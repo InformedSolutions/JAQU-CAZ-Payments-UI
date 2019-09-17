@@ -41,6 +41,7 @@ class VehicleCheckersController < ApplicationController
       render enter_details_vehicle_checkers_path
     end
 
+    redirect_to root_path
     # session[:vrn] = params_vrn
     # redirect_to non_uk? ? non_uk_vehicle_checkers_path : confirm_details_vehicle_checkers_path
   end

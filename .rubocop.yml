@@ -9,4 +9,16 @@ Style/Documentation:
 
 Metrics/LineLength:
   Max: 99
-  IgnoredPatterns: ['\A#']
+  IgnoredPatterns: ['(\A|\s)#']
+
+Metrics/BlockLength:
+  ExcludedMethods: ['describe', 'context']
+  Exclude:
+    - 'config/routes.rb'
+
+Style/AndOr:
+  EnforcedStyle: conditionals
+
+Style/MixinUsage:
+  Exclude:
+    - 'features/step_definitions/*.rb'
