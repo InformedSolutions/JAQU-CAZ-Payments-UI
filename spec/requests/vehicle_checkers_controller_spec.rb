@@ -2,9 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe WelcomeController, type: :request do
-  describe 'GET #index' do
-    subject { get root_path }
+RSpec.describe VehicleCheckersController, type: :request do
+  describe 'GET #enter_details' do
+    subject { get enter_details_vehicle_checkers_path }
 
     it 'returns http success' do
       subject

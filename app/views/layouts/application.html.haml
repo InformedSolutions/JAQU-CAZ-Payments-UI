@@ -26,7 +26,7 @@
     %meta{content: asset_pack_url('media/images/govuk-opengraph-image.png'), property: 'og:image'}/
 
   // Set ga variable before assets:precompile //
-  %body.govuk-template__body{ data: { ga: ENV['GOOGLE_ANALYTICS_ID'] } }
+  %body.govuk-template__body{data: {ga: ENV['GOOGLE_ANALYTICS_ID']}}
     :javascript
       document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
     = render 'layouts/cookies_banner'

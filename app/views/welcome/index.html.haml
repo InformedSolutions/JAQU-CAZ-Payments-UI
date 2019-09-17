@@ -1,3 +1,92 @@
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
     .govuk-grid-column-two-thirds
+      %h1.govuk-heading-l Pay a Clean Air Zone charge
+      %p
+        If your vehicle doesn't meet clean air standards, you need to pay a daily charge for driving
+        it into a Clean Air Zone.
+      %p Use this service to pay a charge for driving in a Clean Air Zone.
+      %p You'll need the registration number of the vehicle.
+
+      %p
+        = link_to 'Check if your vehicle meets clean air standards',
+          Rails.configuration.x.check_air_standard_url,
+          target: '_blank',
+          class: 'govuk-link'
+        or
+        = succeed '.' do
+          = link_to 'discover alternatives to having to pay',
+            nil,
+            target: '_blank',
+            class: 'govuk-link'
+
+      %p
+        You must pay the Clean Air Zone charge by midnight on the next working day after you drive in a Clean Air Zone.
+      %a.govuk-button.govuk-button--start{role: 'button',
+                                          'data-draggable': false,
+                                          'data-module': 'govuk-button',
+                                          href: enter_details_vehicle_checkers_path,
+                                          id: 'start-now'}
+        Start now
+        %svg.govuk-button__start-icon{focusable: 'false',
+                                      height: '19',
+                                      role: 'presentation',
+                                      viewbox: '0 0 33 40',
+                                      width: '17.5',
+                                      xmlns: 'http://www.w3.org/2000/svg'}
+          %path{d: 'M0 0h13l20 20-20 20H0l20-20z', fill: 'currentColor'}
+
+      %h2.govuk-heading-m Other ways to pay
+      %details.govuk-details{'data-module': 'govuk-details'}
+        %summary.govuk-details__summary
+          %span.govuk-details__summary-text
+            Birmingham
+        .govuk-details__text
+          %p
+            Pay by phone on 0203457891 (7 days a week from 9am-7pm. Calls are free from landlines
+            and 3p a minute from a mobile but check with your operator as charges may vary).
+
+          %p
+            Pay by textphone on 02034567892 (7 days aweek from 9am-7pm. Calls are free from landlines
+            and 3p a minute from a mobile but check with your operator as charges may vary).
+
+          %p Pay in person at your nearest Payzone, PayPoint or Post Office outlet.
+
+      %details.govuk-details{'data-module': 'govuk-details'}
+        %summary.govuk-details__summary
+          %span.govuk-details__summary-text
+            Leeds
+        .govuk-details__text
+          %p
+            Pay by phone on 0203457891 (7 days a week from 9am-7pm. Calls are free from landlines
+            and 3p a minute from a mobile but check with your operator as charges may vary).
+
+          %p
+            Pay by textphone on 02034567892 (7 days aweek from 9am-7pm. Calls are free from landlines
+            and 3p a minute from a mobile but check with your operator as charges may vary).
+
+          %p Pay in person at your nearest Payzone, PayPoint or Post Office outlet.
+
+      %h2.govuk-heading-s Explore the topic
+      %p
+        Find out more about
+        = succeed '.' do
+          = link_to 'Clean Air Zones',
+            nil,
+            target: '_blank',
+            class: 'govuk-link'
+
+    .govuk-grid-column-one-third
+      %aside#related-items-label.app-related-items{role: 'complementary'}
+        %h2.govuk-heading-m
+          Related content
+        %nav{'aria-labelledby': 'related-items-label', role: 'navigation'}
+          %ul.govuk-list{class: 'govuk-!-font-size-16'}
+            %li
+              = link_to 'Am I exempt?', nil, target: '_blank', class: 'govuk-link'
+            %li
+              = link_to 'Can I claim a refund?', nil, target: '_blank', class: 'govuk-link'
+            %li
+              = link_to 'Create Fleet Account', nil, target: '_blank', class: 'govuk-link'
+            %li
+              = link_to 'Fleet User Account', nil, target: '_blank', class: 'govuk-link'
