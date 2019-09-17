@@ -38,7 +38,7 @@ class VehicleCheckersController < ApplicationController
     form = VrnForm.new(params_vrn, country)
     unless form.valid?
       @errors = form.error_object
-      render enter_details_vehicle_checkers_path
+      return render enter_details_vehicle_checkers_path
     end
 
     redirect_to root_path
