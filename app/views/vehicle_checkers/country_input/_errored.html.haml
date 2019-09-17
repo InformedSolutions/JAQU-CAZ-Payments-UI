@@ -1,0 +1,7 @@
+.govuk-form-group{class: 'govuk-form-group--error'}
+  %span.govuk-label
+    = I18n.t('labels.country')
+  %span#country-error.govuk-error-message
+    %span.govuk-visually-hidden Error:
+    = message
+  = render 'vehicle_checkers/country_input/normal'

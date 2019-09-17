@@ -1,0 +1,34 @@
+- content_for(:title, 'Pay a Clean Air Zone charge')
+= link_to 'Back', root_path, class: 'govuk-back-link'
+
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  - if @errors.present?
+    .govuk-error-summary{'aria-labelledby': 'error-summary-title',
+                         'data-module': 'govuk-error-summary',
+                         role: 'alert',
+                         tabindex: '-1'}
+      %h2#error-summary-title.govuk-error-summary__title
+        There is a problem
+      .govuk-error-summary__body
+        %ul.govuk-list.govuk-error-summary__list
+          - @errors.each_value do |error|
+            %li
+              = link_to(error[:message], error[:link])
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      %h1.govuk-heading-xl
+        Vehicle registration details
+      = form_tag validate_vrn_vehicle_checkers_path, method: :post do
+        %fieldset.govuk-fieldset
+          %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
+          - if @errors[:vrn]
+            = render 'vehicle_checkers/vrn_input/errored', message: @errors[:vrn][:message]
+          - else
+            = render 'vehicle_checkers/vrn_input/normal'
+
+          - if @errors[:country]
+            = render 'vehicle_checkers/country_input/errored', message: @errors[:country][:message]
+          - else
+            = render 'vehicle_checkers/country_input/normal'
+
+          = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
