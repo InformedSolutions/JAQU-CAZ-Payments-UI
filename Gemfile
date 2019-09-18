@@ -38,6 +38,7 @@ end
 group :test do
   gem 'capybara'
   gem 'cucumber-rails', require: false
+  gem 'rails-controller-testing'
   gem 'selenium-webdriver'
   gem 'simplecov', require: false
   gem 'webdrivers'
