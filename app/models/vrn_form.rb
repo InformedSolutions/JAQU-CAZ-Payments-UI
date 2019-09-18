@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 ##
-# This class is used to validate user data filled in +app/views/vehicle_checkers/enter_details.html.haml+.
+# This class is used to validate user data filled in +app/views/vehicles/enter_details.html.haml+.
 class VrnForm
   # Submitted vehicle registration number
   attr_reader :vrn

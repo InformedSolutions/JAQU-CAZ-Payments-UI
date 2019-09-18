@@ -18,17 +18,17 @@
     .govuk-grid-column-two-thirds
       %h1.govuk-heading-xl
         Vehicle registration details
-      = form_tag validate_vrn_vehicle_checkers_path, method: :post do
+      = form_tag validate_details_vehicles_path, method: :post do
         %fieldset.govuk-fieldset
           %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
           - if @errors[:vrn]
-            = render 'vehicle_checkers/vrn_input/errored', message: @errors[:vrn][:message]
+            = render 'vehicles/vrn_input/errored', message: @errors[:vrn][:message]
           - else
-            = render 'vehicle_checkers/vrn_input/normal'
+            = render 'vehicles/vrn_input/normal'
 
           - if @errors[:country]
-            = render 'vehicle_checkers/country_input/errored', message: @errors[:country][:message]
+            = render 'vehicles/country_input/errored', message: @errors[:country][:message]
           - else
-            = render 'vehicle_checkers/country_input/normal'
+            = render 'vehicles/country_input/normal'
 
           = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'

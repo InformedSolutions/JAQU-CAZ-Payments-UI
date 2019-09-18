@@ -3,10 +3,11 @@
 Rails.application.routes.draw do
   root 'welcome#index'
 
-  resources :vehicle_checkers, only: [] do
+  resources :vehicles, only: [] do
     collection do
       get :enter_details
-      post :validate_vrn
+      post :validate_details
+      get :confirm_details
     end
   end
 end
