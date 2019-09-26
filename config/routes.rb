@@ -8,6 +8,8 @@ Rails.application.routes.draw do
       get :enter_details
       post :validate_details
       get :confirm_details
+      get :non_uk
+      post :choose_vehicle
     end
   end
 end
