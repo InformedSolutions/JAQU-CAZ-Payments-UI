@@ -7,6 +7,9 @@ AllCops:
 Style/Documentation:
   Enabled: false
 
+Style/GuardClause:
+  Enabled: false
+
 Metrics/LineLength:
   Max: 99
   IgnoredPatterns: ['(\A|\s)#']
@@ -15,9 +18,6 @@ Metrics/BlockLength:
   ExcludedMethods: ['describe', 'context']
   Exclude:
     - 'config/routes.rb'
-
-Style/AndOr:
-  EnforcedStyle: conditionals
 
 Style/MixinUsage:
   Exclude:

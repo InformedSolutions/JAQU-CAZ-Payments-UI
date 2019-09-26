@@ -1,0 +1,35 @@
+- content_for(:title, 'Check vehicle compliance')
+= link_to 'Back', enter_details_vehicles_path, class: 'govuk-back-link'
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      %h1.govuk-heading-xl Your vehicle is not UK-Registered
+      %p
+        We do not hold details for vehicles that are not registered in the UK.
+      %p
+        If your vehicle does not meet Clean Air standards, you will have to pay the Clean Air Zone charge
+        (payment has to be made by the next working day after you drive in the zone).
+
+      %p
+        Please confirm that the registration number
+        %b
+          = @vehicle_registration
+        is correct.
+      %p
+        = form_tag choose_vehicle_vehicles_path, method: :post do
+          .govuk-form-group{class: ('govuk-form-group--error' if alert)}
+            %fieldset.govuk-fieldset
+              %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
+              - if alert
+                %span#caz-select-error.govuk-error-message
+                  %span.govuk-visually-hidden Error:
+                  Confirm that the registration number is correct
+              .govuk-checkboxes
+                .govuk-checkboxes__item
+                  %input.govuk-checkboxes__input{name: 'confirm-registration',
+                                                 type: 'checkbox',
+                                                 value: 'true',
+                                                 id: 'confirm-registration'}
+                  %label.govuk-label.govuk-checkboxes__label{for: 'confirm-registration'}
+                    I confirm that the registration number is correct.
+          = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
