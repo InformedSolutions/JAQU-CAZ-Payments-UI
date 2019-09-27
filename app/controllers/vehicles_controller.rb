@@ -64,6 +64,43 @@ class VehiclesController < ApplicationController
   end
 
   ##
+  # Verifies if user confirms the vehicle's details.
+  # If yes, renders to {incorrect details}[rdoc-ref:VehiclesController.local_authority]
+  # If no, redirects to {incorrect details}[rdoc-ref:VehiclesController.incorrect_details]
+  #
+  # ==== Path
+  #    POST /vehicles/local_authority
+  #
+  # ==== Params
+  # * +vrn+ - vehicle registration number, required in the session
+  # * +confirm-vehicle+ - user confirmation of vehicle details, 'yes' or 'no', required in the query
+  #
+  # ==== Validations
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  # * +confirm-vehicle+ - lack of it redirects to {confirm details}[rdoc-ref:VehiclesController.incorrect_details]
+  #
+  def local_authority
+    redirect_to incorrect_details_vehicles_path if confirmation == 'no'
+  end
+
+  ##
+  # Renders a static page for users who selected that DVLA data in incorrect.
+  #
+  # ==== Path
+  #
+  #    GET /vehicles/incorrect_details
+  #
+  # ==== Params
+  # * +vrn+ - vehicle registration number, required in the session
+  #
+  # ==== Validations
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  #
+  def incorrect_details
+    # to be defined later
+  end
+
+  ##
   # Renders a page for vehicles that are not registered within the UK.
   #
   # ==== Path
@@ -111,6 +148,11 @@ class VehiclesController < ApplicationController
   # Returns uppercased VRN from the query params, eg. 'CU1234'
   def params_vrn
     params[:vrn].upcase
+  end
+
+  # Returns user's form confirmation from the query params, values: 'yes', 'no', nil
+  def confirmation
+    params['confirm-vehicle']
   end
 
   # Returns vehicles's registration country from the query params, values: 'UK', 'Non-UK', nil

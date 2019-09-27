@@ -1,0 +1,21 @@
+- content_for(:title, 'Check vehicle compliance')
+= link_to 'Back', confirm_details_vehicles_path, class: 'govuk-back-link'
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      %h1.govuk-heading-l Incorrect vehicle details
+      %p
+        If your vehicle details are incorrect, you may need to
+        = succeed '.' do
+          = link_to 'update them', 'https://www.gov.uk/change-vehicle-details-registration-certificate',
+          target: '_blank'
+      %p
+        You still need to pay the Clean Air Zone charge, if you have driven or are planning to
+        drive in a Clean Air Zone. However, as long as your vehicle meets Clean Air standards,
+        you'll be able to claim a refund once your vehicle registration details are updated.
+
+      = form_tag local_authority_vehicles_path, method: :post do
+        = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
+
+      %p
+        = link_to('Check another vehicle', enter_details_vehicles_path)
