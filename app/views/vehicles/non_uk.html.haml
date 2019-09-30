@@ -16,7 +16,7 @@
           = @vehicle_registration
         is correct.
       %p
-        = form_tag choose_vehicle_vehicles_path, method: :post do
+        = form_tag validate_non_uk_vehicles_path, method: :post do
           .govuk-form-group{class: ('govuk-form-group--error' if alert)}
             %fieldset.govuk-fieldset
               %legend.govuk-fieldset__legend.govuk-fieldset__legend--l

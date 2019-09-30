@@ -9,5 +9,5 @@ Then('I press the Start now button') do
 end
 
 Then('I should see {string}') do |string|
-  page.has_content?(string)
+  expect(page).to have_content(string)
 end

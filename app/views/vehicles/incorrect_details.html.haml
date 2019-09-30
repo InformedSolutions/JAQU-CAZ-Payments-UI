@@ -14,7 +14,7 @@
         drive in a Clean Air Zone. However, as long as your vehicle meets Clean Air standards,
         you'll be able to claim a refund once your vehicle registration details are updated.
 
-      = form_tag local_authority_vehicles_path, method: :post do
+      = form_tag local_authority_vehicles_path, method: :get do
         = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
 
       %p
