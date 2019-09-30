@@ -7,3 +7,7 @@ end
 Then('I should see the Vehicle page') do
   expect(page).to have_current_path(enter_details_vehicles_path)
 end
+
+def vrn
+  'CU57ABC'
+end
