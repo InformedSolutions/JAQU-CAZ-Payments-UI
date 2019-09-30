@@ -7,28 +7,29 @@
         %tr.govuk-table__row
           %td.govuk-table__cell{scope: 'row'} Vehicle registration
           %th.govuk-table__cell{id: 'registration-number'}
+            = @vehicle_registration
         %tr.govuk-table__row
           %td.govuk-table__cell{scope: 'row'} Vehicle type approval
-          %th.govuk-table__cell{id: 'type-approval'}
+          %th.govuk-table__cell{id: 'type-approval'} M1
         %tr.govuk-table__row
           %td.govuk-table__cell{scope: 'row'} CAZ vehicle type
-          %th.govuk-table__cell{id: 'type'}
+          %th.govuk-table__cell{id: 'type'} Car
         %tr.govuk-table__row
           %td.govuk-table__cell{scope: 'row'} Make
-          %th.govuk-table__cell{id: 'make'}
+          %th.govuk-table__cell{id: 'make'} Hyundai
         %tr.govuk-table__row
           %td.govuk-table__cell{scope: 'row'} Model
-          %th.govuk-table__cell{id: 'model'}
+          %th.govuk-table__cell{id: 'model'} I20
         %tr.govuk-table__row
           %td.govuk-table__cell{scope: 'row'} Colour
-          %th.govuk-table__cell{id: 'colour'}
+          %th.govuk-table__cell{id: 'colour'} Grey
         %tr.govuk-table__row
           %td.govuk-table__cell{scope: 'row'} Fuel type
-          %th.govuk-table__cell{id: 'fuel-type'}
+          %th.govuk-table__cell{id: 'fuel-type'} Petrol
         %tr.govuk-table__row
           %td.govuk-table__cell{scope: 'row'} Taxi
           %th.govuk-table__cell{id: 'taxi'}
-      = form_tag local_authority_vehicles_path, method: :post do
+      = form_tag validate_confirm_details_vehicles_path, method: :get do
         - if alert
           .govuk-form-group{class: 'govuk-form-group--error'}
             %span#confirm-vehicle-error.govuk-error-message
