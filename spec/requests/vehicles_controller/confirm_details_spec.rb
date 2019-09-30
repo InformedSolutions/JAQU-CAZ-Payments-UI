@@ -7,13 +7,11 @@ RSpec.describe 'VehiclesController - GET #confirm_details', type: :request do
 
   before { add_vrn_to_session }
 
-  context 'when VRN is valid' do
-    before do
-      http_request
-    end
+  before do
+    http_request
+  end
 
-    it 'returns a success response' do
-      expect(response).to have_http_status(:success)
-    end
+  it 'returns a success response' do
+    expect(response).to have_http_status(:success)
   end
 end
