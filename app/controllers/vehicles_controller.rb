@@ -69,7 +69,7 @@ class VehiclesController < ApplicationController
   # If no, redirects to {incorrect details}[rdoc-ref:VehiclesController.incorrect_details]
   #
   # ==== Path
-  #    POST /vehicles/local_authority
+  #    GET /vehicles/validate_confirm_details
   #
   # ==== Params
   # * +vrn+ - vehicle registration number, required in the session
@@ -79,8 +79,72 @@ class VehiclesController < ApplicationController
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   # * +confirm-vehicle+ - lack of it redirects to {confirm details}[rdoc-ref:VehiclesController.incorrect_details]
   #
+  def validate_confirm_details
+    form = ConfirmationForm.new(confirmation)
+    unless form.valid?
+      log_invalid_form 'Redirecting back.'
+      return redirect_to confirm_details_vehicles_path, alert: form.message
+    end
+
+    redirect_to form.confirmed? ? local_authority_vehicles_path : incorrect_details_vehicles_path
+  end
+
+  ##
+  # Renders choose vehicle type page.
+  #
+  # ==== Path
+  #
+  #    GET /vehicles/choose_vehicle
+  #
+  # ==== Params
+  # * +vrn+ - vehicle registration number, required in the session
+  #
+  #   # ==== Validations
+  #   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  #
+  def choose_vehicle
+    # renders a static page
+  end
+
+  ##
+  # Verifies if user choose a type of vehicle.
+  # If yes, renders {incorrect details}[rdoc-ref:VehiclesController.local_authority]
+  # If no, redirects to {incorrect details}[rdoc-ref:VehiclesController.vehicle_type]
+  #
+  # ==== Path
+  #    POST /vehicles/validate_vehicle_type
+  #
+  # ==== Params
+  # * +vrn+ - vehicle registration number, required in the session
+  # * +vehicle-type+ - user's type of vehicle
+  #
+  # ==== Validations
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  # * +vehicle-type+ - lack of it redirects to {confirm details}[rdoc-ref:VehiclesController.vehicle_type]
+  #
+  def validate_vehicle_type
+    if params['vehicle-type'].blank?
+      redirect_to choose_vehicle_vehicles_path, alert: true
+    else
+      redirect_to local_authority_vehicles_path
+    end
+  end
+
+  ##
+  # Renders vehicle type page.
+  #
+  # ==== Path
+  #
+  #    GET /vehicles/vehicle_type
+  #
+  # ==== Params
+  # * +vrn+ - vehicle registration number, required in the session
+  #
+  #   # ==== Validations
+  #   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  #
   def local_authority
-    redirect_to incorrect_details_vehicles_path if confirmation == 'no'
+    # renders static page
   end
 
   ##
@@ -117,20 +181,26 @@ class VehiclesController < ApplicationController
   end
 
   ##
-  # Renders a choose vehicle page for Non-UK vehicle.
+  # Verifies if user confirms that the registration number is correct.
+  # If yes, renders to {incorrect details}[rdoc-ref:VehiclesController.vehicle_type]
+  # If no, redirects to {incorrect details}[rdoc-ref:VehiclesController.non_uk]
   #
   # ==== Path
-  #
-  #    POST /vehicles/choose_vehicle
+  #    POST /vehicles/validate_non_uk
   #
   # ==== Params
-  # * +confirm-registration+ - confirmation that vehicle not registered in the UK
+  # * +vrn+ - vehicle registration number, required in the session
+  # * +confirm-registration+ - user confirmation that the registration number is correct.
   #
   # ==== Validations
-  # * +confirm-registration+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.non_uk]
-  def choose_vehicle
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  # * +confirm-registration+ - lack of it redirects to {confirm details}[rdoc-ref:VehiclesController.non_uk]
+  #
+  def validate_non_uk
     if registration_not_confirmed?
-      redirect_to non_uk_vehicles_path, alert: 'Confirm that the registration number is correct'
+      redirect_to non_uk_vehicles_path, alert: true
+    else
+      redirect_to choose_vehicle_vehicles_path
     end
   end
 
