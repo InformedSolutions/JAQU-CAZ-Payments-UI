@@ -14,6 +14,10 @@ Then('I press the Continue') do
   click_button 'Continue'
 end
 
+Then('I press the Confirm') do
+  click_button 'Confirm'
+end
+
 And('I am on the non UK page') do
   expect(page).to have_current_path(non_uk_vehicles_path)
 end
@@ -28,4 +32,8 @@ end
 
 Then('I choose only UK country') do
   choose('UK')
+end
+
+Then('I choose that the details are incorrect') do
+  choose('No')
 end

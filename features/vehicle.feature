@@ -24,6 +24,19 @@ Feature: Vehicle Checker
       And I press the Continue
     Then I should see "Confirm Details"
 
+  Scenario: User enters a correct vehicle's registration and choose what vehicle's details are incorrect
+    Given I am on the home page
+    Then I press the Start now button
+      And I should see "Vehicle registration details"
+    Then I enter a vehicle's registration and choose UK
+      And I press the Continue
+      And I should see "Are these the vehicle's details?"
+      And I choose that the details are incorrect
+    Then I press the Confirm
+      And I should see "Incorrect vehicle details"
+    Then I press the Continue
+      And I should see "Which Clean Air Zone do you need to pay for?"
+
   Scenario: User enters a correct vehicle's registration and choose Non-UK country
     Given I am on the home page
     Then I press the Start now button
