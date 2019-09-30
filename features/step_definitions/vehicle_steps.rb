@@ -31,9 +31,14 @@ Then("I enter a only vehicle's registration") do
 end
 
 Then('I choose only UK country') do
+  fill_in('vrn', with: '')
   choose('UK')
 end
 
 Then('I choose that the details are incorrect') do
   choose('No')
+end
+
+And('I choose Car type') do
+  choose('Car')
 end
