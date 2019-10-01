@@ -2,9 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe 'VehiclesController - GET #validate_vrn', type: :request do
+RSpec.describe 'VehiclesController - POST #submit_details', type: :request do
   subject(:http_request) do
-    post validate_details_vehicles_path, params: { vrn: vrn, 'registration-country': country }
+    post submit_details_vehicles_path, params: { vrn: vrn, 'registration-country': country }
   end
 
   let(:vrn) { 'CU57ABC' }

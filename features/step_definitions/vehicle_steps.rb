@@ -11,7 +11,7 @@ Then("I enter a vehicle's registration and choose Non-UK") do
 end
 
 Then('I press the Continue') do
-  click_button 'Continue'
+  click_on 'Continue'
 end
 
 Then('I press the Confirm') do
