@@ -11,3 +11,7 @@ end
 def vrn
   'CU57ABC'
 end
+
+Then('I press {string} link') do |string|
+  click_link string
+end

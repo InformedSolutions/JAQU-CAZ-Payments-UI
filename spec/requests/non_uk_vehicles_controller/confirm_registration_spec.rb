@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'NonUkVehiclesController - POST #confirm_registration', type: :request do
   subject(:http_request) do
-    post confirm_registration_non_uk_vehicles_path, params: {'confirm-registration': confirm}
+    post confirm_registration_non_uk_vehicles_path, params: { 'confirm-registration': confirm }
   end
 
   let(:confirm) { 'true' }
