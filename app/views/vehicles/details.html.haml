@@ -29,7 +29,7 @@
         %tr.govuk-table__row
           %td.govuk-table__cell{scope: 'row'} Taxi
           %th.govuk-table__cell{id: 'taxi'}
-      = form_tag validate_confirm_details_vehicles_path, method: :get do
+      = form_tag confirm_details_vehicles_path, method: :post do
         - if alert
           .govuk-form-group{class: 'govuk-form-group--error'}
             %span#confirm-vehicle-error.govuk-error-message

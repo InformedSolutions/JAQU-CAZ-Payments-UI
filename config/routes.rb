@@ -6,15 +6,20 @@ Rails.application.routes.draw do
   resources :vehicles, only: [] do
     collection do
       get :enter_details
-      post :validate_details
-      get :confirm_details
-      get :validate_confirm_details
+      post :submit_details
+      get :details
+      post :confirm_details
       get :incorrect_details
-      get :choose_vehicle
-      post :validate_vehicle_type
-      get :local_authority
-      get :non_uk
-      post :validate_non_uk
     end
   end
+
+  resources :non_uk_vehicles, only: [:index] do
+    collection do
+      post :confirm_registration
+      get :choose_type
+      post :submit_type
+    end
+  end
+
+  resources :local_authorities, only: [:index]
 end

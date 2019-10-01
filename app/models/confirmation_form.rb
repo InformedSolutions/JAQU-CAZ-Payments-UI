@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 ##
-# This class is used to validate user data filled in +app/views/vehicles/confirm_details.html.haml+.
+# This class is used to validate user data filled in +app/views/vehicles/details.html.haml+.
 class ConfirmationForm
   # form confirmation from the query params, values: 'yes', 'no', nil
   attr_reader :confirmation
