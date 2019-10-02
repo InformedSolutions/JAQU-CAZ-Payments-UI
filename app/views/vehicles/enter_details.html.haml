@@ -10,9 +10,9 @@
         There is a problem
       .govuk-error-summary__body
         %ul.govuk-list.govuk-error-summary__list
-          - @errors.each_value do |error|
+          - @errors.each do |field, messages|
             %li
-              = link_to(error[:message], error[:link])
+              = link_to(messages.first, "##{field}-error")
   .govuk-grid-row
     .govuk-grid-column-two-thirds
       %h1.govuk-heading-xl
@@ -20,13 +20,13 @@
       = form_tag submit_details_vehicles_path, method: :post do
         %fieldset.govuk-fieldset
           %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
-          - if @errors[:vrn]
-            = render 'vehicles/vrn_input/errored', message: @errors[:vrn][:message]
+          - if @errors[:vrn].present?
+            = render 'vehicles/vrn_input/errored', message: @errors[:vrn].first
           - else
             = render 'vehicles/vrn_input/normal'
 
-          - if @errors[:country]
-            = render 'vehicles/country_input/errored', message: @errors[:country][:message]
+          - if @errors[:country].present?
+            = render 'vehicles/country_input/errored', message: @errors[:country].first
           - else
             = render 'vehicles/country_input/normal'
           = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
