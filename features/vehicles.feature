@@ -33,8 +33,11 @@ Feature: Vehicles
     Then I enter a vehicle's registration and choose UK
       And I press the Continue
       And I should see "Are these the vehicle's details?"
-      And I choose that the details are incorrect
     Then I press the Confirm
+      And I should see "You must choose an answer"
+      And I should see "Select yes if the details are correct"
+    Then I choose that the details are incorrect
+      And I press the Confirm
       And I should see "Incorrect vehicle details"
     Then I press the Continue
       And I should see "Which Clean Air Zone do you need to pay for?"
