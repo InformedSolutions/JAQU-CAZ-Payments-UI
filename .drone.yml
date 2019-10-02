@@ -1,0 +1,350 @@
+kind: pipeline
+name: ci
+
+steps:
+
+  # Clean agent images and containers to prevent disk space overuse
+  - name: clean agent
+    image: docker
+    commands:
+    - docker system prune -f
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+
+  # Build docker image
+  - name: build
+    image: docker
+    commands:
+    - docker build -f Dockerfile.test -t test-vehicle-compliance-checker-frontend:latest --build-arg secret_key_base=${DRONE_COMMIT} .
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+
+  # Trigger unit tests
+  - name: unit tests
+    image: test-vehicle-compliance-checker-frontend
+    pull: never
+    environment:
+      COMPLIANCE_CHECKER_API_URL: http://localhost
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    commands:
+      - yarn install
+      - rspec -f d
+
+  # Execute integration/scenario tests
+  - name: integration tests
+    image: test-vehicle-compliance-checker-frontend
+    pull: never
+    environment:
+      COMPLIANCE_CHECKER_API_URL: https://s5fbiclr6j.execute-api.eu-west-2.amazonaws.com/dev
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    commands:
+      - cucumber
+
+  # Invoke static code analysis through Ruby libraries
+  - name: static code analysis (Ruby)
+    image: test-vehicle-compliance-checker-frontend
+    pull: never
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    commands:
+      - rubocop
+
+  # Invoke security analysis through Ruby libraries
+  - name: security tests (Ruby)
+    image: test-vehicle-compliance-checker-frontend
+    pull: never
+    commands:
+       - bundle audit check --update
+       - yarn audit
+       - brakeman
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+
+  # Invoke sonar scan
+  - name: sonar scan
+    image: aosapps/drone-sonar-plugin
+    environment:
+      sonar_host:
+        from_secret: sonar_host
+      sonar_token:
+        from_secret: sonar_token
+      sonar.ruby.coverage.reportPaths: coverage/.resultset.json
+    commands:
+      - sonar-scanner
+        -Dsonar.projectKey=${DRONE_REPO}
+        -Dsonar.projectName=${DRONE_REPO}
+        -Dsonar.host.url=$sonar_host
+        -Dsonar.login=$sonar_token
+        -Dproject.settings=./sonar-project.properties
+
+  # Invoke terraform scripts to ensure ecr is available for deploy step.
+  - name: initialise ecr
+    image: hashicorp/terraform:0.12.3
+    commands:
+      - apk update && apk add bash
+      - mkdir ~/.ssh
+      - echo -n "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
+      - chmod 600 ~/.ssh/id_rsa
+      - touch ~/.ssh/known_hosts
+      - chmod 600 ~/.ssh/known_hosts
+      - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
+      - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
+      - cd JAQU-CAZ-IAC
+      - cd terraform/projects/payments/layers/00.global
+      - PATH=$PATH:../../../../bin/
+      - chmod +x ../../../../bin/tf
+      - tf init
+      - tf workspace select default
+      - tf apply -auto-approve
+    environment:
+      TF_VAR_access_key:
+        from_secret: aws_access_key_id
+      TF_VAR_secret_key:
+        from_secret: aws_secret_access_key
+      GIT_PRIVATE_SSH:
+        from_secret: github_private_key
+    when:
+      event:
+        exclude:
+        - pull_request
+
+  # Push built image to ECR registry
+  - name: publish image to ecr
+    image: plugins/ecr
+    settings:
+      access_key:
+        from_secret: aws_access_key_id
+      secret_key:
+        from_secret: aws_secret_access_key
+      repo: 018330602464.dkr.ecr.eu-west-2.amazonaws.com/payments-web
+      registry: 018330602464.dkr.ecr.eu-west-2.amazonaws.com
+      dockerfile: Dockerfile.build
+      region: eu-west-2
+      tags:
+        - latest
+        - ${DRONE_BUILD_NUMBER}
+      build_args:
+        - secret_key_base=${DRONE_COMMIT}
+    when:
+      event:
+        exclude:
+        - pull_request
+
+  # Invoke terraform scripts with tagged image number
+  - name: deploy to dev
+    image: hashicorp/terraform:0.12.3
+    commands:
+      - apk update && apk add bash
+      - cd JAQU-CAZ-IAC
+      - cd terraform/projects/payments/layers/01.networking
+      - PATH=$PATH:../../../../bin/
+      - chmod +x ../../../../bin/tf
+      - tf init
+      - tf workspace select dev
+      - tf apply -auto-approve
+      - cd ../02.backends
+      - tf init
+      - tf workspace select dev
+      - tf apply -auto-approve
+      - cd ../04.web
+      - tf init
+      - tf workspace select dev
+      - tf apply -auto-approve
+    environment:
+      TF_VAR_build_number: ${DRONE_BUILD_NUMBER}
+      TF_VAR_secret_key_base: ${DRONE_COMMIT}
+      TF_VAR_google_analytics_id: UA-144774549-2
+      TF_VAR_access_key:
+        from_secret: aws_access_key_id
+      TF_VAR_secret_key:
+        from_secret: aws_secret_access_key
+      TF_VAR_enable_https_redirect: false
+    when:
+      event:
+        exclude:
+        - pull_request
+      branch: feature/CAZ-1186/payments-ui-drone-pipeline
+
+  # Invoke terraform scripts with tagged image number
+  - name: deploy to sit
+    image: hashicorp/terraform:0.12.3
+    commands:
+      - cd JAQU-CAZ-IAC/terraform/projects/payments-web/environments/sit
+      - terraform init
+      - terraform workspace select sit
+      - terraform apply -auto-approve
+    environment:
+      TF_VAR_build_number: ${DRONE_BUILD_NUMBER}
+      TF_VAR_secret_key_base: ${DRONE_COMMIT}
+      TF_VAR_google_analytics_id: UA-144774549-2
+      TF_VAR_compliance_checker: https://grr1loxnzi.execute-api.eu-west-2.amazonaws.com/sit
+      TF_VAR_access_key:
+        from_secret: aws_access_key_id
+      TF_VAR_secret_key:
+        from_secret: aws_secret_access_key
+      TF_VAR_enable_https_redirect: false
+    when:
+      event:
+        exclude:
+        - pull_request
+      branch: release/*
+
+  # Build docker image
+  - name: await ecs rollout
+    image: docker
+    environment:
+      build_id_url: http://payments-alb-dev-175447278.eu-west-2.elb.amazonaws.com/build_id
+      build_id: ${DRONE_BUILD_NUMBER}
+    commands:
+      - apk add curl
+      - sh build_utils/check_build_number.sh
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    when:
+      event:
+        exclude:
+        - pull_request
+      branch: feature/CAZ-1186/payments-ui-drone-pipeline
+
+  # Build pa11y-ci image
+  - name: build pa11y-ci image
+    image: docker
+    commands:
+      - cd pa11y
+      - docker build -t pa11y-ci .
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    when:
+      event:
+        exclude:
+        - pull_request
+      branch: feature/CAZ-1186/payments-ui-drone-pipeline
+
+  # Trigger accessibility test
+  - name: accessibility tests
+    image: pa11y-ci
+    pull: never
+    environment:
+      BASE_URL: http://payments-alb-dev-175447278.eu-west-2.elb.amazonaws.com
+    commands:
+      - mkdir screenshots
+      - /usr/local/bin/pa11y-ci -c pa11y/.pa11yci.conf.js
+    when:
+      event:
+        exclude:
+        - pull_request
+      branch: feature/CAZ-1186/payments-ui-drone-pipeline
+
+  # Execute jMeter scripts via taurus
+  - name: micro-performance tests
+    image: blazemeter/taurus
+    commands:
+      - bzt jmeter/valid_vehicle_compliance.jmx jmeter/assertion.yml
+      - bzt jmeter/invalid_vehicle_compliance.jmx jmeter/assertion.yml
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    when:
+      event:
+        exclude:
+        - pull_request
+      branch: feature/CAZ-1186/payments-ui-drone-pipeline
+
+
+    # Invoke terraform scripts with tagged image number
+#  - name: enable authentication
+#    image: hashicorp/terraform:0.12.3
+#    commands:
+#      - cd JAQU-CAZ-IAC/terraform/projects/payments/layers/04.web
+#      - terraform init
+#      - terraform workspace select dev
+#      - terraform apply -auto-approve
+#    environment:
+#      TF_VAR_build_number: ${DRONE_BUILD_NUMBER}
+#      TF_VAR_secret_key_base: secret
+#      TF_VAR_google_analytics_id: UA-144774549-2
+#      TF_VAR_access_key:
+#        from_secret: aws_access_key_id
+#      TF_VAR_secret_key:
+#        from_secret: aws_secret_access_key
+#      TF_VAR_enable_https_redirect: true
+#    when:
+#      event:
+#        exclude:
+#        - pull_request
+#      branch: develop
+
+volumes:
+- name: docker_sock
+  host:
+    path: /var/run/docker.sock
+
+# Triggers
+trigger:
+  branch:
+    - develop
+    - release/*
+  event:
+    - pull_request
+    - push
+
+
+# Note the below values are pulled from AWS Secrets Manager via the aws-secrets Drone plugin
+---
+kind: secret
+name: aws_access_key_id
+get:
+  path: /secret/drone.global
+  name: awsAccessKeyId
+
+---
+kind: secret
+name: aws_secret_access_key
+get:
+  path: /secret/drone.global
+  name: awsSecretAccessKey
+
+---
+kind: secret
+name: sonar_host
+get:
+  path: /secret/drone.global
+  name: sonarHost
+
+---
+kind: secret
+name: sonar_token
+get:
+  path: /secret/drone.global
+  name: sonarToken
+
+---
+kind: secret
+name: github_private_key
+get:
+  path: /secret/drone.global
+  name: githubPrivateKey
+
+---
+kind: secret
+name: browserstack_auth_key
+get:
+  path: /secret/drone.global
+  name: browserStackAuthKey
+
+---
+kind: secret
+name: browserstack_username
+get:
+  path: /secret/drone.global
+  name: browserStackUsername
