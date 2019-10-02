@@ -22,4 +22,11 @@ Rails.application.routes.draw do
   end
 
   resources :local_authorities, only: [:index]
+
+  resources :refunds, only: [] do
+    collection do
+      get :scenarios
+      get :details
+    end
+  end
 end
