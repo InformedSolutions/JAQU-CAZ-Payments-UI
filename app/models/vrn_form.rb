@@ -44,7 +44,7 @@ class VrnForm
     country == 'UK'
   end
 
-  # Checks if VRN matches ant possible VRN format
+  # Checks if VRN matches any possible VRN format
   def vrn_format
     return if FORMAT_REGEXPS.any? do |reg|
       reg.match(vrn).present?

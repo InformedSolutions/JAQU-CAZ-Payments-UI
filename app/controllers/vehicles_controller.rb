@@ -44,7 +44,6 @@ class VehiclesController < ApplicationController
     form = VrnForm.new(params_vrn, country)
     unless form.valid?
       @errors = form.errors.messages
-      puts @errors
       log_invalid_form 'Rendering :enter_details.'
       return render enter_details_vehicles_path
     end
