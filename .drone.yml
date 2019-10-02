@@ -261,28 +261,6 @@ steps:
       branch: feature/CAZ-1186/payments-ui-drone-pipeline
 
 
-    # Invoke terraform scripts with tagged image number
-#  - name: enable authentication
-#    image: hashicorp/terraform:0.12.3
-#    commands:
-#      - cd JAQU-CAZ-IAC/terraform/projects/payments/layers/04.web
-#      - terraform init
-#      - terraform workspace select dev
-#      - terraform apply -auto-approve
-#    environment:
-#      TF_VAR_build_number: ${DRONE_BUILD_NUMBER}
-#      TF_VAR_secret_key_base: secret
-#      TF_VAR_google_analytics_id: UA-144774549-2
-#      TF_VAR_access_key:
-#        from_secret: aws_access_key_id
-#      TF_VAR_secret_key:
-#        from_secret: aws_secret_access_key
-#      TF_VAR_enable_https_redirect: true
-#    when:
-#      event:
-#        exclude:
-#        - pull_request
-#      branch: develop
 
 volumes:
 - name: docker_sock
@@ -292,7 +270,7 @@ volumes:
 # Triggers
 trigger:
   branch:
-    - develop
+    - feature/CAZ-1186/payments-ui-drone-pipeline
     - release/*
   event:
     - pull_request
