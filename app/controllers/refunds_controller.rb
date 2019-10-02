@@ -5,7 +5,6 @@ class RefundsController < ApplicationController
   # Renders the scenarios page.
   #
   # ==== Path
-  #    GET /
   #    GET /refunds/scenarios
   #
   def scenarios
@@ -16,7 +15,6 @@ class RefundsController < ApplicationController
   # Renders the details page.
   #
   # ==== Path
-  #    GET /
   #    GET /refunds/details
   #
   def details
