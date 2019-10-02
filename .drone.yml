@@ -98,7 +98,6 @@ steps:
       - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
       - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
       - cd JAQU-CAZ-IAC
-      - git checkout feature/CAZ/Payments
       - cd terraform/projects/payments/layers/00.global
       - PATH=$PATH:../../../../bin/
       - chmod +x ../../../../bin/tf
@@ -172,7 +171,7 @@ steps:
       event:
         exclude:
         - pull_request
-      branch: feature/CAZ-1186/payments-ui-drone-pipeline
+      branch: develop
 
   # Invoke terraform scripts with tagged image number
   - name: deploy to sit
@@ -214,7 +213,7 @@ steps:
       event:
         exclude:
         - pull_request
-      branch: feature/CAZ-1186/payments-ui-drone-pipeline
+      branch: develop
 
 
 volumes:
@@ -225,7 +224,7 @@ volumes:
 # Triggers
 trigger:
   branch:
-    - feature/CAZ-1186/payments-ui-drone-pipeline
+    - develop
     - release/*
   event:
     - pull_request
