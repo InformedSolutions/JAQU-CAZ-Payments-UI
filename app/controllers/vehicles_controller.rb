@@ -86,7 +86,7 @@ class VehiclesController < ApplicationController
     form = ConfirmationForm.new(confirmation)
     unless form.valid?
       log_invalid_form 'Redirecting back.'
-      return redirect_to details_vehicles_path, alert: form.message
+      return redirect_to details_vehicles_path, alert: form.errors.messages[:confirmation].first
     end
 
     redirect_to form.confirmed? ? local_authorities_path : incorrect_details_vehicles_path
