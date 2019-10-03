@@ -7,7 +7,3 @@ end
 Then('I press the Start now button') do
   click_link 'Start now'
 end
-
-Then('I should see {string}') do |string|
-  expect(page).to have_content(string)
-end

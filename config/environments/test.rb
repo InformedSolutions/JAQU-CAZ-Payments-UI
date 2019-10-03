@@ -47,4 +47,8 @@ Rails.application.configure do
 
   # Raises error for missing translations.
   # config.action_view.raise_on_missing_translations = true
+
+  # https://github.com/railsware/rack_session_access
+  # Used to add eg VRN value to session in cucumber tests
+  config.middleware.use RackSessionAccess::Middleware
 end

@@ -20,6 +20,6 @@ class LocalAuthoritiesController < ApplicationController
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
   def index
-    # renders static page
+    @return_path = request.referer || enter_details_vehicles_path
   end
 end
