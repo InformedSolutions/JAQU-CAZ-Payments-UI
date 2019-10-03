@@ -38,6 +38,8 @@ end
 group :test do
   gem 'capybara'
   gem 'cucumber-rails', require: false
+  # Used to set session values in cucumber tests
+  gem 'rack_session_access'
   gem 'rails-controller-testing'
   gem 'selenium-webdriver'
   gem 'simplecov', require: false

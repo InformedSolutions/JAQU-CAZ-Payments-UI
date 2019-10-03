@@ -8,7 +8,7 @@ Feature: Vehicles
     Given I am on the home page
     Then I should see "Start now"
       And I press the Start now button
-    Then I should see the Vehicle page
+    Then I should be on the enter details page
       And I should see "Pay a Clean Air Zone charge" title
       And I should see "Vehicle registration details"
     Then I enter a only vehicle's registration
@@ -51,7 +51,7 @@ Feature: Vehicles
     Then I should see "Your vehicle is not UK-Registered"
       And I press the Continue
     Then I should see "Confirm that the registration number is correct"
-      And I am on the non UK page
+      And I should be on the non UK page
     Then I choose I confirm registration
       And I press the Continue
     Then I should see "What is your vehicle?"
@@ -61,9 +61,4 @@ Feature: Vehicles
       And I press the Confirm
     Then I should see "Which Clean Air Zone do you need to pay for?"
 
-  Scenario: User wants to to know in what scenarios he can claim a refund
-    Given I am on the home page
-    Then I press 'Can I claim a refund?' link
-      And I should see "Can I claim a refund?"
-    Then I press the Continue
-      And I should see "Claim a refund"
+
