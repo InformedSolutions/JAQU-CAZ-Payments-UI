@@ -18,30 +18,29 @@
       %table.govuk-table
         %tr.govuk-table__row
           %td.govuk-table__cell{scope: 'row'} Vehicle registration
-          %th.govuk-table__cell{id: 'registration-number'}
-            = @vehicle_registration
+          %th.govuk-table__cell{id: 'registration-number'}= @vehicle_details.registration_number
         %tr.govuk-table__row
           %td.govuk-table__cell{scope: 'row'} Vehicle type approval
-          %th.govuk-table__cell{id: 'type-approval'} M1
+          %th.govuk-table__cell{id: 'type-approval'}= @vehicle_details.type_approval
         %tr.govuk-table__row
           %td.govuk-table__cell{scope: 'row'} CAZ vehicle type
-          %th.govuk-table__cell{id: 'type'} Car
+          %th.govuk-table__cell{id: 'type'}= @vehicle_details.type
         %tr.govuk-table__row
           %td.govuk-table__cell{scope: 'row'} Make
-          %th.govuk-table__cell{id: 'make'} Hyundai
+          %th.govuk-table__cell{id: 'make'}= @vehicle_details.make
         %tr.govuk-table__row
           %td.govuk-table__cell{scope: 'row'} Model
-          %th.govuk-table__cell{id: 'model'} I20
+          %th.govuk-table__cell{id: 'model'}= @vehicle_details.model
         %tr.govuk-table__row
           %td.govuk-table__cell{scope: 'row'} Colour
-          %th.govuk-table__cell{id: 'colour'} Grey
+          %th.govuk-table__cell{id: 'colour'}= @vehicle_details.colour
         %tr.govuk-table__row
           %td.govuk-table__cell{scope: 'row'} Fuel type
-          %th.govuk-table__cell{id: 'fuel-type'} Petrol
-        -#- if @vehicle_details.taxi_private_hire_vehicle.eql?('Yes')
-        -#  %tr.govuk-table__row
-        -#    %td.govuk-table__cell{scope: 'row'} Taxi
-        -#    %th.govuk-table__cell{id: 'taxi'}= @vehicle_details.taxi_private_hire_vehicle
+          %th.govuk-table__cell{id: 'fuel-type'}= @vehicle_details.fuel_type
+        - if @vehicle_details.taxi_private_hire_vehicle.eql?('Yes')
+          %tr.govuk-table__row
+            %td.govuk-table__cell{scope: 'row'} Taxi
+            %th.govuk-table__cell{id: 'taxi'}= @vehicle_details.taxi_private_hire_vehicle
       = form_tag confirm_details_vehicles_path, method: :post do
         - if alert
           .govuk-form-group{class: 'govuk-form-group--error'}
