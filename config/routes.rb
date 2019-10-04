@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       get :details
       post :confirm_details
       get :incorrect_details
+      get :unrecognised_vehicle
     end
   end
 

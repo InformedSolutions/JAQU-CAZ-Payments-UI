@@ -4,6 +4,9 @@
 # Controls the first steps of the payment process regarding user's vehicle data.
 #
 class VehiclesController < ApplicationController
+  # 404 HTTP status from API mean vehicle in not found in DLVA database. Redirects to the proper page.
+  rescue_from BaseApi::Error404Exception, with: :vehicle_not_found
+
   # checks if VRN is present in the session
   before_action :check_vrn, except: %i[enter_details submit_details]
 
@@ -63,7 +66,7 @@ class VehiclesController < ApplicationController
   # * +vrn+ - vehicle registration number, required in the session
   #
   def details
-    @vehicle_registration = vrn
+    @vehicle_details = VehicleDetails.new(vrn)
   end
 
   ##
@@ -108,6 +111,13 @@ class VehiclesController < ApplicationController
   def incorrect_details
     # to be defined later
   end
+
+  # Redirects to {vehicle not found}[rdoc-ref:VehiclesController.unrecognised_vehicle]
+  def vehicle_not_found
+    redirect_to unrecognised_vehicle_vehicles_path
+  end
+
+  def unrecognised_vehicle; end
 
   private
 
