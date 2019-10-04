@@ -6,15 +6,15 @@
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
           %fieldset.govuk-fieldset
             %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
-              - if alert
-                %span#caz-select-error.govuk-error-message
-                  %span.govuk-visually-hidden Error:
-                  Tell us what type of vehicle you want to pay for
               %h1.govuk-fieldset__heading
                 What is your vehicle?
             %p
               Since we are not able to find your vehicle's details, you'll need to tell us what type of
               vehicle you want to pay for.
+            - if alert
+              %span#caz-select-error.govuk-error-message
+                %span.govuk-visually-hidden Error:
+                Tell us what type of vehicle you want to pay for
             .govuk-radios
               .govuk-radios__item
                 %input#vehicle-type.govuk-radios__input{name: 'vehicle-type', type: 'radio', value: 'bus'}
