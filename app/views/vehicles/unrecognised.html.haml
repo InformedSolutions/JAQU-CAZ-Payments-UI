@@ -1,0 +1,52 @@
+= link_to 'Back', enter_details_vehicles_path, class: 'govuk-back-link'
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      %h1.govuk-heading-xl Vehicle details not found
+      %h1.govuk-heading-m We can't find the details of this vehicle
+      %p
+        We might not be able to find the details for the vehicle XYZ456 because it's not registered
+        with the DVLA.
+      %p
+        Try
+        = link_to 'entering your details', enter_details_vehicles_path, class: 'govuk-link'
+        again making sure that you have no mixed up letters and numbers
+        (for example, the letters
+        <strong>I</strong> and <strong>O</strong> with the numbers <strong>1</strong> and <strong>0</strong>).
+      %h1.govuk-heading-m If you believe your vehicle should be registered in the UK
+      %p
+        If your details are still not recognised, and you believe your vehicle should be registered
+        in the UK, contact the
+        = link_to 'DVLA',
+          'https://www.gov.uk/change-vehicle-details-registration-certificate',
+          target: '_blank',
+          class: 'govuk-link'
+        to update the details it holds for your vehicle.
+      %p
+        You will still have to pay the Clean Air Zone charge (payment has to be made by midnight
+        the next working day after you drive in the zone). If your vehicle meets Clean Air standards,
+        you will be able to claim a
+        = link_to 'refund once your vehicle details are updated.',
+          scenarios_refunds_path,
+          class: 'govuk-link'
+      %p
+        Please confirm that the registration number
+        %b= @vrn
+        is correct.
+      = form_tag confirm_registration_vehicles_path, method: :get do
+        .govuk-form-group{class: ('govuk-form-group--error' if alert)}
+          %fieldset.govuk-fieldset
+            %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
+            - if alert
+              %span#caz-select-error.govuk-error-message
+                %span.govuk-visually-hidden Error:
+                Confirm that the registration number is correct
+            .govuk-checkboxes
+              .govuk-checkboxes__item
+                %input.govuk-checkboxes__input{name: 'confirm-registration',
+                                               type: 'checkbox',
+                                               value: 'true',
+                                               id: 'confirm-registration'}
+                %label.govuk-label.govuk-checkboxes__label{for: 'confirm-registration'}
+                  I confirm that the registration number is correct.
+        = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'

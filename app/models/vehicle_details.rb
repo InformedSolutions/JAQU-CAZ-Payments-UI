@@ -114,7 +114,6 @@ class VehicleDetails
   #     * +financialAssistance+
   #     * +boundary+
   def compliance_api
-    # @compliance_api ||= MockResponse.new(vrn).response
     @compliance_api ||= ComplianceCheckerApi.vehicle_details(vrn_for_request)
   end
 end

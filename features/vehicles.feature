@@ -61,4 +61,18 @@ Feature: Vehicles
       And I press the Confirm
     Then I should see "Which Clean Air Zone do you need to pay for?"
 
+  Scenario: User enters a vehicle's registration which cannot be recognised
+    Given I am on the home page
+    Then I press the Start now button
+      And I should see "Vehicle registration details"
+    Then I enter a unrecognised vehicle's registration and choose UK
+      And I press the Continue
+    Then I should see "Vehicle details not found"
+      And I press the Continue
+    Then I should see "Confirm that the registration number is correct"
+      And I should be on the unrecognised page
+    Then I choose I confirm registration
+      And I press the Continue
+    Then I should see "What is your vehicle?"
+
 

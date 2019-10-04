@@ -61,7 +61,7 @@ class NonUkVehiclesController < ApplicationController
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
   def choose_type
-    # renders a static page
+    @return_path = request.referer || non_uk_vehicles_path
   end
 
   ##
@@ -86,13 +86,5 @@ class NonUkVehiclesController < ApplicationController
     else
       redirect_to local_authority_charges_path
     end
-  end
-
-  private
-
-  # Checks if confirm registration not equals 'true'.
-  # Returns boolean.
-  def registration_not_confirmed?
-    params['confirm-registration'] != 'true'
   end
 end
