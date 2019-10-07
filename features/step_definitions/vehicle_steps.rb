@@ -35,3 +35,8 @@ end
 Then('I choose that the details are correct') do
   choose('Yes')
 end
+
+Then("I enter a unrecognised vehicle's registration and choose UK") do
+  fill_in('vrn', with: 'CU27ABA')
+  choose('UK')
+end

@@ -2,6 +2,7 @@ en:
   hello: "Hello world"
   labels:
     vrn: For example, CU57ABC
+    country: Where was the vehicle registered?
   vrn_form:
     vrn_missing: 'Enter the registration number of the vehicle'
     country_missing: 'Tell us if your vehicle is UK or non-UK registered'

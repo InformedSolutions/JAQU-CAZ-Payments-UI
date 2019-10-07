@@ -7,7 +7,7 @@ RSpec.describe 'NonUkVehiclesController - POST #confirm_registration', type: :re
     post confirm_registration_non_uk_vehicles_path, params: { 'confirm-registration': confirm }
   end
 
-  let(:confirm) { 'true' }
+  let(:confirm) { 'yes' }
 
   before do
     add_vrn_to_session

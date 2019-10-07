@@ -109,15 +109,51 @@ class VehiclesController < ApplicationController
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
   def incorrect_details
-    # to be defined later
+    # renders static page
   end
 
-  # Redirects to {vehicle not found}[rdoc-ref:VehiclesController.unrecognised_vehicle]
-  def vehicle_not_found
-    redirect_to unrecognised_vehicle_vehicles_path
+  ##
+  # Renders a static page for users who selected that DVLA data in incorrect.
+  #
+  # ==== Path
+  #
+  #    GET /vehicles/unrecognised
+  #
+  # ==== Params
+  # * +vrn+ - vehicle registration number, required in the session
+  #
+  # ==== Validations
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  #
+  def unrecognised
+    @vrn = vrn
   end
 
-  def unrecognised_vehicle; end
+  ##
+  # Verifies if user confirms that the registration number is correct.
+  # If yes, renders to {choose type}[rdoc-ref:NonUkVehiclesController.choose_type]
+  # If no, redirects to {non_uk_vehicles}[rdoc-ref:VehiclesController.unrecognised]
+  #
+  # ==== Path
+  #    POST /vehicles/confirm_unrecognised_registration
+  #
+  # ==== Params
+  # * +vrn+ - vehicle registration number, required in the session
+  # * +confirm-registration+ - user confirmation that the registration number is correct.
+  #
+  # ==== Validations
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  # * +confirm-registration+ - lack of it redirects to {non_uk_vehicles}[rdoc-ref:VehiclesController.unrecognised]
+  #
+  def confirm_unrecognised_registration
+    form = ConfirmationForm.new(params['confirm-registration'])
+    if form.confirmed?
+      redirect_to choose_type_non_uk_vehicles_path
+    else
+      log_invalid_form 'Redirecting back.'
+      redirect_to unrecognised_vehicles_path, alert: true
+    end
+  end
 
   def compliant
     @return_path = request.referer || enter_details_vehicles_path
@@ -149,5 +185,10 @@ class VehiclesController < ApplicationController
   # Returns boolean.
   def non_uk?
     country == 'Non-UK'
+  end
+
+  # Redirects to {vehicle not found}[rdoc-ref:VehiclesController.unrecognised_vehicle]
+  def vehicle_not_found
+    redirect_to unrecognised_vehicles_path
   end
 end
