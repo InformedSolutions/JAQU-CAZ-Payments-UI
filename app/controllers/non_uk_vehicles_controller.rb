@@ -62,7 +62,7 @@ class NonUkVehiclesController < ApplicationController
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
   def choose_type
-    @return_path = request.referer || non_uk_vehicles_path
+    @return_path = return_path(custom_path: non_uk_vehicles_path)
   end
 
   ##

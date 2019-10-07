@@ -169,7 +169,7 @@ class VehiclesController < ApplicationController
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
   def compliant
-    @return_path = request.referer || enter_details_vehicles_path
+    @return_path = return_path
   end
 
   private

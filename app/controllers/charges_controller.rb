@@ -27,7 +27,7 @@ class ChargesController < ApplicationController
     return redirect_to compliant_vehicles_path if zones_data.empty?
 
     @zones = zones_data.map { |caz_data| Caz.new(caz_data) }
-    @return_path = request.referer || enter_details_vehicles_path
+    @return_path = return_path
   end
 
   ##
