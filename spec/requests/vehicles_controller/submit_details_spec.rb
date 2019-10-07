@@ -16,6 +16,11 @@ RSpec.describe 'VehiclesController - POST #submit_details', type: :request do
     it 'returns a found response' do
       expect(response).to have_http_status(:found)
     end
+
+    it 'sets VRN in the session' do
+      http_request
+      expect(session[:vrn]).to eq(vrn)
+    end
   end
 
   context 'when VRN is not valid' do

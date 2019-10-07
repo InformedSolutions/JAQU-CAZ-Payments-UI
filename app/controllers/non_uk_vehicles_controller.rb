@@ -84,7 +84,7 @@ class NonUkVehiclesController < ApplicationController
     if params['vehicle-type'].blank?
       redirect_to choose_type_non_uk_vehicles_path, alert: true
     else
-      redirect_to local_authorities_path
+      redirect_to local_authority_charges_path
     end
   end
 

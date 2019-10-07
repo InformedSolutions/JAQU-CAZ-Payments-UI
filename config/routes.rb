@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       post :confirm_details
       get :incorrect_details
       get :unrecognised_vehicle
+      get :compliant
     end
   end
 
@@ -22,7 +23,13 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :local_authorities, only: [:index]
+  resources :charges, only: [] do
+    collection do
+      get :local_authority
+      post :submit_local_authority
+      get :dates
+    end
+  end
 
   resources :refunds, only: [] do
     collection do

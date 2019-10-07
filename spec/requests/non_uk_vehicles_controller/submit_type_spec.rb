@@ -15,8 +15,8 @@ RSpec.describe 'NonUkVehiclesController - POST #submit_type', type: :request do
   end
 
   context 'when user chooses the vehicle type' do
-    it 'redirects to local authority page' do
-      expect(response).to redirect_to(local_authorities_path)
+    it 'redirects to select local authority page' do
+      expect(response).to redirect_to(local_authority_charges_path)
     end
   end
 

@@ -56,5 +56,11 @@ class ComplianceCheckerApi < BaseApi
       MockVrnResponse.new(vrn).response
       # request(:get, "/vehicles/#{vrn}/details")
     end
+
+    # TODO: replace by call to /compliance and checking returned charge value
+    def chargeable_zones(vrn, type = nil)
+      log_action "Getting chargeable CAZ, vrn: #{type ? "#{vrn}, type: #{type}" : vrn}"
+      MockCazResponse.new(vrn).response
+    end
   end
 end

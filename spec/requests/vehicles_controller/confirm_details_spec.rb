@@ -15,8 +15,8 @@ RSpec.describe 'VehicleCheckersController - POST #confirm_details', type: :reque
   end
 
   context 'when user confirms details' do
-    it 'redirects to LA page' do
-      expect(response).to redirect_to(local_authorities_path)
+    it 'redirects to select LA page' do
+      expect(response).to redirect_to(local_authority_charges_path)
     end
   end
 
