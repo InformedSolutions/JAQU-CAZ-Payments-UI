@@ -1,6 +1,25 @@
 # frozen_string_literal: true
 
+##
+# Base controller class. Contains common functions.
+#
+# Also, contains some basic endpoints used for build purposes.
+#
 class ApplicationController < ActionController::Base
+  ##
+  # Build ID endpoint
+  #
+  # Used by CI to determine if the new version is already deployed.
+  # +BUILD_ID+ environment variables is used to set it's value. If nothing is set, returns 'undefined
+  #
+  # ==== Path
+  #
+  #    GET /build_id.json
+  #
+  def build_id
+    render json: ENV.fetch('BUILD_ID', 'undefined'), status: :ok
+  end
+
   private
 
   # Logs invalid form on +warn+ level

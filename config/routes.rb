@@ -30,4 +30,6 @@ Rails.application.routes.draw do
       get :details
     end
   end
+
+  get :build_id, to: 'application#build_id'
 end
