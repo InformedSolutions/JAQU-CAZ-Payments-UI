@@ -42,7 +42,7 @@ class NonUkVehiclesController < ApplicationController
   #
   def confirm_registration
     form = ConfirmationForm.new(params['confirm-registration'])
-    if form.valid?
+    if form.confirmed?
       redirect_to choose_type_non_uk_vehicles_path
     else
       redirect_to non_uk_vehicles_path, alert: true

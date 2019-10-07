@@ -126,7 +126,7 @@ class VehiclesController < ApplicationController
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
   def unrecognised
-    @vrn = session[:vrn]
+    @vrn = vrn
   end
 
   ##
@@ -147,7 +147,7 @@ class VehiclesController < ApplicationController
   #
   def confirm_unrecognised_registration
     form = ConfirmationForm.new(params['confirm-registration'])
-    if form.valid?
+    if form.confirmed?
       redirect_to choose_type_non_uk_vehicles_path
     else
       log_invalid_form 'Redirecting back.'
