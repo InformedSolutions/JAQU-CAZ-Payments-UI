@@ -18,14 +18,6 @@ Feature: Vehicles
       And I press the Continue
       And I should see "Enter the registration number of the vehicle"
 
-  Scenario: User enters a correct vehicle's registration and choose UK country
-    Given I am on the home page
-    Then I press the Start now button
-      And I should see "Vehicle registration details"
-    Then I enter a vehicle's registration and choose UK
-      And I press the Continue
-    Then I should see "Are these the vehicle's details?"
-
   Scenario: User enters a correct vehicle's registration and choose what vehicle's details are incorrect
     Given I am on the home page
     Then I press the Start now button
@@ -75,4 +67,13 @@ Feature: Vehicles
       And I press the Continue
     Then I should see "What is your vehicle?"
 
-
+  Scenario: User enters a compliant vehicle's registration and choose UK country
+    Given I am on the home page
+    Then I press the Start now button
+      And I should see "Vehicle registration details"
+    Then I enter a compliant vehicle's registration and choose UK
+      And I press the Continue
+      And I should see "Are these the vehicle's details?"
+    Then I choose that the details are correct
+      And I press the Confirm
+      And I should see "There is no charge for this vehicle"
