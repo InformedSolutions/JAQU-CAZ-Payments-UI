@@ -33,7 +33,7 @@
         Please confirm that the registration number
         %b= @vrn
         is correct.
-      = form_tag confirm_registration_vehicles_path, method: :get do
+      = form_tag confirm_unrecognised_registration_vehicles_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
           %fieldset.govuk-fieldset
             %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
@@ -45,7 +45,7 @@
               .govuk-checkboxes__item
                 %input.govuk-checkboxes__input{name: 'confirm-registration',
                                                type: 'checkbox',
-                                               value: 'true',
+                                               value: 'yes',
                                                id: 'confirm-registration'}
                 %label.govuk-label.govuk-checkboxes__label{for: 'confirm-registration'}
                   I confirm that the registration number is correct.

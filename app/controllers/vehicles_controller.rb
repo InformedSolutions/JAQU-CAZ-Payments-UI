@@ -135,7 +135,7 @@ class VehiclesController < ApplicationController
   # If no, redirects to {non_uk_vehicles}[rdoc-ref:VehiclesController.unrecognised]
   #
   # ==== Path
-  #    GET /vehicles/confirm_registration
+  #    POST /vehicles/confirm_unrecognised_registration
   #
   # ==== Params
   # * +vrn+ - vehicle registration number, required in the session
@@ -145,11 +145,13 @@ class VehiclesController < ApplicationController
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   # * +confirm-registration+ - lack of it redirects to {non_uk_vehicles}[rdoc-ref:VehiclesController.unrecognised]
   #
-  def confirm_registration
-    if registration_not_confirmed?
-      redirect_to unrecognised_vehicles_path, alert: true
-    else
+  def confirm_unrecognised_registration
+    form = ConfirmationForm.new(params['confirm-registration'])
+    if form.valid?
       redirect_to choose_type_non_uk_vehicles_path
+    else
+      log_invalid_form 'Redirecting back.'
+      redirect_to unrecognised_vehicles_path, alert: true
     end
   end
 

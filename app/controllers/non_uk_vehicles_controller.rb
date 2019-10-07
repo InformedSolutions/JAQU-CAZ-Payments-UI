@@ -41,10 +41,11 @@ class NonUkVehiclesController < ApplicationController
   # * +confirm-registration+ - lack of it redirects to {non_uk_vehicles}[rdoc-ref:NonUkVehiclesController.index]
   #
   def confirm_registration
-    if registration_not_confirmed?
-      redirect_to non_uk_vehicles_path, alert: true
-    else
+    form = ConfirmationForm.new(params['confirm-registration'])
+    if form.valid?
       redirect_to choose_type_non_uk_vehicles_path
+    else
+      redirect_to non_uk_vehicles_path, alert: true
     end
   end
 

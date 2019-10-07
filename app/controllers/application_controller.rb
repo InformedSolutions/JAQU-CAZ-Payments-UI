@@ -40,10 +40,4 @@ class ApplicationController < ActionController::Base
     Rails.logger.warn 'VRN is missing in the session. Redirecting to :enter_details'
     redirect_to enter_details_vehicles_path
   end
-
-  # Checks if confirm registration not equals 'true'.
-  # Returns boolean.
-  def registration_not_confirmed?
-    params['confirm-registration'] != 'true'
-  end
 end

@@ -2,13 +2,13 @@
 
 require 'rails_helper'
 
-RSpec.describe 'VehiclesController - GET #confirm_registation', type: :request do
+RSpec.describe 'VehiclesController - POST #confirm_registation', type: :request do
   subject(:http_request) do
-    get confirm_registration_vehicles_path,
-        params: { 'confirm-registration': confirmation }
+    post confirm_unrecognised_registration_vehicles_path,
+         params: { 'confirm-registration': confirmation }
   end
 
-  let(:confirmation) { 'true' }
+  let(:confirmation) { 'yes' }
 
   before do
     add_vrn_to_session
@@ -26,7 +26,7 @@ RSpec.describe 'VehiclesController - GET #confirm_registation', type: :request d
   end
 
   context 'when registration not confirmed' do
-    let(:confirmation) { 'false' }
+    let(:confirmation) { nil }
 
     it 'returns a found response' do
       expect(response).to have_http_status(:found)
