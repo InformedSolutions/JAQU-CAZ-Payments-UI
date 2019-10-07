@@ -8,3 +8,5 @@ en:
     vrn_invalid: 'Enter the registration number of the vehicle in valid format'
     vrn_too_long: 'The registration number of the vehicle is too long'
     vrn_too_short: 'The registration number of the vehicle is too short'
+  la_form:
+    la_missing: 'Which clean air zone are you paying for?'

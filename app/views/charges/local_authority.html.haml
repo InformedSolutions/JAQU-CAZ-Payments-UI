@@ -1,0 +1,33 @@
+= link_to 'Back', @return_path, class: 'govuk-back-link'
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      = form_tag submit_local_authority_charges_path, method: :post do
+        .govuk-form-group{class: ('govuk-form-group--error' if alert)}
+          %fieldset.govuk-fieldset
+            %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
+              %h1.govuk-fieldset__heading
+                Which Clean Air Zone do you need to pay for?
+            %p
+              You need to pay separately for each Clean Air Zone you drive in.
+            %details.govuk-details{'data-module': 'govuk-details'}
+              %summary.govuk-details__summary
+                %span.govuk-details__summary-text
+                  Why can I only select one Clean Air Zone?
+              .govuk-details__text
+                %p
+                  You will only see zones in which your vehicle does not meet Clean Air Standards.
+            - if alert
+              %span#caz-select-error.govuk-error-message
+                %span.govuk-visually-hidden Error:
+                = alert
+            .govuk-radios
+              - @zones.each do |zone|
+                .govuk-radios__item
+                  %input.govuk-radios__input{name: 'local-authority',
+                                             type: 'radio',
+                                             value: zone.id,
+                                             id: zone.name.downcase}
+                  %label.govuk-label.govuk-radios__label{for: zone.name.downcase}
+                    = zone.name
+        = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'

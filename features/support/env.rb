@@ -7,6 +7,7 @@
 # files.
 
 require 'cucumber/rails'
+require 'cucumber/rspec/doubles'
 require 'rack_session_access/capybara'
 
 # Capybara defaults to CSS3 selectors rather than XPath.

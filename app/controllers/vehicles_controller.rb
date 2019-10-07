@@ -92,7 +92,7 @@ class VehiclesController < ApplicationController
       return redirect_to details_vehicles_path, alert: form.errors.messages[:confirmation].first
     end
 
-    redirect_to form.confirmed? ? local_authorities_path : incorrect_details_vehicles_path
+    redirect_to form.confirmed? ? local_authority_charges_path : incorrect_details_vehicles_path
   end
 
   ##
@@ -118,6 +118,10 @@ class VehiclesController < ApplicationController
   end
 
   def unrecognised_vehicle; end
+
+  def compliant
+    @return_path = request.referer || enter_details_vehicles_path
+  end
 
   private
 
