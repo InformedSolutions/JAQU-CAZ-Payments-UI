@@ -23,10 +23,10 @@ class ChargesController < ApplicationController
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
   def local_authority
-    @zones = ComplianceCheckerApi.chargeable_clean_air_zones(vrn)
-    return redirect_to compliant_vehicles_path if @zones.empty?
+    zones_data = ComplianceCheckerApi.chargeable_zones(vrn)
+    return redirect_to compliant_vehicles_path if zones_data.empty?
 
-    @zones = @zones.map { |caz_data| Caz.new(caz_data) }
+    @zones = zones_data.map { |caz_data| Caz.new(caz_data) }
     @return_path = request.referer || enter_details_vehicles_path
   end
 
@@ -47,13 +47,13 @@ class ChargesController < ApplicationController
   #
   def submit_local_authority
     form = LocalAuthorityForm.new(params['local-authority'])
-    unless form.valid?
+    if form.valid?
+      store_la
+      redirect_to dates_charges_path
+    else
       log_invalid_form 'Redirecting to :local_authority.'
-      return redirect_to local_authority_charges_path, alert: la_alert(form)
+      redirect_to local_authority_charges_path, alert: la_alert(form)
     end
-
-    store_la
-    redirect_to dates_charges_path
   end
 
   ##

@@ -57,7 +57,8 @@ class ComplianceCheckerApi < BaseApi
       # request(:get, "/vehicles/#{vrn}/details")
     end
 
-    def chargeable_clean_air_zones(vrn, type = nil)
+    # TODO: replace by call to /compliance and checking returned charge value
+    def chargeable_zones(vrn, type = nil)
       log_action "Getting chargeable CAZ, vrn: #{type ? "#{vrn}, type: #{type}" : vrn}"
       MockCazResponse.new(vrn).response
     end

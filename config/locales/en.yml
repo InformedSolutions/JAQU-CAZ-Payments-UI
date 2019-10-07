@@ -10,3 +10,5 @@ en:
     vrn_too_short: 'The registration number of the vehicle is too short'
   la_form:
     la_missing: 'Which clean air zone are you paying for?'
+  confirmation_form:
+    answer_missing: 'You must choose an answer'
