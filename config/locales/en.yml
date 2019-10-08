@@ -13,3 +13,4 @@ en:
     la_missing: 'Which clean air zone are you paying for?'
   confirmation_form:
     answer_missing: 'You must choose an answer'
+    exemption: Confirm you have checked if you are eligible for an exemption

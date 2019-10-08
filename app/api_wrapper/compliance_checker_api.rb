@@ -62,5 +62,11 @@ class ComplianceCheckerApi < BaseApi
       log_action "Getting chargeable CAZ, vrn: #{type ? "#{vrn}, type: #{type}" : vrn}"
       MockCazResponse.new(vrn).response
     end
+
+    def vehicle_compliance(vrn, zone = nil)
+      log_action "Getting vehicle compliance, vrn: #{vrn}, zone: #{zone || 'all'}"
+      MockComplianceResponse.new(vrn, zone).response
+      # request(:get, "/vehicles/#{vrn}/compliance", query: { zones: zones })
+    end
   end
 end
