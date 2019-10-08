@@ -155,6 +155,19 @@ class VehiclesController < ApplicationController
     end
   end
 
+  ##
+  # Renders a static page for users which VRN is recognised as compliant (no charge in all LAs)
+  #
+  # ==== Path
+  #
+  #    GET /vehicles/compliant
+  #
+  # ==== Params
+  # * +vrn+ - vehicle registration number, required in the session
+  #
+  # ==== Validations
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  #
   def compliant
     @return_path = request.referer || enter_details_vehicles_path
   end

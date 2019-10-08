@@ -40,3 +40,8 @@ Then("I enter a unrecognised vehicle's registration and choose UK") do
   fill_in('vrn', with: 'CU27ABA')
   choose('UK')
 end
+
+Then("I enter a compliant vehicle's registration and choose UK") do
+  fill_in('vrn', with: 'CDE345')
+  choose('UK')
+end
