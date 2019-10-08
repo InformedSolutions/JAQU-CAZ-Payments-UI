@@ -1,6 +1,18 @@
 # frozen_string_literal: true
 
+##
+# Class is used to wrap data from ComplianceCheckerApi.vehicle_compliance API call
+# and display them on +app/views/charges/daily_charge.html.haml+
+#
 class ComplianceDetails
+  ##
+  # Creates an instance of a class with attributes ued to perform the backend call.
+  #
+  # ==== Attributes
+  #
+  # * +vrn+ - string, eg. 'CU57ABC'
+  # * +zone_id+ - UUID, represents id of a CAZ in the backend DB
+  #
   def initialize(vrn, zone_id)
     @vrn = vrn
     @zone_id = zone_id
@@ -27,12 +39,19 @@ class ComplianceDetails
 
   private
 
+  # Attributes used to perform the backend call
   attr_reader :vrn, :zone_id
 
+  # Helper method used to take given url from URLs hash
+  #
+  # ==== Attributes
+  #
+  # * +name+ - symbol, name of the URL field eg. :exemption_or_discount
   def url(name)
     compliance_data.dig(:information_urls, name)
   end
 
+  # Performs a call to the backend API, transforms data and stores it in variable
   def compliance_data
     @compliance_data ||= ComplianceCheckerApi.vehicle_compliance(
       vrn, zone_id

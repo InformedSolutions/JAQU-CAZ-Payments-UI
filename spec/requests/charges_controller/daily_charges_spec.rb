@@ -14,12 +14,15 @@ RSpec.describe 'ChargesController - GET #daily_charge', type: :request do
                     exemption_or_discount_url: 'www.wp.pl')
   end
 
+  before do
+    allow(ComplianceDetails)
+      .to receive(:new)
+      .with(vrn, zone_id)
+      .and_return(details)
+  end
+
   context 'with VRN in the session' do
     before do
-      allow(ComplianceDetails)
-        .to receive(:new)
-        .with(vrn, zone_id)
-        .and_return(details)
       add_vrn_to_session(vrn: vrn)
       add_la_to_session(zone_id)
       http_request
@@ -27,6 +30,12 @@ RSpec.describe 'ChargesController - GET #daily_charge', type: :request do
 
     it 'returns a success response' do
       expect(response).to have_http_status(:success)
+    end
+  end
+
+  context 'without VRN in the session' do
+    it 'redirects to :enter_details' do
+      expect(http_request).to redirect_to(enter_details_vehicles_path)
     end
   end
 end
