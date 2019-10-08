@@ -32,6 +32,10 @@ Then('I should be on the local authorities page') do
   expect_path(local_authority_charges_path)
 end
 
+Then('I should be on the daily charge page') do
+  expect_path(daily_charge_charges_path)
+end
+
 Then('I should be on the pick dates page') do
   expect_path(dates_charges_path)
 end

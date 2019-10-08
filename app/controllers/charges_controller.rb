@@ -8,7 +8,7 @@ class ChargesController < ApplicationController
   before_action :check_vrn
 
   # checks if LA is present in the session
-  before_action :check_la, only: :dates
+  before_action :check_la, except: %i[local_authority submit_local_authority]
 
   ##
   # Renders the list of available local authorities.
@@ -49,10 +49,55 @@ class ChargesController < ApplicationController
     form = LocalAuthorityForm.new(params['local-authority'])
     if form.valid?
       store_la
-      redirect_to dates_charges_path
+      redirect_to daily_charge_charges_path
     else
       log_invalid_form 'Redirecting to :local_authority.'
       redirect_to local_authority_charges_path, alert: la_alert(form)
+    end
+  end
+
+  ##
+  # Renders the charge value for a given LA.
+  #
+  # ==== Path
+  #    GET /charges/daily_charge
+  #
+  # ==== Params
+  # * +vrn+ - vehicle registration number, required in the session
+  # * +la+ - selected local authority, required in the session
+  #
+  # ==== Validations
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  # * +la+ - lack of LA redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
+  #
+  def daily_charge
+    @compliance_details = ComplianceDetails.new(vrn, session[:la])
+  end
+
+  ##
+  # Validates if user confirmed being not exempt for a given LA.
+  # If yes, redirects to the {next step}[rdoc-ref:ChargesController.dates]
+  #
+  # ==== Path
+  #    POST /charges/confirm_daily_charge
+  #
+  # ==== Params
+  # * +vrn+ - vehicle registration number, required in the session
+  # * +la+ - selected local authority, required in the session
+  # * +confirm-exempt+ - user confirmation of not being exempt, required in params
+  #
+  # ==== Validations
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  # * +la+ - lack of LA redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
+  # * +confirm-exempt+ - lack of the confirmation redirects back to {daily charge}[rdoc-ref:ChargesController.daily_charge]
+  #
+  def confirm_daily_charge
+    form = ConfirmationForm.new(params['confirm-exempt'])
+    if form.confirmed?
+      redirect_to dates_charges_path
+    else
+      log_invalid_form 'Redirecting back to :daily_charge.'
+      redirect_to daily_charge_charges_path, alert: I18n.t('confirmation_form.exemption')
     end
   end
 
@@ -76,14 +121,18 @@ class ChargesController < ApplicationController
 
   private
 
+  # Takes right alert for the LA out of error object
   def la_alert(form)
     form.errors.messages[:authority].first
   end
 
+  # Stores submitted LA in the session
   def store_la
     session[:la] = params['local-authority']
   end
 
+  # Checks if LA is present in the session.
+  # If not, redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
   def check_la
     return if session[:la]
 

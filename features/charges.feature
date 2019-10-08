@@ -39,9 +39,21 @@ Feature: Charges
       And I am on the select local authority page
     Then I select Birmingham
       And I press the Continue
-    Then I should be on the pick dates page
+    Then I should be on the daily charge page
 
   Scenario: Vehicle is compliant in all CAZ
     Given My vehicle is compliant
       And I am on the select local authority page
     Then I should be on the compliant vehicle page
+
+  Scenario: User does not confirm exemption
+    Given I am on the daily charge page
+      And I press the Continue
+    Then I should be on the daily charge page
+      And I should see "Confirm you have checked if you are eligible for an exemption"
+
+  Scenario: User confirms exemption
+    Given I am on the daily charge page
+      And I confirm exemption
+      And I press the Continue
+    Then I should be on the pick dates page

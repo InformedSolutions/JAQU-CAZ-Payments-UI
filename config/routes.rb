@@ -28,6 +28,8 @@ Rails.application.routes.draw do
     collection do
       get :local_authority
       post :submit_local_authority
+      get :daily_charge
+      post :confirm_daily_charge
       get :dates
     end
   end
