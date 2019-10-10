@@ -27,3 +27,11 @@ end
 Then('I confirm exemption') do
   check 'confirm-exempt'
 end
+
+Then('I choose I confirm that I am not exempt') do
+  check 'I confirm that I am not exempt'
+end
+
+Then('I choose today date') do
+  check 'Today'
+end

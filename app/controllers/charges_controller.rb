@@ -117,7 +117,36 @@ class ChargesController < ApplicationController
   #
   def dates
     @local_authority = session[:la]
+    @dates = Dates.new.build
   end
+
+  ##
+  # Validates if user selects at least one date.
+  #
+  # ==== Path
+  #    POST /charges/confirm_dates
+  #
+  # ==== Params
+  # * +vrn+ - vehicle registration number, required in the session
+  # * +la+ - selected local authority, required in the session
+  # * +dates+ - selected dates
+  #
+  # ==== Validations
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  # * +la+ - lack of LA redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
+  # * +dates+ - lack of the date redirects back to {daily charge}[rdoc-ref:ChargesController.dates]
+  #
+  def confirm_dates
+    if params[:dates]
+      session[:dates] = params[:dates]
+      redirect_to review_payment_charges_path
+    else
+      log_invalid_form 'Redirecting back to :dates.'
+      redirect_to dates_charges_path, alert: true
+    end
+  end
+
+  def review_payment; end
 
   private
 

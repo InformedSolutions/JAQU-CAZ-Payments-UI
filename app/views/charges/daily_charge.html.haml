@@ -1,20 +1,20 @@
 = link_to 'Back', local_authority_charges_path, class: 'govuk-back-link'
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
-  - if alert
-    .govuk-error-summary{'aria-labelledby': 'error-summary-title',
-                           'data-module': 'govuk-error-summary',
-                           role: 'alert',
-                           tabindex: '-1'}
-      %h2#error-summary-title.govuk-error-summary__title
-        There is a problem
-      .govuk-error-summary__body
-        %ul.govuk-list.govuk-error-summary__list
-          %li
-            %a{href: '#confirmation-error', id: 'error-summary'}
-              = alert
   .govuk-grid-row
     .govuk-grid-column-two-thirds
+      - if alert
+        .govuk-error-summary{'aria-labelledby': 'error-summary-title',
+                             'data-module': 'govuk-error-summary',
+                             role: 'alert',
+                             tabindex: '-1'}
+          %h2#error-summary-title.govuk-error-summary__title
+            There is a problem
+          .govuk-error-summary__body
+            %ul.govuk-list.govuk-error-summary__list
+              %li
+                %a{href: '#confirmation-error', id: 'error-summary'}
+                  = alert
       %h1.govuk-heading-l
         Pay a
         = @compliance_details.zone_name
