@@ -16,6 +16,8 @@ class Dates
   #
   def initialize
     @today = Date.current
+    @yesterday = Date.current.yesterday
+    @tomorrow = Date.current.tomorrow
     @dates = []
   end
 
@@ -23,67 +25,65 @@ class Dates
   # [{:value=>"2019-10-11", :name=>"Friday 11 October 2019"},...]
   def build
     add_previous_working_days
-    add_today_and_next_six_days
+    add_today
+    add_six_working_days
     dates
   end
 
   private
 
   # today and dates getters
-  attr_reader :today, :dates
+  attr_reader :today, :yesterday, :tomorrow, :dates
 
   # Add previous working days.
   # If yesterday was Sunday, add Friday, Saturday and Sunday
   # If yesterday was Saturday, add Friday and Saturday
   # If yesterday was working day, add only that day
   def add_previous_working_days
-    prev_day = today.yesterday
-    if prev_day.wday.zero?
-      add_three_days(prev_day)
-    elsif prev_day.wday == 6
-      add_two_days(prev_day)
+    if yesterday.sunday? || yesterday.saturday?
+      add_weekend_days
     else
-      add_one_day(prev_day)
+      add_one_day
     end
   end
 
-  # Add today and next six days to +dates+
-  def add_today_and_next_six_days
-    today.upto(today + 6.days) do |date|
-      @dates << {
-        value: date.strftime('%F'),
-        name: date.strftime(DATE_FORMAT)
-      }
+  # Add today to +dates+
+  def add_today
+    add_to_array(today)
+  end
+
+  # Add next six working days to +dates+ includes all weekends
+  def add_six_working_days
+    maximum_end_date = today + 10.days
+    working_days_count = 0
+
+    (tomorrow..maximum_end_date).each do |date|
+      break if working_days_count == 6
+
+      working_days_count += 1 if date.on_weekday?
+      add_to_array(date)
     end
   end
 
-  # Add last three days to +dates+ in case when yesterday was Sunday
-  def add_three_days(monday)
-    friday = monday - 2.days
-    friday.upto(friday + 2.days) do |date|
-      @dates << {
-        value: date.strftime('%F'),
-        name: date.strftime(DATE_FORMAT)
-      }
-    end
-  end
-
-  # Add last two days to +dates+ in case when yesterday was Saturday
-  def add_two_days(sunday)
-    friday = sunday - 1.day
-    friday.upto(friday + 1.day) do |date|
-      @dates << {
-        value: date.strftime('%F'),
-        name: date.strftime(DATE_FORMAT)
-      }
+  # Add last two or three days to +dates+ in case when yesterday was Sunday or Saturday
+  def add_weekend_days
+    friday = today.prev_weekday
+    friday.upto(yesterday) do |date|
+      add_to_array(date)
     end
   end
 
   # Add yesterday day to +dates+ in case when yesterday was not Sunday or Saturday
-  def add_one_day(working_day)
+  def add_one_day
+    add_to_array
+  end
+
+  # Add date to +dates+
+  def add_to_array(date = yesterday)
     @dates << {
-      value: working_day.strftime('%F'),
-      name: working_day.strftime(DATE_FORMAT)
+      value: date.strftime('%F'),
+      name: date.strftime(DATE_FORMAT),
+      today: date.today?
     }
   end
 end

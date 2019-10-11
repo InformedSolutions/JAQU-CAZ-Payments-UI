@@ -46,7 +46,7 @@
                                                  value: date[:value],
                                                  id: "date-#{index}"}
                   %label.govuk-label.govuk-checkboxes__label{for: "date-#{index}"}
-                    - if date[:value] == Date.current.strftime('%F')
+                    - if date[:today]
                       %b
                         = date[:name]
                       (Today)

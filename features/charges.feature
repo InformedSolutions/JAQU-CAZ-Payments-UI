@@ -41,15 +41,6 @@ Feature: Charges
       And I press the Continue
     Then I should be on the daily charge page
       And I should see "Pay a Birmingham Clean Air Zone charge"
-    Then I choose I confirm that I am not exempt
-      And I press the Continue
-    Then I should be on the dates page
-      And I should see "Which days do you want to pay for?"
-    Then I press the Continue
-      And I should see "Select a date that you wish to pay for"
-    Then I choose today date
-      And I press the Continue
-    Then I should see "Review your payment"
 
   Scenario: Vehicle is compliant in all CAZ
     Given My vehicle is compliant
@@ -67,3 +58,12 @@ Feature: Charges
       And I confirm exemption
       And I press the Continue
     Then I should be on the pick dates page
+
+  Scenario: User selects dates to pay for
+    Given I am on the dates page
+      And I should see "Which days do you want to pay for?"
+    Then I press the Continue
+      And I should see "Select a date that you wish to pay for"
+    Then I choose today date
+      And I press the Continue
+    Then I should see "Review your payment"
