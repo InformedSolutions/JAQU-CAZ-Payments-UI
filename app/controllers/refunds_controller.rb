@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+##
+# Controls the flow for claiming a refund.
+#
 class RefundsController < ApplicationController
   ##
   # Renders the scenarios page.

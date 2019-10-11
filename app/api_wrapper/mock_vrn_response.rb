@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # rubocop:disable all
+# :nodoc: all
 class MockVrnResponse
   def initialize(vrn)
     @vrn = vrn

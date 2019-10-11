@@ -54,9 +54,11 @@ class VehicleDetails
 
   # Check if type is 'null'
   #
-  # Returns a string 'true' if type is 'null'.
+  # Returns a string 'true' if type is 'null' or is empty.
   # Returns a string 'false' if type is not 'null'.
   def undetermined?
+    return 'true' if compliance_api['type'].blank?
+
     (compliance_api['type']&.downcase == 'null').to_s
   end
 

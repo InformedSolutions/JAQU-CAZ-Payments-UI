@@ -40,4 +40,8 @@ class ApplicationController < ActionController::Base
     Rails.logger.warn 'VRN is missing in the session. Redirecting to :enter_details'
     redirect_to enter_details_vehicles_path
   end
+
+  def return_path(custom_path: enter_details_vehicles_path)
+    request.referer || custom_path
+  end
 end

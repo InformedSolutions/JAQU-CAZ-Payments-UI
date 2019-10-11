@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # rubocop:disable all
+# :nodoc: all
 class MockCazResponse
   COMPLIANT = ['CDE345'].freeze
   ONLY_LEEDS = ['ABC123'].freeze
