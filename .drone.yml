@@ -1,7 +1,45 @@
-kind: pipeline
-name: ci
+  ################################################### YAML Anchors ########################################################
 
+  # Note that these are used when common environment variables are present in a step to reduce repetition - see terraform steps
+
+global-variables:
+  environment: &shared_terraform_credentials
+    TF_VAR_access_key:
+      from_secret: aws_access_key_id
+    TF_VAR_secret_key:
+      from_secret: aws_secret_access_key
+    TF_VAR_account_id:
+      from_secret: aws_account_id
+    GIT_PRIVATE_SSH:
+      from_secret: github_private_key
+
+  ################################################# End YAML Anchors ########################################################
+
+
+kind: pipeline
+type: docker
+name: payments-web
+trigger:
+  branch:
+    - develop
+    - release/*
+    - staging
+    - master
+  event:
+    - pull_request
+    - push
+concurrency:
+  limit: 1
+  
+volumes:
+- name: docker_sock
+  host:
+    path: /var/run/docker.sock
+    
+    
 steps:
+
+  ################################################# DEV/SIT Shared Steps ########################################################
 
   # Clean agent images and containers to prevent disk space overuse
   - name: clean agent
@@ -16,14 +54,18 @@ steps:
   - name: build
     image: docker
     commands:
-    - docker build -f Dockerfile.test -t test-vehicle-compliance-checker-frontend:latest --build-arg secret_key_base=${DRONE_COMMIT} .
+    - docker build -f Dockerfile.test -t test-payments-frontend:latest --build-arg secret_key_base=${DRONE_COMMIT} .
     volumes:
       - name: docker_sock
         path: /var/run/docker.sock
+    when:
+      branch:
+        - develop
+        - release/*
 
   # Trigger unit tests
   - name: unit tests
-    image: test-vehicle-compliance-checker-frontend
+    image: test-payments-frontend
     pull: never
     environment:
       COMPLIANCE_CHECKER_API_URL: http://localhost
@@ -33,10 +75,14 @@ steps:
     commands:
       - yarn install
       - rspec -f d
+    when:
+      branch:
+        - develop
+        - release/*
 
   # Execute integration/scenario tests
   - name: integration tests
-    image: test-vehicle-compliance-checker-frontend
+    image: test-payments-frontend
     pull: never
     environment:
       COMPLIANCE_CHECKER_API_URL: https://s5fbiclr6j.execute-api.eu-west-2.amazonaws.com/dev
@@ -45,20 +91,28 @@ steps:
         path: /var/run/docker.sock
     commands:
       - cucumber
+    when:
+      branch:
+        - develop
+        - release/*
 
   # Invoke static code analysis through Ruby libraries
   - name: static code analysis (Ruby)
-    image: test-vehicle-compliance-checker-frontend
+    image: test-payments-frontend
     pull: never
     volumes:
       - name: docker_sock
         path: /var/run/docker.sock
     commands:
       - rubocop
+    when:
+      branch:
+        - develop
+        - release/*
 
   # Invoke security analysis through Ruby libraries
   - name: security tests (Ruby)
-    image: test-vehicle-compliance-checker-frontend
+    image: test-payments-frontend
     pull: never
     commands:
        - bundle audit check --update
@@ -67,23 +121,10 @@ steps:
     volumes:
       - name: docker_sock
         path: /var/run/docker.sock
-
-  # Invoke sonar scan
-  - name: sonar scan
-    image: aosapps/drone-sonar-plugin
-    environment:
-      sonar_host:
-        from_secret: sonar_host
-      sonar_token:
-        from_secret: sonar_token
-      sonar.ruby.coverage.reportPaths: coverage/.resultset.json
-    commands:
-      - sonar-scanner
-        -Dsonar.projectKey=${DRONE_REPO}
-        -Dsonar.projectName=${DRONE_REPO}
-        -Dsonar.host.url=$sonar_host
-        -Dsonar.login=$sonar_token
-        -Dproject.settings=./sonar-project.properties
+    when:
+      branch:
+        - develop
+        - release/*
 
   # Invoke terraform scripts to ensure ecr is available for deploy step.
   - name: initialise ecr
@@ -105,12 +146,7 @@ steps:
       - tf workspace select default
       - tf apply -auto-approve
     environment:
-      TF_VAR_access_key:
-        from_secret: aws_access_key_id
-      TF_VAR_secret_key:
-        from_secret: aws_secret_access_key
-      GIT_PRIVATE_SSH:
-        from_secret: github_private_key
+      <<: *shared_terraform_credentials
     when:
       event:
         exclude:
@@ -137,6 +173,34 @@ steps:
       event:
         exclude:
         - pull_request
+
+  ################################################# End DEV/SIT Shared Steps #######################################################
+
+
+
+
+
+
+  ################################################### Development Only #######################################################
+
+  # Invoke sonar scan
+  - name: sonar scan
+    image: aosapps/drone-sonar-plugin
+    environment:
+      SONAR_HOST:
+        from_secret: sonar_host
+      SONAR_TOKEN:
+        from_secret: sonar_token
+      sonar.ruby.coverage.reportPaths: coverage/.resultset.json
+    commands:
+      - sonar-scanner 
+        -Dsonar.projectKey=${DRONE_REPO}
+        -Dsonar.projectName=${DRONE_REPO}
+        -Dsonar.host.url=$SONAR_HOST
+        -Dsonar.login=$SONAR_TOKEN
+        -Dproject.settings=./sonar-project.properties
+    when:
+      branch: develop
 
   # Invoke terraform scripts with tagged image number
   - name: deploy to dev
@@ -173,30 +237,6 @@ steps:
         - pull_request
       branch: develop
 
-  # Invoke terraform scripts with tagged image number
-  - name: deploy to sit
-    image: hashicorp/terraform:0.12.3
-    commands:
-      - cd JAQU-CAZ-IAC/terraform/projects/payments-web/environments/sit
-      - terraform init
-      - terraform workspace select sit
-      - terraform apply -auto-approve
-    environment:
-      TF_VAR_build_number: ${DRONE_BUILD_NUMBER}
-      TF_VAR_secret_key_base: ${DRONE_COMMIT}
-      TF_VAR_google_analytics_id: UA-144774549-2
-      TF_VAR_compliance_checker: https://grr1loxnzi.execute-api.eu-west-2.amazonaws.com/sit
-      TF_VAR_access_key:
-        from_secret: aws_access_key_id
-      TF_VAR_secret_key:
-        from_secret: aws_secret_access_key
-      TF_VAR_enable_https_redirect: false
-    when:
-      event:
-        exclude:
-        - pull_request
-      branch: release/*
-
   # Build docker image
   - name: await ecs rollout
     image: docker
@@ -215,21 +255,13 @@ steps:
         - pull_request
       branch: develop
 
+  ################################################# End Development Only #######################################################      
 
-volumes:
-- name: docker_sock
-  host:
-    path: /var/run/docker.sock
 
-# Triggers
-trigger:
-  branch:
-    - develop
-    - release/*
-  event:
-    - pull_request
-    - push
 
+
+
+  ################################################ Secrets #########################################################
 
 # Note the below values are pulled from AWS Secrets Manager via the aws-secrets Drone plugin
 ---
@@ -280,3 +312,5 @@ name: browserstack_username
 get:
   path: /secret/drone.global
   name: browserStackUsername
+
+  ################################################ End Secrets #########################################################
