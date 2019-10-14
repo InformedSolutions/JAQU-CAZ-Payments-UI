@@ -9,7 +9,7 @@
 # All methods are on the class level, so there is no initializer method.
 
 class ComplianceCheckerApi < BaseApi
-  base_uri ENV.fetch('PAYMENTS_API_URL', '') + '/v1/compliance-checker'
+  base_uri ENV.fetch('COMPLIANCE_CHECKER_API_URL', 'localhost:3001') + '/v1/compliance-checker'
 
   headers(
     'Content-Type' => 'application/json',
@@ -50,11 +50,10 @@ class ComplianceCheckerApi < BaseApi
     # * {404 Exception}[rdoc-ref:BaseApi::Error404Exception] - vehicle not found in the DVLA db
     # * {422 Exception}[rdoc-ref:BaseApi::Error422Exception] - invalid VRN
     # * {500 Exception}[rdoc-ref:BaseApi::Error500Exception] - backend API error
-
+    #
     def vehicle_details(vrn)
       log_action "Getting vehicle details, vrn: #{vrn}"
-      MockVrnResponse.new(vrn).response
-      # request(:get, "/vehicles/#{vrn}/details")
+      request(:get, "/vehicles/#{vrn}/details")
     end
 
     def chargeable_zones(vrn, type = nil)

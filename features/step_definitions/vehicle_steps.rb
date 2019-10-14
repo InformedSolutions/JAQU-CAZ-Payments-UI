@@ -2,12 +2,14 @@
 
 Given('I am on the vehicles details page') do
   add_vrn_to_session
+  mock_vehicle_details
   visit details_vehicles_path
 end
 
 Then("I enter a vehicle's registration and choose UK") do
   fill_in('vrn', with: vrn)
   choose('UK')
+  mock_vehicle_details
 end
 
 Then("I enter a vehicle's registration and choose Non-UK") do
@@ -39,9 +41,11 @@ end
 Then("I enter a unrecognised vehicle's registration and choose UK") do
   fill_in('vrn', with: 'CU27ABA')
   choose('UK')
+  mock_unrecognized_vehicle
 end
 
 Then("I enter a compliant vehicle's registration and choose UK") do
   fill_in('vrn', with: 'CDE345')
   choose('UK')
+  mock_vehicle_details
 end
