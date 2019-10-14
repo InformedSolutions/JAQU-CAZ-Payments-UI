@@ -38,7 +38,6 @@ class Dates
   # Create hash of dates
   def parse(date)
     {
-      value: date.strftime('%F'),
       name: date.strftime(DATE_FORMAT),
       today: date.today?
     }

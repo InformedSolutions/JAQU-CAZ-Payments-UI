@@ -19,6 +19,7 @@ class VehiclesController < ApplicationController
   #
   def enter_details
     @errors = {}
+    @return_path = return_path(custom_path: root_path)
   end
 
   ##

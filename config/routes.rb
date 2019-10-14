@@ -33,6 +33,7 @@ Rails.application.routes.draw do
       get :dates
       post :confirm_dates
       get :review_payment
+      get :debit_credit_card
     end
   end
 

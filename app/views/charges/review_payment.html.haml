@@ -1,6 +1,38 @@
-= link_to 'Back', local_authority_charges_path, class: 'govuk-back-link'
+- content_for(:title, 'Confirm your payment')
+= link_to 'Back', dates_charges_path, class: 'govuk-back-link', id: 'back-link'
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
     .govuk-grid-column-two-thirds
       %h1.govuk-heading-l Review your payment
+      = form_tag debit_credit_card_charges_path, method: :get do
+        %table.govuk-table
+          %tbody.govuk-table__body
+            %tr.govuk-table__row
+              %td.govuk-table__cell
+              %th.govuk-table__header{scope: 'row'}
+              %td.govuk-table__cell
+            %tr.govuk-table__row
+              %td.govuk-table__cell Registration number
+              %th.govuk-table__header{scope: 'row'}
+                = @vrn
+              %td.govuk-table__cell
+                = link_to 'Change', enter_details_vehicles_path, class: 'govuk-link', id: 'change-vrn'
+            %tr.govuk-table__row
+              %td.govuk-table__cell Clean Air Zone
+              %th.govuk-table__header{scope: 'row'}
+                = @la_name
+              %td.govuk-table__cell
+                = link_to 'Change', local_authority_charges_path, class: 'govuk-link', id: 'change-la'
+            %tr.govuk-table__row
+              %td.govuk-table__cell Payment for
+              %th.govuk-table__header{scope: 'row'}
+                = @dates
+              %td.govuk-table__cell
+                = link_to 'Change', dates_charges_path, class: 'govuk-link', id: 'change-dates'
+            %tr.govuk-table__row
+              %td.govuk-table__cell Total charge
+              %th.govuk-table__header{scope: 'row'}
+                = charge_format(@total_charge)
+              %td.govuk-table__cell
+        = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'

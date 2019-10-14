@@ -41,3 +41,22 @@ end
 Then('I choose today date') do
   check 'Today'
 end
+
+Then('I am on the review payment page') do
+  add_vrn_to_session
+  add_la_to_session
+  add_dates_to_session
+  visit review_payment_charges_path
+end
+
+Then('I press the Change Registration number link') do
+  find('#change-vrn').click
+end
+
+Then('I press the Change Clean Air Zone link') do
+  find('#change-la').click
+end
+
+Then('I press the Change Payment for link') do
+  find('#change-dates').click
+end

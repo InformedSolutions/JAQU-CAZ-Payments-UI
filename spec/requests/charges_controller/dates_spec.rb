@@ -21,8 +21,14 @@ RSpec.describe 'ChargesController - GET #dates', type: :request do
   end
 
   context 'without VRN in the session' do
-    it 'redirects to :enter_details' do
-      expect(http_request).to redirect_to(enter_details_vehicles_path)
+    it_behaves_like 'vrn is missing'
+  end
+
+  context 'without LA in the session' do
+    before do
+      add_vrn_to_session(vrn: vrn)
     end
+
+    it_behaves_like 'la is missing'
   end
 end

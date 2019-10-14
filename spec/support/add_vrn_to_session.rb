@@ -6,6 +6,10 @@ module AddVrnToSession
   end
 
   def add_la_to_session(zone_id = SecureRandom.uuid)
-    post submit_local_authority_charges_path, params: { 'local-authority' => zone_id }
+    post submit_local_authority_charges_path, params: { 'local-authority': zone_id }
+  end
+
+  def add_dates_to_session(dates = [Date.current])
+    post confirm_dates_charges_path, params: { dates: dates }
   end
 end

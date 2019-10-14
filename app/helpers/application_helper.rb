@@ -8,4 +8,8 @@ module ApplicationHelper
   def service_name
     Rails.configuration.x.service_name
   end
+
+  def charge_format(value)
+    "£#{format('%<pay>.2f', pay: value.to_f)}"
+  end
 end

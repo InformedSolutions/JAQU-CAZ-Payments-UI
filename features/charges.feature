@@ -67,3 +67,21 @@ Feature: Charges
     Then I choose today date
       And I press the Continue
     Then I should see "Review your payment"
+
+  Scenario: User wants review payment
+    Given I am on the review payment page
+      And I should see "Review your payment"
+    Then I press the Change Registration number link
+      And I should see "Vehicle registration details"
+    Then I press the Back link
+      And I should see "Review your payment"
+    Then I press the Change Clean Air Zone link
+      And I should see "Which Clean Air Zone do you need to pay for?"
+    Then I press the Back link
+      And I should see "Review your payment"
+    Then I press the Change Payment for link
+      And I should see "Which days do you want to pay for?"
+    Then I press the Back link
+      And I should see "Review your payment"
+    Then I press the Continue
+      And I should see "Enter card details"

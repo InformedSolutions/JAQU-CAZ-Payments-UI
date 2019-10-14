@@ -9,6 +9,10 @@ module SessionHelper
     page.set_rack_session(la: SecureRandom.uuid)
   end
 
+  def add_dates_to_session
+    page.set_rack_session(dates: [Date.current])
+  end
+
   def vrn
     'CU57ABC'
   end
