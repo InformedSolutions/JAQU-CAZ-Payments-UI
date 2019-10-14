@@ -24,6 +24,9 @@ module CitizensChargePayment
     config.x.service_name = 'Pay a Clean Air Zone charge'
 
     check_air_standard_url = 'https://www.example.com'
-    config.x.check_air_standard_url = ENV.fetch('CHECK_AIR_STANDARD_URL', check_air_standard_url)
+    config.x.check_air_standard_url = ENV.fetch(
+      'COMPLIANCE_CHECKER_UI_URL',
+      check_air_standard_url
+    )
   end
 end

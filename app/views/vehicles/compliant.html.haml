@@ -10,7 +10,7 @@
         Birmingham and Leeds are currently the only Clean Air Zones.
       %p
         You can always use the
-        = link_to 'Vehicle Checker', 'https://www.example.com/', target: '_blank', class: 'govuk-link'
+        = link_to 'Vehicle Checker', Rails.configuration.x.check_air_standard_url, target: '_blank', class: 'govuk-link'
         service to find out if you need to pay in any Clean Air Zone.
       %p
         = link_to 'Pay for another vehicle', enter_details_vehicles_path, class: 'govuk-link'
