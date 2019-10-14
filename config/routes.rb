@@ -31,6 +31,8 @@ Rails.application.routes.draw do
       get :daily_charge
       post :confirm_daily_charge
       get :dates
+      post :confirm_dates
+      get :review_payment
     end
   end
 
