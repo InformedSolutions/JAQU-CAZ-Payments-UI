@@ -27,9 +27,9 @@ class ApplicationController < ActionController::Base
     Rails.logger.warn("The form is invalid. #{msg}")
   end
 
-  # Gets VRN from session. Returns string, eg 'CU1234'
+  # Gets VRN from vehicle_details hash in the session. Returns string, eg 'CU1234'
   def vrn
-    session[:vrn]
+    session.dig(:vehicle_details, 'vrn')
   end
 
   # Checks if VRN is present in session.

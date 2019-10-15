@@ -51,7 +51,7 @@ class VehiclesController < ApplicationController
       return render enter_details_vehicles_path
     end
 
-    store_vrn
+    store_vehicle_details
     redirect_to non_uk? ? non_uk_vehicles_path : details_vehicles_path
   end
 
@@ -180,8 +180,11 @@ class VehiclesController < ApplicationController
   end
 
   # Stores VRN in the session
-  def store_vrn
-    session[:vrn] = params_vrn
+  def store_vehicle_details
+    session[:vehicle_details] = {
+      vrn: params_vrn,
+      country: country
+    }
   end
 
   # Returns user's form confirmation from the query params, values: 'yes', 'no', nil
