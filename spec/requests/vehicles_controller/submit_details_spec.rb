@@ -19,7 +19,12 @@ RSpec.describe 'VehiclesController - POST #submit_details', type: :request do
 
     it 'sets VRN in the session' do
       http_request
-      expect(session[:vrn]).to eq(vrn)
+      expect(session[:vehicle_details][:vrn]).to eq(vrn)
+    end
+
+    it 'sets country in the session' do
+      http_request
+      expect(session[:vehicle_details][:country]).to eq(country)
     end
   end
 
