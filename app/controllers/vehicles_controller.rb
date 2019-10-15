@@ -174,9 +174,9 @@ class VehiclesController < ApplicationController
 
   private
 
-  # Returns uppercased VRN from the query params, eg. 'CU1234'
+  # Returns uppercased VRN from the query params without any space, eg. 'CU1234'
   def params_vrn
-    params[:vrn].upcase
+    params[:vrn].upcase&.delete(' ')
   end
 
   # Stores VRN in the session
