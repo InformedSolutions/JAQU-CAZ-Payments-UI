@@ -9,6 +9,8 @@ class ChargesController < ApplicationController
 
   # checks if LA is present in the session
   before_action :check_la, except: %i[local_authority submit_local_authority]
+  # checks if dates is present in the session
+  before_action :check_dates, only: %i[review_payment]
 
   ##
   # Renders the list of available local authorities.
@@ -72,6 +74,8 @@ class ChargesController < ApplicationController
   #
   def daily_charge
     @compliance_details = ComplianceDetails.new(vrn, session[:la])
+    session[:la_name] = @compliance_details.zone_name
+    session[:daily_charge] = @compliance_details.charge
   end
 
   ##
@@ -118,6 +122,7 @@ class ChargesController < ApplicationController
   def dates
     @local_authority = session[:la]
     @dates = Dates.new.build
+    @return_path = return_path(custom_path: daily_charge_charges_path)
   end
 
   ##
@@ -146,7 +151,23 @@ class ChargesController < ApplicationController
     end
   end
 
-  def review_payment; end
+  ##
+  # Renders a review payment page.
+  #
+  # ==== Path
+  #    GET /charges/review_payment
+  #
+  # ==== Validations
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  # * +la+ - lack of LA redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
+  # * +dates+ - lack of dates redirects to {picking dates}[rdoc-ref:ChargesController.dates]
+  #
+  def review_payment
+    @vrn = vrn
+    @dates = session[:dates].join(', ')
+    @la_name = session[:la_name]
+    @total_charge = session[:daily_charge] * session[:dates].length
+  end
 
   private
 
@@ -167,5 +188,14 @@ class ChargesController < ApplicationController
 
     Rails.logger.warn 'LA is missing in the session. Redirecting to :local_authority'
     redirect_to local_authority_charges_path
+  end
+
+  # Checks if dates is present in the session.
+  # If not, redirects to {picking dates}[rdoc-ref:ChargesController.dates]
+  def check_dates
+    return if session[:dates]
+
+    Rails.logger.warn 'Dates is missing in the session. Redirecting to :dates'
+    redirect_to dates_charges_path
   end
 end

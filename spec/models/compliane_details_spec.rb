@@ -28,7 +28,7 @@ RSpec.describe ComplianceDetails, type: :model do
 
   describe '.charge' do
     it 'returns formatted charge value' do
-      expect(details.charge).to eq('£5.00')
+      expect(details.charge).to eq('5')
     end
   end
 

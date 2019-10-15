@@ -23,3 +23,7 @@ end
 Then('I press the Confirm') do
   click_button 'Confirm'
 end
+
+Then('I press the Back link') do
+  click_link('Back')
+end
