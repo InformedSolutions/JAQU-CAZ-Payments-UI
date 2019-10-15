@@ -33,7 +33,6 @@ Rails.application.routes.draw do
       get :dates
       post :confirm_dates
       get :review_payment
-      get :debit_credit_card
     end
   end
 
@@ -43,6 +42,8 @@ Rails.application.routes.draw do
       get :details
     end
   end
+
+  post :govuk_pay, to: 'govuk_pay#pay'
 
   get :build_id, to: 'application#build_id'
 end

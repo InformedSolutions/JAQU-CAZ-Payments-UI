@@ -9,7 +9,7 @@ module ApplicationHelper
     Rails.configuration.x.service_name
   end
 
-  def charge_format(value)
+  def parse_charge(value)
     "£#{format('%<pay>.2f', pay: value.to_f)}"
   end
 end

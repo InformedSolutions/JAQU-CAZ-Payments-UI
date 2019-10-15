@@ -35,6 +35,7 @@ end
 Then('I am on the dates page') do
   add_vrn_to_session
   add_la_to_session
+  add_daily_charge_to_session
   visit dates_charges_path
 end
 
@@ -45,6 +46,7 @@ end
 Then('I am on the review payment page') do
   add_vrn_to_session
   add_la_to_session
+  add_daily_charge_to_session
   add_dates_to_session
   visit review_payment_charges_path
 end

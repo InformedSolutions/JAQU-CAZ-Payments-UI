@@ -75,6 +75,7 @@ class ChargesController < ApplicationController
   def daily_charge
     @compliance_details = ComplianceDetails.new(vrn, session[:la])
     session[:la_name] = @compliance_details.zone_name
+    session[:daily_charge] = @compliance_details.charge
   end
 
   ##
@@ -165,11 +166,7 @@ class ChargesController < ApplicationController
     @vrn = vrn
     @dates = session[:dates].join(', ')
     @la_name = session[:la_name]
-    @total_charge = 99
-  end
-
-  def debit_credit_card
-    # to be defined later
+    @total_charge = session[:daily_charge] * session[:dates].length
   end
 
   private

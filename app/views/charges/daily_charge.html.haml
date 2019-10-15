@@ -22,7 +22,7 @@
       %p
         The daily charge for your vehicle is:
       %h2.govuk-heading-m
-        = @compliance_details.charge
+        = parse_charge(@compliance_details.charge)
       %p
         You only need to pay once per day (the daily charge period runs from midnight to midnight).
       .govuk-warning-text

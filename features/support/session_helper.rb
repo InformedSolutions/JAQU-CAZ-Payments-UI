@@ -10,7 +10,11 @@ module SessionHelper
   end
 
   def add_dates_to_session
-    page.set_rack_session(dates: [Date.current])
+    page.set_rack_session(dates: [Date.current, Date.current.tomorrow])
+  end
+
+  def add_daily_charge_to_session
+    page.set_rack_session(daily_charge: 9.0)
   end
 
   def vrn

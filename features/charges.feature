@@ -83,5 +83,3 @@ Feature: Charges
       And I should see "Which days do you want to pay for?"
     Then I press the Back link
       And I should see "Review your payment"
-    Then I press the Continue
-      And I should see "Enter card details"

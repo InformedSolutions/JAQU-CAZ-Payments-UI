@@ -5,7 +5,7 @@
   .govuk-grid-row
     .govuk-grid-column-two-thirds
       %h1.govuk-heading-l Review your payment
-      = form_tag debit_credit_card_charges_path, method: :get do
+      = form_tag govuk_pay_path, method: :post do
         %table.govuk-table
           %tbody.govuk-table__body
             %tr.govuk-table__row
@@ -33,6 +33,6 @@
             %tr.govuk-table__row
               %td.govuk-table__cell Total charge
               %th.govuk-table__header{scope: 'row'}
-                = charge_format(@total_charge)
+                = parse_charge(@total_charge)
               %td.govuk-table__cell
         = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
