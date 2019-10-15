@@ -26,6 +26,7 @@ RSpec.describe 'ChargesController - GET #review_payment', type: :request do
       add_vrn_to_session(vrn: vrn)
       add_la_to_session(zone_id)
       add_dates_to_session
+      add_daily_charge_to_session
       http_request
     end
 
