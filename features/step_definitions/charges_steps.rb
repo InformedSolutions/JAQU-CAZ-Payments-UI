@@ -18,6 +18,7 @@ end
 
 Given('My vehicle is not compliant') do
   mock_chargeable_caz
+  mock_vehicle_compliance
 end
 
 Then('I select Birmingham') do

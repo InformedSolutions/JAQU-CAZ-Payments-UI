@@ -24,22 +24,12 @@ RSpec.describe VehicleDetails, type: :model do
   end
 
   before do
-    allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(response)
+    allow(ComplianceCheckerApi).to receive(:vehicle_details).with(vrn).and_return(response)
   end
 
   describe '.registration_number' do
     it 'returns a proper registration number' do
       expect(subject.registration_number).to eq(vrn)
-    end
-  end
-
-  describe '.vrn_for_request' do
-    before do
-      allow(VrnParser).to receive(:call).and_return(vrn)
-    end
-
-    it 'returns a proper vrn' do
-      expect(subject.vrn_for_request).to eq(vrn)
     end
   end
 
@@ -90,7 +80,7 @@ RSpec.describe VehicleDetails, type: :model do
 
     context 'when key is not present' do
       before do
-        allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return({})
+        allow(ComplianceCheckerApi).to receive(:vehicle_details).with(vrn).and_return({})
       end
 
       it 'returns a nil' do
@@ -128,7 +118,7 @@ RSpec.describe VehicleDetails, type: :model do
 
     context 'when key is not present' do
       before do
-        allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return({})
+        allow(ComplianceCheckerApi).to receive(:vehicle_details).with(vrn).and_return({})
       end
 
       it 'returns a nil' do
