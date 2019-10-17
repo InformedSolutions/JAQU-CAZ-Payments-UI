@@ -5,32 +5,18 @@ require 'rails_helper'
 RSpec.describe 'ChargesController - GET #review_payment', type: :request do
   subject(:http_request) { get review_payment_charges_path }
 
-  let(:vrn) { 'CU57ABC' }
   let(:zone_id) { SecureRandom.uuid }
-  let(:details) do
-    instance_double(ComplianceDetails,
-                    zone_name: 'Name',
-                    charge: '£5.00',
-                    exemption_or_discount_url: 'www.wp.pl')
-  end
-
-  before do
-    allow(ComplianceDetails)
-      .to receive(:new)
-      .with(vrn, zone_id)
-      .and_return(details)
-  end
 
   context 'with VRN, LA and DATES in the session' do
     before do
-      add_vrn_to_session(vrn: vrn)
+      add_vrn_to_session
       add_la_to_session(zone_id)
       add_dates_to_session
       add_daily_charge_to_session
-      http_request
     end
 
     it 'returns a success response' do
+      http_request
       expect(response).to have_http_status(:success)
     end
   end
@@ -41,7 +27,7 @@ RSpec.describe 'ChargesController - GET #review_payment', type: :request do
 
   context 'without LA in the session' do
     before do
-      add_vrn_to_session(vrn: vrn)
+      add_vrn_to_session
     end
 
     it_behaves_like 'la is missing'
@@ -49,7 +35,7 @@ RSpec.describe 'ChargesController - GET #review_payment', type: :request do
 
   context 'without DATES in the session' do
     before do
-      add_vrn_to_session(vrn: vrn)
+      add_vrn_to_session
       add_la_to_session(zone_id)
     end
 

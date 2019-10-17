@@ -3,38 +3,95 @@
 require 'rails_helper'
 
 RSpec.describe ComplianceDetails, type: :model do
-  subject(:details) { described_class.new(vrn, zone_id) }
+  subject(:details) { described_class.new(vehicle_details) }
 
+  let(:vehicle_details) { { 'vrn' => vrn, 'country' => country, 'la' => zone_id } }
   let(:vrn) { 'CU57ABC' }
+  let(:country) { 'UK' }
   let(:zone_id) { SecureRandom.uuid }
+
   let(:outcomes) do
-    [{ 'name' => name, 'charge' => '5', 'urls' => { 'exemptionOrDiscount' => url } }]
+    [{ 'name' => name, 'charge' => 5, 'urls' => { 'exemptionOrDiscount' => url } }]
   end
   let(:name) { 'Leeds' }
   let(:url) { 'www.wp.pl' }
 
-  before do
-    allow(ComplianceCheckerApi)
-      .to receive(:vehicle_compliance)
-      .with(vrn, zone_id)
-      .and_return('complianceOutcomes' => outcomes)
-  end
+  context 'when the vehicle is registered in the UK' do
+    before do
+      allow(ComplianceCheckerApi)
+        .to receive(:vehicle_compliance)
+        .with(vrn, [zone_id])
+        .and_return('complianceOutcomes' => outcomes)
+    end
 
-  describe '.zone_name' do
-    it 'returns CAZ name' do
-      expect(details.zone_name).to eq(name)
+    it 'calls :vehicle_compliance with right params' do
+      expect(ComplianceCheckerApi).to receive(:vehicle_compliance).with(vrn, [zone_id])
+      details.zone_name
+    end
+
+    describe '.zone_name' do
+      it 'returns CAZ name' do
+        expect(details.zone_name).to eq(name)
+      end
+    end
+
+    describe '.charge' do
+      it 'returns charge value' do
+        expect(details.charge).to eq(5)
+      end
+    end
+
+    describe '.exemption_or_discount_url' do
+      it 'returns URL' do
+        expect(details.zone_name).to eq(name)
+      end
+    end
+
+    context 'when vehicle is unrecognised' do
+      let(:vehicle_details) do
+        { 'vrn' => vrn, 'country' => country, 'la' => zone_id, 'unrecognised' => true }
+      end
+
+      before do
+        allow(ComplianceCheckerApi)
+          .to receive(:non_dvla_vehicle_compliance)
+          .with(vrn, [zone_id], nil)
+          .and_return('complianceOutcomes' => outcomes)
+      end
+
+      it 'calls :non_dvla_vehicle_compliance with right params' do
+        expect(ComplianceCheckerApi)
+          .to receive(:non_dvla_vehicle_compliance)
+          .with(vrn, [zone_id], nil)
+        details.zone_name
+      end
+
+      it 'does not call :vehicle_compliance' do
+        expect(ComplianceCheckerApi).not_to receive(:vehicle_compliance)
+        details.zone_name
+      end
     end
   end
 
-  describe '.charge' do
-    it 'returns formatted charge value' do
-      expect(details.charge).to eq('5')
+  context 'when the vehicle is registered outside of the UK' do
+    let(:vehicle_details) do
+      { 'vrn' => vrn, 'country' => country, 'la' => zone_id, 'type' => type }
     end
-  end
+    let(:country) { 'non-UK' }
+    let(:type) { 'Car' }
 
-  describe '.exemption_or_discount_url' do
-    it 'returns URL' do
-      expect(details.zone_name).to eq(name)
+    before do
+      allow(ComplianceCheckerApi)
+        .to receive(:non_dvla_vehicle_compliance)
+        .with(vrn, [zone_id], type)
+        .and_return('complianceOutcomes' => outcomes)
+    end
+
+    it 'calls :non_dvla_vehicle_compliance with right params' do
+      expect(ComplianceCheckerApi)
+        .to receive(:non_dvla_vehicle_compliance)
+        .with(vrn, [zone_id], type)
+      details.zone_name
     end
   end
 end
