@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Given('I am on the vehicles details page') do
-  add_vrn_to_session
+  add_vrn_and_country_to_session
   visit details_vehicles_path
 end
 
@@ -44,4 +44,9 @@ end
 Then("I enter a compliant vehicle's registration and choose UK") do
   fill_in('vrn', with: 'CDE345')
   choose('UK')
+end
+
+Given('I am on the recognised page') do
+  add_unrecognised_vrn_to_session
+  visit details_vehicles_path
 end

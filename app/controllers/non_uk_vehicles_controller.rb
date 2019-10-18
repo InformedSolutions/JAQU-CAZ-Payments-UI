@@ -62,7 +62,7 @@ class NonUkVehiclesController < ApplicationController
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
   def choose_type
-    @return_path = return_path(custom_path: non_uk_vehicles_path)
+    @return_path = choose_type_return_path
   end
 
   ##
@@ -86,6 +86,14 @@ class NonUkVehiclesController < ApplicationController
       redirect_to choose_type_non_uk_vehicles_path, alert: true
     else
       redirect_to local_authority_charges_path
+    end
+  end
+
+  def choose_type_return_path
+    if vehicle_details('unrecognised')
+      unrecognised_vehicles_path
+    else
+      non_uk_vehicles_path
     end
   end
 end
