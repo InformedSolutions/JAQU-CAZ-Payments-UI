@@ -7,7 +7,7 @@ Feature: Charges
     Given I am on the vehicles details page
     Then I choose that the details are correct
       And I press the Confirm
-    Then I should be on the local authorities page
+      And I should be on the local authorities page
     Then I press "Back" link
       And I should be on the vehicle details page
 
@@ -17,22 +17,22 @@ Feature: Charges
       And I press the Confirm
     Then I should be on the incorrect details page
       And I press the Continue
-    Then I should be on the local authorities page
+      And I should be on the local authorities page
     Then I press "Back" link
       And I should be on the incorrect details page
 
   Scenario: User wants to return with vehicle registered not in the UK
-    Given I am on the choose type page
+    Given I am on the choose type page for non-UK vehicle
     Then I choose Car type
       And I press the Confirm
-    Then I should be on the local authorities page
+      And I should be on the local authorities page
     Then I press "Back" link
       And I should be on the choose type page
 
   Scenario: User wants to return without the previous page
     Given I am on the select local authority page
     Then I press "Back" link
-      And I should be on the enter details page
+      And I should be on the vehicle details page
 
   Scenario: User selects LA to pay for
     Given My vehicle is not compliant
@@ -68,18 +68,20 @@ Feature: Charges
       And I press the Continue
     Then I should see "Review your payment"
 
-  Scenario: User wants review payment
+  Scenario: User wants review payment and press the change registration number link
     Given I am on the review payment page
       And I should see "Review your payment"
     Then I press the Change Registration number link
       And I should see "Vehicle registration details"
-    Then I press the Back link
+
+  Scenario: User wants review payment and press the change clean air zone link
+    Given I am on the review payment page
       And I should see "Review your payment"
     Then I press the Change Clean Air Zone link
       And I should see "Which Clean Air Zone do you need to pay for?"
-    Then I press the Back link
+
+  Scenario: User wants review payment and press the change payment for link
+    Given I am on the review payment page
       And I should see "Review your payment"
     Then I press the Change Payment for link
       And I should see "Which days do you want to pay for?"
-    Then I press the Back link
-      And I should see "Review your payment"
