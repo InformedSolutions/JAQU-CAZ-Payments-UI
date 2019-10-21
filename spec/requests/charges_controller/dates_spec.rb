@@ -11,7 +11,7 @@ RSpec.describe 'ChargesController - GET #dates', type: :request do
   context 'with VRN in the session' do
     before do
       add_vrn_to_session(vrn: vrn)
-      add_la_to_session(zone_id)
+      add_la_to_session(zone_id: zone_id)
       http_request
     end
 

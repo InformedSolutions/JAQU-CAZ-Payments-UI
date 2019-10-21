@@ -6,7 +6,7 @@
     .govuk-grid-column-two-thirds
       %h1.govuk-heading-l Review your payment
       = render 'common/draft_tag'
-      = form_tag govuk_pay_index_path, method: :post do
+      = form_tag payments_path, method: :post do
         %table.govuk-table
           %tbody.govuk-table__body
             %tr.govuk-table__row

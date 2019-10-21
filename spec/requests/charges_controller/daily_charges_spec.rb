@@ -25,7 +25,7 @@ RSpec.describe 'ChargesController - GET #daily_charge', type: :request do
   context 'with VRN and LA in the session' do
     before do
       add_vrn_to_session(vrn: vrn, country: country)
-      add_la_to_session(zone_id)
+      add_la_to_session(zone_id: zone_id)
     end
 
     it 'call ComplianceDetails with right params' do

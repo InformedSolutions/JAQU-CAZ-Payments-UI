@@ -52,3 +52,7 @@ Rails.application.configure do
   # Used to add eg VRN value to session in cucumber tests
   config.middleware.use RackSessionAccess::Middleware
 end
+
+# https://stackoverflow.com/questions/5691727/how-to-set-config-action-controller-default-url-options-host-on-per
+# Used in PaymentsApi
+Rails.application.routes.default_url_options = { host: 'test-host.com' }

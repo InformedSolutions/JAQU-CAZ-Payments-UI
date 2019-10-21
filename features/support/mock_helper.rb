@@ -42,6 +42,10 @@ module MockHelper
       .and_raise(BaseApi:: Error404Exception.new(404, '', {}))
   end
 
+  def mock_payment_creation
+    allow(Payment).to receive(:new).and_return(OpenStruct.new(payment_id: SecureRandom.uuid))
+  end
+
   private
 
   # Reads provided file from +spec/fixtures/files+ directory

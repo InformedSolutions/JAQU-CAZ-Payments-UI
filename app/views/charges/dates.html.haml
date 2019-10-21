@@ -50,7 +50,7 @@
                 .govuk-checkboxes__item
                   %input.govuk-checkboxes__input{name: 'dates[]',
                                                  type: 'checkbox',
-                                                 value: date[:name],
+                                                 value: date[:value],
                                                  id: "date-#{index}"}
                   %label.govuk-label.govuk-checkboxes__label{for: "date-#{index}"}
                     - if date[:today]

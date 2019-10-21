@@ -6,7 +6,8 @@
 #
 class Dates
   # date format, e.g. 'Friday 11 October 2019'
-  DATE_FORMAT = '%A %d %B %Y'
+  DISPLAY_DATE_FORMAT = '%A %d %B %Y'
+  VALUE_DATE_FORMAT = '%Y-%m-%d'
   ##
   #
   #
@@ -31,7 +32,8 @@ class Dates
   # Create hash of dates
   def parse(date)
     {
-      name: date.strftime(DATE_FORMAT),
+      name: date.strftime(DISPLAY_DATE_FORMAT),
+      value: date.strftime(VALUE_DATE_FORMAT),
       today: date.today?
     }
   end
