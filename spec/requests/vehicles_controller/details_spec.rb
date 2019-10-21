@@ -6,7 +6,10 @@ RSpec.describe 'VehiclesController - GET #details', type: :request do
   subject(:http_request) { get details_vehicles_path }
 
   context 'with VRN in session' do
-    before { add_vrn_to_session }
+    before do
+      add_vrn_to_session
+      mock_vehicle_details
+    end
 
     it 'returns http success' do
       http_request
