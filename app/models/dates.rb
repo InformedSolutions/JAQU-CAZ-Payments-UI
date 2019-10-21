@@ -20,20 +20,13 @@ class Dates
   # Build the list of dates and return them, e.g.
   # [{:value=>"2019-10-11", :name=>"Friday 11 October 2019"},...]
   def build
-    (today.prev_weekday..six_weekdays_from_today).map { |date| parse(date) }
+    ((today - 6.days)..(today + 6.days)).map { |date| parse(date) }
   end
 
   private
 
   # today and dates getters
   attr_reader :today
-
-  # Calculate the next six working days with all weekends.
-  def six_weekdays_from_today
-    day = today
-    6.times { day = day.next_weekday }
-    day
-  end
 
   # Create hash of dates
   def parse(date)
