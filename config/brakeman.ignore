@@ -3,73 +3,11 @@
     {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 4,
-      "fingerprint": "3726fe31c845c8e91c2756ad75d597f5f2a795953524e4affc10ce2b3dbd0353",
-      "check_name": "LinkToHref",
-      "message": "Potentially unsafe model attribute in `link_to` href",
-      "file": "app/views/charges/daily_charge.html.haml",
-      "line": 51,
-      "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
-      "code": "link_to(\"here\", ComplianceDetails.new(vrn, session[:la]).exemption_or_discount_url, :target => \"_blank\", :id => \"exemption-link\")",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "ChargesController",
-          "method": "daily_charge",
-          "line": 61,
-          "file": "app/controllers/charges_controller.rb",
-          "rendered": {
-            "name": "charges/daily_charge",
-            "file": "app/views/charges/daily_charge.html.haml"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "charges/daily_charge"
-      },
-      "user_input": "ComplianceDetails.new(vrn, session[:la]).exemption_or_discount_url",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "Cross-Site Scripting",
-      "warning_code": 4,
-      "fingerprint": "85baa34e85de3e48a2d894913ba0c29ceef5c13f4033e00a667acd7afd6b754f",
-      "check_name": "LinkToHref",
-      "message": "Potentially unsafe model attribute in `link_to` href",
-      "file": "app/views/charges/daily_charge.html.haml",
-      "line": 51,
-      "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
-      "code": "link_to(\"here\", ComplianceDetails.new(vrn, vehicle_details(\"la\")).exemption_or_discount_url, :target => \"_blank\", :id => \"exemption-link\")",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "ChargesController",
-          "method": "daily_charge",
-          "line": 78,
-          "file": "app/controllers/charges_controller.rb",
-          "rendered": {
-            "name": "charges/daily_charge",
-            "file": "app/views/charges/daily_charge.html.haml"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "charges/daily_charge"
-      },
-      "user_input": "ComplianceDetails.new(vrn, vehicle_details(\"la\")).exemption_or_discount_url",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "Cross-Site Scripting",
-      "warning_code": 4,
       "fingerprint": "9eacb58fec2752b8207867640cdad94177e3c98fe60805d64c2aae9a6b8b6729",
       "check_name": "LinkToHref",
       "message": "Potentially unsafe model attribute in `link_to` href",
       "file": "app/views/charges/daily_charge.html.haml",
-      "line": 55,
+      "line": 56,
       "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
       "code": "link_to(\"here\", ComplianceDetails.new(session[:vehicle_details]).exemption_or_discount_url, :target => \"_blank\", :id => \"exemption-link\")",
       "render_path": [
@@ -92,39 +30,8 @@
       "user_input": "ComplianceDetails.new(session[:vehicle_details]).exemption_or_discount_url",
       "confidence": "Weak",
       "note": ""
-    },
-    {
-      "warning_type": "Cross-Site Scripting",
-      "warning_code": 4,
-      "fingerprint": "a2a00881010efcb51ef927ee4862c30683ff968033bbab6756b860a1c6c5f5bc",
-      "check_name": "LinkToHref",
-      "message": "Potentially unsafe model attribute in `link_to` href",
-      "file": "app/views/charges/daily_charge.html.haml",
-      "line": 51,
-      "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
-      "code": "link_to(\"here\", ComplianceDetails.new(vrn, session.dig(:vehicle_details, \"la\")).exemption_or_discount_url, :target => \"_blank\", :id => \"exemption-link\")",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "ChargesController",
-          "method": "daily_charge",
-          "line": 78,
-          "file": "app/controllers/charges_controller.rb",
-          "rendered": {
-            "name": "charges/daily_charge",
-            "file": "app/views/charges/daily_charge.html.haml"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "charges/daily_charge"
-      },
-      "user_input": "ComplianceDetails.new(vrn, session.dig(:vehicle_details, \"la\")).exemption_or_discount_url",
-      "confidence": "Weak",
-      "note": ""
     }
   ],
-  "updated": "2019-10-22 09:21:20 +0200",
-  "brakeman_version": "4.7.0"
+  "updated": "2019-10-22 10:05:43 +0200",
+  "brakeman_version": "4.6.1"
 }
