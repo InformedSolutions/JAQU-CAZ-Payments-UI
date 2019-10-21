@@ -9,6 +9,8 @@ class ChargesController < ApplicationController
 
   # checks if LA is present in the session
   before_action :check_la, except: %i[local_authority submit_local_authority]
+  # checks if dates is present in the session
+  before_action :check_dates, only: %i[review_payment]
 
   ##
   # Renders the list of available local authorities.
@@ -27,7 +29,7 @@ class ChargesController < ApplicationController
     return redirect_to compliant_vehicles_path if zones_data.empty?
 
     @zones = zones_data.map { |caz_data| Caz.new(caz_data) }
-    @return_path = return_path
+    @return_path = local_authority_return_path
   end
 
   ##
@@ -71,7 +73,11 @@ class ChargesController < ApplicationController
   # * +la+ - lack of LA redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
   #
   def daily_charge
-    @compliance_details = ComplianceDetails.new(vrn, session[:la])
+    @compliance_details = ComplianceDetails.new(vrn, vehicle_details('la'))
+    session[:vehicle_details].merge!(
+      la_name: @compliance_details.zone_name,
+      daily_charge: @compliance_details.charge
+    )
   end
 
   ##
@@ -116,7 +122,7 @@ class ChargesController < ApplicationController
   # * +la+ - lack of LA redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
   #
   def dates
-    @local_authority = session[:la]
+    @local_authority = vehicle_details('la')
     @dates = Dates.new.build
   end
 
@@ -138,7 +144,7 @@ class ChargesController < ApplicationController
   #
   def confirm_dates
     if params[:dates]
-      session[:dates] = params[:dates]
+      session[:vehicle_details]['dates'] = params[:dates]
       redirect_to review_payment_charges_path
     else
       log_invalid_form 'Redirecting back to :dates.'
@@ -146,7 +152,23 @@ class ChargesController < ApplicationController
     end
   end
 
-  def review_payment; end
+  ##
+  # Renders a review payment page.
+  #
+  # ==== Path
+  #    GET /charges/review_payment
+  #
+  # ==== Validations
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  # * +la+ - lack of LA redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
+  # * +dates+ - lack of dates redirects to {picking dates}[rdoc-ref:ChargesController.dates]
+  #
+  def review_payment
+    @vrn = vrn
+    @dates = vehicle_details('dates').join(', ')
+    @la_name = vehicle_details('la_name')
+    @total_charge = calculate_total_charge
+  end
 
   private
 
@@ -157,15 +179,40 @@ class ChargesController < ApplicationController
 
   # Stores submitted LA in the session
   def store_la
-    session[:la] = params['local-authority']
+    session[:vehicle_details]['la'] = params['local-authority']
   end
 
   # Checks if LA is present in the session.
   # If not, redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
   def check_la
-    return if session[:la]
+    return if vehicle_details('la')
 
     Rails.logger.warn 'LA is missing in the session. Redirecting to :local_authority'
     redirect_to local_authority_charges_path
+  end
+
+  # Checks if dates is present in the session.
+  # If not, redirects to {picking dates}[rdoc-ref:ChargesController.dates]
+  def check_dates
+    return if vehicle_details('dates')
+
+    Rails.logger.warn 'Dates is missing in the session. Redirecting to :dates'
+    redirect_to dates_charges_path
+  end
+
+  # Define the back button path.
+  def local_authority_return_path
+    if vehicle_details('incorrect')
+      incorrect_details_vehicles_path
+    elsif vehicle_details('country') == 'UK'
+      details_vehicles_path
+    else
+      choose_type_non_uk_vehicles_path
+    end
+  end
+
+  # Calculating total charge based on daily charge and days what was selected by user.
+  def calculate_total_charge
+    vehicle_details('daily_charge') * vehicle_details('dates').length
   end
 end

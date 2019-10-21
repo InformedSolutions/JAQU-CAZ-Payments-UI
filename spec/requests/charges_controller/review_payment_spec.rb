@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe 'ChargesController - GET #daily_charge', type: :request do
-  subject(:http_request) { get daily_charge_charges_path }
+RSpec.describe 'ChargesController - GET #review_payment', type: :request do
+  subject(:http_request) { get review_payment_charges_path }
 
   let(:vrn) { 'CU57ABC' }
   let(:zone_id) { SecureRandom.uuid }
@@ -21,10 +21,12 @@ RSpec.describe 'ChargesController - GET #daily_charge', type: :request do
       .and_return(details)
   end
 
-  context 'with VRN and LA in the session' do
+  context 'with VRN, LA and DATES in the session' do
     before do
       add_vrn_to_session(vrn: vrn)
       add_la_to_session(zone_id)
+      add_dates_to_session
+      add_daily_charge_to_session
       http_request
     end
 
@@ -43,5 +45,14 @@ RSpec.describe 'ChargesController - GET #daily_charge', type: :request do
     end
 
     it_behaves_like 'la is missing'
+  end
+
+  context 'without DATES in the session' do
+    before do
+      add_vrn_to_session(vrn: vrn)
+      add_la_to_session(zone_id)
+    end
+
+    it_behaves_like 'dates is missing'
   end
 end

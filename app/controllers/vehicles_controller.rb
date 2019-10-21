@@ -44,14 +44,14 @@ class VehiclesController < ApplicationController
   # Validations are done by {VrnForm}[rdoc-ref:VrnForm]
   #
   def submit_details
-    form = VrnForm.new(params_vrn, country)
+    form = VrnForm.new(parsed_vrn, country)
     unless form.valid?
       @errors = form.errors.messages
       log_invalid_form 'Rendering :enter_details.'
       return render enter_details_vehicles_path
     end
 
-    store_vrn
+    store_vehicle_details
     redirect_to non_uk? ? non_uk_vehicles_path : details_vehicles_path
   end
 
@@ -109,11 +109,11 @@ class VehiclesController < ApplicationController
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
   def incorrect_details
-    # renders static page
+    session[:vehicle_details]['incorrect'] = true
   end
 
   ##
-  # Renders a static page for users who selected that DVLA data in incorrect.
+  # Renders a static page for users who selected that DVLA data is incorrect.
   #
   # ==== Path
   #
@@ -126,6 +126,7 @@ class VehiclesController < ApplicationController
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
   def unrecognised
+    session[:vehicle_details]['unrecognised'] = true
     @vrn = vrn
   end
 
@@ -169,19 +170,22 @@ class VehiclesController < ApplicationController
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
   def compliant
-    @return_path = return_path
+    # renders the static page
   end
 
   private
 
-  # Returns uppercased VRN from the query params, eg. 'CU1234'
-  def params_vrn
-    params[:vrn].upcase
+  # Returns uppercased VRN from the query params without any space, eg. 'CU1234'
+  def parsed_vrn
+    params[:vrn].upcase&.delete(' ')
   end
 
   # Stores VRN in the session
-  def store_vrn
-    session[:vrn] = params_vrn
+  def store_vehicle_details
+    session[:vehicle_details] = {
+      vrn: parsed_vrn,
+      country: country
+    }
   end
 
   # Returns user's form confirmation from the query params, values: 'yes', 'no', nil

@@ -11,7 +11,7 @@ RSpec.describe 'ChargesController - POST #confirm_dates', type: :request do
   let(:vrn) { 'CU57ABC' }
   let(:zone_id) { SecureRandom.uuid }
 
-  context 'with VRN in the session' do
+  context 'with VRN and LA in the session' do
     before do
       add_vrn_to_session(vrn: vrn)
       add_la_to_session(zone_id)
@@ -38,8 +38,14 @@ RSpec.describe 'ChargesController - POST #confirm_dates', type: :request do
   end
 
   context 'without VRN in the session' do
-    it 'redirects to :enter_details' do
-      expect(http_request).to redirect_to(enter_details_vehicles_path)
+    it_behaves_like 'vrn is missing'
+  end
+
+  context 'without LA in the session' do
+    before do
+      add_vrn_to_session(vrn: vrn)
     end
+
+    it_behaves_like 'la is missing'
   end
 end

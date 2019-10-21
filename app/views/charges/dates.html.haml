@@ -1,4 +1,4 @@
-= link_to 'Back', daily_charge_charges_path, class: 'govuk-back-link'
+= link_to 'Back', daily_charge_charges_path, class: 'govuk-back-link', id: 'back-link'
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
@@ -43,7 +43,7 @@
                 .govuk-checkboxes__item
                   %input.govuk-checkboxes__input{name: 'dates[]',
                                                  type: 'checkbox',
-                                                 value: date[:value],
+                                                 value: date[:name],
                                                  id: "date-#{index}"}
                   %label.govuk-label.govuk-checkboxes__label{for: "date-#{index}"}
                     - if date[:today]

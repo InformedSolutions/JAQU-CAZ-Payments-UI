@@ -77,3 +77,11 @@ Feature: Vehicles
     Then I choose that the details are correct
       And I press the Confirm
       And I should see "There is no charge for this vehicle"
+
+  Scenario: User wants to return with vehicle's registration which cannot be recognised
+    Given I am on the recognised page
+    Then I choose I confirm registration
+      And I press the Continue
+      And I should be on the choose type page
+    Then I press "Back" link
+      And I should be on the unrecognised page

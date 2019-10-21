@@ -43,5 +43,7 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :govuk_pay, only: %w[index create]
+
   get :build_id, to: 'application#build_id'
 end

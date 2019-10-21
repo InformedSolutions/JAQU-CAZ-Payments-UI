@@ -25,11 +25,10 @@ class ComplianceDetails
 
   # Determines how much owner of the vehicle will have to pay in this CAZ.
   #
-  # rubocop:disable Style/AsciiComments
-  # Returns a string, eg. '£10.00'
-  # rubocop:enable Style/AsciiComments
+
+  # Returns a float, eg. '8.0'
   def charge
-    "£#{format('%<pay>.2f', pay: compliance_data[:charge].to_f)}"
+    compliance_data[:charge]
   end
 
   # Returns a string, eg. 'www.example.com'.

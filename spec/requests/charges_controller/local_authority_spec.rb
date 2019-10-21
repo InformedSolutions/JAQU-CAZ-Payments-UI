@@ -49,8 +49,6 @@ RSpec.describe 'ChargesController - GET #local_authority', type: :request do
   context 'without VRN in the session' do
     before { http_request }
 
-    it 'returns a redirect to :enter_details' do
-      expect(response).to redirect_to(enter_details_vehicles_path)
-    end
+    it_behaves_like 'vrn is missing'
   end
 end

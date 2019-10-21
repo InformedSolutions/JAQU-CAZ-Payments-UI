@@ -27,9 +27,9 @@ class ApplicationController < ActionController::Base
     Rails.logger.warn("The form is invalid. #{msg}")
   end
 
-  # Gets VRN from session. Returns string, eg 'CU1234'
+  # Gets VRN from vehicle_details hash in the session. Returns string, eg 'CU1234'
   def vrn
-    session[:vrn]
+    vehicle_details('vrn')
   end
 
   # Checks if VRN is present in session.
@@ -41,7 +41,8 @@ class ApplicationController < ActionController::Base
     redirect_to enter_details_vehicles_path
   end
 
-  def return_path(custom_path: enter_details_vehicles_path)
-    request.referer || custom_path
+  # returns hash's value for current +field+
+  def vehicle_details(field)
+    session.dig(:vehicle_details, field)
   end
 end
