@@ -50,7 +50,8 @@ Then("I enter a compliant vehicle's registration and choose UK") do
   mock_vehicle_details
 end
 
-Given('I am on the recognised page') do
+Given('I am on the vehicle details page with unrecognized vehicle to check') do
   add_unrecognised_vrn_to_session
+  mock_unrecognized_vehicle
   visit details_vehicles_path
 end

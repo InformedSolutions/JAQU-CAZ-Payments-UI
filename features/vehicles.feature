@@ -79,7 +79,7 @@ Feature: Vehicles
       And I should see "There is no charge for this vehicle"
 
   Scenario: User wants to return with vehicle's registration which cannot be recognised
-    Given I am on the recognised page
+    Given I am on the vehicle details page with unrecognized vehicle to check
     Then I choose I confirm registration
       And I press the Continue
       And I should be on the choose type page
