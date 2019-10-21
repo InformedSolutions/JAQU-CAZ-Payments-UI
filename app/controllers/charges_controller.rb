@@ -73,11 +73,9 @@ class ChargesController < ApplicationController
   # * +la+ - lack of LA redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
   #
   def daily_charge
-    @compliance_details = ComplianceDetails.new(vrn, vehicle_details('la'))
-    session[:vehicle_details].merge!(
-      la_name: @compliance_details.zone_name,
-      daily_charge: @compliance_details.charge
-    )
+    @compliance_details = ComplianceDetails.new(session[:vehicle_details])
+    session[:vehicle_details][:la_name] = @compliance_details.zone_name
+    session[:vehicle_details][:daily_charge] = @compliance_details.charge
   end
 
   ##

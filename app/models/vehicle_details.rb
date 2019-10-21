@@ -16,12 +16,7 @@ class VehicleDetails
 
   # Returns a string, eg. 'CU57ABC'.
   def registration_number
-    @vrn
-  end
-
-  # Returns a string, eg. 'CU57ABC'.
-  def vrn_for_request
-    VrnParser.call(vrn: @vrn)
+    vrn
   end
 
   # Returns a string, eg. 'Car'.
@@ -74,6 +69,9 @@ class VehicleDetails
 
   private
 
+  # Reader function for the vehicle registration number
+  attr_reader :vrn
+
   ##
   # Converts the first character of +key+ value to uppercase.
   #
@@ -116,6 +114,6 @@ class VehicleDetails
   #     * +financialAssistance+
   #     * +boundary+
   def compliance_api
-    @compliance_api ||= ComplianceCheckerApi.vehicle_details(vrn_for_request)
+    @compliance_api ||= ComplianceCheckerApi.vehicle_details(vrn)
   end
 end
