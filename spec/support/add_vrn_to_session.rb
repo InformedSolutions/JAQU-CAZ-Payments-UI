@@ -14,6 +14,9 @@ module AddVrnToSession
   end
 
   def add_daily_charge_to_session
+    allow(ComplianceDetails).to receive(:new).and_return(
+      OpenStruct.new(charge: 10, zone_name: 'Zone')
+    )
     get daily_charge_charges_path
   end
 end

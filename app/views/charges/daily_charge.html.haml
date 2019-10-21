@@ -46,8 +46,12 @@
                                                value: 'yes',
                                                id: 'confirm-exempt'}
                 %label.govuk-label.govuk-checkboxes__label{for: 'confirm-exempt'}
-                  I confirm that I am not exempt from the Birmingham Clean Air Zone charge
-                  (full details about who is exempt from paying the charge in Birmingham can be found
+                  I confirm that I am not exempt from the
+                  = @compliance_details.zone_name
+                  Clean Air Zone charge
+                  (full details about who is exempt from paying the charge in
+                  = @compliance_details.zone_name
+                  can be found
                   = link_to('here', @compliance_details.exemption_or_discount_url , target: '_blank', id: 'exemption-link')
                   ).
         = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'

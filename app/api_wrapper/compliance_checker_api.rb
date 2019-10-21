@@ -56,16 +56,70 @@ class ComplianceCheckerApi < BaseApi
       request(:get, "/vehicles/#{vrn}/details")
     end
 
+    ##
+    # Calls +/v1/compliance-checker/vehicles/:vrn/compliance+ endpoint with +GET+ method
+    # and returns compliance details of the requested vehicle for requested zones.
+    #
+    # ==== Attributes
+    #
+    # * +vrn+ - Vehicle registration number parsed using {Parser}[rdoc-ref:VrnParser]
+    # * +zones+ - Array of zones IDs which vehicle compliance is check against
+    #
+    # ==== Example
+    #
+    #    ComplianceCheckerApi.vehicle_compliance('0009-AA', ['3c3e1631-c478-42db-8422-63f608f71efd'])
+    #
+    # ==== Result
+    #
+    # Returned compliance details will have following fields:
+    # * +registrationNumber+
+    # * +retrofitted+ - boolean
+    # * +exempt+ - boolean, determines if the vehicle is exempt from charges
+    # * +complianceOutcomes+ - array of objects
+    #   * +cleanAirZoneId+ - UUID, this represents CAZ ID in the DB
+    #   * +name+ - string, eg. "Birmingham"
+    #   * +charge+ - number, determines how much owner of the vehicle will have to pay in this CAZ
+    #   * +informationUrls+ - object containing CAZ dedicated info links
+    #     * +emissionsStandards+
+    #     * +mainInfo+
+    #     * +hoursOfOperation+
+    #     * +pricing+
+    #     * +exemptionOrDiscount+
+    #     * +payCaz+
+    #     * +becomeCompliant+
+    #     * +financialAssistance+
+    #     * +boundary+
+    #
+    # ==== Serialization
+    #
+    # {Compliance model}[rdoc-ref:Compliance]
+    # can be used to wrap the call and
+    # {Compliance details model}[rdoc-ref:ComplianceDetails]
+    # for each zone.
+    #
+    # ==== Exceptions
+    #
+    # * {404 Exception}[rdoc-ref:BaseApi::Error404Exception] - vehicle not found in the DVLA db
+    # * {422 Exception}[rdoc-ref:BaseApi::Error422Exception] - invalid VRN
+    # * {500 Exception}[rdoc-ref:BaseApi::Error500Exception] - backend API error
+
+    def vehicle_compliance(vrn, zones)
+      zones = zones.join(',')
+      log_action "Getting vehicle compliance, vrn: #{vrn}, zones: #{zones}"
+      request(:get, "/vehicles/#{vrn}/compliance", query: { zones: zones })
+    end
+
+    def non_dvla_vehicle_compliance(vrn, zones, type)
+      zones = zones.join(',')
+      log_action "Getting vehicle compliance, vrn: #{vrn}, zones: #{zones}, type: #{type}"
+      MockComplianceResponse.new(vrn, zones).response
+      # request(:get, "/vehicles/#{vrn}/compliance", query: { zones: zones, type: type })
+    end
+
     def chargeable_zones(vrn, type = nil)
       log_action "Getting chargeable CAZ, vrn: #{type ? "#{vrn}, type: #{type}" : vrn}"
       MockCazResponse.new(vrn).response
       # request(:get, "/vehicles/#{vrn}/compliance")
-    end
-
-    def vehicle_compliance(vrn, zone = nil)
-      log_action "Getting vehicle compliance, vrn: #{vrn}, zone: #{zone || 'all'}"
-      MockComplianceResponse.new(vrn, zone).response
-      # request(:get, "/vehicles/#{vrn}/compliance", query: { zones: zones })
     end
   end
 end

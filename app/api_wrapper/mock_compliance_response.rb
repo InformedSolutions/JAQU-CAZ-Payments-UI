@@ -5,7 +5,6 @@ class MockComplianceResponse
   def initialize(vrn, zone_id)
     @vrn = vrn
     @zone_id = zone_id
-
   end
 
   def response
@@ -13,17 +12,11 @@ class MockComplianceResponse
       'registrationNumber' => vrn,
       'retrofitted' => false,
       'exempt' => false,
-      'complianceOutcomes' =>
-          zone_id ?
-              [birmingham, leeds].select { |zone| zone['cleanAirZoneId'] == zone_id } :
-              [birmingham, leeds]
+      'complianceOutcomes' => [birmingham, leeds].select { |zone| zone['cleanAirZoneId'] == zone_id }
     }
   end
 
   private
-
-  COMPLIANT = ['CDE345'].freeze
-  ONLY_LEEDS = ['ABC123'].freeze
 
   attr_reader :vrn, :zone_id
 
@@ -31,7 +24,7 @@ class MockComplianceResponse
     {
       'cleanAirZoneId' => '5cd7441d-766f-48ff-b8ad-1809586fea37',
       'name' => 'Birmingham',
-      'charge' => vrn.in?([*COMPLIANT, *ONLY_LEEDS]) ? 0.0 : 8.0,
+      'charge' => 8.0,
       'informationUrls' => urls
     }
   end
@@ -40,7 +33,7 @@ class MockComplianceResponse
     {
       "cleanAirZoneId" => '39e54ed8-3ed2-441d-be3f-38fc9b70c8d3',
       "name" => "Leeds",
-      'charge' => vrn.in?([COMPLIANT]) ? 0.0 : 12.5,
+      'charge' => 12.5,
       'informationUrls' => urls
     }
   end
