@@ -67,6 +67,7 @@ Feature: Charges
     Then I choose today date
       And I press the Continue
     Then I should see "Review your payment"
+      And I have selected dates in the session
 
   Scenario: User wants review payment and press the change registration number link
     Given I am on the review payment page

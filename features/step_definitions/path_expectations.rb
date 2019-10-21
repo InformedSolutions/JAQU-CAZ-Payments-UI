@@ -43,3 +43,7 @@ end
 Then('I should be on the unrecognised page') do
   expect_path(unrecognised_vehicles_path)
 end
+
+Then('I should be on the payments page') do
+  expect_path(payments_path)
+end

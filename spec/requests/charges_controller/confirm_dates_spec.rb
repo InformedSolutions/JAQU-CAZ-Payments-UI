@@ -14,7 +14,7 @@ RSpec.describe 'ChargesController - POST #confirm_dates', type: :request do
   context 'with VRN and LA in the session' do
     before do
       add_vrn_to_session(vrn: vrn)
-      add_la_to_session(zone_id)
+      add_la_to_session(zone_id: zone_id)
       http_request
     end
 

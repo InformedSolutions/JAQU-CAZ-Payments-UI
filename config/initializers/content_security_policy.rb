@@ -6,17 +6,17 @@
 # For further information see the following documentation
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
 
-if Rails.env.production? && ENV.fetch('ENABLE_CSP', false)
-  Rails.application.config.content_security_policy do |policy|
-    policy.default_src :self, :https
-    policy.font_src    :self, :https
-    policy.img_src     :self, :https
-    policy.object_src  :none
-    policy.script_src  :self, :https
-    policy.style_src   :self, :https
-    policy.connect_src :self, :https
-  end
-end
+# if Rails.env.production? && ENV.fetch('ENABLE_CSP', false)
+#   Rails.application.config.content_security_policy do |policy|
+#     policy.default_src :self, :https
+#     policy.font_src    :self, :https
+#     policy.img_src     :self, :https
+#     policy.object_src  :none
+#     policy.script_src  :self, :https
+#     policy.style_src   :self, :https
+#     policy.connect_src :self, :https
+#   end
+# end
 
 # If you are using UJS then enable automatic nonce generation
 # Rails.application.config.content_security_policy_nonce_generator =

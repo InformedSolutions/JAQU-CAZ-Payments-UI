@@ -62,3 +62,7 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 end
+
+# https://stackoverflow.com/questions/5691727/how-to-set-config-action-controller-default-url-options-host-on-per
+# Used in PaymentsApi
+Rails.application.routes.default_url_options = { host: 'localhost:3000' }
