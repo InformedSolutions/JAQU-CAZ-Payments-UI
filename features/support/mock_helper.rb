@@ -12,16 +12,12 @@ module MockHelper
   # Mocks response from clean-air-zones endpoint in VCCS API
   def mock_chargeable_caz
     caz_list = read_file('caz_list_response.json')
-    allow(ComplianceCheckerApi)
-      .to receive(:chargeable_zones)
-      .and_return(caz_list['cleanAirZones'])
+    allow(ChargeableZonesService).to receive(:call).and_return(caz_list['cleanAirZones'])
   end
 
   # Mocks response for a compliant vehicle
-  def mock_compliant_vehicle
-    allow(ComplianceCheckerApi)
-      .to receive(:chargeable_zones)
-      .and_return([])
+  def mock_non_chargeable_caz
+    allow(ChargeableZonesService).to receive(:call).and_return([])
   end
 
   # Mocks response from compliance endpoint in VCCS API

@@ -25,10 +25,10 @@ class ChargesController < ApplicationController
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
   def local_authority
-    zones_data = ComplianceCheckerApi.chargeable_zones(vrn)
-    return redirect_to compliant_vehicles_path if zones_data.empty?
+    chargeable_zones = ChargeableZonesService.call(vrn: vrn, country: vehicle_details('country'))
+    return redirect_to compliant_vehicles_path if chargeable_zones.empty?
 
-    @zones = zones_data.map { |caz_data| Caz.new(caz_data) }
+    @zones = chargeable_zones.map { |caz_data| Caz.new(caz_data) }
     @return_path = local_authority_return_path
   end
 

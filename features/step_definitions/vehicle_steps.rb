@@ -3,6 +3,7 @@
 Given('I am on the vehicles details page') do
   add_vrn_and_country_to_session
   mock_vehicle_details
+  mock_vehicle_compliance
   visit details_vehicles_path
 end
 
@@ -32,6 +33,7 @@ end
 
 Then('I choose that the details are incorrect') do
   choose('No')
+  mock_chargeable_caz
 end
 
 Then('I choose that the details are correct') do
@@ -48,6 +50,7 @@ Then("I enter a compliant vehicle's registration and choose UK") do
   fill_in('vrn', with: 'CDE345')
   choose('UK')
   mock_vehicle_details
+  mock_non_chargeable_caz
 end
 
 Given('I am on the vehicle details page with unrecognized vehicle to check') do

@@ -19,10 +19,8 @@ RSpec.describe 'ChargesController - GET #local_authority', type: :request do
 
     context 'with any chargeable CAZ' do
       before do
-        allow(ComplianceCheckerApi)
-          .to receive(:chargeable_zones)
-          .with(vrn)
-          .and_return([caz_data])
+        caz_list = read_file('caz_list_response.json')
+        allow(ChargeableZonesService).to receive(:call).and_return(caz_list['cleanAirZones'])
         http_request
       end
 
@@ -33,10 +31,7 @@ RSpec.describe 'ChargesController - GET #local_authority', type: :request do
 
     context 'without any chargeable CAZ' do
       before do
-        allow(ComplianceCheckerApi)
-          .to receive(:chargeable_zones)
-          .with(vrn)
-          .and_return([])
+        allow(ChargeableZonesService).to receive(:call).and_return([])
         http_request
       end
 

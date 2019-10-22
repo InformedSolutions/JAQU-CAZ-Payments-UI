@@ -1,18 +1,13 @@
 # frozen_string_literal: true
 
 # rubocop:disable all
-class MockComplianceResponse
-  def initialize(vrn, zone_id)
-    @vrn = vrn
-    @zone_id = zone_id
-  end
-
+class MockCazesForNonukResponse
   def response
     {
       'registrationNumber' => vrn,
       'retrofitted' => false,
       'exempt' => false,
-      'complianceOutcomes' => [birmingham, leeds].select { |zone| zone['cleanAirZoneId'] == zone_id }
+      'complianceOutcomes' => [birmingham, leeds]
     }
   end
 
