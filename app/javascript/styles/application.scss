@@ -7,3 +7,7 @@ $govuk-assets-path: '/packs/media/';
 html {
   background-color: govuk-colour($colour: 'light-grey');
 }
+
+.draft-tag {
+  margin-bottom: 30px;
+}

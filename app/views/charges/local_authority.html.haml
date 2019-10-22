@@ -8,6 +8,7 @@
             %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
               %h1.govuk-fieldset__heading
                 Which Clean Air Zone do you need to pay for?
+              = render 'common/draft_tag'
             %p
               You need to pay separately for each Clean Air Zone you drive in.
             - if @zones.size == 1

@@ -17,6 +17,7 @@
     .govuk-grid-column-two-thirds
       %h1.govuk-heading-xl
         Vehicle registration details
+      = render 'common/draft_tag'
       = form_tag submit_details_vehicles_path, method: :post do
         %fieldset.govuk-fieldset
           %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
