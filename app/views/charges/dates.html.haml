@@ -24,12 +24,18 @@
             Why can't I see my date?
         .govuk-details__text
           %p
-            You can't pay for more than 7 days ahead.
+            You can't pay for more than 6 days in the past and 6 days ahead.
           %p
-            You have to pay the charge by midnight on the next working day after you have driven in
-            a zone. If the payment window has closed you won't be able to pay here, and you will be
-            sent a fine in the post. This will be sent to the address the DVLA holds for the
-            vehicle's owner.
+            If your dates are not displayed:
+            %ul.govuk-list-govuk-list--bullet
+              %li
+                %p
+                  because they are too far in the past, you will receive a fine in the post to the
+                  address DVLA holds for you.
+              %li
+                %p
+                  because they are too far in the future, you can check back here nearer the time.
+
       = form_tag confirm_dates_charges_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
           %fieldset.govuk-fieldset
