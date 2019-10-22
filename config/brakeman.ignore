@@ -65,6 +65,37 @@
     {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 4,
+      "fingerprint": "9eacb58fec2752b8207867640cdad94177e3c98fe60805d64c2aae9a6b8b6729",
+      "check_name": "LinkToHref",
+      "message": "Potentially unsafe model attribute in `link_to` href",
+      "file": "app/views/charges/daily_charge.html.haml",
+      "line": 55,
+      "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
+      "code": "link_to(\"here\", ComplianceDetails.new(session[:vehicle_details]).exemption_or_discount_url, :target => \"_blank\", :id => \"exemption-link\")",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "ChargesController",
+          "method": "daily_charge",
+          "line": 79,
+          "file": "app/controllers/charges_controller.rb",
+          "rendered": {
+            "name": "charges/daily_charge",
+            "file": "app/views/charges/daily_charge.html.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "charges/daily_charge"
+      },
+      "user_input": "ComplianceDetails.new(session[:vehicle_details]).exemption_or_discount_url",
+      "confidence": "Weak",
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 4,
       "fingerprint": "a2a00881010efcb51ef927ee4862c30683ff968033bbab6756b860a1c6c5f5bc",
       "check_name": "LinkToHref",
       "message": "Potentially unsafe model attribute in `link_to` href",
@@ -94,6 +125,6 @@
       "note": ""
     }
   ],
-  "updated": "2019-10-18 13:03:36 +0200",
+  "updated": "2019-10-22 09:21:20 +0200",
   "brakeman_version": "4.7.0"
 }
