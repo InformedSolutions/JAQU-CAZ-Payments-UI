@@ -9,7 +9,7 @@
 # All methods are on the class level, so there is no initializer method.
 
 class ComplianceCheckerApi < BaseApi
-  base_uri ENV.fetch('COMPLIANCE_CHECKER_API_URL', 'localhost:3001') + '/v1/compliance-checker'
+  base_uri ENV.fetch('PAYMENTS_API_URL', 'localhost:3001') + '/v1/compliance-checker'
 
   headers(
     'Content-Type' => 'application/json',
