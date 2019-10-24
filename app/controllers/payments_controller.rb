@@ -24,7 +24,7 @@ class PaymentsController < ApplicationController
   # * +daily_charge+ - daily charge for selected vehicle, required in the session
   #
   def create
-    payment = Payment.new(session[:vehicle_details])
+    payment = Payment.new(session[:vehicle_details], payments_url)
     session[:vehicle_details]['payment_id'] = payment.payment_id
     redirect_to payments_path
   end
