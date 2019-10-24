@@ -42,8 +42,14 @@ Then('I choose today date') do
   check 'Today'
 end
 
+Then('I have selected dates in the session') do
+  expect(page.driver.request.session[:vehicle_details]['dates'])
+    .to eq([Date.current.strftime('%Y-%m-%d')])
+end
+
 Then('I am on the review payment page') do
   add_vehicle_details_to_session
+  mock_payment_creation
   visit review_payment_charges_path
 end
 

@@ -5,11 +5,12 @@
 # and display them on +app/views/charges/dates.html.haml+
 #
 class Dates
-  # date format, e.g. 'Friday 11 October 2019'
-  DATE_FORMAT = '%A %d %B %Y'
+  # date format used to display on the UI, eg. 'Friday 11 October 2019'
+  DISPLAY_DATE_FORMAT = '%A %d %B %Y'
+  # date format used to communicate with backend API, eg. '2019-05-14'
+  VALUE_DATE_FORMAT = '%Y-%m-%d'
+
   ##
-  #
-  #
   # ==== Attributes
   # * +today+ - current date
   #
@@ -18,20 +19,21 @@ class Dates
   end
 
   # Build the list of dates and return them, e.g.
-  # [{:value=>"2019-10-11", :name=>"Friday 11 October 2019"},...]
+  # [{value: "2019-10-11", name: "Friday 11 October 2019", today: false},...]
   def build
     ((today - 6.days)..(today + 6.days)).map { |date| parse(date) }
   end
 
   private
 
-  # today and dates getters
+  # today get function
   attr_reader :today
 
   # Create hash of dates
   def parse(date)
     {
-      name: date.strftime(DATE_FORMAT),
+      name: date.strftime(DISPLAY_DATE_FORMAT),
+      value: date.strftime(VALUE_DATE_FORMAT),
       today: date.today?
     }
   end

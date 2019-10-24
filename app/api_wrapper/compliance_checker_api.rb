@@ -23,7 +23,7 @@ class ComplianceCheckerApi < BaseApi
     #
     # ==== Attributes
     #
-    # * +vrn+ - Vehicle registration number parsed using {Parser}[rdoc-ref:VrnParser]
+    # * +vrn+ - Vehicle registration number
     #
     # ==== Example
     #
