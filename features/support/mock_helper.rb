@@ -4,6 +4,11 @@
 # Module used to mock external calls for cucumber tests
 #
 module MockHelper
+  # Returns URL
+  def gov_uk_pay_url
+    'https://www.payments.service.gov.uk/'
+  end
+
   # Mocks response from clean-air-zones endpoint in VCCS API
   def mock_chargeable_caz
     caz_list = read_file('caz_list_response.json')
@@ -43,7 +48,9 @@ module MockHelper
   end
 
   def mock_payment_creation
-    allow(Payment).to receive(:new).and_return(OpenStruct.new(payment_id: SecureRandom.uuid))
+    allow(Payment).to receive(:new).and_return(
+      OpenStruct.new(payment_id: SecureRandom.uuid, gov_uk_pay_url: gov_uk_pay_url)
+    )
   end
 
   private

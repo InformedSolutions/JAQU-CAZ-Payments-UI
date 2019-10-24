@@ -26,7 +26,7 @@ class PaymentsController < ApplicationController
   def create
     payment = Payment.new(session[:vehicle_details])
     session[:vehicle_details]['payment_id'] = payment.payment_id
-    redirect_to payments_path
+    redirect_to payment.gov_uk_pay_url
   end
 
   private
