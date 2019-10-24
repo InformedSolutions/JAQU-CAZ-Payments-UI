@@ -206,7 +206,7 @@ steps:
   - name: await ecs rollout
     image: docker
     environment:
-      build_id_url: http://payments-alb-dev-175447278.eu-west-2.elb.amazonaws.com/build_id
+      build_id_url: https://dev.paycleanairzonecharge.co.uk/build_id
       build_id: ${DRONE_BUILD_NUMBER}
     commands:
       - apk add curl
