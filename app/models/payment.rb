@@ -15,12 +15,12 @@ class Payment
   #   * +la+ = ID of the selected CAZ
   #   * +dates+ = array of the selected days in the right format, eg. ['2019-05-14', '2019-05-15']
   #
-  def initialize(charge_details)
+  def initialize(charge_details, return_url)
     @vrn = charge_details['vrn']
     @dates = charge_details['dates']
     @zone_id = charge_details['la']
-    daily_charge = charge_details['daily_charge']
-    @total_charge = daily_charge * @dates.length
+    @total_charge = charge_details['daily_charge'] * dates.length
+    @return_url = return_url
   end
 
   # Returns ID assigned to the payment by GovUK.Pay
@@ -36,12 +36,12 @@ class Payment
   private
 
   # Reader functions for variables
-  attr_reader :vrn, :dates, :zone_id, :total_charge
+  attr_reader :vrn, :dates, :zone_id, :total_charge, :return_url
 
   # Calls PaymentsApi.create_payment with right data
   def payment_details
     @payment_details ||= PaymentsApi.create_payment(
-      vrn: vrn, zone_id: zone_id, amount: total_charge, days: dates
+      vrn: vrn, zone_id: zone_id, amount: total_charge, days: dates, return_url: return_url
     )
   end
 end

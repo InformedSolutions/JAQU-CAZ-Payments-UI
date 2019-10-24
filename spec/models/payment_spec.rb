@@ -4,12 +4,12 @@ require 'rails_helper'
 
 RSpec.describe Payment, type: :model do
   subject(:payment) do
-    Payment.new(
-      'vrn' => vrn,
-      'dates' => dates,
-      'la' => zone_id,
-      'daily_charge' => charge
-    )
+    Payment.new({
+                  'vrn' => vrn,
+                  'dates' => dates,
+                  'la' => zone_id,
+                  'daily_charge' => charge
+                }, url)
   end
 
   let(:vrn) { 'CU57ABC' }
@@ -24,14 +24,14 @@ RSpec.describe Payment, type: :model do
   before do
     allow(PaymentsApi)
       .to receive(:create_payment)
-      .with(vrn: vrn, zone_id: zone_id, amount: total_charge, days: dates)
+      .with(vrn: vrn, zone_id: zone_id, amount: total_charge, days: dates, return_url: url)
       .and_return('paymentId' => payment_id, 'nextUrl' => url)
   end
 
   it 'calls PaymentsApi.create_payment with proper params' do
     expect(PaymentsApi)
       .to receive(:create_payment)
-      .with(vrn: vrn, zone_id: zone_id, amount: total_charge, days: dates)
+      .with(vrn: vrn, zone_id: zone_id, amount: total_charge, days: dates, return_url: url)
     payment.payment_id
   end
 

@@ -28,12 +28,14 @@ RSpec.describe 'PaymentsController - POST #create', type: :request do
 
   it 'calls Payment model with right params' do
     expect(Payment).to receive(:new).with(
-      'vrn' => vrn,
-      'la' => zone_id,
-      'daily_charge' => charge,
-      'dates' => dates,
-      'country' => anything,
-      'la_name' => anything
+      {
+        'vrn' => vrn,
+        'la' => zone_id,
+        'daily_charge' => charge,
+        'dates' => dates,
+        'country' => anything,
+        'la_name' => anything
+      }, payments_url
     )
     http_request
   end
