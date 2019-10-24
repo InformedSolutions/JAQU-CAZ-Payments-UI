@@ -11,13 +11,13 @@ trigger:
     - push
 concurrency:
   limit: 1
-  
+
 volumes:
 - name: docker_sock
   host:
     path: /var/run/docker.sock
-    
-    
+
+
 steps:
 
   # Clean agent images and containers to prevent disk space overuse
@@ -147,7 +147,7 @@ steps:
         from_secret: sonar_token
       sonar.ruby.coverage.reportPaths: coverage/.resultset.json
     commands:
-      - sonar-scanner 
+      - sonar-scanner
         -Dsonar.projectKey=${DRONE_REPO}
         -Dsonar.projectName=${DRONE_REPO}
         -Dsonar.host.url=$SONAR_HOST
@@ -182,6 +182,22 @@ steps:
       TF_VAR_secret_key:
         from_secret: aws_secret_access_key
       TF_VAR_enable_https_redirect: false
+    when:
+      event:
+        - push
+
+  - name: codedeploy ui dev
+    image: golang:alpine
+    commands:
+      - apk add --update bash python python-dev py-pip build-base
+      - pip install awscli
+      - aws deploy create-deployment --application-name payments-codedeploy-service-dev --deployment-config-name CodeDeployDefault.ECSAllAtOnce --deployment-group-name payments-codedeploy-service-dev --description "Deployment ECS" --s3-location bucket=jaqu-projects-lambda-bucket,bundleType=yaml,key=payments/dev/appspec.yaml
+    environment:
+      AWS_ACCESS_KEY_ID:
+        from_secret: aws_access_key_id
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: aws_secret_access_key
+      AWS_DEFAULT_REGION: eu-west-2
     when:
       event:
         - push
