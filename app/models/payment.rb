@@ -15,11 +15,11 @@ class Payment
   #   * +la+ = ID of the selected CAZ
   #   * +dates+ = array of the selected days in the right format, eg. ['2019-05-14', '2019-05-15']
   #
-  def initialize(charge_details, return_url)
+  def initialize(charge_details, return_url, total_charge)
     @vrn = charge_details['vrn']
     @dates = charge_details['dates']
     @zone_id = charge_details['la']
-    @total_charge = charge_details['daily_charge'] * dates.length
+    @total_charge = total_charge
     @return_url = return_url
   end
 

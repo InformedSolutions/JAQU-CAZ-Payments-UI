@@ -1,0 +1,58 @@
+- content_for(:title, service_name)
+
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      = render 'common/draft_tag'
+      .govuk-panel.govuk-panel--confirmation
+        %h1.govuk-panel__title
+          Payment complete
+        .govuk-panel__body
+          Payment reference
+          %br
+            %strong
+              = @payment_id
+      %p
+        A receipt will be sent to
+        = succeed '.' do
+          = @user_email
+      %p You can use the payment reference above as proof of payment.
+      %h1.govuk-heading-m You have paid for:
+      %table.govuk-table
+        %tbody.govuk-table__body
+          %tr.govuk-table__row
+            %td.govuk-table__cell Registration number
+            %th.govuk-table__header{scope: 'row'}
+              = @vrn
+          %tr.govuk-table__row
+            %td.govuk-table__cell Clean Air Zone
+            %th.govuk-table__header{scope: 'row'}
+              = @la_name
+          %tr.govuk-table__row
+            %td.govuk-table__cell Payment for
+            %th.govuk-table__header{scope: 'row'}
+              = parse_dates(@dates).join(', ')
+          %tr.govuk-table__row
+            %td.govuk-table__cell Total charge
+            %th.govuk-table__header{scope: 'row'}
+              = parse_charge(@total_charge)
+      %p
+        = link_to 'Avoid having to pay in the future', nil
+        by finding out about options such as vehicle grants and
+        alternative ways to travel.
+
+      %p#print-page-link{style: 'display: none;'}
+        = link_to "Print this page", 'javascript:window.print()', id: 'print-this-page'
+
+    .govuk-grid-column-one-third
+      %h2.govuk-heading-m
+        Other tasks
+      %ul.govuk-list.govuk-list--bullet
+        %li
+          = link_to 'Pay for another Clean Air Zone',
+            local_authority_charges_path,
+            id: 'check-another-caz'
+        %li
+          = link_to 'Pay for another vehicle',
+            enter_details_vehicles_path,
+            id: 'pay-another-vehicle'
