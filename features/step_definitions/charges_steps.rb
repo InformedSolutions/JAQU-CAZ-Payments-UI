@@ -3,6 +3,7 @@
 Given('I am on the select local authority page') do
   add_vrn_and_country_to_session
   mock_vehicle_details
+  mock_vehicle_compliance
   visit local_authority_charges_path
 end
 
@@ -13,7 +14,7 @@ Given('I am on the daily charge page') do
 end
 
 Given('My vehicle is compliant') do
-  mock_compliant_vehicle
+  allow(ChargeableZonesService).to receive(:call).and_return([])
 end
 
 Given('My vehicle is not compliant') do
@@ -49,6 +50,7 @@ end
 
 Then('I am on the review payment page') do
   add_vehicle_details_to_session
+  mock_chargeable_caz
   mock_payment_creation
   visit review_payment_charges_path
 end
