@@ -9,23 +9,24 @@ class ChargeableZonesService < BaseService
   # Initializer method.
   #
   # ==== Attributes
-  #
-  # * +vrn+ - string, eg. 'CU57ABC'
-  # * +country+ - string, eg. 'UK'
-  def initialize(vrn:, country:)
-    @vrn = vrn
-    @country = country
+  # * +vehicle_details+ - hash with string keys
+  #   * +vrn+ - string, eg. 'CU57ABC'
+  #   * +country+ - string, country of the vehicle registration - UK or non-UK
+  #   * +unrecognised+ - boolean, unrecognised vehicle's registration
+  def initialize(vehicle_details:)
+    @vrn = vehicle_details['vrn']
+    @non_dvla = vehicle_details['country'] != 'UK' || vehicle_details['unrecognised']
   end
 
   # The caller method for the service.
-  # It checks which country was chosen.
-  # If Non-UK, returns mocked response.
-  # If UK, calls +ComplianceCheckerApi.chargeable_zones+ and then calls
+  # It checks which country was chosen or vehicle is unrecognised.
+  # If non_dvla is equals to true, returns mocked response.
+  # If not, calls +ComplianceCheckerApi.chargeable_zones+ and then calls
   # +ComplianceCheckerApi.vehicle_compliance+ to check if any of zones has charge price
   #
   # Returns an array
   def call
-    return MockCazesForNonukResponse.new.response['complianceOutcomes'] if country == 'Non-UK'
+    return MockCazesForNonukResponse.new.response['complianceOutcomes'] if non_dvla
 
     zone_ids = zone_data.map { |caz_data| caz_data['cleanAirZoneId'] }
     vehicle_compliance_response = ComplianceCheckerApi.vehicle_compliance(vrn, zone_ids)
@@ -37,7 +38,7 @@ class ChargeableZonesService < BaseService
   private
 
   # Variable used internally by the service
-  attr_reader :vrn, :country
+  attr_reader :vrn, :non_dvla
 
   # Calling API and returns the list of available local authorities.
   def zone_data
