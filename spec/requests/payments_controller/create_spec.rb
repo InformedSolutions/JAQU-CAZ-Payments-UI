@@ -10,6 +10,7 @@ RSpec.describe 'PaymentsController - POST #create', type: :request do
   let(:dates) { [Date.current, Date.tomorrow].map(&:to_s) }
   let(:charge) { 10 }
   let(:payment_id) { SecureRandom.uuid }
+  let(:redirect_url) { 'https://www.payments.service.gov.uk' }
 
   before do
     add_vrn_to_session(vrn: vrn)
@@ -17,13 +18,13 @@ RSpec.describe 'PaymentsController - POST #create', type: :request do
     add_dates_to_session(dates: dates)
     add_daily_charge_to_session(charge: charge)
     allow(Payment).to receive(:new).and_return(
-      OpenStruct.new(payment_id: payment_id)
+      OpenStruct.new(payment_id: payment_id, gov_uk_pay_url: redirect_url)
     )
   end
 
-  it 'redirects to :index' do
+  it 'redirects to the link from Payments API' do
     http_request
-    expect(response).to redirect_to(payments_path)
+    expect(response).to redirect_to(redirect_url)
   end
 
   it 'calls Payment model with right params' do

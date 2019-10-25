@@ -80,7 +80,7 @@ steps:
     commands:
        - bundle audit check --update
        - yarn audit
-       - brakeman
+       - brakeman --except Redirect,LinkToHref
     volumes:
       - name: docker_sock
         path: /var/run/docker.sock

@@ -6,6 +6,5 @@ Feature: Payments
   Scenario: User wants to start the payment process
     Given I am on the review payment page
       And I press the Continue
-    Then I should be on the payments page
+    Then I should get redirected to the GOV.UK Pay page
       And I should have payment id in the session
-
