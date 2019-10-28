@@ -19,4 +19,8 @@ module AddVrnToSession
     )
     get daily_charge_charges_path
   end
+
+  def add_payment_id_to_session
+    post payments_path
+  end
 end

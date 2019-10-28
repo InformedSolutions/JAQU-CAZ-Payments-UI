@@ -8,6 +8,7 @@ class PaymentsController < ApplicationController
 
   def index
     @payment_id = vehicle_details('payment_id')
+    redirect_to confirm_payment_payments_path
   end
 
   ##
@@ -24,9 +25,36 @@ class PaymentsController < ApplicationController
   # * +daily_charge+ - daily charge for selected vehicle, required in the session
   #
   def create
-    payment = Payment.new(session[:vehicle_details], payments_url)
-    session[:vehicle_details]['payment_id'] = payment.payment_id
-    redirect_to payment.gov_uk_pay_url
+    session[:vehicle_details]['payment_id'] = 'XYZ123ABC'
+    session[:vehicle_details]['user_email'] = 'example@email.com'
+    redirect_to confirm_payment_payments_path
+
+    # payment = Payment.new(session[:vehicle_details], payments_url)
+    # session[:vehicle_details]['payment_id'] = payment.payment_id
+    # redirect_to payment.gov_uk_pay_url
+  end
+
+  ##
+  # Renders page after successful payment
+  #
+  # ==== Path
+  #    GET /confirm_payment
+  #
+  # ==== Params
+  # * +payment_id+ - vehicle registration number, required in the session
+  # * +user_email+ - user email address, required in the session
+  # * +vrn+ - vehicle registration number, required in the session
+  # * +la_name+ - selected local authority, required in the session
+  # * +dates+ - selected dates, required in the session
+  # * +total_charge+ - total charge for selected dates, required in the session
+  #
+  def confirm_payment
+    @payment_id = session[:vehicle_details]['payment_id']
+    @user_email = session[:vehicle_details]['user_email']
+    @vrn = vrn
+    @la_name = vehicle_details('la_name')
+    @dates = vehicle_details('dates')
+    @total_charge = vehicle_details('total_charge')
   end
 
   private

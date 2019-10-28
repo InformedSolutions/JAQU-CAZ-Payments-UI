@@ -16,6 +16,8 @@ import '../styles/application.scss';
 import '../src/GovUKAssets';
 import { initAll } from 'govuk-frontend/govuk/all.js';
 import initBanner from '../src/cookiesBanner/init';
+import initPrintLink from '../src/printLink/init';
 
 initAll();
 initBanner();
+initPrintLink();

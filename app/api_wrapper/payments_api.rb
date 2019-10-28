@@ -61,7 +61,7 @@ class PaymentsApi < BaseApi
       )
       request(:post, '/payments', body: {
         days: days, vrn: vrn, amount: amount_in_pence,
-        'cleanAirZoneId' => zone_id, 'returnUrl' => return_url
+        cleanAirZoneId: zone_id, returnUrl: return_url
       }.to_json)
     end
   end

@@ -163,7 +163,7 @@ class ChargesController < ApplicationController
   #
   def review_payment
     @vrn = vrn
-    @dates = vehicle_details('dates').join(', ')
+    @dates = vehicle_details('dates')
     @la_name = vehicle_details('la_name')
     @total_charge = calculate_total_charge
   end
@@ -211,6 +211,8 @@ class ChargesController < ApplicationController
 
   # Calculating total charge based on daily charge and days what was selected by user.
   def calculate_total_charge
-    vehicle_details('daily_charge') * vehicle_details('dates').length
+    daily_charge = vehicle_details('daily_charge')
+    dates_length = vehicle_details('dates').length
+    session[:vehicle_details]['total_charge'] = daily_charge * dates_length
   end
 end

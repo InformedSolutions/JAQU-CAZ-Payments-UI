@@ -9,7 +9,9 @@ RSpec.describe Payment, type: :model do
                   'dates' => dates,
                   'la' => zone_id,
                   'daily_charge' => charge
-                }, url)
+                },
+                url,
+                total_charge)
   end
 
   let(:vrn) { 'CU57ABC' }
