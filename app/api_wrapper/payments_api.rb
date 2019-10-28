@@ -55,11 +55,12 @@ class PaymentsApi < BaseApi
     # * {500 Exception}[rdoc-ref:BaseApi::Error500Exception] - backend API error
     #
     def create_payment(vrn:, amount:, zone_id:, days:, return_url:)
+      amount_in_pence = (amount.to_f * 100).to_i
       log_action(
-        "Getting a payment, vrn: #{vrn}, amount: #{amount}, zone id: #{zone_id}, days: #{days.join(',')}"
+        "Getting a payment, vrn: #{vrn}, amount: #{amount_in_pence}p, zone id: #{zone_id}, days: #{days.join(',')}"
       )
       request(:post, '/payments', body: {
-        days: days, vrn: vrn, amount: amount,
+        days: days, vrn: vrn, amount: amount_in_pence,
         'cleanAirZoneId' => zone_id, 'returnUrl' => return_url
       }.to_json)
     end
