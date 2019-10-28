@@ -10,8 +10,7 @@ RSpec.describe Payment, type: :model do
                   'la' => zone_id,
                   'daily_charge' => charge
                 },
-                url,
-                total_charge)
+                url)
   end
 
   let(:vrn) { 'CU57ABC' }

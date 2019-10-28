@@ -13,21 +13,22 @@ RSpec.describe 'PaymentsController - POST #create', type: :request do
   let(:redirect_url) { 'https://www.payments.service.gov.uk' }
 
   before do
-    add_vrn_to_session(vrn: vrn)
-    add_la_to_session(zone_id: zone_id)
-    add_dates_to_session(dates: dates)
-    add_daily_charge_to_session(charge: charge)
+    add_to_session(
+      vrn: vrn, country: 'UK',
+      la: zone_id, la_name: 'Leeds',
+      dates: dates, daily_charge: charge
+    )
     allow(Payment).to receive(:new).and_return(
       OpenStruct.new(payment_id: payment_id, gov_uk_pay_url: redirect_url)
     )
   end
 
-  skip it 'redirects to the link from Payments API' do
+  it 'redirects to the link from Payments API' do
     http_request
     expect(response).to redirect_to(redirect_url)
   end
 
-  skip it 'calls Payment model with right params' do
+  it 'calls Payment model with right params' do
     expect(Payment).to receive(:new).with(
       {
         'vrn' => vrn,

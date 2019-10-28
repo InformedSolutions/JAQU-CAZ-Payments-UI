@@ -8,6 +8,11 @@ html {
   background-color: govuk-colour($colour: 'light-grey');
 }
 
+.govuk-panel--failure {
+  background: $govuk-error-colour;
+  color: govuk-colour($colour: 'white');
+}
+
 .draft-tag {
   margin-bottom: 30px;
 }

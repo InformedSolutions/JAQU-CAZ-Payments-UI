@@ -1,0 +1,14 @@
+- content_for(:title, service_name)
+
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      = render 'common/draft_tag'
+      .govuk-panel.govuk-panel--failure
+        %h1.govuk-panel__title
+          Payment failed
+        .govuk-panel__body
+          Payment reference
+          %br
+            %strong
+              = @payment_id

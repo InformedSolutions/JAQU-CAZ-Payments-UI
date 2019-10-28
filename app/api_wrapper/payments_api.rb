@@ -66,5 +66,10 @@ class PaymentsApi < BaseApi
         returnUrl: return_url
       }.to_json)
     end
+
+    def payment_status(payment_id:)
+      log_action "Getting a payment status for id: #{payment_id}"
+      request(:get, "/payments/#{payment_id}")
+    end
   end
 end
