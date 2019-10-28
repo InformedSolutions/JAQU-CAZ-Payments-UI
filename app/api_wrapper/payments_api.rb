@@ -59,8 +59,11 @@ class PaymentsApi < BaseApi
         "Getting a payment, vrn: #{vrn}, amount: #{amount}, zone id: #{zone_id}, days: #{days.join(',')}"
       )
       request(:post, '/payments', body: {
-        days: days, vrn: vrn, amount: amount,
-        'cleanAirZoneId' => zone_id, 'returnUrl' => return_url
+        days: days,
+        vrn: vrn,
+        amount: amount,
+        cleanAirZoneId: zone_id,
+        returnUrl: return_url
       }.to_json)
     end
   end

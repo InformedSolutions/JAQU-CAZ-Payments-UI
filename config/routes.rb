@@ -43,7 +43,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :payments, only: %i[index create]
+  resources :payments, only: %i[index create] do
+    collection do
+      get :confirm_payment
+    end
+  end
 
   get :build_id, to: 'application#build_id'
 end
