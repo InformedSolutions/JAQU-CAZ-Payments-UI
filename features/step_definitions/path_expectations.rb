@@ -48,6 +48,10 @@ Then('I should be on the payments page') do
   expect_path(payments_path)
 end
 
-Then('I should be on the payments complete page') do
-  expect_path(confirm_payment_payments_path)
+Then('I should be on the successful payments page') do
+  expect_path(success_payments_path)
+end
+
+Then('I should be on the failed payments page') do
+  expect_path(failure_payments_path)
 end

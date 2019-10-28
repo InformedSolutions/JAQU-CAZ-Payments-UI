@@ -4,11 +4,30 @@
 # Controls the flow for calling Payments API.
 #
 class PaymentsController < ApplicationController
-  before_action :check_payment_id, only: :create
+  before_action :check_payment_creation, only: :create
+  before_action :check_payment_details, except: :create
 
+  ##
+  # The page used as a landing point after the GOV.UK payment process
+  #
+  # Calls +/payments/:id+ backend endpoint to get payment status
+  #
+  # Redirects to either success or failure payments path
+  #
+  # ==== Path
+  #    GET /payments
+  #
+  # ==== Params
+  # * +payment_id+ - vehicle registration number, required in the session
+  #
   def index
-    @payment_id = vehicle_details('payment_id')
-    redirect_to confirm_payment_payments_path
+    payment = PaymentStatus.new(vehicle_details('payment_id'))
+    if payment.success?
+      session[:vehicle_details]['user_email'] = payment.user_email
+      redirect_to success_payments_path
+    else
+      redirect_to failure_payments_path
+    end
   end
 
   ##
@@ -25,20 +44,16 @@ class PaymentsController < ApplicationController
   # * +daily_charge+ - daily charge for selected vehicle, required in the session
   #
   def create
-    session[:vehicle_details]['payment_id'] = 'XYZ123ABC'
-    session[:vehicle_details]['user_email'] = 'example@email.com'
-    redirect_to confirm_payment_payments_path
-
-    # payment = Payment.new(session[:vehicle_details], payments_url)
-    # session[:vehicle_details]['payment_id'] = payment.payment_id
-    # redirect_to payment.gov_uk_pay_url
+    payment = Payment.new(session[:vehicle_details], payments_url)
+    session[:vehicle_details]['payment_id'] = payment.payment_id
+    redirect_to payment.gov_uk_pay_url
   end
 
   ##
   # Renders page after successful payment
   #
   # ==== Path
-  #    GET /confirm_payment
+  #    GET /payments/success
   #
   # ==== Params
   # * +payment_id+ - vehicle registration number, required in the session
@@ -48,13 +63,28 @@ class PaymentsController < ApplicationController
   # * +dates+ - selected dates, required in the session
   # * +total_charge+ - total charge for selected dates, required in the session
   #
-  def confirm_payment
-    @payment_id = session[:vehicle_details]['payment_id']
-    @user_email = session[:vehicle_details]['user_email']
+  def success
+    @payment_id = vehicle_details('payment_id')
+    @user_email = vehicle_details('user_email')
     @vrn = vrn
     @la_name = vehicle_details('la_name')
     @dates = vehicle_details('dates')
     @total_charge = vehicle_details('total_charge')
+    session[:vehicle_details] = nil
+  end
+
+  ##
+  # Renders page after unsuccessful payment
+  #
+  # ==== Path
+  #    GET /payments/failure
+  #
+  # ==== Params
+  # * +payment_id+ - vehicle registration number, required in the session
+  #
+  def failure
+    @payment_id = vehicle_details('payment_id')
+    session[:vehicle_details] = nil
   end
 
   private
@@ -64,11 +94,19 @@ class PaymentsController < ApplicationController
   #
   # If it is, redirects to payments index view
   #
-  def check_payment_id
+  def check_payment_creation
     payment_id = vehicle_details('payment_id')
     return unless payment_id
 
     Rails.logger.warn "Payment with id: #{payment_id} was already created"
     redirect_to payments_path
+  end
+
+  def check_payment_details
+    payment_id = vehicle_details('payment_id')
+    return if payment_id
+
+    Rails.logger.warn 'Payment id is missing'
+    redirect_to enter_details_vehicles_path
   end
 end

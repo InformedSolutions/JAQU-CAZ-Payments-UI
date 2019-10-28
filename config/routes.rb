@@ -45,7 +45,8 @@ Rails.application.routes.draw do
 
   resources :payments, only: %i[index create] do
     collection do
-      get :confirm_payment
+      get :success
+      get :failure
     end
   end
 

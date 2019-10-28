@@ -23,4 +23,9 @@ module AddVrnToSession
   def add_payment_id_to_session
     post payments_path
   end
+
+  def add_to_session(data = {})
+    encoded_data = RackSessionAccess.encode(vehicle_details: data)
+    put RackSessionAccess.path, params: { data: encoded_data }
+  end
 end

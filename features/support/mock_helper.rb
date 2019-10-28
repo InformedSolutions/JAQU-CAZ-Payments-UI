@@ -49,6 +49,12 @@ module MockHelper
     )
   end
 
+  def mock_payment_status(success: true)
+    allow(PaymentStatus).to receive(:new).and_return(
+      OpenStruct.new(success?: success, user_email: 'user_email@example.com')
+    )
+  end
+
   private
 
   # Reads provided file from +spec/fixtures/files+ directory

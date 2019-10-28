@@ -1,0 +1,22 @@
+# frozen_string_literal: true
+
+require 'rails_helper'
+
+RSpec.describe 'PaymentsController - GET #success', type: :request do
+  subject(:http_request) { get failure_payments_path }
+
+  let(:payment_id) { 'XYZ123ABC' }
+
+  before do
+    add_to_session(payment_id: payment_id)
+    subject
+  end
+
+  it 'returns http success' do
+    expect(response).to have_http_status(:success)
+  end
+
+  it 'clears details in session' do
+    expect(session[:vehicle_details]).to be_nil
+  end
+end

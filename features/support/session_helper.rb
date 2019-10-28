@@ -13,14 +13,16 @@ module SessionHelper
     page.set_rack_session(vehicle_details: { vrn: vrn, country: 'UK', la: random_la_uuid })
   end
 
-  def add_vehicle_details_to_session
-    page.set_rack_session(vehicle_details: {
-                            vrn: vrn,
-                            country: 'UK',
-                            la: random_la_uuid,
-                            dates: dates,
-                            daily_charge: 9.0
-                          })
+  def add_vehicle_details_to_session(add_payment_id: false)
+    details = {
+      vrn: vrn,
+      country: 'UK',
+      la: random_la_uuid,
+      dates: dates,
+      daily_charge: 9.0
+    }
+    details[:payment_id] = SecureRandom.uuid if add_payment_id
+    page.set_rack_session(vehicle_details: details)
   end
 
   def add_unrecognised_vrn_to_session
