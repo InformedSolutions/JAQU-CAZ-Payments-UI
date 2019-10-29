@@ -2,6 +2,19 @@
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
     .govuk-grid-column-two-thirds
+      - if alert
+        .govuk-error-summary{'aria-labelledby': 'error-summary-title',
+                             'data-module': 'govuk-error-summary',
+                             role: 'alert',
+                             tabindex: '-1'}
+          %h2#error-summary-title.govuk-error-summary__title
+            There is a problem
+          .govuk-error-summary__body
+            %ul.govuk-list.govuk-error-summary__list
+              %li
+                %a{href: "#caz-select-error"}
+                  State which Clean Air Zone you are paying for
+
       = form_tag submit_local_authority_charges_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
           %fieldset.govuk-fieldset

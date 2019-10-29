@@ -37,6 +37,9 @@ Feature: Charges
   Scenario: User selects LA to pay for
     Given My vehicle is not compliant
       And I am on the select local authority page
+    Then I press the Continue
+      And I should see "There is a problem"
+      And I should see "Which clean air zone are you paying for?"
     Then I select Birmingham
       And I press the Continue
     Then I should be on the daily charge page
