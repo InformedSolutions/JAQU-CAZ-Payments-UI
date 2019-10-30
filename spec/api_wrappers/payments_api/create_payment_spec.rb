@@ -29,7 +29,7 @@ RSpec.describe 'PaymentsApi.create_payment' do
 
     it 'calls API with right params' do
       expect(call).to have_requested(:post, /payments/).with(body: {
-        days: days, vrn: vrn, amount: amount,
+        days: days, vrn: vrn, amount: amount * 100,
         'cleanAirZoneId' => zone_id,
         'returnUrl' => return_url
       }.to_json)
