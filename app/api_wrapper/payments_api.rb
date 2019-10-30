@@ -59,15 +59,55 @@ class PaymentsApi < BaseApi
       log_action(
         "Getting a payment, vrn: #{vrn}, amount: #{amount_in_pence}p, zone id: #{zone_id}, days: #{days.join(',')}"
       )
-      request(:post, '/payments', body: {
-        days: days, vrn: vrn, amount: amount_in_pence,
-        cleanAirZoneId: zone_id, returnUrl: return_url
-      }.to_json)
+      request(
+        :post,
+        '/payments',
+        body: payment_creation_body(days, vrn, amount_in_pence, zone_id, return_url)
+      )
     end
 
+    # Calls +/v1/payments/:id+ endpoint with +GET+ method which returns details of the payment.
+    #
+    # ==== Attributes
+    #
+    # * +payment_id+ - Payment ID returned by backend API during the payment creation
+    #
+    # ==== Example
+    #
+    #    PaymentsApi.payment_status(payment_id: '86b64512-154c-4033-a64d-92e8ed19275f')
+    #
+    # ==== Result
+    #
+    # Returned payment details will have the following fields:
+    # * +status+ - string, status of the payment eg. "success"
+    # * +userEmail+ - email, email submitted by the user during the payment process
+    #
+    # ==== Serialization
+    #
+    # {PaymentStatus model}[rdoc-ref:PaymentStatus]
+    # can be used to create an instance referring to the returned data
+    #
+    # ==== Exceptions
+    #
+    # * {404 Exception}[rdoc-ref:BaseApi::Error404Exception] - payment not found
+    # * {500 Exception}[rdoc-ref:BaseApi::Error500Exception] - backend API error
+    #
     def payment_status(payment_id:)
       log_action "Getting a payment status for id: #{payment_id}"
       request(:get, "/payments/#{payment_id}")
+    end
+
+    private
+
+    # Returns parsed to JSON hash of the payment creation parameters with proper keys
+    def payment_creation_body(days, vrn, amount, zone_id, return_url)
+      {
+        days: days,
+        vrn: vrn,
+        amount: amount,
+        cleanAirZoneId: zone_id,
+        returnUrl: return_url
+      }.to_json
     end
   end
 end
