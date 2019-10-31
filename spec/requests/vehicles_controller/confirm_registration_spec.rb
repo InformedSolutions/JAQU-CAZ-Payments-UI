@@ -21,7 +21,7 @@ RSpec.describe 'VehiclesController - POST #confirm_registation', type: :request 
     end
 
     it 'redirects to unrecognised page' do
-      expect(response).to redirect_to(choose_type_non_uk_vehicles_path)
+      expect(response).to redirect_to(choose_type_non_dvla_vehicles_path)
     end
   end
 

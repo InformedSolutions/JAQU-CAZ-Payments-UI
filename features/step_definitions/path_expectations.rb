@@ -17,7 +17,7 @@ Then('I should be on the incorrect details page') do
 end
 
 Then('I should be on the choose type page') do
-  expect_path(choose_type_non_uk_vehicles_path)
+  expect_path(choose_type_non_dvla_vehicles_path)
 end
 
 Then('I should be on the compliant vehicle page') do
@@ -25,7 +25,7 @@ Then('I should be on the compliant vehicle page') do
 end
 
 Then('I should be on the non UK page') do
-  expect_path(non_uk_vehicles_path)
+  expect_path(non_dvla_vehicles_path)
 end
 
 Then('I should be on the local authorities page') do

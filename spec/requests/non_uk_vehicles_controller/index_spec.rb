@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe 'NonUkVehiclesController - GET #index', type: :request do
-  subject(:http_request) { get non_uk_vehicles_path }
+RSpec.describe 'NonDvlaVehiclesController - GET #index', type: :request do
+  subject(:http_request) { get non_dvla_vehicles_path }
 
   context 'with VRN in the session' do
     before do
