@@ -70,7 +70,7 @@ class PaymentsController < ApplicationController
     @la_name = vehicle_details('la_name')
     @dates = vehicle_details('dates')
     @total_charge = vehicle_details('total_charge')
-    session[:vehicle_details] = nil
+    clear_payment_in_session
   end
 
   ##
@@ -84,7 +84,7 @@ class PaymentsController < ApplicationController
   #
   def failure
     @payment_id = vehicle_details('payment_id')
-    session[:vehicle_details] = nil
+    clear_payment_in_session
   end
 
   private
@@ -108,5 +108,10 @@ class PaymentsController < ApplicationController
 
     Rails.logger.warn 'Payment id is missing'
     redirect_to enter_details_vehicles_path
+  end
+
+  def clear_payment_in_session
+    payment_keys = %w[la la_name daily_charge dates total_charge payment_id user_email]
+    session[:vehicle_details].except!(*payment_keys)
   end
 end
