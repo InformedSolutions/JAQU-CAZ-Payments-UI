@@ -9,14 +9,18 @@ Feature: Payments
     Then I should get redirected to the GOV.UK Pay page
       And I should have payment id in the session
 
-  Scenario: User wants to to finalize payment process
+  Scenario: User wants to finalize payment process
     Given I have finished the payment successfully
       And I'm getting redirected from GOV.UK Pay
     Then I should be on the successful payments page
 
-  Scenario: User wants to to finalize payment process
+  Scenario: User wants to finalize unsuccessful payment process
     Given I have finished the payment unsuccessfully
       And I'm getting redirected from GOV.UK Pay
     Then I should be on the failed payments page
 
-
+  Scenario: User wants to pay for another CAZ
+    Given I have finished the payment successfully
+      And I'm getting redirected from GOV.UK Pay
+    Then I press pay for another CAZ
+      And I should be on the local authorities page

@@ -21,3 +21,8 @@ Then('I should have payment id in the session') do
   visit root_path
   expect(page.driver.request.session[:vehicle_details]['payment_id']).not_to be_nil
 end
+
+Then('I press pay for another CAZ') do
+  mock_vehicle_compliance
+  click_link 'Pay for another Clean Air Zone'
+end
