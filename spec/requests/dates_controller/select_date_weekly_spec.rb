@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe 'ChargesController - GET #review_payment', type: :request do
-  subject(:http_request) { get review_payment_charges_path }
+RSpec.describe 'DatesController - GET #select_date_weekly', type: :request do
+  subject(:http_request) { get select_date_weekly_charges_path }
 
   let(:vrn) { 'CU57ABC' }
   let(:country) { 'UK' }
@@ -11,12 +11,10 @@ RSpec.describe 'ChargesController - GET #review_payment', type: :request do
   let(:charge) { 50 }
   let(:la_name) { 'Leeds' }
 
-  context 'with VRN, COUNTRY, LA NAME, CHARGE and DATES in the session' do
+  context 'with VRN, COUNTRY, LA, LA NAME and CHARGE in the session' do
     before do
-      add_vrn_to_session
-      add_la_to_session(zone_id: zone_id)
-      add_dates_to_session
-      add_daily_charge_to_session
+      add_to_session(vrn: vrn, country: country, la: zone_id, charge: charge, la_name: la_name)
+      http_request
     end
 
     it 'returns a success response' do
@@ -31,20 +29,10 @@ RSpec.describe 'ChargesController - GET #review_payment', type: :request do
 
   context 'without LA in the session' do
     before do
-      add_vrn_to_session
+      add_to_session(vrn: vrn, country: country, charge: charge, la_name: la_name)
     end
 
     it_behaves_like 'la is missing'
-  end
-
-  context 'without DATES in the session' do
-    before do
-      add_vrn_to_session
-      add_la_to_session(zone_id: zone_id)
-      add_daily_charge_to_session
-    end
-
-    it_behaves_like 'vehicle details is missing'
   end
 
   context 'without charge in the session' do

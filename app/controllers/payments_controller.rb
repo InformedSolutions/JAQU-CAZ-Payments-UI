@@ -67,7 +67,7 @@ class PaymentsController < ApplicationController
     @payment_id = vehicle_details('payment_id')
     @user_email = vehicle_details('user_email')
     @vrn = vrn
-    @la_name = vehicle_details('la_name')
+    @la_name = la_name
     @dates = vehicle_details('dates')
     @total_charge = vehicle_details('total_charge')
     clear_payment_in_session

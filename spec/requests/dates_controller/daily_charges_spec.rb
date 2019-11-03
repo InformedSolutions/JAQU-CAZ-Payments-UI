@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'ChargesController - GET #daily_charge', type: :request do
+RSpec.describe 'DatesController - GET #daily_charge', type: :request do
   subject(:http_request) { get daily_charge_charges_path }
 
   let(:vrn) { 'CU57ABC' }

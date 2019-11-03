@@ -1,5 +1,5 @@
 - content_for(:title, 'Confirm your payment')
-= link_to 'Back', dates_charges_path, class: 'govuk-back-link', id: 'back-link'
+= link_to 'Back', @return_path, class: 'govuk-back-link', id: 'back-link'
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
@@ -28,7 +28,10 @@
             %tr.govuk-table__row
               %td.govuk-table__cell Payment for
               %th.govuk-table__header{scope: 'row'}
-                = parse_dates(@dates).join(', ')
+                - if @weekly_charge
+                  = parse_weekly_dates(@dates.join(''))
+                - else
+                  = parse_dates(@dates).join(', ')
               %td.govuk-table__cell
                 = link_to 'Change', dates_charges_path, class: 'govuk-link', id: 'change-dates'
             %tr.govuk-table__row

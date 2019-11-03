@@ -67,6 +67,8 @@ class VehiclesController < ApplicationController
   #
   def details
     @vehicle_details = VehicleDetails.new(vrn)
+
+    session[:vehicle_details]['taxi'] = true if @vehicle_details.taxi_private_hire_vehicle == 'Yes'
   end
 
   ##

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'ChargesController - POST #confirm_dates', type: :request do
+RSpec.describe 'DatesController - POST #confirm_dates', type: :request do
   subject(:http_request) do
     post confirm_dates_charges_path, params: dates
   end

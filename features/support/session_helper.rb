@@ -18,8 +18,9 @@ module SessionHelper
       vrn: vrn,
       country: 'UK',
       la: random_la_uuid,
+      la_name: 'Leeds',
       dates: dates,
-      daily_charge: 9.0
+      charge: 9.0
     }
     details[:payment_id] = SecureRandom.uuid if add_payment_id
     page.set_rack_session(vehicle_details: details)

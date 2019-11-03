@@ -22,4 +22,12 @@ module ApplicationHelper
       date_string.to_date.strftime('%A %d %B %Y')
     end
   end
+
+  # Returns parsed date format, eg. '01/11/19 - 07/11/19'
+  def parse_weekly_dates(selected_date)
+    date = selected_date.to_date
+    first_day_of_week = date.strftime('%d/%m/%y')
+    last_day_of_week = (date + 6.days).strftime('%d/%m/%y')
+    "#{first_day_of_week} - #{last_day_of_week}"
+  end
 end
