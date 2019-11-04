@@ -2,10 +2,10 @@
 
 require 'rails_helper'
 
-RSpec.describe Dates, type: :model do
-  subject(:dates) { described_class.new.build }
+RSpec.describe Dates::Daily do
+  subject(:dates) { described_class.call }
 
-  describe '.build' do
+  describe '.call' do
     it 'returns thirteen days' do
       expect(subject.count).to eq(13)
     end

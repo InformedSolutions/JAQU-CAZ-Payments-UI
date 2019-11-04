@@ -38,10 +38,10 @@ Rails.application.routes.draw do
       get :weekly_charge, to: 'dates#weekly_charge'
       post :confirm_weekly_charge, to: 'dates#confirm_weekly_charge'
 
-      get :dates, to: 'dates#dates'
-      post :confirm_dates, to: 'dates#confirm_dates'
+      get :select_daily_date, to: 'dates#select_daily_date'
+      post :confirm_daily_date, to: 'dates#confirm_daily_date'
 
-      get :select_date_weekly, to: 'dates#select_date_weekly'
+      get :select_weekly_date, to: 'dates#select_weekly_date'
       post :confirm_date_weekly, to: 'dates#confirm_date_weekly'
 
       get :review_payment

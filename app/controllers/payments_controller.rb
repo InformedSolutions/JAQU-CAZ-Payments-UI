@@ -39,9 +39,9 @@ class PaymentsController < ApplicationController
   #
   # ==== Params
   # * +vrn+ - vehicle registration number, required in the session
-  # * +la+ - selected local authority, required in the session
+  # * +la_id+ - selected local authority, required in the session
   # * +dates+ - selected dates, required in the session
-  # * +daily_charge+ - daily charge for selected vehicle, required in the session
+  # * +charge+ - daily charge for selected vehicle, required in the session
   #
   def create
     payment = Payment.new(session[:vehicle_details], payments_url)
@@ -111,7 +111,9 @@ class PaymentsController < ApplicationController
   end
 
   def clear_payment_in_session
-    payment_keys = %w[la la_name daily_charge dates total_charge payment_id user_email]
+    payment_keys = %w[
+      la_id la_name charge dates total_charge payment_id user_email weekly_period taxi
+    ]
     session[:vehicle_details].except!(*payment_keys)
   end
 end

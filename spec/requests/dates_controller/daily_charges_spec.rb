@@ -19,7 +19,7 @@ RSpec.describe 'DatesController - GET #daily_charge', type: :request do
   before do
     allow(ComplianceDetails)
       .to receive(:new)
-      .with('vrn' => vrn, 'country' => country, 'la' => zone_id)
+      .with('vrn' => vrn, 'country' => country, 'la_id' => zone_id)
       .and_return(details)
   end
 
@@ -32,7 +32,7 @@ RSpec.describe 'DatesController - GET #daily_charge', type: :request do
     it 'call ComplianceDetails with right params' do
       expect(ComplianceDetails)
         .to receive(:new)
-        .with('vrn' => vrn, 'country' => country, 'la' => zone_id)
+        .with('vrn' => vrn, 'country' => country, 'la_id' => zone_id)
       http_request
     end
 

@@ -46,18 +46,18 @@ class ApplicationController < ActionController::Base
     redirect_to enter_details_vehicles_path
   end
 
-  # Checks if LA is present in the session.
+  # Checks if LA ID is present in the session.
   # If not, redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
-  def check_la
-    return if la
+  def check_la_id
+    return if la_id
 
-    Rails.logger.warn 'LA is missing in the session. Redirecting to :local_authority'
+    Rails.logger.warn 'LA ID is missing in the session. Redirecting to :local_authority'
     redirect_to local_authority_charges_path
   end
 
   # Gets LA from vehicle_details hash in the session. Returns string, eg '39e54ed8-3ed2-441d-be3f-38fc9b70c8d3'
-  def la
-    vehicle_details('la')
+  def la_id
+    vehicle_details('la_id')
   end
 
   # Returns hash's value for current +field+

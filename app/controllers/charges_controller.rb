@@ -7,7 +7,7 @@ class ChargesController < ApplicationController
   # checks if VRN is present in the session
   before_action :check_vrn
   # checks if LA is present in the session
-  before_action :check_la, except: %i[local_authority submit_local_authority]
+  before_action :check_la_id, except: %i[local_authority submit_local_authority]
   # checks if vehicle_details is present in the session
   before_action :check_vehicle_details, only: %i[review_payment]
 
@@ -33,7 +33,7 @@ class ChargesController < ApplicationController
 
   ##
   # Validates and stores the selected local authority.
-  # If successful, redirects to {picking dates}[rdoc-ref:ChargesController.dates]
+  # If successful, redirects to {picking dates}[rdoc-ref:DatesController.select_daily_date]
   #
   # ==== Path
   #    POST /charges/submit_local_authority
@@ -65,8 +65,8 @@ class ChargesController < ApplicationController
   #
   # ==== Validations
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
-  # * +la+ - lack of LA redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
-  # * +dates+ - lack of dates redirects to {picking dates}[rdoc-ref:ChargesController.dates]
+  # * +la_id+ - lack of LA redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
+  # * +dates+ - lack of dates redirects to {picking dates}[rdoc-ref:DatesController.select_daily_date]
   #
   def review_payment
     @vrn = vrn
@@ -86,16 +86,16 @@ class ChargesController < ApplicationController
 
   # Stores submitted LA in the session
   def store_la
-    session[:vehicle_details]['la'] = params['local-authority']
+    session[:vehicle_details]['la_id'] = params['local-authority']
   end
 
   # Checks if dates is present in the session.
-  # If not, redirects to {picking dates}[rdoc-ref:ChargesController.dates]
+  # If not, redirects to {picking dates}[rdoc-ref:DatesController.select_daily_date]
   def check_dates
     return if dates
 
     Rails.logger.warn 'Dates is missing in the session. Redirecting to :dates'
-    redirect_to dates_charges_path
+    redirect_to select_daily_date_charges_path
   end
 
   # Define the back button path on local authority page.
@@ -120,14 +120,9 @@ class ChargesController < ApplicationController
 
   # Calculating total charge based on daily charge and days what was selected by user.
   def calculate_total_charge
-    daily_charge = charge
     dates_length = vehicle_details('dates').length
-    session[:vehicle_details]['total_charge'] = daily_charge * dates_length
+    session[:vehicle_details]['total_charge'] = charge * dates_length
   end
-
-  ##
-  # ==== Params
-  # * +period+ - status for the vehicle type if it is not possible to determine, eg. 'true'
 
   # Verifies which date period was selected.
   # If date period equals 'daily-charge' redirects to {daily_charge}[rdoc-ref:DatesController.daily_charge]
@@ -149,9 +144,10 @@ class ChargesController < ApplicationController
 
   # Checks if vehicle_details is present in the session
   def check_vehicle_details
-    return if vrn && la && la_name && charge && vehicle_details('dates')
+    return if vrn && la_id && la_name && charge && vehicle_details('dates')
 
     Rails.logger.warn 'Vehicle details is missing in the session. Redirecting to :enter_details'
+    Rails.logger.warn "Current vehicle_details in session: #{session[:vehicle_details]}#"
     redirect_to enter_details_vehicles_path
   end
 end

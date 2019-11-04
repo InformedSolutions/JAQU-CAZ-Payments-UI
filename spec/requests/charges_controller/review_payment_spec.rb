@@ -13,10 +13,8 @@ RSpec.describe 'ChargesController - GET #review_payment', type: :request do
 
   context 'with VRN, COUNTRY, LA NAME, CHARGE and DATES in the session' do
     before do
-      add_vrn_to_session
-      add_la_to_session(zone_id: zone_id)
-      add_dates_to_session
-      add_daily_charge_to_session
+      today = Date.current
+      add_to_session(vrn: vrn, la_id: zone_id, charge: charge, la_name: la_name, dates: [today])
     end
 
     it 'returns a success response' do
@@ -47,17 +45,17 @@ RSpec.describe 'ChargesController - GET #review_payment', type: :request do
     it_behaves_like 'vehicle details is missing'
   end
 
-  context 'without charge in the session' do
+  context 'without CHARGE in the session' do
     before do
-      add_to_session(vrn: vrn, country: country, la: zone_id, la_name: la_name)
+      add_to_session(vrn: vrn, country: country, la_id: zone_id, la_name: la_name)
     end
 
     it_behaves_like 'charge is missing'
   end
 
-  context 'without la name in the session' do
+  context 'without LA NAME in the session' do
     before do
-      add_to_session(vrn: vrn, country: country, la: zone_id, charge: charge)
+      add_to_session(vrn: vrn, country: country, la_id: zone_id, charge: charge)
     end
 
     it_behaves_like 'la name is missing'

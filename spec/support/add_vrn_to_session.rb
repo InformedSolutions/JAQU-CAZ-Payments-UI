@@ -10,7 +10,7 @@ module AddVrnToSession
   end
 
   def add_dates_to_session(dates: [Date.current])
-    post confirm_dates_charges_path, params: { dates: dates }
+    post confirm_daily_date_charges_path, params: { dates: dates }
   end
 
   def add_daily_charge_to_session(charge: 10)

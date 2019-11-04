@@ -36,7 +36,7 @@ end
 
 Then('I am on the dates page') do
   add_vehicle_details_to_session
-  visit dates_charges_path
+  visit select_daily_date_charges_path
 end
 
 Then('I choose today date') do

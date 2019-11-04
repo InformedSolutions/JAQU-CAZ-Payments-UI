@@ -13,13 +13,13 @@ RSpec.describe 'DatesController - POST #confirm_weekly_charge', type: :request d
 
   context 'with VRN, LA, LA NAME and CHARGE in the session' do
     before do
-      add_to_session(vrn: vrn, la: zone_id, charge: 50, la_name: 'Leeds')
+      add_to_session(vrn: vrn, la_id: zone_id, charge: 50, la_name: 'Leeds')
       http_request
     end
 
     context 'with checked checkbox' do
       it 'redirects to :dates' do
-        expect(http_request).to redirect_to(select_date_weekly_charges_path)
+        expect(http_request).to redirect_to(select_weekly_date_charges_path)
       end
     end
 

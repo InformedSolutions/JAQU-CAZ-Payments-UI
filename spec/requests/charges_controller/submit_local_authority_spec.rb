@@ -19,7 +19,7 @@ RSpec.describe 'ChargesController - POST #submit_local_authority', type: :reques
 
       it 'sets LA in the session' do
         http_request
-        expect(session.dig(:vehicle_details, 'la')).to eq(zone_id)
+        expect(session.dig(:vehicle_details, 'la_id')).to eq(zone_id)
       end
     end
 

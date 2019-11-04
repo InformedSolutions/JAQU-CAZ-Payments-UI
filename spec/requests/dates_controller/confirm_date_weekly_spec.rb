@@ -19,7 +19,7 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
 
   context 'with VRN, COUNTRY, LA, LA NAME and CHARGE in the session' do
     before do
-      add_to_session(vrn: vrn, country: country, la: zone_id, charge: charge, la_name: la_name)
+      add_to_session(vrn: vrn, country: country, la_id: zone_id, charge: charge, la_name: la_name)
       http_request
     end
 
@@ -40,17 +40,17 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
     it_behaves_like 'la is missing'
   end
 
-  context 'without charge in the session' do
+  context 'without CHARGE in the session' do
     before do
-      add_to_session(vrn: vrn, country: country, la: zone_id, la_name: la_name)
+      add_to_session(vrn: vrn, country: country, la_id: zone_id, la_name: la_name)
     end
 
     it_behaves_like 'charge is missing'
   end
 
-  context 'without la name in the session' do
+  context 'without LA NAME in the session' do
     before do
-      add_to_session(vrn: vrn, country: country, la: zone_id, charge: charge)
+      add_to_session(vrn: vrn, country: country, la_id: zone_id, charge: charge)
     end
 
     it_behaves_like 'la name is missing'

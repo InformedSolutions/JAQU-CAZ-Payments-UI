@@ -18,7 +18,7 @@ class ComplianceDetails
   def initialize(vehicle_details)
     @vrn = vehicle_details['vrn']
     @type = vehicle_details['type']
-    @zone_id = vehicle_details['la']
+    @zone_id = vehicle_details['la_id']
     @non_dvla = vehicle_details['country'] != 'UK' || vehicle_details['unrecognised']
   end
 
