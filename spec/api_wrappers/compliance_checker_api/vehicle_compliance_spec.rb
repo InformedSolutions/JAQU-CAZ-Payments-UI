@@ -10,7 +10,7 @@ RSpec.describe 'ComplianceCheckerApi.vehicle_details' do
 
   context 'when call returns 200' do
     before do
-      vehicle_details = file_fixture('vehicle_compliance_response.json').read
+      vehicle_details = file_fixture('vehicle_compliance_birmingham_response.json').read
       stub_request(:get, /compliance\?zones=/).to_return(
         status: 200,
         body: vehicle_details

@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe ComplianceDetails, type: :model do
   subject(:details) { described_class.new(vehicle_details) }
 
-  let(:vehicle_details) { { 'vrn' => vrn, 'country' => country, 'la' => zone_id } }
+  let(:vehicle_details) { { 'vrn' => vrn, 'country' => country, 'la_id' => zone_id } }
   let(:vrn) { 'CU57ABC' }
   let(:country) { 'UK' }
   let(:zone_id) { SecureRandom.uuid }
@@ -64,7 +64,7 @@ RSpec.describe ComplianceDetails, type: :model do
 
     context 'when vehicle is unrecognised' do
       let(:vehicle_details) do
-        { 'vrn' => vrn, 'country' => country, 'la' => zone_id, 'unrecognised' => true }
+        { 'vrn' => vrn, 'country' => country, 'la_id' => zone_id, 'unrecognised' => true }
       end
 
       before do
@@ -90,7 +90,7 @@ RSpec.describe ComplianceDetails, type: :model do
 
   context 'when the vehicle is registered outside of the UK' do
     let(:vehicle_details) do
-      { 'vrn' => vrn, 'country' => country, 'la' => zone_id, 'type' => type }
+      { 'vrn' => vrn, 'country' => country, 'la_id' => zone_id, 'type' => type }
     end
     let(:country) { 'non-UK' }
     let(:type) { 'Car' }

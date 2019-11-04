@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe 'ChargesController - GET #daily_charge', type: :request do
-  subject(:http_request) { get daily_charge_charges_path }
+RSpec.describe 'DatesController - GET #daily_charge', type: :request do
+  subject(:http_request) { get daily_charge_dates_path }
 
   let(:vrn) { 'CU57ABC' }
   let(:country) { 'UK' }
@@ -19,7 +19,7 @@ RSpec.describe 'ChargesController - GET #daily_charge', type: :request do
   before do
     allow(ComplianceDetails)
       .to receive(:new)
-      .with('vrn' => vrn, 'country' => country, 'la' => zone_id)
+      .with('vrn' => vrn, 'country' => country, 'la_id' => zone_id)
       .and_return(details)
   end
 
@@ -32,7 +32,7 @@ RSpec.describe 'ChargesController - GET #daily_charge', type: :request do
     it 'call ComplianceDetails with right params' do
       expect(ComplianceDetails)
         .to receive(:new)
-        .with('vrn' => vrn, 'country' => country, 'la' => zone_id)
+        .with('vrn' => vrn, 'country' => country, 'la_id' => zone_id)
       http_request
     end
 

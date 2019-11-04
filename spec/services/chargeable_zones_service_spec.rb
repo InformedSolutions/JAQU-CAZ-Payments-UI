@@ -25,7 +25,7 @@ RSpec.describe ChargeableZonesService do
           mock_vehicle_compliance
         end
 
-        let(:compliance_data) { read_file('vehicle_compliance_response.json') }
+        let(:compliance_data) { read_file('vehicle_compliance_birmingham_response.json') }
 
         it 'returns chargeable caz zones' do
           expect(service_call).to eq(compliance_data['complianceOutcomes'])

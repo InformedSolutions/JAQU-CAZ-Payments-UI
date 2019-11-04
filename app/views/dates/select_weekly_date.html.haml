@@ -1,4 +1,4 @@
-= link_to 'Back', daily_charge_charges_path, class: 'govuk-back-link', id: 'back-link'
+= link_to 'Back', weekly_charge_dates_path, class: 'govuk-back-link', id: 'back-link'
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
@@ -15,29 +15,24 @@
               %li
                 %a{href: '#confirmation-error', id: 'error-summary'}
                   Select a date that you wish to pay for
-      %h1.govuk-heading-l Which days do you want to pay for?
+      %h1.govuk-heading-l When do you want your 7-day period to start?
       = render 'common/draft_tag'
       %p
-        A daily charge period runs from midnight to midnight.
+        You have to pay by midnight on the next working day after you drive in the zone.
       %details.govuk-details{'data-module': 'govuk-details'}
         %summary.govuk-details__summary
           %span.govuk-details__summary-text
-            Why can't I see my date?
+            Why can't I see my dates?
         .govuk-details__text
           %p
-            You can't pay for more than 6 days in the past and 6 days ahead.
+            You can't pay more than 7 days ahead.
           %p
-            If your dates are not displayed:
-            %ul.govuk-list-govuk-list--bullet
-              %li
-                %p
-                  because they are too far in the past, you will receive a fine in the post to the
-                  address DVLA holds for you.
-              %li
-                %p
-                  because they are too far in the future, you can check back here nearer the time.
+            You have to pay the charge by midnight on the next working day after you have driven in
+            a Clean Air Zone. If the payment window has closed you won't be able to pay here, and
+            you will be sent a fine in the post. This will be sent to the address the DVLA holds
+            for the vehicle's owner.
 
-      = form_tag confirm_dates_charges_path, method: :post do
+      = form_tag confirm_date_weekly_dates_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
           %fieldset.govuk-fieldset
             %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
@@ -45,18 +40,23 @@
               %span#confirmation-error.govuk-error-message
                 %span.govuk-visually-hidden Error:
                 Select a date that you wish to pay for
-            .govuk-checkboxes
+            .govuk-radios
               - @dates.each_with_index do |date, index|
-                .govuk-checkboxes__item
-                  %input.govuk-checkboxes__input{name: 'dates[]',
-                                                 type: 'checkbox',
+                .govuk-radios__item
+                  %input.govuk-radios__input{'aria-describedby': 'date-hint',
+                                                 name: 'dates[]',
+                                                 type: 'radio',
                                                  value: date[:value],
                                                  id: "date-#{index}"}
-                  %label.govuk-label.govuk-checkboxes__label{for: "date-#{index}"}
+                  %label.govuk-label.govuk-radios__label{for: "date-#{index}"}
                     - if date[:today]
                       %b
                         = date[:name]
                       (Today)
                     - else
                       = date[:name]
+                  %span#date-hint.govuk-hint.govuk-radios__hint
+                    = date[:hint]
         = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
+
+      %p= link_to 'Pay for 1 day instead', select_period_dates_path, id: 'pay_instead'

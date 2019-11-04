@@ -1,0 +1,63 @@
+= link_to 'Back', @return_path, class: 'govuk-back-link', id: 'back-link'
+
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      - if alert
+        .govuk-error-summary{'aria-labelledby': 'error-summary-title',
+                             'data-module': 'govuk-error-summary',
+                             role: 'alert',
+                             tabindex: '-1'}
+          %h2#error-summary-title.govuk-error-summary__title
+            There is a problem
+          .govuk-error-summary__body
+            %ul.govuk-list.govuk-error-summary__list
+              %li
+                %a{href: '#confirmation-error', id: 'error-summary'}
+                  = alert
+      %h1.govuk-heading-l
+        Pay a
+        = @compliance_details.zone_name
+        Clean Air Zone charge
+      = render 'common/draft_tag'
+      %p
+        The daily charge for your vehicle is:
+      %h2.govuk-heading-m
+        = parse_charge(@compliance_details.charge)
+      %p
+        You only need to pay once per day (the daily charge period runs from midnight to midnight).
+      .govuk-warning-text
+        %span.govuk-warning-text__icon{'aria-hidden': true } !
+        %strong.govuk-warning-text__text
+          %span.govuk-warning-text__assistive
+            Warning
+          If you don't pay by midnight on the next working day after you have driven in the zone, you will be sent a fine.
+      = form_tag confirm_daily_charge_dates_path, method: :post do
+        .govuk-form-group{class: ('govuk-form-group--error' if alert)}
+          %fieldset.govuk-fieldset
+            %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
+            - if alert
+              %span#confirmation-error.govuk-error-message
+                %span.govuk-visually-hidden Error:
+                = alert
+            .govuk-checkboxes
+              .govuk-checkboxes__item
+                %input.govuk-checkboxes__input{name: 'confirm-exempt',
+                                               type: 'checkbox',
+                                               value: 'yes',
+                                               id: 'confirm-exempt'}
+                %label.govuk-label.govuk-checkboxes__label{for: 'confirm-exempt'}
+                  I confirm that I am not exempt from the
+                  = @compliance_details.zone_name
+                  Clean Air Zone charge
+                  (full details about who is exempt from paying the charge in
+                  = @compliance_details.zone_name
+                  can be found
+                  = succeed ').' do
+                    = link_to('here', @compliance_details.exemption_or_discount_url , target: '_blank', id: 'exemption-link')                  
+        = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
+      %p
+        = link_to('Discover alternatives to having to pay',
+                  @compliance_details.compliance_url,
+                  target: '_blank',
+                  id: 'alternative-link')

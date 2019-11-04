@@ -15,8 +15,8 @@ RSpec.describe 'PaymentsController - POST #create', type: :request do
   before do
     add_to_session(
       vrn: vrn, country: 'UK',
-      la: zone_id, la_name: 'Leeds',
-      dates: dates, daily_charge: charge
+      la_id: zone_id, la_name: 'Leeds',
+      dates: dates, charge: charge
     )
     allow(Payment).to receive(:new).and_return(
       OpenStruct.new(payment_id: payment_id, gov_uk_pay_url: redirect_url)
@@ -32,8 +32,8 @@ RSpec.describe 'PaymentsController - POST #create', type: :request do
     expect(Payment).to receive(:new).with(
       {
         'vrn' => vrn,
-        'la' => zone_id,
-        'daily_charge' => charge,
+        'la_id' => zone_id,
+        'charge' => charge,
         'dates' => dates,
         'country' => anything,
         'la_name' => anything

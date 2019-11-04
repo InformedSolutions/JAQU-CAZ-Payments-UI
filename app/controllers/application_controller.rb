@@ -32,6 +32,11 @@ class ApplicationController < ActionController::Base
     vehicle_details('vrn')
   end
 
+  # Gets LA name from vehicle_details hash in the session. Returns string, eg 'Leeds'
+  def la_name
+    vehicle_details('la_name')
+  end
+
   # Checks if VRN is present in session.
   # If not, redirects to VehiclesController#enter_details
   def check_vrn
@@ -41,8 +46,43 @@ class ApplicationController < ActionController::Base
     redirect_to enter_details_vehicles_path
   end
 
-  # returns hash's value for current +field+
+  # Checks if LA ID is present in the session.
+  # If not, redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
+  def check_la_id
+    return if la_id
+
+    Rails.logger.warn 'LA ID is missing in the session. Redirecting to :local_authority'
+    redirect_to local_authority_charges_path
+  end
+
+  # Gets LA from vehicle_details hash in the session. Returns string, eg '39e54ed8-3ed2-441d-be3f-38fc9b70c8d3'
+  def la_id
+    vehicle_details('la_id')
+  end
+
+  # Returns hash's value for current +field+
   def vehicle_details(field)
     session.dig(:vehicle_details, field)
+  end
+
+  # Checks if LA name is present in the session
+  def check_la_name
+    return if la_name
+
+    Rails.logger.warn 'LA NAME is missing in the session. Redirecting to :enter_details'
+    redirect_to enter_details_vehicles_path
+  end
+
+  # Checks if charge is present in the session
+  def check_charge
+    return if charge
+
+    Rails.logger.warn 'CHARGE is missing in the session. Redirecting to :enter_details'
+    redirect_to enter_details_vehicles_path
+  end
+
+  # Gets charge from vehicle_details hash in the session. Returns integer, eg 50
+  def charge
+    vehicle_details('charge')
   end
 end

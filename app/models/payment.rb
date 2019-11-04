@@ -11,15 +11,15 @@ class Payment
   #
   # * +charge_details+ - hash
   #   * +vrn+ - Vehicle registration number
-  #   * +daily_charge+ - Daily charge value for selected vehicle in selected CAZ, eg. 50
-  #   * +la+ = ID of the selected CAZ
+  #   * +charge+ - Daily charge value for selected vehicle in selected CAZ, eg. 50
+  #   * +la_id+ = ID of the selected CAZ
   #   * +dates+ = array of the selected days in the right format, eg. ['2019-05-14', '2019-05-15']
   #
   def initialize(charge_details, return_url)
     @vrn = charge_details['vrn']
     @dates = charge_details['dates']
-    @zone_id = charge_details['la']
-    @total_charge = charge_details['daily_charge'] * dates.length
+    @zone_id = charge_details['la_id']
+    @total_charge = charge_details['charge'] * dates.length
     @return_url = return_url
   end
 

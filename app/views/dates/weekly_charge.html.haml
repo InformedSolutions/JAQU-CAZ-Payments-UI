@@ -1,4 +1,4 @@
-= link_to 'Back', local_authority_charges_path, class: 'govuk-back-link', id: 'back-link'
+= link_to 'Back', @return_path, class: 'govuk-back-link', id: 'back-link'
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
@@ -14,32 +14,37 @@
             %ul.govuk-list.govuk-error-summary__list
               %li
                 %a{href: '#confirmation-error', id: 'error-summary'}
-                  = alert
+                  Confirm you have checked if you are eligible for an exemption
       %h1.govuk-heading-l
         Pay a
         = @compliance_details.zone_name
-        Clean Air Zone charge
+        Clean Air Zone weekly charge
       = render 'common/draft_tag'
       %p
-        The daily charge for your vehicle is:
+        The weekly charge for your vehicle is:
       %h2.govuk-heading-m
-        = parse_charge(@compliance_details.charge)
+        = parse_charge(@weekly_charge)
       %p
-        You only need to pay once per day (the daily charge period runs from midnight to midnight).
+        Paying the weekly charge lets you drive the same vehilce in the Leeds Clean Air Zone as
+        often as you like within a 7-day period.
+      %p
+        You must pay for the weekly charge either on the first day or by midnight on the next
+        working day after you drive in a Clean Air Zone.
       .govuk-warning-text
         %span.govuk-warning-text__icon{'aria-hidden': true } !
         %strong.govuk-warning-text__text
           %span.govuk-warning-text__assistive
             Warning
-          If you don't pay by midnight on the next working day after you have driven in the zone, you will be sent a fine.
-      = form_tag confirm_daily_charge_charges_path, method: :post do
+          If you don't pay by midnight on the next working day after you have driven in the zone,
+          you will be sent a fine.
+      = form_tag confirm_weekly_charge_dates_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
           %fieldset.govuk-fieldset
             %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
             - if alert
               %span#confirmation-error.govuk-error-message
                 %span.govuk-visually-hidden Error:
-                = alert
+                Confirm you have checked if you are eligible for an exemption
             .govuk-checkboxes
               .govuk-checkboxes__item
                 %input.govuk-checkboxes__input{name: 'confirm-exempt',
@@ -54,10 +59,10 @@
                   = @compliance_details.zone_name
                   can be found
                   = succeed ').' do
-                    = link_to('here', @compliance_details.exemption_or_discount_url , target: '_blank', id: 'exemption-link')                  
+                    = link_to('here',
+                              @compliance_details.exemption_or_discount_url ,
+                              target: '_blank',
+                              id: 'exemption-link')
         = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
-      %p
-        = link_to('Discover alternatives to having to pay',
-                  @compliance_details.compliance_url,
-                  target: '_blank',
-                  id: 'alternative-link')
+
+        %p= link_to 'Discover alternatives having to pay', '#', id: 'discover-alternatives'

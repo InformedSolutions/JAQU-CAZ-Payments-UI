@@ -1,7 +1,7 @@
 Feature: Payments
   In order to pay the charge
   As a user
-  I want to proceed to the  payment process
+  I want to proceed to the payment process
 
   Scenario: User wants to start the payment process
     Given I am on the review payment page

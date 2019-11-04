@@ -7,8 +7,8 @@ RSpec.describe Payment, type: :model do
     Payment.new({
                   'vrn' => vrn,
                   'dates' => dates,
-                  'la' => zone_id,
-                  'daily_charge' => charge
+                  'la_id' => zone_id,
+                  'charge' => charge
                 },
                 url)
   end

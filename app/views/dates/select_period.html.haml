@@ -1,9 +1,10 @@
-= link_to 'Back', root_path, class: 'govuk-back-link', id: 'back-link'
+- content_for(:title, service_name)
+= link_to 'Back', local_authority_charges_path, class: 'govuk-back-link', id: 'back-link'
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
     .govuk-grid-column-two-thirds
-      - if @errors.present?
+      - if alert
         .govuk-error-summary{'aria-labelledby': 'error-summary-title',
                              'data-module': 'govuk-error-summary',
                              role: 'alert',
@@ -12,22 +13,20 @@
             There is a problem
           .govuk-error-summary__body
             %ul.govuk-list.govuk-error-summary__list
-              - @errors.each do |field, messages|
-                %li
-                  = link_to(messages.first, "##{field}-error")
-      %h1.govuk-heading-xl
-        Vehicle registration details
+              %li
+                %a{href: '#period-error', id: 'error-summary'}
+                  State if you are paying for 1 day or 7 days
+
+      %h1.govuk-heading-l What would you like to do?
       = render 'common/draft_tag'
-      = form_tag enter_details_vehicles_path, method: :post do
+      .govuk-inset-text
+        Taxis and private hire vehicles licensed by Leeds City Council can pay a reduced charge of
+        £50 a week.
+      = form_tag confirm_select_period_dates_path, method: :post do
         %fieldset.govuk-fieldset
           %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
-          - if @errors[:vrn].present?
-            = render 'vehicles/vrn_input/errored', message: @errors[:vrn].first
+          - if alert
+            = render 'dates/select_period_input/errored'
           - else
-            = render 'vehicles/vrn_input/normal'
-
-          - if @errors[:country].present?
-            = render 'vehicles/country_input/errored', message: @errors[:country].first
-          - else
-            = render 'vehicles/country_input/normal'
+            = render 'dates/select_period_input/normal'
           = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'

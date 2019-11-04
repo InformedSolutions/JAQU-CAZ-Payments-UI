@@ -10,16 +10,17 @@ module SessionHelper
   end
 
   def add_vrn_country_la_to_session
-    page.set_rack_session(vehicle_details: { vrn: vrn, country: 'UK', la: random_la_uuid })
+    page.set_rack_session(vehicle_details: { vrn: vrn, country: 'UK', la_id: random_la_uuid })
   end
 
   def add_vehicle_details_to_session(add_payment_id: false)
     details = {
       vrn: vrn,
       country: 'UK',
-      la: random_la_uuid,
+      la_id: random_la_uuid,
+      la_name: 'Leeds',
       dates: dates,
-      daily_charge: 9.0
+      charge: 9.0
     }
     details[:payment_id] = SecureRandom.uuid if add_payment_id
     page.set_rack_session(vehicle_details: details)

@@ -18,7 +18,7 @@ module ApiMocks
 
   # Mocks response from compliance endpoint in VCCS API
   def mock_vehicle_compliance
-    compliance_data = read_file('vehicle_compliance_response.json')
+    compliance_data = read_file('vehicle_compliance_birmingham_response.json')
     allow(ComplianceCheckerApi)
       .to receive(:vehicle_compliance)
       .and_return(compliance_data)
