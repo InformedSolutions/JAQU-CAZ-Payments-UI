@@ -16,7 +16,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :non_uk_vehicles, only: [:index] do
+  resources :non_dvla_vehicles, only: [:index] do
     collection do
       post :confirm_registration
       get :choose_type

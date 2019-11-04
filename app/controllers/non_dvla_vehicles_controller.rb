@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 ##
-# Controls the flow for vehicles not registered in the UK
+# Controls the flow for vehicles not registered in the UK and those which are not found in the DVLA database
 #
-class NonUkVehiclesController < ApplicationController
+class NonDvlaVehiclesController < ApplicationController
   # checks if VRN is present in the session
   before_action :check_vrn
 
@@ -12,7 +12,7 @@ class NonUkVehiclesController < ApplicationController
   #
   # ==== Path
   #
-  #    GET /non_uk_vehicles
+  #    GET /non_dvla_vehicles
   #
   # ==== Params
   # * +vrn+ - vehicle registration number, required in the session
@@ -26,11 +26,11 @@ class NonUkVehiclesController < ApplicationController
 
   ##
   # Verifies if user confirms that the registration number is correct.
-  # If yes, renders to {choose type}[rdoc-ref:NonUkVehiclesController.choose_type]
-  # If no, redirects to {non_uk_vehicles}[rdoc-ref:NonUkVehiclesController.index]
+  # If yes, renders to {choose type}[rdoc-ref:NonDvlaVehiclesController.choose_type]
+  # If no, redirects to {non_dvla_vehicles}[rdoc-ref:NonDvlaVehiclesController.index]
   #
   # ==== Path
-  #    POST /non_uk_vehicles/confirm_registration
+  #    POST /non_dvla_vehicles/confirm_registration
   #
   # ==== Params
   # * +vrn+ - vehicle registration number, required in the session
@@ -38,14 +38,14 @@ class NonUkVehiclesController < ApplicationController
   #
   # ==== Validations
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
-  # * +confirm-registration+ - lack of it redirects to {non_uk_vehicles}[rdoc-ref:NonUkVehiclesController.index]
+  # * +confirm-registration+ - lack of it redirects to {non_dvla_vehicles}[rdoc-ref:NonDvlaVehiclesController.index]
   #
   def confirm_registration
     form = ConfirmationForm.new(params['confirm-registration'])
     if form.confirmed?
-      redirect_to choose_type_non_uk_vehicles_path
+      redirect_to choose_type_non_dvla_vehicles_path
     else
-      redirect_to non_uk_vehicles_path, alert: true
+      redirect_to non_dvla_vehicles_path, alert: true
     end
   end
 
@@ -53,7 +53,7 @@ class NonUkVehiclesController < ApplicationController
   # Renders choose vehicle type page.
   #
   # ==== Path
-  #    GET /non_uk_vehicles/choose_type
+  #    GET /non_dvla_vehicles/choose_type
   #
   # ==== Params
   # * +vrn+ - vehicle registration number, required in the session
@@ -63,15 +63,16 @@ class NonUkVehiclesController < ApplicationController
   #
   def choose_type
     @return_path = choose_type_return_path
+    @types = VehicleTypes.call
   end
 
   ##
   # Verifies if user choose a type of vehicle.
   # If yes, renders {local authorities}[rdoc-ref:LocalAuthoritiesController.index]
-  # If no, redirects to {choose_type}[rdoc-ref:NonUkVehiclesController.choose_type]
+  # If no, redirects to {choose_type}[rdoc-ref:NonDvlaVehiclesController.choose_type]
   #
   # ==== Path
-  #    POST /non_uk_vehicles/submit_type
+  #    POST /non_dvla_vehicles/submit_type
   #
   # ==== Params
   # * +vrn+ - vehicle registration number, required in the session
@@ -79,21 +80,23 @@ class NonUkVehiclesController < ApplicationController
   #
   # ==== Validations
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
-  # * +vehicle-type+ - lack of it redirects to {choose_type}[rdoc-ref:NonUkVehiclesController.choose_type]
+  # * +vehicle-type+ - lack of it redirects to {choose_type}[rdoc-ref:NonDvlaVehiclesController.choose_type]
   #
   def submit_type
     if params['vehicle-type'].blank?
-      redirect_to choose_type_non_uk_vehicles_path, alert: true
+      redirect_to choose_type_non_dvla_vehicles_path, alert: true
     else
       redirect_to local_authority_charges_path
     end
   end
 
+  private
+
   def choose_type_return_path
     if vehicle_details('unrecognised')
       unrecognised_vehicles_path
     else
-      non_uk_vehicles_path
+      non_dvla_vehicles_path
     end
   end
 end

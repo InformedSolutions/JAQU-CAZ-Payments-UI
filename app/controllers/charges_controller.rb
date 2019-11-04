@@ -205,7 +205,7 @@ class ChargesController < ApplicationController
     elsif vehicle_details('country') == 'UK'
       details_vehicles_path
     else
-      choose_type_non_uk_vehicles_path
+      choose_type_non_dvla_vehicles_path
     end
   end
 

@@ -52,7 +52,7 @@ class VehiclesController < ApplicationController
     end
 
     store_vehicle_details
-    redirect_to non_uk? ? non_uk_vehicles_path : details_vehicles_path
+    redirect_to non_uk? ? non_dvla_vehicles_path : details_vehicles_path
   end
 
   ##
@@ -132,8 +132,8 @@ class VehiclesController < ApplicationController
 
   ##
   # Verifies if user confirms that the registration number is correct.
-  # If yes, renders to {choose type}[rdoc-ref:NonUkVehiclesController.choose_type]
-  # If no, redirects to {non_uk_vehicles}[rdoc-ref:VehiclesController.unrecognised]
+  # If yes, renders to {choose type}[rdoc-ref:NonDvlaVehiclesController.choose_type]
+  # If no, redirects to {non_dvla_vehicles}[rdoc-ref:VehiclesController.unrecognised]
   #
   # ==== Path
   #    POST /vehicles/confirm_unrecognised_registration
@@ -144,12 +144,12 @@ class VehiclesController < ApplicationController
   #
   # ==== Validations
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
-  # * +confirm-registration+ - lack of it redirects to {non_uk_vehicles}[rdoc-ref:VehiclesController.unrecognised]
+  # * +confirm-registration+ - lack of it redirects to {non_dvla_vehicles}[rdoc-ref:VehiclesController.unrecognised]
   #
   def confirm_unrecognised_registration
     form = ConfirmationForm.new(params['confirm-registration'])
     if form.confirmed?
-      redirect_to choose_type_non_uk_vehicles_path
+      redirect_to choose_type_non_dvla_vehicles_path
     else
       log_invalid_form 'Redirecting back.'
       redirect_to unrecognised_vehicles_path, alert: true
