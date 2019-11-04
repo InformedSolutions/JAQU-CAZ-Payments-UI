@@ -11,7 +11,16 @@ RSpec.describe ComplianceDetails, type: :model do
   let(:zone_id) { SecureRandom.uuid }
 
   let(:outcomes) do
-    [{ 'name' => name, 'charge' => 5, 'urls' => { 'exemptionOrDiscount' => url } }]
+    [
+      {
+        'name' => name,
+        'charge' => 5,
+        'informationUrls' => {
+          'exemptionOrDiscount' => url,
+          'becomeCompliant' => url
+        }
+      }
+    ]
   end
   let(:name) { 'Leeds' }
   let(:url) { 'www.wp.pl' }
@@ -43,7 +52,13 @@ RSpec.describe ComplianceDetails, type: :model do
 
     describe '.exemption_or_discount_url' do
       it 'returns URL' do
-        expect(details.zone_name).to eq(name)
+        expect(details.exemption_or_discount_url).to eq(url)
+      end
+    end
+
+    describe '.compliance_url' do
+      it 'returns URL' do
+        expect(details.compliance_url).to eq(url)
       end
     end
 
