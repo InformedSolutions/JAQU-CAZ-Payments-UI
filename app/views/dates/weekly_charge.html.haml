@@ -37,7 +37,7 @@
             Warning
           If you don't pay by midnight on the next working day after you have driven in the zone,
           you will be sent a fine.
-      = form_tag confirm_weekly_charge_charges_path, method: :post do
+      = form_tag confirm_weekly_charge_dates_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
           %fieldset.govuk-fieldset
             %legend.govuk-fieldset__legend.govuk-fieldset__legend--l

@@ -52,7 +52,7 @@ class DatesController < ApplicationController
       determinate_next_page
     else
       log_invalid_form 'Redirecting back to :select_period.'
-      redirect_to select_period_charges_path, alert: true
+      redirect_to select_period_dates_path, alert: true
     end
   end
 
@@ -94,10 +94,10 @@ class DatesController < ApplicationController
     form = ConfirmationForm.new(params['confirm-exempt'])
     if form.confirmed?
       session[:vehicle_details]['weekly_period'] = false
-      redirect_to select_daily_date_charges_path
+      redirect_to select_daily_date_dates_path
     else
       log_invalid_form 'Redirecting back to :daily_charge.'
-      redirect_to daily_charge_charges_path, alert: I18n.t('confirmation_form.exemption')
+      redirect_to daily_charge_dates_path, alert: I18n.t('confirmation_form.exemption')
     end
   end
 
@@ -140,7 +140,7 @@ class DatesController < ApplicationController
       redirect_to review_payment_charges_path
     else
       log_invalid_form 'Redirecting back to :dates.'
-      redirect_to select_daily_date_charges_path, alert: true
+      redirect_to select_daily_date_dates_path, alert: true
     end
   end
 
@@ -183,10 +183,10 @@ class DatesController < ApplicationController
     form = ConfirmationForm.new(params['confirm-exempt'])
     if form.confirmed?
       session[:vehicle_details]['weekly_period'] = true
-      redirect_to select_weekly_date_charges_path
+      redirect_to select_weekly_date_dates_path
     else
       log_invalid_form 'Redirecting back to :weekly_charge.'
-      redirect_to weekly_charge_charges_path, alert: I18n.t('confirmation_form.exemption')
+      redirect_to weekly_charge_dates_path, alert: I18n.t('confirmation_form.exemption')
     end
   end
 
@@ -229,7 +229,7 @@ class DatesController < ApplicationController
       redirect_to review_payment_charges_path
     else
       log_invalid_form 'Redirecting back to :dates.'
-      redirect_to select_weekly_date_charges_path, alert: true
+      redirect_to select_weekly_date_dates_path, alert: true
     end
   end
 
@@ -246,17 +246,17 @@ class DatesController < ApplicationController
   #
   def determinate_next_page
     if params[:period] == 'daily-charge'
-      redirect_to daily_charge_charges_path
+      redirect_to daily_charge_dates_path
     elsif params[:period] == 'weekly-charge'
-      redirect_to weekly_charge_charges_path
+      redirect_to weekly_charge_dates_path
     else
       log_invalid_form 'Redirecting back to :dates.'
-      redirect_to select_daily_date_charges_path, alert: true
+      redirect_to select_daily_date_dates_path, alert: true
     end
   end
 
   # Define the back button path on daily and weekly charge page.
   def determinate_return_path
-    vehicle_details('taxi') ? select_period_charges_path : local_authority_charges_path
+    vehicle_details('taxi') ? select_period_dates_path : local_authority_charges_path
   end
 end

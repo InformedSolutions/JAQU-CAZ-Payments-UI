@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
   subject(:http_request) do
-    post confirm_date_weekly_charges_path,
+    post confirm_date_weekly_dates_path,
          params:
            {
              'dates' => ['2019-11-08']

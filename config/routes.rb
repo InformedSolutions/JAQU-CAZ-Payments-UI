@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   resources :vehicles, only: [] do
     collection do
-      get :enter_details, to: 'vehicles#enter_details'
+      get :enter_details
       post :enter_details, to: 'vehicles#submit_details'
       get :details
       post :confirm_details
@@ -28,23 +28,26 @@ Rails.application.routes.draw do
     collection do
       get :local_authority
       post :submit_local_authority
-
-      get :select_period, to: 'dates#select_period'
-      post :confirm_select_period, to: 'dates#confirm_select_period'
-
-      get :daily_charge, to: 'dates#daily_charge'
-      post :confirm_daily_charge, to: 'dates#confirm_daily_charge'
-
-      get :weekly_charge, to: 'dates#weekly_charge'
-      post :confirm_weekly_charge, to: 'dates#confirm_weekly_charge'
-
-      get :select_daily_date, to: 'dates#select_daily_date'
-      post :confirm_daily_date, to: 'dates#confirm_daily_date'
-
-      get :select_weekly_date, to: 'dates#select_weekly_date'
-      post :confirm_date_weekly, to: 'dates#confirm_date_weekly'
-
       get :review_payment
+    end
+  end
+
+  resources :dates, only: [] do
+    collection do
+      get :select_period
+      post :confirm_select_period
+
+      get :daily_charge
+      post :confirm_daily_charge
+
+      get :weekly_charge
+      post :confirm_weekly_charge
+
+      get :select_daily_date
+      post :confirm_daily_date
+
+      get :select_weekly_date
+      post :confirm_date_weekly
     end
   end
 

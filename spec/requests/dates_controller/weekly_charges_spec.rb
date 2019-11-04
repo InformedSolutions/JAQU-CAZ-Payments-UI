@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'DatesController - GET #weekly_charge', type: :request do
-  subject(:http_request) { get weekly_charge_charges_path }
+  subject(:http_request) { get weekly_charge_dates_path }
 
   let(:vrn) { 'CU57ABC' }
   let(:country) { 'UK' }

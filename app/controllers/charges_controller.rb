@@ -95,7 +95,7 @@ class ChargesController < ApplicationController
     return if dates
 
     Rails.logger.warn 'Dates is missing in the session. Redirecting to :dates'
-    redirect_to select_daily_date_charges_path
+    redirect_to select_daily_date_dates_path
   end
 
   # Define the back button path on local authority page.
@@ -112,9 +112,9 @@ class ChargesController < ApplicationController
   # Define the back button path on review payment page.
   def review_payment_return_path
     if vehicle_details('weekly_period')
-      weekly_charge_charges_path
+      weekly_charge_dates_path
     else
-      daily_charge_charges_path
+      daily_charge_dates_path
     end
   end
 
@@ -130,9 +130,9 @@ class ChargesController < ApplicationController
   #
   def determinate_next_page
     if vehicle_details('taxi') && la_is_leeds?
-      redirect_to select_period_charges_path
+      redirect_to select_period_dates_path
     else
-      redirect_to daily_charge_charges_path
+      redirect_to daily_charge_dates_path
     end
   end
 

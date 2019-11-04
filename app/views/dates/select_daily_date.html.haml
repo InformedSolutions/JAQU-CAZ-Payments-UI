@@ -1,4 +1,4 @@
-= link_to 'Back', daily_charge_charges_path, class: 'govuk-back-link', id: 'back-link'
+= link_to 'Back', daily_charge_dates_path, class: 'govuk-back-link', id: 'back-link'
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
@@ -37,7 +37,7 @@
                 %p
                   because they are too far in the future, you can check back here nearer the time.
 
-      = form_tag confirm_daily_date_charges_path, method: :post do
+      = form_tag confirm_daily_date_dates_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
           %fieldset.govuk-fieldset
             %legend.govuk-fieldset__legend.govuk-fieldset__legend--l

@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'DatesController - GET #select_period', type: :request do
-  subject(:http_request) { get select_period_charges_path }
+  subject(:http_request) { get select_period_dates_path }
 
   let(:vrn) { 'CU57ABC' }
   let(:country) { 'UK' }

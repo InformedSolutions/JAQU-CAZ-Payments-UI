@@ -10,7 +10,7 @@ end
 Given('I am on the daily charge page') do
   mock_vehicle_compliance
   add_vrn_country_la_to_session
-  visit daily_charge_charges_path
+  visit daily_charge_dates_path
 end
 
 Given('My vehicle is compliant') do
@@ -36,7 +36,7 @@ end
 
 Then('I am on the dates page') do
   add_vehicle_details_to_session
-  visit select_daily_date_charges_path
+  visit select_daily_date_dates_path
 end
 
 Then('I choose today date') do

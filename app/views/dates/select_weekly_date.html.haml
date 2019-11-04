@@ -1,4 +1,4 @@
-= link_to 'Back', weekly_charge_charges_path, class: 'govuk-back-link', id: 'back-link'
+= link_to 'Back', weekly_charge_dates_path, class: 'govuk-back-link', id: 'back-link'
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
@@ -32,7 +32,7 @@
             you will be sent a fine in the post. This will be sent to the address the DVLA holds
             for the vehicle's owner.
 
-      = form_tag confirm_date_weekly_charges_path, method: :post do
+      = form_tag confirm_date_weekly_dates_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
           %fieldset.govuk-fieldset
             %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
@@ -59,4 +59,4 @@
                     = date[:hint]
         = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
 
-      %p= link_to 'Pay for 1 day instead', select_period_charges_path, id: 'pay_instead'
+      %p= link_to 'Pay for 1 day instead', select_period_dates_path, id: 'pay_instead'

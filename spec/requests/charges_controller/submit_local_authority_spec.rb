@@ -14,7 +14,7 @@ RSpec.describe 'ChargesController - POST #submit_local_authority', type: :reques
 
     context 'with selected zone' do
       it 'returns redirect to #daily_charge' do
-        expect(http_request).to redirect_to(daily_charge_charges_path)
+        expect(http_request).to redirect_to(daily_charge_dates_path)
       end
 
       it 'sets LA in the session' do

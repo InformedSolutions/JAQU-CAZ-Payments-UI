@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'DatesController - POST #confirm_daily_date', type: :request do
   subject(:http_request) do
-    post confirm_daily_date_charges_path, params: dates
+    post confirm_daily_date_dates_path, params: dates
   end
 
   let(:dates) { { 'dates' => %w[2019-10-07 2019-10-10] } }
@@ -30,7 +30,7 @@ RSpec.describe 'DatesController - POST #confirm_daily_date', type: :request do
       let(:dates) { nil }
 
       it 'redirects to :dates_charges' do
-        expect(http_request).to redirect_to(select_daily_date_charges_path)
+        expect(http_request).to redirect_to(select_daily_date_dates_path)
       end
     end
 
