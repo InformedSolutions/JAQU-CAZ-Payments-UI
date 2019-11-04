@@ -34,9 +34,18 @@ class ComplianceDetails
     compliance_data[:charge]
   end
 
-  # Returns a string, eg. 'www.example.com'.
+  # Displays CAZ dedicated link for checking exemptions and discounts.
+  #
+  # Returns an URL, eg. 'www.example.com'.
   def exemption_or_discount_url
     url(:exemption_or_discount)
+  end
+
+  # Displays CAZ dedicated link for becoming compliant.
+  #
+  # Returns an URL, eg. 'www.example.com'.
+  def compliance_url
+    url(:become_compliant)
   end
 
   private

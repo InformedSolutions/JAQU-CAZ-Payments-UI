@@ -56,3 +56,8 @@
                   = succeed ').' do
                     = link_to('here', @compliance_details.exemption_or_discount_url , target: '_blank', id: 'exemption-link')                  
         = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
+      %p
+        = link_to('Discover alternatives to having to pay',
+                  @compliance_details.compliance_url,
+                  target: '_blank',
+                  id: 'alternative-link')
