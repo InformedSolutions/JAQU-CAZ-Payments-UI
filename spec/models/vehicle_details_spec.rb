@@ -57,6 +57,24 @@ RSpec.describe VehicleDetails, type: :model do
     end
   end
 
+  describe '.exempt?' do
+    describe 'when key is not present' do
+      it 'returns a nil' do
+        expect(subject.exempt?).to eq(nil)
+      end
+    end
+
+    describe 'when key is present' do
+      before do
+        allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return('exempt' => true)
+      end
+
+      it 'returns a true' do
+        expect(subject.exempt?).to eq(true)
+      end
+    end
+  end
+
   describe '.taxi_private_hire_vehicle' do
     describe 'when taxi_or_phv value is false' do
       it "returns a 'No'" do

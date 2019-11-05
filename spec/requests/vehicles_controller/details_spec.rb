@@ -15,6 +15,17 @@ RSpec.describe 'VehiclesController - GET #details', type: :request do
       http_request
       expect(response).to be_successful
     end
+
+    context 'when vehicle is exempted' do
+      let(:vehicle_details_stub) { instance_double('VehicleDetails', exempt?: true) }
+
+      before { allow(VehicleDetails).to receive(:new).and_return(vehicle_details_stub) }
+
+      it 'redirects to compliant path' do
+        http_request
+        expect(response).to redirect_to(compliant_vehicles_path)
+      end
+    end
   end
 
   context 'without VRN in session' do

@@ -67,6 +67,11 @@ class VehicleDetails
     string_field('model')
   end
 
+  # Returns information if vehicle is exempted - boolean
+  def exempt?
+    compliance_api['exempt']
+  end
+
   private
 
   # Reader function for the vehicle registration number
