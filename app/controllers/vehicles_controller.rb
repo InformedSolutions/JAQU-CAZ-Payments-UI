@@ -67,6 +67,7 @@ class VehiclesController < ApplicationController
   #
   def details
     @vehicle_details = VehicleDetails.new(vrn)
+    return redirect_to(compliant_vehicles_path) if @vehicle_details.exempt?
 
     session[:vehicle_details]['taxi'] = true if @vehicle_details.taxi_private_hire_vehicle == 'Yes'
   end
