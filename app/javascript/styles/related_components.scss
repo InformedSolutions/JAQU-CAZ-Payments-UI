@@ -1,8 +1,10 @@
 .app-related-items {
   border-top: 10px solid govuk-colour($colour: 'blue');
   padding-top: govuk-spacing($spacing-point: 2);
-}
 
-.app-related-items .govuk-list > li {
-  margin-bottom: govuk-spacing($spacing-point: 2);
+  .govuk-list {
+    li {
+      margin-bottom: govuk-spacing($spacing-point: 2);
+    }
+  }
 }
