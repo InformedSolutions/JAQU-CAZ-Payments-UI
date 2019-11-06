@@ -26,6 +26,20 @@ module SessionHelper
     page.set_rack_session(vehicle_details: details)
   end
 
+  def add_weekly_vehicle_details_to_session
+    details = {
+      vrn: vrn,
+      country: 'UK',
+      la_id: random_la_uuid,
+      la_name: 'Leeds',
+      dates: [Date.current],
+      charge: 50,
+      weekly_period: true
+    }
+
+    page.set_rack_session(vehicle_details: details)
+  end
+
   def add_unrecognised_vrn_to_session
     page.set_rack_session(vehicle_details: { vrn: 'CU27ABA', country: 'UK' })
   end

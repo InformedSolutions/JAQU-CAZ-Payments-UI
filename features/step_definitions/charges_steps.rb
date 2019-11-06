@@ -55,6 +55,13 @@ Then('I am on the review payment page') do
   visit review_payment_charges_path
 end
 
+Then('I am on the review weekly payment page') do
+  add_weekly_vehicle_details_to_session
+  mock_chargeable_caz
+  mock_payment_creation
+  visit review_payment_charges_path
+end
+
 Then('I press the Change Registration number link') do
   find('#change-vrn').click
 end
@@ -69,5 +76,9 @@ end
 
 Then('I am go the review payment page') do
   add_vehicle_details_to_session
+  visit review_payment_charges_path
+end
+
+Then('I am go the select period page') do
   visit review_payment_charges_path
 end
