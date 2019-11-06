@@ -15,19 +15,19 @@
               %td.govuk-table__cell
             %tr.govuk-table__row
               %td.govuk-table__cell Registration number
-              %th.govuk-table__header{scope: 'row'}
+              %th.govuk-table__header{scope: 'row', id: 'value-vrn'}
                 = @vrn
               %td.govuk-table__cell
                 = link_to 'Change', enter_details_vehicles_path, class: 'govuk-link', id: 'change-vrn'
             %tr.govuk-table__row
               %td.govuk-table__cell Clean Air Zone
-              %th.govuk-table__header{scope: 'row'}
+              %th.govuk-table__header{scope: 'row', id: 'value-la'}
                 = @la_name
               %td.govuk-table__cell
                 = link_to 'Change', local_authority_charges_path, class: 'govuk-link', id: 'change-la'
             %tr.govuk-table__row
               %td.govuk-table__cell Payment for
-              %th.govuk-table__header{scope: 'row'}
+              %th.govuk-table__header{scope: 'row', id: 'value-dates'}
                 - if @weekly_charge
                   = parse_weekly_dates(@dates.join(''))
                 - else
@@ -36,7 +36,7 @@
                 = link_to 'Change', select_daily_date_dates_path, class: 'govuk-link', id: 'change-dates'
             %tr.govuk-table__row
               %td.govuk-table__cell Total charge
-              %th.govuk-table__header{scope: 'row'}
+              %th.govuk-table__header{scope: 'row', id: 'value-charge'}
                 = parse_charge(@total_charge)
               %td.govuk-table__cell
         = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
