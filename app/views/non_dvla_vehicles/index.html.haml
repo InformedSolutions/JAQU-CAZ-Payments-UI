@@ -2,6 +2,11 @@
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
     .govuk-grid-column-two-thirds
+      - if alert
+        = render 'common/error_summary',
+          error_msg_div: '#confirmation-error',
+          error_msg: 'Confirm that the registration number is correct'
+
       %h1.govuk-heading-xl Your vehicle is not UK-Registered
       = render 'common/draft_tag'
       %p
@@ -21,7 +26,7 @@
             %fieldset.govuk-fieldset
               %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
               - if alert
-                %span#caz-select-error.govuk-error-message
+                %span#confirmation-error.govuk-error-message
                   %span.govuk-visually-hidden Error:
                   Confirm that the registration number is correct
               .govuk-checkboxes

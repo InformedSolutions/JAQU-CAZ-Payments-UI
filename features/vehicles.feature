@@ -43,12 +43,14 @@ Feature: Vehicles
     Then I should see "Your vehicle is not UK-Registered"
       And I press the Continue
     Then I should see "Confirm that the registration number is correct"
+      And I should see "There is a problem"
       And I should be on the non UK page
     Then I choose I confirm registration
       And I press the Continue
     Then I should see "What is your vehicle?"
       And I press the Confirm
     Then I should see "Tell us what type of vehicle you want to pay for"
+      And I should see "There is a problem"
       And I choose Car type
       And I press the Confirm
     Then I should see "Which Clean Air Zone do you need to pay for?"
@@ -62,6 +64,7 @@ Feature: Vehicles
     Then I should see "Vehicle details not found"
       And I press the Continue
     Then I should see "Confirm that the registration number is correct"
+      And I should see "There is a problem"
       And I should be on the unrecognised page
     Then I choose I confirm registration
       And I press the Continue

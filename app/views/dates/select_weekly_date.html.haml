@@ -4,17 +4,10 @@
   .govuk-grid-row
     .govuk-grid-column-two-thirds
       - if alert
-        .govuk-error-summary{'aria-labelledby': 'error-summary-title',
-                             'data-module': 'govuk-error-summary',
-                             role: 'alert',
-                             tabindex: '-1'}
-          %h2#error-summary-title.govuk-error-summary__title
-            There is a problem
-          .govuk-error-summary__body
-            %ul.govuk-list.govuk-error-summary__list
-              %li
-                %a{href: '#confirmation-error', id: 'error-summary'}
-                  Select a date that you wish to pay for
+        = render 'common/error_summary',
+          error_msg_div: '#select-weekly-date-error',
+          error_msg: 'Select a date that you wish to pay for'
+
       %h1.govuk-heading-l When do you want your 7-day period to start?
       = render 'common/draft_tag'
       %p
@@ -37,7 +30,7 @@
           %fieldset.govuk-fieldset
             %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
             - if alert
-              %span#confirmation-error.govuk-error-message
+              %span#select-weekly-date-error.govuk-error-message
                 %span.govuk-visually-hidden Error:
                 Select a date that you wish to pay for
             .govuk-radios

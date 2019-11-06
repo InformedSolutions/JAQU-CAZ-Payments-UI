@@ -5,17 +5,9 @@
   .govuk-grid-row
     .govuk-grid-column-two-thirds
       - if alert
-        .govuk-error-summary{'aria-labelledby': 'error-summary-title',
-                             'data-module': 'govuk-error-summary',
-                             role: 'alert',
-                             tabindex: '-1'}
-          %h2#error-summary-title.govuk-error-summary__title
-            There is a problem
-          .govuk-error-summary__body
-            %ul.govuk-list.govuk-error-summary__list
-              %li
-                %a{href: '#period-error', id: 'error-summary'}
-                  State if you are paying for 1 day or 7 days
+        = render 'common/error_summary',
+          error_msg_div: '#select-period-error',
+          error_msg: 'State if you are paying for 1 day or 7 days'
 
       %h1.govuk-heading-l What would you like to do?
       = render 'common/draft_tag'

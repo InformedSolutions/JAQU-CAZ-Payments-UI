@@ -2,6 +2,11 @@
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
     .govuk-grid-column-two-thirds
+      - if alert
+        = render 'common/error_summary',
+          error_msg_div: '#unrecognised-vehicle-error',
+          error_msg: 'Confirm that the registration number is correct'
+
       %h1.govuk-heading-xl Vehicle details not found
       %h1.govuk-heading-m We can't find the details of this vehicle
       = render 'common/draft_tag'
@@ -41,7 +46,7 @@
           %fieldset.govuk-fieldset
             %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
             - if alert
-              %span#caz-select-error.govuk-error-message
+              %span#unrecognised-vehicle-error.govuk-error-message
                 %span.govuk-visually-hidden Error:
                 Confirm that the registration number is correct
             .govuk-checkboxes

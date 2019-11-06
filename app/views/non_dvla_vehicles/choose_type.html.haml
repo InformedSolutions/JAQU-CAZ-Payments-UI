@@ -2,6 +2,11 @@
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
     .govuk-grid-column-two-thirds
+      - if alert
+        = render 'common/error_summary',
+          error_msg_div: '#choose-type-error',
+          error_msg: 'Tell us what type of vehicle you want to pay for'
+
       = form_tag submit_type_non_dvla_vehicles_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
           %fieldset.govuk-fieldset
@@ -13,7 +18,7 @@
               Since we are not able to find your vehicle's details, you'll need to tell us what type of
               vehicle you want to pay for.
             - if alert
-              %span#caz-select-error.govuk-error-message
+              %span#choose-type-error.govuk-error-message
                 %span.govuk-visually-hidden Error:
                 Tell us what type of vehicle you want to pay for
             .govuk-radios
