@@ -53,3 +53,5 @@
                     - else
                       = date[:name]
         = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
+
+      %p= link_to 'Payment for', select_period_dates_path, id: 'payment-for'

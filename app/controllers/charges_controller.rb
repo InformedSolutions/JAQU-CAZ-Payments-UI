@@ -72,7 +72,7 @@ class ChargesController < ApplicationController
     @vrn = vrn
     @la_name = la_name
     @dates = vehicle_details('dates')
-    @weekly_charge = vehicle_details('weekly_period')
+    @weekly_period = vehicle_details('weekly_period')
     @total_charge = calculate_total_charge
     @return_path = review_payment_return_path
   end

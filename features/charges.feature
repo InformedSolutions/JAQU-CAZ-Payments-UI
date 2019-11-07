@@ -60,7 +60,7 @@ Feature: Charges
     Given I am on the daily charge page
       And I confirm exemption
       And I press the Continue
-    Then I should be on the pick dates page
+    Then I should be on the pick daily dates page
 
   Scenario: User selects dates to pay for
     Given I am on the dates page
@@ -84,8 +84,14 @@ Feature: Charges
     Then I press the Change Clean Air Zone link
       And I should see "Which Clean Air Zone do you need to pay for?"
 
-  Scenario: User wants review payment and press the change payment for link
+  Scenario: User wants review daily payment and press the change payment for link
     Given I am on the review payment page
       And I should see "Review your payment"
     Then I press the Change Payment for link
-      And I should see "Which days do you want to pay for?"
+      And I should be on the pick daily dates page
+
+  Scenario: User wants review weekly payment and press the change payment for link
+    Given I am on the review weekly payment page
+      And I should see "Review your payment"
+    Then I press the Change Payment for link
+      And I should be on the pick weekly dates page
