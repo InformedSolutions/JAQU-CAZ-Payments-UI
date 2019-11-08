@@ -6,6 +6,7 @@
 # Also, contains some basic endpoints used for build purposes.
 #
 class ApplicationController < ActionController::Base
+  # Escapes all API related error with rendering 503 page
   rescue_from Errno::ECONNREFUSED,
               SocketError,
               BaseApi::Error500Exception,
@@ -29,6 +30,8 @@ class ApplicationController < ActionController::Base
 
   private
 
+  # Logs an exception and redirects to service unavailable page.
+  # Used to escape API calls related exceptions.
   def redirect_to_server_unavailable(exception)
     Rails.logger.error "#{exception.class}: #{exception.message}"
 

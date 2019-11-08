@@ -14,9 +14,9 @@ RSpec.describe 'PaymentsController - POST #create', type: :request do
 
   before do
     add_to_session(
-        vrn: vrn, country: 'UK',
-        la_id: zone_id, la_name: 'Leeds',
-        dates: dates, charge: charge
+      vrn: vrn, country: 'UK',
+      la_id: zone_id, la_name: 'Leeds',
+      dates: dates, charge: charge
     )
   end
 
