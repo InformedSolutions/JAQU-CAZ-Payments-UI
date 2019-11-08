@@ -34,4 +34,15 @@ RSpec.describe 'VehiclesController - GET #details', type: :request do
       expect(response).to redirect_to(enter_details_vehicles_path)
     end
   end
+
+  context 'when API call fails' do
+    before do
+      add_vrn_to_session
+      allow(ComplianceCheckerApi).to receive(:vehicle_details).and_raise(
+        BaseApi::Error500Exception.new(500, 'internal error', message: 'Boom')
+      )
+    end
+
+    it_behaves_like 'an unsuccessful API call'
+  end
 end
