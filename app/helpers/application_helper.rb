@@ -33,6 +33,6 @@ module ApplicationHelper
 
   # Returns url path depends on which period was selected
   def determinate_payment_for_path(weekly_period)
-    weekly_period ? select_weekly_date_dates_path : select_daily_date_dates_path
+    weekly_period ? select_period_dates_path : select_daily_date_dates_path
   end
 end
