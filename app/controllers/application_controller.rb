@@ -6,6 +6,13 @@
 # Also, contains some basic endpoints used for build purposes.
 #
 class ApplicationController < ActionController::Base
+  rescue_from Errno::ECONNREFUSED,
+              SocketError,
+              BaseApi::Error500Exception,
+              BaseApi::Error422Exception,
+              BaseApi::Error400Exception,
+              with: :redirect_to_server_unavailable
+
   ##
   # Build ID endpoint
   #
@@ -21,6 +28,12 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def redirect_to_server_unavailable(exception)
+    Rails.logger.error "#{exception.class}: #{exception.message}"
+
+    render template: 'errors/service_unavailable', status: :service_unavailable
+  end
 
   # Logs invalid form on +warn+ level
   def log_invalid_form(msg)
