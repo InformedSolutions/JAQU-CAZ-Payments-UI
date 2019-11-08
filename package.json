@@ -2,9 +2,9 @@
   "name": "jaqu-caz-payments",
   "private": true,
   "dependencies": {
-    "@rails/actioncable": "^6.0.0",
-    "@rails/activestorage": "^6.0.0",
-    "@rails/ujs": "^6.0.0",
+    "@rails/actioncable": "^6.0.1",
+    "@rails/activestorage": "^6.0.1",
+    "@rails/ujs": "^6.0.1",
     "@rails/webpacker": "^4.0.7",
     "govuk-frontend": "^3.3.0",
     "rails-erb-loader": "^5.5.2",
@@ -12,6 +12,6 @@
   },
   "version": "0.1.0",
   "devDependencies": {
-    "webpack-dev-server": "^3.8.2"
+    "webpack-dev-server": "^3.9.0"
   }
 }
