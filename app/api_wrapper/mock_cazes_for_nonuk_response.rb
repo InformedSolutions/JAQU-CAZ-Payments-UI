@@ -2,6 +2,7 @@
 
 # rubocop:disable all
 class MockCazesForNonukResponse
+  # Returns mocked response
   def response
     {
       'registrationNumber' => vrn,

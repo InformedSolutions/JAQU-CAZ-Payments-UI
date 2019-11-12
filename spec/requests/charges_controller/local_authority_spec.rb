@@ -6,13 +6,6 @@ RSpec.describe 'ChargesController - GET #local_authority', type: :request do
   subject(:http_request) { get local_authority_charges_path }
 
   let(:vrn) { 'CU57ABC' }
-  let(:caz_data) do
-    {
-      'cleanAirZoneId' => '5cd7441d-766f-48ff-b8ad-1809586fea37',
-      'name' => 'Birmingham',
-      'boundaryUrl' => 'https://www.wp.pl'
-    }
-  end
 
   context 'with VRN in the session' do
     before { add_vrn_to_session(vrn: vrn) }
@@ -21,11 +14,42 @@ RSpec.describe 'ChargesController - GET #local_authority', type: :request do
       before do
         caz_list = read_file('caz_list_response.json')
         allow(ChargeableZonesService).to receive(:call).and_return(caz_list['cleanAirZones'])
-        http_request
       end
 
-      it 'returns a success response' do
-        expect(response).to have_http_status(:success)
+      context 'when the vehicle has correct data' do
+        context 'when the vehicle in registered in the UK' do
+          before { http_request }
+
+          it 'returns a success response' do
+            expect(response).to have_http_status(:success)
+          end
+
+          it 'assigns VehicleController#details as return path' do
+            expect(assigns(:return_path)).to eq(details_vehicles_path)
+          end
+        end
+
+        context 'when the vehicle in registered in the UK' do
+          before do
+            add_vrn_to_session(vrn: vrn, country: 'Non-UK')
+            http_request
+          end
+
+          it 'assigns NonDvlaVehicleController#choose_type as return path' do
+            expect(assigns(:return_path)).to eq(choose_type_non_dvla_vehicles_path)
+          end
+        end
+      end
+
+      context 'when the vehicle has incorrect data' do
+        before do
+          add_to_session(vrn: vrn, country: 'UK', incorrect: true)
+          http_request
+        end
+
+        it 'assigns VehicleController#incorrect_details as return path' do
+          expect(assigns(:return_path)).to eq(incorrect_details_vehicles_path)
+        end
       end
     end
 

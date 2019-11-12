@@ -55,6 +55,13 @@ module MockHelper
     )
   end
 
+  def mock_clean_air_zones
+    caz_data = read_file('caz_list_response.json')
+    allow(ComplianceCheckerApi)
+      .to receive(:clean_air_zones)
+      .and_return(caz_data['cleanAirZones'])
+  end
+
   private
 
   # Reads provided file from +spec/fixtures/files+ directory

@@ -13,7 +13,7 @@ module ApiMocks
   # Mocks response from clean-air-zones endpoint in VCCS API
   def mock_chargeable_zones
     caz_list = read_file('caz_list_response.json')
-    allow(ComplianceCheckerApi).to receive(:chargeable_zones).and_return(caz_list['cleanAirZones'])
+    allow(ComplianceCheckerApi).to receive(:clean_air_zones).and_return(caz_list['cleanAirZones'])
   end
 
   # Mocks response from compliance endpoint in VCCS API

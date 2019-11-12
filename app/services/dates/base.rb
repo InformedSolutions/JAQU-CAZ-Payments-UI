@@ -21,12 +21,6 @@ module Dates
       @today = Date.current
     end
 
-    # Build the list of dates and return them, e.g.
-    # [{value: "2019-10-11", name: "Friday 11 October 2019", today: false},...]
-    def call
-      ((today - 1.day)..(today + 6.days)).map { |date| parse(date) }
-    end
-
     private
 
     # today get function

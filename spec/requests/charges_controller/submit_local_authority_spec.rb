@@ -13,6 +13,19 @@ RSpec.describe 'ChargesController - POST #submit_local_authority', type: :reques
     before { add_vrn_to_session }
 
     context 'with selected zone' do
+      context 'when vehicle is a taxi in Leeds' do
+        before do
+          add_to_session(vrn: 'CU57ABC', country: 'UK', taxi: true)
+          allow(ComplianceDetails).to receive(:new).and_return(
+            OpenStruct.new(zone_name: 'Leeds')
+          )
+        end
+
+        it 'returns redirect to DatesController#select_period' do
+          expect(http_request).to redirect_to(select_period_dates_path)
+        end
+      end
+
       it 'returns redirect to #daily_charge' do
         expect(http_request).to redirect_to(daily_charge_dates_path)
       end

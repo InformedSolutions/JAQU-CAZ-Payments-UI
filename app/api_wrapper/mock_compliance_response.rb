@@ -2,11 +2,18 @@
 
 # rubocop:disable all
 class MockComplianceResponse
+  # Initializer for the mock
+  #
+  # ==== Attributes
+  # * +vrn+ - string, vehicle registration number
+  # * +zone_id+ - UUID, Clean Air Zone ID from backend DB
+  #
   def initialize(vrn, zone_id)
     @vrn = vrn
     @zone_id = zone_id
   end
 
+  # Returns mocked response
   def response
     {
       'registrationNumber' => vrn,
