@@ -89,15 +89,6 @@ class ChargesController < ApplicationController
     session[:vehicle_details]['la_id'] = params['local-authority']
   end
 
-  # Checks if dates is present in the session.
-  # If not, redirects to {picking dates}[rdoc-ref:DatesController.select_daily_date]
-  def check_dates
-    return if dates
-
-    Rails.logger.warn 'Dates is missing in the session. Redirecting to :dates'
-    redirect_to select_daily_date_dates_path
-  end
-
   # Define the back button path on local authority page.
   def local_authority_return_path
     if vehicle_details('incorrect')
@@ -137,6 +128,8 @@ class ChargesController < ApplicationController
   end
 
   # Checks if local authority equals 'Leeds'
+  #
+  # Will be changed due to API changes
   def la_is_leeds?
     compliance_details = ComplianceDetails.new(session[:vehicle_details])
     compliance_details.zone_name == 'Leeds'

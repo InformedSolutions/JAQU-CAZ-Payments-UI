@@ -45,4 +45,18 @@ RSpec.describe 'VehiclesController - GET #details', type: :request do
 
     it_behaves_like 'an unsuccessful API call'
   end
+
+  context 'when vehicle is not found' do
+    before do
+      add_vrn_to_session
+      allow(ComplianceCheckerApi).to receive(:vehicle_details).and_raise(
+        BaseApi::Error404Exception.new(404, 'not found', message: 'Boom')
+      )
+    end
+
+    it 'redirects to :unrecognized' do
+      http_request
+      expect(response).to redirect_to(unrecognised_vehicles_path)
+    end
+  end
 end

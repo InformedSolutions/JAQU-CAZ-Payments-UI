@@ -9,19 +9,11 @@ module AddVrnToSession
     post submit_local_authority_charges_path, params: { 'local-authority': zone_id }
   end
 
-  def add_dates_to_session(dates: [Date.current])
-    post confirm_daily_date_dates_path, params: { dates: dates }
-  end
-
   def add_daily_charge_to_session(charge: 10)
     allow(ComplianceDetails).to receive(:new).and_return(
       OpenStruct.new(charge: charge, zone_name: 'Zone')
     )
     get daily_charge_dates_path
-  end
-
-  def add_payment_id_to_session
-    post payments_path
   end
 
   def add_to_session(data = {})

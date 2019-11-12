@@ -4,6 +4,7 @@ Given('I am on the vehicle details page with taxi vehicle to check') do
   add_vrn_and_country_to_session
   mock_vehicle_details_taxi
   mock_vehicle_compliance_leeds
+  mock_clean_air_zones
   visit details_vehicles_path
 end
 

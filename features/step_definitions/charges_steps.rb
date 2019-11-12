@@ -4,6 +4,7 @@ Given('I am on the select local authority page') do
   add_vrn_and_country_to_session
   mock_vehicle_details
   mock_vehicle_compliance
+  mock_clean_air_zones
   visit local_authority_charges_path
 end
 

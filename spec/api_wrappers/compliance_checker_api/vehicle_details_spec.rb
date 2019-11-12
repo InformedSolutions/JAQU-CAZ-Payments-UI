@@ -30,6 +30,24 @@ RSpec.describe 'ComplianceCheckerApi.vehicle_details' do
     end
   end
 
+  context 'when body is an invalid JSON' do
+    let(:body) { 'test' }
+
+    before do
+      stub_request(:get, /details/).to_return(
+        status: 200,
+        body: body
+      )
+    end
+
+    it 'raises Error500Exception' do
+      expect { call }.to raise_exception(
+        an_instance_of(BaseApi::Error500Exception)
+          .and(having_attributes(status: 500, status_message: 'Response body parsing failed'))
+      )
+    end
+  end
+
   context 'when the response status is 500' do
     before do
       stub_request(:get, /details/).to_return(

@@ -109,17 +109,41 @@ class ComplianceCheckerApi < BaseApi
       request(:get, "/vehicles/#{vrn}/compliance", query: { zones: zones })
     end
 
+    ##
+    # Calls +/v1/compliance-checker/clean-air-zones+ endpoint with +GET+ method
+    # and returns the list of available Clean Air Zones.
+    #
+    # ==== Example
+    #
+    #    ComplianceCheckerApi.clean_air_zones
+    #
+    # ==== Result
+    #
+    # Each returned CAZ will have following fields:
+    # * +name+ - string, eg. "Birmingham"
+    # * +cleanAirZoneId+ - UUID, this represents CAZ ID in the DB
+    # * +boundaryUrl+ - URL, this represents a link to eg. a map with CAZ boundaries
+    #
+    # ==== Serialization
+    #
+    # {Caz model}[rdoc-ref:Caz] can be used to create an instance of Clean Air Zone
+    #
+    # ==== Exceptions
+    #
+    # * {500 Exception}[rdoc-ref:BaseApi::Error500Exception] - backend API error
+    #
+    def clean_air_zones
+      log_action 'Getting CAZ list'
+      request(:get, '/clean-air-zones')['cleanAirZones']
+    end
+
+    # :nocov:
+    # Mocked compliance result for non DVLA vehicles
     def non_dvla_vehicle_compliance(vrn, zones, type)
       zones = zones.join(',')
       log_action "Getting vehicle compliance, vrn: #{vrn}, zones: #{zones}, type: #{type}"
       MockComplianceResponse.new(vrn, zones).response
       # request(:get, "/vehicles/#{vrn}/compliance", query: { zones: zones, type: type })
-    end
-
-    def chargeable_zones(vrn, type = nil)
-      log_action "Getting chargeable CAZ, vrn: #{type ? "#{vrn}, type: #{type}" : vrn}"
-      MockCazResponse.new(vrn).response
-      # request(:get, "/vehicles/#{vrn}/compliance")
     end
   end
 end
