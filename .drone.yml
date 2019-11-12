@@ -252,14 +252,10 @@ steps:
       BASEURL_PAYMENTS: 'https://payments-alb-dev-1894331684.eu-west-2.elb.amazonaws.com/'
       BROWSER_SET: 'min'
       BUILD: ${DRONE_BUILD_NUMBER}
-      SPECTRE: false
       LOCATION: browserstack
     commands:
       - cd JAQU-CAZ-QA-selenium
       - cucumber -t @PAYMENTS --retry 3
-    when:
-      event:
-        -pull_request
 
 
   ################################################ Secrets #########################################################
