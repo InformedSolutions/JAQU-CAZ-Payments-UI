@@ -63,8 +63,8 @@ steps:
     commands:
       - cucumber
 
-  # Invoke static code analysis through Ruby libraries
-  - name: static code analysis (Ruby)
+  # Invoke static code analysis through Ruby libraries and assets (js + stylesheets)
+  - name: static code analysis (Ruby + assets)
     image: test-payments-frontend
     pull: never
     volumes:
@@ -72,6 +72,7 @@ steps:
         path: /var/run/docker.sock
     commands:
       - rubocop
+      - govuk-lint-sass app/javascript
 
   # Invoke security analysis through Ruby libraries
   - name: security tests (Ruby)
