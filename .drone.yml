@@ -240,7 +240,7 @@ steps:
       - name: docker_sock
         path: /var/run/docker.sock
 
-    # Run end to end tests
+  # Run end to end tests
   - name: run end to end tests
     image: selenium-jaqu
     pull: never
@@ -249,14 +249,14 @@ steps:
         from_secret: browserstack_username
       BS_AUTHKEY:
         from_secret: browserstack_auth_key
-      BASEURL_VCCS: 'https://payments-alb-dev-1894331684.eu-west-2.elb.amazonaws.com/'
+      BASEURL_PAYMENTS: 'https://payments-alb-dev-1894331684.eu-west-2.elb.amazonaws.com/'
       BROWSER_SET: 'min'
       BUILD: ${DRONE_BUILD_NUMBER}
       SPECTRE: false
       LOCATION: browserstack
     commands:
       - cd JAQU-CAZ-QA-selenium
-      - cucumber -t @VCCS --retry 3
+      - cucumber -t @PAYMENTS --retry 3
     when:
       event:
         -pull_request
