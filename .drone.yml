@@ -72,7 +72,7 @@ steps:
         path: /var/run/docker.sock
     commands:
       - rubocop
-      - govuk-lint-sass app/javascript
+      - scss-lint app/javascript
 
   # Invoke security analysis through Ruby libraries
   - name: security tests (Ruby)
