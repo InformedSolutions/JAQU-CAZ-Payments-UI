@@ -36,7 +36,7 @@ rubocop
 
 Configures various linters to comply with GOV.UK's style guides.
 ```
-govuk-lint-sass app/javascript
+scss-lint app/javascript
 ```
 
 ### SonarQube inspection

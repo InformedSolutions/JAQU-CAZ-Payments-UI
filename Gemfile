@@ -16,6 +16,7 @@ gem 'logstash-logger'
 gem 'puma'
 gem 'rubocop-rails'
 gem 'sass-rails'
+gem 'scss_lint-govuk', require: false
 gem 'sdoc', require: false
 gem 'sqlite3'
 gem 'turbolinks'
@@ -24,7 +25,6 @@ gem 'webpacker'
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'dotenv-rails'
-  gem 'govuk-lint'
   gem 'haml-rails'
   gem 'rspec-rails'
 end
