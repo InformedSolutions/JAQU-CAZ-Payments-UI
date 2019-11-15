@@ -73,3 +73,8 @@ $cookie-border: #0b0c0c;
     }
   }
 }
+
+// Forces cookie message to be hidden
+.global-cookie-message__hidden {
+  display: none !important;
+}

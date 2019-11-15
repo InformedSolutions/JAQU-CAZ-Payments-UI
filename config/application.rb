@@ -26,5 +26,7 @@ module CitizensChargePayment
 
     # https://mattbrictson.com/dynamic-rails-error-pages
     config.exceptions_app = routes
+
+    config.time_zone = 'London'
   end
 end

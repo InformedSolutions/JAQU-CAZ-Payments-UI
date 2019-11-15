@@ -14,6 +14,13 @@ class ApplicationController < ActionController::Base
               BaseApi::Error400Exception,
               with: :redirect_to_server_unavailable
 
+  # enable basic HTTP authentication on production environment if HTTP_BASIC_PASSWORD variable present
+  http_basic_authenticate_with name: ENV['HTTP_BASIC_USER'],
+                               password: ENV['HTTP_BASIC_PASSWORD'],
+                               if: lambda {
+                                     Rails.env.production? && ENV['HTTP_BASIC_PASSWORD'].present?
+                                   }
+
   ##
   # Build ID endpoint
   #

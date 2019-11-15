@@ -1,8 +1,10 @@
+import './styles.scss'
+
 function init() {
   const printLink = document.getElementById('print-page-link');
   if (printLink)
   {
-    printLink.style.display = 'block';
+    printLink.classList.remove('print-page-link__hidden')
   }
 }
 

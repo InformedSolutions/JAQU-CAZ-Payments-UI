@@ -1,10 +1,9 @@
-#global-cookie-message.global-cookie-message{style: 'display: none;'}
+#global-cookie-message.global-cookie-message.global-cookie-message__hidden
   .govuk-width-container
     %p
       GOV.UK uses cookies to make the site simpler.
-
     .cookie-banner__buttons
       .cookie-banner__button.cookie-banner__button-accept
         %a.button.govuk-button.govuk-link{href: nil, role: 'button', id: 'close-banner'} Accept cookies
       .cookie-banner__button.cookie-banner__button-settings
-        %a.button.govuk-button.govuk-link{href: 'https://www.gov.uk/help/cookies', target: '_blank', role: 'button'} Cookie settings
+        %a.button.govuk-button.govuk-link{href: 'https://www.gov.uk/help/cookies', target: '_blank', role: 'button', id: 'cookie-settings'} Cookie settings
