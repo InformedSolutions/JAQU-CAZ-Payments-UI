@@ -263,7 +263,9 @@ steps:
       event:
         - push
 
+
 ---
+
 
 #################################################### Sit Steps ############################################################
 
@@ -281,8 +283,8 @@ limit: 1
 
 volumes:
 - name: docker_sock
-host:
-  path: /var/run/docker.sock
+  host:
+    path: /var/run/docker.sock
 
 
 steps:
