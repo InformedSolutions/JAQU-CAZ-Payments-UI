@@ -11,8 +11,8 @@ function init() {
     banner.classList.remove(hideClass);
     const closeLink = banner.querySelector('#close-banner');
     closeLink.addEventListener('click', () => {
-        banner.classList.add(hideClass);
-        setCookie()
+      banner.classList.add(hideClass);
+      setCookie()
     })
   }
 }
