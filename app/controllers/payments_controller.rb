@@ -23,7 +23,7 @@ class PaymentsController < ApplicationController
   def index
     payment = PaymentStatus.new(vehicle_details('payment_id'))
     if payment.success?
-      session[:vehicle_details]['user_email'] = payment.user_email
+      SessionManipulation::SetUserEmail.call(session: session, email: payment.user_email)
       redirect_to success_payments_path
     else
       redirect_to failure_payments_path
@@ -45,7 +45,7 @@ class PaymentsController < ApplicationController
   #
   def create
     payment = Payment.new(session[:vehicle_details], payments_url)
-    session[:vehicle_details]['payment_id'] = payment.payment_id
+    SessionManipulation::SetPaymentId.call(session: session, payment_id: payment.payment_id)
     redirect_to payment.gov_uk_pay_url
   end
 
@@ -102,6 +102,11 @@ class PaymentsController < ApplicationController
     redirect_to payments_path
   end
 
+  ##
+  # Checks if payment id is present in the session
+  #
+  # If it is not, redirects to beginning of the payment process
+  #
   def check_payment_details
     payment_id = vehicle_details('payment_id')
     return if payment_id
@@ -110,10 +115,8 @@ class PaymentsController < ApplicationController
     redirect_to enter_details_vehicles_path
   end
 
+  # Clears details of the payment in the session
   def clear_payment_in_session
-    payment_keys = %w[
-      la_id la_name charge dates total_charge payment_id user_email weekly_period taxi
-    ]
-    session[:vehicle_details].except!(*payment_keys)
+    SessionManipulation::ClearPaymentDetails.call(session: session)
   end
 end

@@ -7,13 +7,11 @@ RSpec.describe 'DatesController - POST #confirm_weekly_charge', type: :request d
     post confirm_weekly_charge_dates_path, params: { 'confirm-exempt' => confirmation }
   end
 
-  let(:vrn) { 'CU57ABC' }
-  let(:zone_id) { SecureRandom.uuid }
   let(:confirmation) { 'yes' }
 
-  context 'with VRN, LA, LA NAME and CHARGE in the session' do
+  context 'with details in the session' do
     before do
-      add_to_session(vrn: vrn, la_id: zone_id, charge: 50, la_name: 'Leeds')
+      add_details_to_session(weekly_possible: true)
       http_request
     end
 
@@ -37,10 +35,12 @@ RSpec.describe 'DatesController - POST #confirm_weekly_charge', type: :request d
   end
 
   context 'without LA in the session' do
-    before do
-      add_vrn_to_session(vrn: vrn)
-    end
+    before { add_vrn_to_session }
 
     it_behaves_like 'la is missing'
+  end
+
+  context 'when Leeds weekly discount is NOT possible' do
+    it_behaves_like 'not allowed Leeds discount'
   end
 end

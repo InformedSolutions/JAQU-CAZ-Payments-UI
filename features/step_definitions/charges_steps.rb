@@ -72,6 +72,7 @@ Then('I press the Change Clean Air Zone link') do
 end
 
 Then('I press the Change Payment for link') do
+  mock_vehicle_compliance
   find('#change-dates').click
 end
 

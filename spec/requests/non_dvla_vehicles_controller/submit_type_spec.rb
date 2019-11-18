@@ -18,6 +18,10 @@ RSpec.describe 'NonDvlaVehiclesController - POST #submit_type', type: :request d
     it 'redirects to select local authority page' do
       expect(response).to redirect_to(local_authority_charges_path)
     end
+
+    it 'sets the type in the session' do
+      expect(session[:vehicle_details]['type']).to eq(vehicle_type)
+    end
   end
 
   context 'when user does not choose the vehicle type' do

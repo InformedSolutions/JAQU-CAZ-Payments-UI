@@ -8,7 +8,7 @@ RSpec.describe Payment, type: :model do
                   'vrn' => vrn,
                   'dates' => dates,
                   'la_id' => zone_id,
-                  'charge' => charge
+                  'total_charge' => total_charge
                 },
                 url)
   end
@@ -16,8 +16,7 @@ RSpec.describe Payment, type: :model do
   let(:vrn) { 'CU57ABC' }
   let(:zone_id) { SecureRandom.uuid }
   let(:dates) { [Date.current, Date.tomorrow].map(&:to_s) }
-  let(:charge) { 10 }
-  let(:total_charge) { charge * dates.length }
+  let(:total_charge) { 25 }
 
   let(:payment_id) { SecureRandom.uuid }
   let(:url) { 'www.wp.pl' }

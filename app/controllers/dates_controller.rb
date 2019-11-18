@@ -7,18 +7,11 @@ class DatesController < ApplicationController
   # checks if VRN is present in the session
   before_action :check_vrn
   # checks if LA is present in the session
-  before_action :check_la_id
-  # checks if LA name is present in the session
-  before_action :check_la_name, only: %i[confirm_daily_charge select_daily_date
-                                         confirm_daily_date
-                                         confirm_weekly_charge select_weekly_date
-                                         confirm_date_weekly]
-  # checks if charge is present in the session
-  before_action :check_charge, only: %i[confirm_daily_charge select_daily_date
-                                        confirm_daily_date confirm_weekly_charge
-                                        select_weekly_date
-                                        confirm_date_weekly]
-
+  before_action :check_compliance_details
+  # checks if weekly Leeds discount is possible for weekly paths
+  before_action :check_weekly, only: %i[select_period confirm_select_period
+                                        weekly_charge confirm_weekly_charge
+                                        select_weekly_date confirm_date_weekly]
   ##
   # Renders a select period page.
   #
@@ -68,8 +61,6 @@ class DatesController < ApplicationController
   #
   def daily_charge
     @compliance_details = ComplianceDetails.new(session[:vehicle_details])
-    session[:vehicle_details][:charge] = @compliance_details.charge
-    session[:vehicle_details][:la_name] = @compliance_details.zone_name
     @return_path = determinate_return_path
   end
 
@@ -93,7 +84,6 @@ class DatesController < ApplicationController
   def confirm_daily_charge
     form = ConfirmationForm.new(params['confirm-exempt'])
     if form.confirmed?
-      session[:vehicle_details]['weekly_period'] = false
       redirect_to select_daily_date_dates_path
     else
       log_invalid_form 'Redirecting back to :daily_charge.'
@@ -136,7 +126,7 @@ class DatesController < ApplicationController
   #
   def confirm_daily_date
     if params[:dates]
-      session[:vehicle_details]['dates'] = params[:dates]
+      SessionManipulation::CalculateTotalCharge.call(session: session, dates: params[:dates])
       redirect_to review_payment_charges_path
     else
       log_invalid_form 'Redirecting back to :dates.'
@@ -157,8 +147,6 @@ class DatesController < ApplicationController
   def weekly_charge
     @compliance_details = ComplianceDetails.new(session[:vehicle_details])
     @weekly_charge = 50.00
-    session[:vehicle_details]['charge'] = @weekly_charge
-    session[:vehicle_details]['la_name'] = @compliance_details.zone_name
     @return_path = determinate_return_path
   end
 
@@ -182,7 +170,6 @@ class DatesController < ApplicationController
   def confirm_weekly_charge
     form = ConfirmationForm.new(params['confirm-exempt'])
     if form.confirmed?
-      session[:vehicle_details]['weekly_period'] = true
       redirect_to select_weekly_date_dates_path
     else
       log_invalid_form 'Redirecting back to :weekly_charge.'
@@ -225,7 +212,9 @@ class DatesController < ApplicationController
   #
   def confirm_date_weekly
     if params[:dates]
-      session[:vehicle_details]['dates'] = params[:dates]
+      SessionManipulation::CalculateTotalCharge.call(
+        session: session, dates: params[:dates], weekly: true
+      )
       redirect_to review_payment_charges_path
     else
       log_invalid_form 'Redirecting back to :dates.'
@@ -258,5 +247,14 @@ class DatesController < ApplicationController
   # Define the back button path on daily and weekly charge page.
   def determinate_return_path
     vehicle_details('taxi') ? select_period_dates_path : local_authority_charges_path
+  end
+
+  # Checks if weekly Leeds discount is possible
+  def check_weekly
+    return if vehicle_details('weekly_possible')
+
+    Rails.logger.warn "Vehicle with VRN #{vrn} is not allowed for weekly Leeds discount"
+    Rails.logger.warn "Current vehicle_details in session: #{session[:vehicle_details]}#"
+    redirect_to daily_charge_dates_path
   end
 end

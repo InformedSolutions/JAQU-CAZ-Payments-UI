@@ -10,6 +10,11 @@ module ApiMocks
     allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(vehicle_details)
   end
 
+  def mock_vehicle_details_taxi
+    vehicle_details = read_file('vehicle_details_taxi_response.json')
+    allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(vehicle_details)
+  end
+
   # Mocks response from clean-air-zones endpoint in VCCS API
   def mock_chargeable_zones
     caz_list = read_file('caz_list_response.json')

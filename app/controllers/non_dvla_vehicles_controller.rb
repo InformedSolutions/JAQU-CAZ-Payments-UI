@@ -83,9 +83,11 @@ class NonDvlaVehiclesController < ApplicationController
   # * +vehicle-type+ - lack of it redirects to {choose_type}[rdoc-ref:NonDvlaVehiclesController.choose_type]
   #
   def submit_type
-    if params['vehicle-type'].blank?
+    type = params['vehicle-type']
+    if type.blank?
       redirect_to choose_type_non_dvla_vehicles_path, alert: true
     else
+      SessionManipulation::SetType.call(session: session, type: type)
       redirect_to local_authority_charges_path
     end
   end
