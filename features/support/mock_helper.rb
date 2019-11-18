@@ -15,6 +15,12 @@ module MockHelper
     allow(ChargeableZonesService).to receive(:call).and_return(caz_list['cleanAirZones'])
   end
 
+  # Mocks response from unrecognised_compliance endpoint in VCCS API
+  def mock_unrecognised_compliance
+    unrecognised = read_file('unrecognised_response.json')
+    allow(ChargeableZonesService).to receive(:call).and_return(unrecognised['charges'])
+  end
+
   # Mocks response for a compliant vehicle
   def mock_non_chargeable_caz
     allow(ChargeableZonesService).to receive(:call).and_return([])

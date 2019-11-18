@@ -7,5 +7,5 @@ end
 
 Then('I choose Car type') do
   choose('Car')
-  mock_chargeable_caz
+  mock_unrecognised_compliance
 end

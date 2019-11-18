@@ -1,0 +1,10 @@
+{
+  "charges":
+  [
+    {
+      "cleanAirZoneId": "39e54ed8-3ed2-441d-be3f-38fc9b70c8d3",
+      "name": "Birmingham",
+      "charge": 15
+    }
+  ]
+}

@@ -13,6 +13,7 @@ RSpec.describe ChargeableZonesService do
     }
   end
 
+  let(:caz_list_response) { read_file('caz_list_response.json')['cleanAirZones'] }
   let(:country) { 'UK' }
   let(:unrecognised) { false }
 
@@ -51,7 +52,7 @@ RSpec.describe ChargeableZonesService do
       end
 
       it 'returns all caz zones' do
-        expect(service_call).to eq(MockCazesForNonukResponse.new.response['complianceOutcomes'])
+        expect(service_call).to eq(caz_list_response)
       end
     end
 
@@ -63,7 +64,7 @@ RSpec.describe ChargeableZonesService do
       end
 
       it 'returns all caz zones' do
-        expect(service_call).to eq(MockCazesForNonukResponse.new.response['complianceOutcomes'])
+        expect(service_call).to eq(caz_list_response)
       end
     end
   end

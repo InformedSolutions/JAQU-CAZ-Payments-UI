@@ -21,13 +21,13 @@ class ChargeableZonesService < BaseService
 
   # The caller method for the service.
   # It checks which country was chosen or vehicle is unrecognised.
-  # If non_dvla is equals to true, returns mocked response.
+  # If non_dvla is equals to true, returns all zones.
   # If not, calls +ComplianceCheckerApi.chargeable_zones+ and then calls
   # +ComplianceCheckerApi.vehicle_compliance+ to check if any of zones has charge price
   #
   # Returns an array
   def call
-    return MockCazesForNonukResponse.new.response['complianceOutcomes'] if non_dvla
+    return zone_data if non_dvla
 
     zone_ids = zone_data.map { |caz_data| caz_data['cleanAirZoneId'] }
     vehicle_compliance_response = ComplianceCheckerApi.vehicle_compliance(vrn, zone_ids)

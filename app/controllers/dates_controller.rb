@@ -44,8 +44,7 @@ class DatesController < ApplicationController
     if params[:period]
       determinate_next_page
     else
-      log_invalid_form 'Redirecting back to :select_period.'
-      redirect_to select_period_dates_path, alert: true
+      redirect_back_to(select_period_dates_path, true, :select_period)
     end
   end
 
@@ -86,8 +85,8 @@ class DatesController < ApplicationController
     if form.confirmed?
       redirect_to select_daily_date_dates_path
     else
-      log_invalid_form 'Redirecting back to :daily_charge.'
-      redirect_to daily_charge_dates_path, alert: I18n.t('confirmation_form.exemption')
+      alert = I18n.t('confirmation_form.exemption')
+      redirect_back_to(daily_charge_dates_path, alert, :daily_charge)
     end
   end
 
@@ -129,8 +128,7 @@ class DatesController < ApplicationController
       SessionManipulation::CalculateTotalCharge.call(session: session, dates: params[:dates])
       redirect_to review_payment_charges_path
     else
-      log_invalid_form 'Redirecting back to :dates.'
-      redirect_to select_daily_date_dates_path, alert: true
+      redirect_back_to(select_daily_date_dates_path, true, :dates)
     end
   end
 
@@ -172,8 +170,8 @@ class DatesController < ApplicationController
     if form.confirmed?
       redirect_to select_weekly_date_dates_path
     else
-      log_invalid_form 'Redirecting back to :weekly_charge.'
-      redirect_to weekly_charge_dates_path, alert: I18n.t('confirmation_form.exemption')
+      alert = I18n.t('confirmation_form.exemption')
+      redirect_back_to(weekly_charge_dates_path, alert, :weekly_charge)
     end
   end
 
@@ -217,8 +215,7 @@ class DatesController < ApplicationController
       )
       redirect_to review_payment_charges_path
     else
-      log_invalid_form 'Redirecting back to :dates.'
-      redirect_to select_weekly_date_dates_path, alert: true
+      redirect_back_to(select_weekly_date_dates_path, true, :dates)
     end
   end
 
@@ -239,8 +236,7 @@ class DatesController < ApplicationController
     elsif params[:period] == 'weekly-charge'
       redirect_to weekly_charge_dates_path
     else
-      log_invalid_form 'Redirecting back to :dates.'
-      redirect_to select_daily_date_dates_path, alert: true
+      redirect_back_to(select_daily_date_dates_path, true, :dates)
     end
   end
 

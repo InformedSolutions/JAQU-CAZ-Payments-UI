@@ -102,9 +102,8 @@ class ComplianceCheckerApi < BaseApi
     # * {404 Exception}[rdoc-ref:BaseApi::Error404Exception] - vehicle not found in the DVLA db
     # * {422 Exception}[rdoc-ref:BaseApi::Error422Exception] - invalid VRN
     # * {500 Exception}[rdoc-ref:BaseApi::Error500Exception] - backend API error
-
+    #
     def vehicle_compliance(vrn, zones)
-      zones = zones.join(',')
       log_action "Getting vehicle compliance, vrn: #{vrn}, zones: #{zones}"
       request(:get, "/vehicles/#{vrn}/compliance", query: { zones: zones })
     end
@@ -137,13 +136,27 @@ class ComplianceCheckerApi < BaseApi
       request(:get, '/clean-air-zones')['cleanAirZones']
     end
 
-    # :nocov:
-    # Mocked compliance result for non DVLA vehicles
-    def non_dvla_vehicle_compliance(vrn, zones, type)
-      zones = zones.join(',')
-      log_action "Getting vehicle compliance, vrn: #{vrn}, zones: #{zones}, type: #{type}"
-      MockComplianceResponse.new(vrn, zones).response
-      # request(:get, "/vehicles/#{vrn}/compliance", query: { zones: zones, type: type })
+    ##
+    # Calls +/v1/compliance-checker/vehicles/unrecognised/:type/compliance+ endpoint with +GET+ method
+    # and returns compliance details for non DVLA vehicle on requested zone.
+    #
+    # ==== Attributes
+    #
+    # * +type+ - string, eg. 'car'
+    # * +zones+ - string, zone ID which vehicle compliance is check against
+    #
+    # ==== Result
+    #
+    # Returned compliance details will for non-dvla have following fields:
+    # * +charges+ - array of objects
+    #   * +cleanAirZoneId+ - UUID, this represents CAZ ID in the DB
+    #   * +name+ - string, eg. "Birmingham"
+    #   * +charge+ - number, determines how much owner of the vehicle will have to pay in this CAZ
+    #
+    def unrecognised_compliance(type, zone_id)
+      log_action "Getting vehicle unrecognised type compliance, type: #{type}, zone_id: #{zone_id}"
+      endpoint = "/vehicles/unrecognised/#{type}/compliance"
+      request(:get, endpoint, query: { zones: zone_id })
     end
   end
 end
