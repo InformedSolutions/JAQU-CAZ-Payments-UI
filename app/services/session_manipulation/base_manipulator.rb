@@ -36,13 +36,16 @@ module SessionManipulation
     # Reader for the user's session
     attr_reader :session
 
+    # Returns an array of subkeys based on service LEVEL.
     def previous_keys
       SUBKEYS.select { |key| key < self.class::LEVEL }.values.flatten
     end
 
+    # Add passed values to the session.
+    # It transforms keys to strings and removes keys from next levels.
     def add_fields(values = {})
       log_action "Adding #{values} to session"
-      values.transform_keys!(&:to_s)
+      values.stringify_keys!
       session[SESSION_KEY] = session[SESSION_KEY].slice(*previous_keys).merge(values)
       log_action "User's current session: #{session[SESSION_KEY]}"
     end

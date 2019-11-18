@@ -10,7 +10,7 @@ module SessionManipulation
   #    SessionManipulation::ClearPaymentDetails.call(session: session)
   #
   class ClearPaymentDetails < BaseManipulator
-    # It clears keys in the session hash
+    # It clears keys in the session hash the were set after setting compliance details
     def call
       log_action 'Clearing data from the session'
       session[SESSION_KEY] = session[SESSION_KEY].slice(*keys_to_keep)

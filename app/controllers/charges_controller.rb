@@ -112,7 +112,8 @@ class ChargesController < ApplicationController
     end
   end
 
-  # TODO: docs
+  # Returns redirect to selecting period if Leeds discounted charge is available.
+  # Else, returns redirect to daily charge
   def determinate_next_page
     if vehicle_details('weekly_possible')
       redirect_to select_period_dates_path
