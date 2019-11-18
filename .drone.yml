@@ -264,6 +264,275 @@ steps:
         - push
 
 
+---
+
+
+#################################################### Sit Steps ############################################################
+
+kind: pipeline
+type: docker
+name: payments-web-sit
+trigger:
+branch:
+  - release/*
+event:
+  - pull_request
+  - push
+concurrency:
+limit: 1
+
+volumes:
+- name: docker_sock
+  host:
+    path: /var/run/docker.sock
+
+
+steps:
+
+  # Clean agent images and containers to prevent disk space overuse
+  - name: clean agent
+    image: docker
+    commands:
+    - docker system prune -f
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+
+  # Build docker image
+  - name: build
+    image: docker
+    commands:
+    - docker build -f Dockerfile.test -t test-payments-frontend:latest --build-arg secret_key_base=${DRONE_COMMIT} .
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+
+  # Trigger unit tests
+  - name: unit tests
+    image: test-payments-frontend
+    pull: never
+    environment:
+      COMPLIANCE_CHECKER_API_URL: http://localhost
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    commands:
+      - yarn install
+      - rspec -f d
+
+  # Execute integration/scenario tests
+  - name: integration tests
+    image: test-payments-frontend
+    pull: never
+    environment:
+      COMPLIANCE_CHECKER_API_URL: https://zhapjjzdkg.execute-api.eu-west-2.amazonaws.com/sit
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    commands:
+      - cucumber
+
+  # Invoke static code analysis through Ruby libraries and assets (js + stylesheets)
+  - name: static code analysis (Ruby + assets)
+    image: test-payments-frontend
+    pull: never
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    commands:
+      - rubocop
+      - scss-lint app/javascript
+
+  # Invoke security analysis through Ruby libraries
+  - name: security tests (Ruby)
+    image: test-payments-frontend
+    pull: never
+    commands:
+       - bundle audit check --update
+       - yarn audit
+       - brakeman --except Redirect,LinkToHref
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+
+  # Invoke terraform scripts to ensure ecr is available for deploy step.
+  - name: initialise ecr
+    image: hashicorp/terraform:0.12.3
+    commands:
+      - apk update && apk add bash
+      - mkdir ~/.ssh
+      - echo -n "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
+      - chmod 600 ~/.ssh/id_rsa
+      - touch ~/.ssh/known_hosts
+      - chmod 600 ~/.ssh/known_hosts
+      - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
+      - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
+      - cd JAQU-CAZ-IAC
+      - cd terraform/projects/payments/layers/00.global
+      - PATH=$PATH:../../../../bin/
+      - chmod +x ../../../../bin/tf
+      - tf init
+      - tf workspace select default
+      - tf apply -auto-approve
+    environment:
+      TF_VAR_access_key:
+        from_secret: aws_access_key_id
+      TF_VAR_secret_key:
+        from_secret: aws_secret_access_key
+      TF_VAR_account_id:
+        from_secret: aws_account_id
+      GIT_PRIVATE_SSH:
+        from_secret: github_private_key
+    when:
+      event:
+        - push
+
+  # Push built image to ECR registry
+  - name: publish image to ecr
+    image: plugins/ecr
+    settings:
+      access_key:
+        from_secret: aws_access_key_id
+      secret_key:
+        from_secret: aws_secret_access_key
+      repo: 018330602464.dkr.ecr.eu-west-2.amazonaws.com/payments-web
+      registry: 018330602464.dkr.ecr.eu-west-2.amazonaws.com
+      dockerfile: Dockerfile.build
+      region: eu-west-2
+      tags:
+        - latest
+        - ${DRONE_BUILD_NUMBER}
+      build_args:
+        - secret_key_base=${DRONE_COMMIT}
+    when:
+      event:
+        - push
+
+  - name: sonar scan
+    image: aosapps/drone-sonar-plugin
+    environment:
+      SONAR_HOST:
+        from_secret: sonar_host
+      SONAR_TOKEN:
+        from_secret: sonar_token
+      sonar.ruby.coverage.reportPaths: coverage/.resultset.json
+    commands:
+      - sonar-scanner
+        -Dsonar.projectKey=${DRONE_REPO}
+        -Dsonar.projectName=${DRONE_REPO}
+        -Dsonar.host.url=$SONAR_HOST
+        -Dsonar.login=$SONAR_TOKEN
+        -Dproject.settings=./sonar-project.properties
+
+  - name: deploy to sit
+    image: hashicorp/terraform:0.12.3
+    commands:
+      - apk update && apk add bash
+      - cd JAQU-CAZ-IAC
+      - cd terraform/projects/payments/layers/01.networking
+      - PATH=$PATH:../../../../bin/
+      - chmod +x ../../../../bin/tf
+      - tf init
+      - tf workspace select sit || tf workspace new sit
+      - tf apply -auto-approve
+      - cd ../02.backends
+      - tf init
+      - tf workspace select sit || tf workspace new sit
+      - tf apply -auto-approve
+      - cd ../04.web
+      - tf init
+      - tf workspace select sit || tf workspace new sit
+      - tf apply -auto-approve
+    environment:
+      TF_VAR_build_number: ${DRONE_BUILD_NUMBER}
+      TF_VAR_secret_key_base: ${DRONE_COMMIT}
+      TF_VAR_google_analytics_id: UA-144774549-2
+      TF_VAR_access_key:
+        from_secret: aws_access_key_id
+      TF_VAR_secret_key:
+        from_secret: aws_secret_access_key
+      TF_VAR_enable_https_redirect: false
+    when:
+      event:
+        - push
+
+  - name: codedeploy ui sit
+    image: golang:alpine
+    commands:
+      - apk add --update bash python python-dev py-pip build-base
+      - pip install awscli
+      - aws deploy create-deployment --application-name payments-codedeploy-service-sit --deployment-config-name CodeDeployDefault.ECSAllAtOnce --deployment-group-name payments-codedeploy-service-sit --description "Deployment ECS" --s3-location bucket=jaqu-projects-lambda-bucket,bundleType=yaml,key=payments/sit/appspec.yaml
+    environment:
+      AWS_ACCESS_KEY_ID:
+        from_secret: aws_access_key_id
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: aws_secret_access_key
+      AWS_DEFAULT_REGION: eu-west-2
+    when:
+      event:
+        - push
+
+  # Build docker image
+  - name: await ecs rollout
+    image: docker
+    environment:
+      build_id_url: https://sit.paycleanairzonecharge.co.uk/build_id
+      build_id: ${DRONE_BUILD_NUMBER}
+    commands:
+      - apk add curl
+      - sh build_utils/check_build_number.sh
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    when:
+      event:
+        - push
+
+
+  # Build end to end tests docker image
+  - name: build end to end test image
+    image: docker:git
+    commands:
+      - mkdir ~/.ssh
+      - echo -n "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
+      - chmod 600 ~/.ssh/id_rsa
+      - touch ~/.ssh/known_hosts
+      - chmod 600 ~/.ssh/known_hosts
+      - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /sit/null
+      - git clone git@github.com:InformedSolutions/JAQU-CAZ-QA-selenium.git
+      - cd JAQU-CAZ-QA-selenium
+      - docker build -t selenium-jaqu .
+    environment:
+      GIT_PRIVATE_SSH:
+        from_secret: github_private_key
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    when:
+      event:
+        - push
+
+  # Run end to end tests
+  - name: run end to end tests
+    image: selenium-jaqu
+    pull: never
+    environment:
+      BS_USERNAME:
+        from_secret: browserstack_username
+      BS_AUTHKEY:
+        from_secret: browserstack_auth_key
+      BASEURL_PAYMENTS: 'https://payments-alb-sit-1894331684.eu-west-2.elb.amazonaws.com/'
+      BROWSER_SET: 'min'
+      BUILD: ${DRONE_BUILD_NUMBER}
+      LOCATION: browserstack
+    commands:
+      - cd JAQU-CAZ-QA-selenium
+      - cucumber -t @PAYMENTS --retry 3
+    when:
+      event:
+        - push
+
+
   ################################################ Secrets #########################################################
 
 # Note the below values are pulled from AWS Secrets Manager via the aws-secrets Drone plugin
