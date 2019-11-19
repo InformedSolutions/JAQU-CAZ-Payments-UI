@@ -13,12 +13,9 @@ module SessionHelper
     page.set_rack_session(vehicle_details: compliance_details)
   end
 
-  def add_vehicle_details_to_session(add_payment_id: false)
-    details = {
-      **compliance_details,
-      dates: dates,
-      total_charge: dates.length * 9
-    }
+  def add_vehicle_details_to_session(add_dates: false, add_payment_id: false)
+    details = compliance_details
+    details.merge!(dates: dates, total_charge: dates.length * 9) if add_dates || add_payment_id
     details[:payment_id] = SecureRandom.uuid if add_payment_id
     page.set_rack_session(vehicle_details: details)
   end
