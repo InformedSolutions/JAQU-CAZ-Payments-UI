@@ -28,7 +28,8 @@
                   %input.govuk-radios__input{name: 'local-authority',
                                              type: 'radio',
                                              value: zone.id,
-                                             id: zone.name.downcase}
+                                             id: zone.name.downcase,
+                                             checked: zone.id == session[:vehicle_details]['la_id']}
                   %label.govuk-label.govuk-radios__label{for: zone.name.downcase}
                     = zone.name
         = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'

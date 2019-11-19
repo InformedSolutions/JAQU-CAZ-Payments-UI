@@ -44,7 +44,8 @@
                   %input.govuk-checkboxes__input{name: 'dates[]',
                                                  type: 'checkbox',
                                                  value: date[:value],
-                                                 id: "date-#{index}"}
+                                                 id: "date-#{index}",
+                                                 checked: checked_daily?(date[:value])}
                   %label.govuk-label.govuk-checkboxes__label{for: "date-#{index}"}
                     - if date[:today]
                       %b

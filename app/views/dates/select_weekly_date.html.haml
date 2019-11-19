@@ -40,7 +40,8 @@
                                                  name: 'dates[]',
                                                  type: 'radio',
                                                  value: date[:value],
-                                                 id: "date-#{index}"}
+                                                 id: "date-#{index}",
+                                                 checked: checked_weekly?(date[:value])}
                   %label.govuk-label.govuk-radios__label{for: "date-#{index}"}
                     - if date[:today]
                       %b
