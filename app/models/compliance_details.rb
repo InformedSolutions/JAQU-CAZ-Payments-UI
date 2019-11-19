@@ -74,7 +74,7 @@ class ComplianceDetails
 
   # Get compliance data for DVLA registered vehicle
   def dvla_compliance_data
-    ComplianceCheckerApi.vehicle_compliance(vrn, zone_id)
+    ComplianceCheckerApi.vehicle_compliance(vrn, [zone_id])
   end
 
   # Get compliance data for non-DVLA registered vehicle

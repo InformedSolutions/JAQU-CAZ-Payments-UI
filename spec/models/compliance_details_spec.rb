@@ -53,12 +53,12 @@ RSpec.describe ComplianceDetails, type: :model do
     before do
       allow(ComplianceCheckerApi)
         .to receive(:vehicle_compliance)
-        .with(vrn, zone_id)
+        .with(vrn, [zone_id])
         .and_return('complianceOutcomes' => outcomes)
     end
 
     it 'calls :vehicle_compliance with right params' do
-      expect(ComplianceCheckerApi).to receive(:vehicle_compliance).with(vrn, zone_id)
+      expect(ComplianceCheckerApi).to receive(:vehicle_compliance).with(vrn, [zone_id])
       details.zone_name
     end
 

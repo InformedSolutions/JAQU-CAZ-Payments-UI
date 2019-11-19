@@ -6,7 +6,7 @@ RSpec.describe 'ComplianceCheckerApi.vehicle_details' do
   subject(:call) { ComplianceCheckerApi.vehicle_compliance(vrn, zones) }
 
   let(:vrn) { 'CAS310' }
-  let(:zones) { 'birmingham, leeds' }
+  let(:zones) { %w[birmingham leeds] }
 
   context 'when call returns 200' do
     before do
