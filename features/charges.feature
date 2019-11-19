@@ -47,7 +47,7 @@ Feature: Charges
 
   Scenario: Vehicle is compliant in all CAZ
     Given My vehicle is compliant
-      And I am on the select local authority page
+      And I am go the local authority page
     Then I should be on the compliant vehicle page
 
   Scenario: User does not confirm exemption

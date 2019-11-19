@@ -13,7 +13,10 @@ RSpec.describe ChargeableZonesService do
     }
   end
 
-  let(:caz_list_response) { read_file('caz_list_response.json')['cleanAirZones'] }
+  let(:caz_list_response) do
+    response = read_file('caz_list_response.json')
+    response['cleanAirZones'].map { |caz_data| Caz.new(caz_data) }
+  end
   let(:country) { 'UK' }
   let(:unrecognised) { false }
 
@@ -26,10 +29,13 @@ RSpec.describe ChargeableZonesService do
           mock_vehicle_compliance
         end
 
-        let(:compliance_data) { read_file('vehicle_compliance_birmingham_response.json') }
+        let(:compliance_data) do
+          response = read_file('vehicle_compliance_birmingham_response.json')
+          response['complianceOutcomes'].map { |caz_data| Caz.new(caz_data) }
+        end
 
         it 'returns chargeable caz zones' do
-          expect(service_call).to eq(compliance_data['complianceOutcomes'])
+          expect(service_call.to_json).to eq(compliance_data.to_json)
         end
       end
 
@@ -48,11 +54,11 @@ RSpec.describe ChargeableZonesService do
       let(:country) { 'Non-UK' }
 
       before do
-        mock_vehicle_compliance
+        mock_chargeable_zones
       end
 
       it 'returns all caz zones' do
-        expect(service_call).to eq(caz_list_response)
+        expect(service_call.to_json).to eq(caz_list_response.to_json)
       end
     end
 
@@ -64,7 +70,7 @@ RSpec.describe ChargeableZonesService do
       end
 
       it 'returns all caz zones' do
-        expect(service_call).to eq(caz_list_response)
+        expect(service_call.to_json).to eq(caz_list_response.to_json)
       end
     end
   end

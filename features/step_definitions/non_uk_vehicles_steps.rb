@@ -7,5 +7,5 @@ end
 
 Then('I choose Car type') do
   choose('Car')
-  mock_unrecognised_compliance
+  mock_non_dvla_response
 end

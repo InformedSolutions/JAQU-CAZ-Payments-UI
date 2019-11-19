@@ -144,7 +144,7 @@ class ComplianceCheckerApi < BaseApi
     # ==== Attributes
     #
     # * +type+ - string, eg. 'car'
-    # * +zones+ - string, zone ID which vehicle compliance is check against
+    # * +zone_id+ - string, zone ID which vehicle compliance is check against
     #
     # ==== Result
     #

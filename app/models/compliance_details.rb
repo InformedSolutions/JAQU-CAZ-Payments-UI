@@ -66,19 +66,19 @@ class ComplianceDetails
   def compliance_data
     @compliance_data ||=
       if non_dvla
-        non_dvla_compliance_data['charges']
+        non_dvla_compliance_data
       else
-        dvla_compliance_data['complianceOutcomes']
+        dvla_compliance_data
       end.first.deep_transform_keys { |key| key.underscore.to_sym }
   end
 
   # Get compliance data for DVLA registered vehicle
   def dvla_compliance_data
-    ComplianceCheckerApi.vehicle_compliance(vrn, [zone_id])
+    ComplianceCheckerApi.vehicle_compliance(vrn, [zone_id])['complianceOutcomes']
   end
 
   # Get compliance data for non-DVLA registered vehicle
   def non_dvla_compliance_data
-    ComplianceCheckerApi.unrecognised_compliance(type, zone_id)
+    ComplianceCheckerApi.unrecognised_compliance(type, zone_id)['charges']
   end
 end
