@@ -20,10 +20,4 @@ describe ApplicationHelper do
       expect(helper.parse_dates(array)).to be_a(Array)
     end
   end
-
-  describe '.parse_weekly_dates' do
-    it 'returns 7 next days' do
-      expect(helper.parse_weekly_dates('2019-11-01')).to eq('01/11/19 - 07/11/19')
-    end
-  end
 end
