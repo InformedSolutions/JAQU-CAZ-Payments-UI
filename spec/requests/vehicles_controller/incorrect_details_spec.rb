@@ -11,4 +11,9 @@ RSpec.describe 'VehiclesController - GET #incorrect_details', type: :request do
     http_request
     expect(response).to have_http_status(:success)
   end
+
+  it 'sets incorrect in the session' do
+    http_request
+    expect(session[:vehicle_details]['incorrect']).to be_truthy
+  end
 end

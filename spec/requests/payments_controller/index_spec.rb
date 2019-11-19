@@ -13,7 +13,7 @@ RSpec.describe 'PaymentsController - GET #index', type: :request do
     before do
       add_to_session(payment_id: payment_id)
       allow(PaymentStatus).to receive(:new).and_return(
-        OpenStruct.new(success?: success, user_email: user_email)
+        instance_double('PaymentStatus', success?: success, user_email: user_email)
       )
       http_request
     end

@@ -7,7 +7,7 @@ class ChargesController < ApplicationController
   # checks if VRN is present in the session
   before_action :check_vrn
   # checks if LA is present in the session
-  before_action :check_la_id, except: %i[local_authority submit_local_authority]
+  before_action :check_compliance_details, except: %i[local_authority submit_local_authority]
   # checks if vehicle_details is present in the session
   before_action :check_vehicle_details, only: %i[review_payment]
 
@@ -49,7 +49,7 @@ class ChargesController < ApplicationController
   def submit_local_authority
     form = LocalAuthorityForm.new(params['local-authority'])
     if form.valid?
-      store_la
+      store_compliance_details
       determinate_next_page
     else
       log_invalid_form 'Redirecting to :local_authority.'
@@ -72,8 +72,8 @@ class ChargesController < ApplicationController
     @vrn = vrn
     @la_name = la_name
     @dates = vehicle_details('dates')
-    @weekly_period = vehicle_details('weekly_period')
-    @total_charge = calculate_total_charge
+    @weekly_period = vehicle_details('weekly')
+    @total_charge = vehicle_details('total_charge')
     @return_path = review_payment_return_path
   end
 
@@ -85,8 +85,11 @@ class ChargesController < ApplicationController
   end
 
   # Stores submitted LA in the session
-  def store_la
-    session[:vehicle_details]['la_id'] = params['local-authority']
+  def store_compliance_details
+    SessionManipulation::SetComplianceDetails.call(
+      session: session,
+      la_id: params['local-authority']
+    )
   end
 
   # Define the back button path on local authority page.
@@ -102,45 +105,29 @@ class ChargesController < ApplicationController
 
   # Define the back button path on review payment page.
   def review_payment_return_path
-    if vehicle_details('weekly_period')
+    if vehicle_details('weekly')
       weekly_charge_dates_path
     else
       daily_charge_dates_path
     end
   end
 
-  # Calculating total charge based on daily charge and days what was selected by user.
-  def calculate_total_charge
-    dates_length = vehicle_details('dates').length
-    session[:vehicle_details]['total_charge'] = charge * dates_length
-  end
-
-  # Verifies which date period was selected.
-  # If date period equals 'daily-charge' redirects to {daily_charge}[rdoc-ref:DatesController.daily_charge]
-  # If date period not equals 'daily-charge' redirects to {weekly_charge}[rdoc-ref:DatesController.weekly_charge]
-  #
+  # Returns redirect to selecting period if Leeds discounted charge is available.
+  # Else, returns redirect to daily charge
   def determinate_next_page
-    if vehicle_details('taxi') && la_is_leeds?
+    if vehicle_details('weekly_possible')
       redirect_to select_period_dates_path
     else
       redirect_to daily_charge_dates_path
     end
   end
 
-  # Checks if local authority equals 'Leeds'
-  #
-  # Will be changed due to API changes
-  def la_is_leeds?
-    compliance_details = ComplianceDetails.new(session[:vehicle_details])
-    compliance_details.zone_name == 'Leeds'
-  end
-
   # Checks if vehicle_details is present in the session
   def check_vehicle_details
-    return if vrn && la_id && la_name && charge && vehicle_details('dates')
+    return if la_id && la_name && vehicle_details('total_charge') && vehicle_details('dates')
 
     Rails.logger.warn 'Vehicle details is missing in the session. Redirecting to :enter_details'
-    Rails.logger.warn "Current vehicle_details in session: #{session[:vehicle_details]}#"
+    Rails.logger.warn "Current vehicle_details in session: #{session[:vehicle_details]}"
     redirect_to enter_details_vehicles_path
   end
 end

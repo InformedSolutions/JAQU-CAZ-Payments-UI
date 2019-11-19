@@ -11,7 +11,7 @@ Rails.application.routes.draw do
       post :confirm_details
       get :incorrect_details
       get :unrecognised
-      post :confirm_unrecognised_registration
+      post :confirm_unrecognised
       get :compliant
     end
   end

@@ -28,10 +28,7 @@
             %tr.govuk-table__row
               %td.govuk-table__cell Payment for
               %th.govuk-table__header{scope: 'row', id: 'value-dates'}
-                - if @weekly_period
-                  = parse_weekly_dates(@dates.join(''))
-                - else
-                  = parse_dates(@dates).join(', ')
+                = parse_dates(@dates).join(', ')
               %td.govuk-table__cell
                 = link_to 'Change', determinate_payment_for_path(@weekly_period), class: 'govuk-link', id: 'change-dates'
             %tr.govuk-table__row

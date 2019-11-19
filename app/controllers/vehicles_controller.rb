@@ -44,14 +44,10 @@ class VehiclesController < ApplicationController
   # Validations are done by {VrnForm}[rdoc-ref:VrnForm]
   #
   def submit_details
-    form = VrnForm.new(parsed_vrn, country)
-    unless form.valid?
-      @errors = form.errors.messages
-      log_invalid_form 'Rendering :enter_details.'
-      return render enter_details_vehicles_path
-    end
+    form = VrnForm.new(params[:vrn], country)
+    return rerender_enter_details(form) unless form.valid?
 
-    store_vehicle_details
+    SessionManipulation::AddVrn.call(session: session, form: form)
     redirect_to non_uk? ? non_dvla_vehicles_path : details_vehicles_path
   end
 
@@ -69,7 +65,9 @@ class VehiclesController < ApplicationController
     @vehicle_details = VehicleDetails.new(vrn)
     return redirect_to(compliant_vehicles_path) if @vehicle_details.exempt?
 
-    session[:vehicle_details]['taxi'] = true if @vehicle_details.taxi_private_hire_vehicle == 'Yes'
+    if @vehicle_details.taxi_private_hire_vehicle == 'Yes'
+      SessionManipulation::SetTaxi.call(session: session)
+    end
   end
 
   ##
@@ -112,7 +110,8 @@ class VehiclesController < ApplicationController
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
   def incorrect_details
-    session[:vehicle_details]['incorrect'] = true
+    # Used to determine the previous step in ChargesController#local_authority
+    SessionManipulation::SetIncorrect.call(session: session)
   end
 
   ##
@@ -129,7 +128,7 @@ class VehiclesController < ApplicationController
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
   def unrecognised
-    session[:vehicle_details]['unrecognised'] = true
+    SessionManipulation::SetUnrecognised.call(session: session)
     @vrn = vrn
   end
 
@@ -139,7 +138,7 @@ class VehiclesController < ApplicationController
   # If no, redirects to {non_dvla_vehicles}[rdoc-ref:VehiclesController.unrecognised]
   #
   # ==== Path
-  #    POST /vehicles/confirm_unrecognised_registration
+  #    POST /vehicles/confirm_unrecognised
   #
   # ==== Params
   # * +vrn+ - vehicle registration number, required in the session
@@ -149,7 +148,7 @@ class VehiclesController < ApplicationController
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   # * +confirm-registration+ - lack of it redirects to {non_dvla_vehicles}[rdoc-ref:VehiclesController.unrecognised]
   #
-  def confirm_unrecognised_registration
+  def confirm_unrecognised
     form = ConfirmationForm.new(params['confirm-registration'])
     if form.confirmed?
       redirect_to choose_type_non_dvla_vehicles_path
@@ -178,19 +177,6 @@ class VehiclesController < ApplicationController
 
   private
 
-  # Returns uppercased VRN from the query params without any space, eg. 'CU1234'
-  def parsed_vrn
-    params[:vrn].upcase&.delete(' ')
-  end
-
-  # Stores VRN in the session
-  def store_vehicle_details
-    session[:vehicle_details] = {
-      vrn: parsed_vrn,
-      country: country
-    }
-  end
-
   # Returns user's form confirmation from the query params, values: 'yes', 'no', nil
   def confirmation
     params['confirm-vehicle']
@@ -210,5 +196,11 @@ class VehiclesController < ApplicationController
   # Redirects to {vehicle not found}[rdoc-ref:VehiclesController.unrecognised_vehicle]
   def vehicle_not_found
     redirect_to unrecognised_vehicles_path
+  end
+
+  def rerender_enter_details(form)
+    @errors = form.errors.messages
+    log_invalid_form 'Rendering :enter_details.'
+    render enter_details_vehicles_path
   end
 end

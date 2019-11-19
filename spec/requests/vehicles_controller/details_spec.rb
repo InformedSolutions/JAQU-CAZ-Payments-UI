@@ -26,6 +26,17 @@ RSpec.describe 'VehiclesController - GET #details', type: :request do
         expect(response).to redirect_to(compliant_vehicles_path)
       end
     end
+
+    context 'when vehicle is a taxi' do
+      before do
+        mock_vehicle_details_taxi
+        http_request
+      end
+
+      it 'sets taxi in the session' do
+        expect(session[:vehicle_details]['taxi']).to be_truthy
+      end
+    end
   end
 
   context 'without VRN in session' do

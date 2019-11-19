@@ -2,9 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe 'VehiclesController - POST #confirm_registation', type: :request do
+RSpec.describe 'VehiclesController - POST #confirm_unrecognised', type: :request do
   subject(:http_request) do
-    post confirm_unrecognised_registration_vehicles_path,
+    post confirm_unrecognised_vehicles_path,
          params: { 'confirm-registration': confirmation }
   end
 

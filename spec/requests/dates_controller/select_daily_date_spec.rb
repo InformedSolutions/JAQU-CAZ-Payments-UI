@@ -5,14 +5,9 @@ require 'rails_helper'
 RSpec.describe 'DatesController - GET #select_daily_date', type: :request do
   subject(:http_request) { get select_daily_date_dates_path }
 
-  let(:vrn) { 'CU57ABC' }
-  let(:zone_id) { SecureRandom.uuid }
-  let(:la_name) { 'Leeds' }
-  let(:charge) { 12.50 }
-
   context 'with VRN in the session' do
     before do
-      add_to_session(vrn: vrn, la_id: zone_id, charge: charge, la_name: la_name)
+      add_details_to_session
       http_request
     end
 
@@ -26,9 +21,7 @@ RSpec.describe 'DatesController - GET #select_daily_date', type: :request do
   end
 
   context 'without LA in the session' do
-    before do
-      add_vrn_to_session(vrn: vrn)
-    end
+    before { add_vrn_to_session }
 
     it_behaves_like 'la is missing'
   end

@@ -10,14 +10,12 @@ RSpec.describe 'ChargesController - GET #review_payment', type: :request do
   let(:zone_id) { SecureRandom.uuid }
   let(:charge) { 50 }
   let(:la_name) { 'Leeds' }
-  let(:session_data) do
-    { vrn: vrn, la_id: zone_id, charge: charge, la_name: la_name, dates: [Date.current] }
-  end
+  let(:details) { {} }
 
-  context 'with VRN, COUNTRY, LA NAME, CHARGE and DATES in the session' do
+  context 'with full payment details in the session' do
     context 'with normal charge flow' do
       before do
-        add_to_session(session_data)
+        add_full_payment_details(details: details)
         http_request
       end
 
@@ -28,16 +26,37 @@ RSpec.describe 'ChargesController - GET #review_payment', type: :request do
       it 'assigns DatesController#daily_charge as return path' do
         expect(assigns(:return_path)).to eq(daily_charge_dates_path)
       end
+
+      describe 'details' do
+        let(:dates) { %w[2019-11-01 2019-11-02] }
+        let(:details) { { daily_charge: 12.5, dates: dates } }
+
+        it 'assigns total_charge' do
+          expect(assigns(:total_charge)).to eq(25)
+        end
+
+        it 'assigns dates' do
+          expect(assigns(:dates)).to eq(dates)
+        end
+
+        it 'assigns weekly_period to false' do
+          expect(assigns(:weekly_period)).to be_falsey
+        end
+      end
     end
 
     context 'with Leeds charge flow' do
       before do
-        add_to_session(session_data.merge(weekly_period: true))
+        add_full_payment_details(weekly: true)
         http_request
       end
 
       it 'assigns DatesController#weekly_charge as return path' do
         expect(assigns(:return_path)).to eq(weekly_charge_dates_path)
+      end
+
+      it 'assigns weekly_period to true' do
+        expect(assigns(:weekly_period)).to be_truthy
       end
     end
   end
@@ -46,37 +65,15 @@ RSpec.describe 'ChargesController - GET #review_payment', type: :request do
     it_behaves_like 'vrn is missing'
   end
 
-  context 'without LA in the session' do
-    before do
-      add_vrn_to_session
-    end
+  context 'without compliance details in the session' do
+    before { add_vrn_to_session }
 
     it_behaves_like 'la is missing'
   end
 
-  context 'without DATES in the session' do
-    before do
-      add_vrn_to_session
-      add_la_to_session(zone_id: zone_id)
-      add_daily_charge_to_session
-    end
+  context 'without dates and total_charge in the session' do
+    before { add_details_to_session }
 
     it_behaves_like 'vehicle details is missing'
-  end
-
-  context 'without CHARGE in the session' do
-    before do
-      add_to_session(vrn: vrn, country: country, la_id: zone_id, la_name: la_name)
-    end
-
-    it_behaves_like 'charge is missing'
-  end
-
-  context 'without LA NAME in the session' do
-    before do
-      add_to_session(vrn: vrn, country: country, la_id: zone_id, charge: charge)
-    end
-
-    it_behaves_like 'la name is missing'
   end
 end

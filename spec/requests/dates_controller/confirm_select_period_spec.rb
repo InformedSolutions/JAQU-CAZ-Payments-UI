@@ -6,15 +6,11 @@ RSpec.describe 'DatesController - POST #confirm_select_period', type: :request d
   subject(:http_request) do
     post confirm_select_period_dates_path, params: { 'period' => period }
   end
-
-  let(:vrn) { 'CU57ABC' }
-  let(:zone_id) { SecureRandom.uuid }
   let(:period) { 'daily-charge' }
 
-  context 'with VRN an LA in the session' do
+  context 'when Leeds weekly discount is possible' do
     before do
-      add_vrn_to_session(vrn: vrn)
-      add_la_to_session(zone_id: zone_id)
+      add_details_to_session(weekly_possible: true)
       http_request
     end
 
@@ -48,10 +44,12 @@ RSpec.describe 'DatesController - POST #confirm_select_period', type: :request d
   end
 
   context 'without LA in the session' do
-    before do
-      add_vrn_to_session(vrn: vrn)
-    end
+    before { add_vrn_to_session }
 
     it_behaves_like 'la is missing'
+  end
+
+  context 'when Leeds weekly discount is NOT possible' do
+    it_behaves_like 'not allowed Leeds discount'
   end
 end
