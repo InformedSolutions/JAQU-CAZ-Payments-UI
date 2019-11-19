@@ -106,9 +106,9 @@ class ChargesController < ApplicationController
   # Define the back button path on review payment page.
   def review_payment_return_path
     if vehicle_details('weekly')
-      weekly_charge_dates_path
+      select_weekly_date_dates_path
     else
-      daily_charge_dates_path
+      select_daily_date_dates_path
     end
   end
 

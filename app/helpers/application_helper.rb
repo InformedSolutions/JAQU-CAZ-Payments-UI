@@ -23,14 +23,6 @@ module ApplicationHelper
     end
   end
 
-  # Returns parsed date format, eg. '01/11/19 - 07/11/19'
-  def parse_weekly_dates(selected_date)
-    date = selected_date.to_date
-    first_day_of_week = date.strftime('%d/%m/%y')
-    last_day_of_week = (date + 6.days).strftime('%d/%m/%y')
-    "#{first_day_of_week} - #{last_day_of_week}"
-  end
-
   # Returns url path depends on which period was selected
   def determinate_payment_for_path(weekly_period)
     weekly_period ? select_period_dates_path : select_daily_date_dates_path

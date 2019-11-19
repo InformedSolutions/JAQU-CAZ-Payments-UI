@@ -23,8 +23,8 @@ RSpec.describe 'ChargesController - GET #review_payment', type: :request do
         expect(response).to have_http_status(:success)
       end
 
-      it 'assigns DatesController#daily_charge as return path' do
-        expect(assigns(:return_path)).to eq(daily_charge_dates_path)
+      it 'assigns DatesController#select_daily_date as return path' do
+        expect(assigns(:return_path)).to eq(select_daily_date_dates_path)
       end
 
       describe 'details' do
@@ -51,8 +51,8 @@ RSpec.describe 'ChargesController - GET #review_payment', type: :request do
         http_request
       end
 
-      it 'assigns DatesController#weekly_charge as return path' do
-        expect(assigns(:return_path)).to eq(weekly_charge_dates_path)
+      it 'assigns DatesController#select_weekly_date as return path' do
+        expect(assigns(:return_path)).to eq(select_weekly_date_dates_path)
       end
 
       it 'assigns weekly_period to true' do

@@ -50,7 +50,7 @@ Then('I have selected dates in the session') do
 end
 
 Then('I am on the review payment page') do
-  add_vehicle_details_to_session
+  add_vehicle_details_to_session(add_dates: true)
   mock_chargeable_caz
   mock_payment_creation
   visit review_payment_charges_path
@@ -77,7 +77,7 @@ Then('I press the Change Payment for link') do
 end
 
 Then('I am go the review payment page') do
-  add_vehicle_details_to_session
+  add_vehicle_details_to_session(add_dates: true)
   visit review_payment_charges_path
 end
 
