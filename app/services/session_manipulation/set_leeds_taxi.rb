@@ -2,18 +2,18 @@
 
 module SessionManipulation
   ##
-  # Service used to mark vehicle as a taxi of PHV.
+  # Service used to mark vehicle as a taxi of PHV registered in Leeds.
   #
   # ==== Usage
   #    SessionManipulation::SetTaxi.call(session: session)
   #
-  class SetTaxi < BaseManipulator
+  class SetLeedsTaxi < BaseManipulator
     # Level used to clearing keys in the session
     LEVEL = 2
 
-    # Sets +taxi+ to true in the session. Used by the class level method +.call+
+    # Sets +leeds_taxi+ to true in the session. Used by the class level method +.call+
     def call
-      add_fields(taxi: true)
+      add_fields(leeds_taxi: true)
     end
   end
 end

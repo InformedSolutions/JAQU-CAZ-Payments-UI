@@ -9,6 +9,7 @@ RSpec.describe VehicleDetails, type: :model do
   let(:type_approval) { 'M1' }
   let(:taxi_or_phv) { false }
   let(:type) { 'car' }
+  let(:las) { %w[Leeds Birmingham] }
 
   let(:response) do
     {
@@ -19,7 +20,8 @@ RSpec.describe VehicleDetails, type: :model do
       'model' => '208',
       'colour' => 'grey',
       'fuelType' => 'diesel',
-      'taxiOrPhv' => taxi_or_phv
+      'taxiOrPhv' => taxi_or_phv,
+      'licensingAuthoritiesNames' => las
     }
   end
 
@@ -158,6 +160,32 @@ RSpec.describe VehicleDetails, type: :model do
       it 'returns a nil' do
         expect(compliance.undetermined?).to eq('true')
       end
+    end
+  end
+
+  describe '.leeds_taxi?' do
+    subject(:taxi) { compliance.leeds_taxi? }
+
+    context 'when Leeds is in licensingAuthoritiesNames' do
+      it { is_expected.to be_truthy }
+    end
+
+    context 'when Leeds is NOT in licensingAuthoritiesNames' do
+      let(:las) { %w[Birmingham London] }
+
+      it { is_expected.to be_falsey }
+    end
+
+    context 'when licensingAuthoritiesNames is empty' do
+      let(:las) { [] }
+
+      it { is_expected.to be_falsey }
+    end
+
+    context 'when licensingAuthoritiesNames is nil' do
+      let(:las) { nil }
+
+      it { is_expected.to be_falsey }
     end
   end
 end

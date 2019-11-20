@@ -44,8 +44,8 @@ RSpec.describe SessionManipulation::SetComplianceDetails do
       expect(session[:vehicle_details]['weekly_possible']).to be_falsey
     end
 
-    context 'when vehicle is a taxi' do
-      let(:session) { { vehicle_details: details.merge('taxi' => true) } }
+    context 'when vehicle is a taxi in Leeds' do
+      let(:session) { { vehicle_details: details.merge('leeds_taxi' => true) } }
 
       it 'sets weekly_possible to true' do
         expect(session[:vehicle_details]['weekly_possible']).to be_truthy
