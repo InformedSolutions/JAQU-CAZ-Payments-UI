@@ -38,6 +38,7 @@ class ComplianceCheckerApi < BaseApi
     # * +colour+ - string, eg. 'red'
     # * +fuelType+ - string, eg. 'diesel'
     # * +taxiOrPhv+ - boolean, determines if the vehicle is a taxi or a PHV
+    # * +licensingAuthoritiesNames+ - array of strings, list of LA where vehicle is registered as a taxi
     # * +exempt+ - boolean, determines if the vehicle is exempt from charges
     #
     # ==== Serialization

@@ -47,7 +47,7 @@ RSpec.describe 'ChargesController - POST #submit_local_authority', type: :reques
 
       context 'when vehicle is a taxi in Leeds' do
         before do
-          add_to_session(vrn: 'CU57ABC', country: 'UK', taxi: true)
+          add_to_session(vrn: 'CU57ABC', country: 'UK', leeds_taxi: true)
         end
 
         it 'returns redirect to DatesController#select_period' do

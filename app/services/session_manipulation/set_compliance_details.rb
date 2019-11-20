@@ -36,7 +36,8 @@ module SessionManipulation
         la_id: la_id,
         la_name: compliance_details.zone_name,
         daily_charge: compliance_details.charge,
-        weekly_possible: session[SESSION_KEY]['taxi'] && compliance_details.zone_name == 'Leeds'
+        weekly_possible:
+          session[SESSION_KEY]['leeds_taxi'] && compliance_details.zone_name == 'Leeds'
       )
     end
 

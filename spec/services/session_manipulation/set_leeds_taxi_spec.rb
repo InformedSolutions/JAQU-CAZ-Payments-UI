@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe SessionManipulation::SetTaxi do
+RSpec.describe SessionManipulation::SetLeedsTaxi do
   subject(:service) { described_class.call(session: session) }
 
   let(:session) { { vehicle_details: details } }
@@ -12,7 +12,7 @@ RSpec.describe SessionManipulation::SetTaxi do
 
   it 'sets taxi' do
     service
-    expect(session[:vehicle_details]['taxi']).to be_truthy
+    expect(session[:vehicle_details]['leeds_taxi']).to be_truthy
   end
 
   context 'when session is already filled with more data' do
@@ -22,7 +22,7 @@ RSpec.describe SessionManipulation::SetTaxi do
 
     it 'clears keys from next steps' do
       service
-      expect(session[:vehicle_details].keys).to contain_exactly('vrn', 'country', 'taxi')
+      expect(session[:vehicle_details].keys).to contain_exactly('vrn', 'country', 'leeds_taxi')
     end
   end
 end

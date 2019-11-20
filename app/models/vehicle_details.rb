@@ -72,6 +72,11 @@ class VehicleDetails
     compliance_api['exempt']
   end
 
+  # Returns if vehicle is register in Leeds as taxi or PHV
+  def leeds_taxi?
+    compliance_api['licensingAuthoritiesNames']&.include?('Leeds')
+  end
+
   private
 
   # Reader function for the vehicle registration number

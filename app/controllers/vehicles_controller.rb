@@ -65,9 +65,7 @@ class VehiclesController < ApplicationController
     @vehicle_details = VehicleDetails.new(vrn)
     return redirect_to(compliant_vehicles_path) if @vehicle_details.exempt?
 
-    if @vehicle_details.taxi_private_hire_vehicle == 'Yes'
-      SessionManipulation::SetTaxi.call(session: session)
-    end
+    SessionManipulation::SetLeedsTaxi.call(session: session) if @vehicle_details.leeds_taxi?
   end
 
   ##
