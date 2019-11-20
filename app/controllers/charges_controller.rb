@@ -125,8 +125,7 @@ class ChargesController < ApplicationController
   def check_vehicle_details
     return if la_id && la_name && vehicle_details('total_charge') && vehicle_details('dates')
 
-    Rails.logger.warn 'Vehicle details is missing in the session. Redirecting to :enter_details'
     Rails.logger.warn "Current vehicle_details in session: #{session[:vehicle_details]}"
-    redirect_to enter_details_vehicles_path
+    redirect_to_enter_details('Vehicle details')
   end
 end

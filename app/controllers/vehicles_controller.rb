@@ -63,7 +63,7 @@ class VehiclesController < ApplicationController
   #
   def details
     @vehicle_details = VehicleDetails.new(vrn)
-    return redirect_to(compliant_vehicles_path) if @vehicle_details.exempt?
+    return redirect_to(exempt_vehicles_path) if @vehicle_details.exempt?
 
     SessionManipulation::SetLeedsTaxi.call(session: session) if @vehicle_details.leeds_taxi?
   end
@@ -196,6 +196,7 @@ class VehiclesController < ApplicationController
     redirect_to unrecognised_vehicles_path
   end
 
+  # Renders enter_details page and log errors
   def rerender_enter_details(form)
     @errors = form.errors.messages
     log_invalid_form 'Rendering :enter_details.'

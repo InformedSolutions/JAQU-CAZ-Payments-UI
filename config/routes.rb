@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       get :unrecognised
       post :confirm_unrecognised
       get :compliant
+      get :exempt
     end
   end
 

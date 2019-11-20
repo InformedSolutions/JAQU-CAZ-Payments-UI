@@ -21,9 +21,9 @@ RSpec.describe 'VehiclesController - GET #details', type: :request do
 
       before { allow(VehicleDetails).to receive(:new).and_return(vehicle_details_stub) }
 
-      it 'redirects to compliant path' do
+      it 'redirects to exempt path' do
         http_request
-        expect(response).to redirect_to(compliant_vehicles_path)
+        expect(response).to redirect_to(exempt_vehicles_path)
       end
     end
 

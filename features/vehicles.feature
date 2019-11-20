@@ -80,6 +80,17 @@ Feature: Vehicles
     Then I choose that the details are correct
       And I press the Confirm
       And I should see "There is no charge for this vehicle"
+    Then I press "Back" link
+      And I should be on the vehicle details page
+
+  Scenario: User enters a exempt vehicle's registration and choose UK country
+    Given I am on the home page
+    Then I press the Start now button
+    Then I enter a exempt vehicle's registration and choose UK
+      And I press the Continue
+    Then I should see "There is no charge for this vehicle"
+      And I press "Back" link
+    Then I should be on the enter details page
 
   Scenario: User wants to return with vehicle's registration which cannot be recognised
     Given I am on the vehicle details page with unrecognized vehicle to check

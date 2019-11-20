@@ -57,6 +57,13 @@ Then("I enter a compliant vehicle's registration and choose UK") do
   choose('UK')
 end
 
+Then("I enter a exempt vehicle's registration and choose UK") do
+  mock_exempt_vehicle_details
+
+  fill_in('vrn', with: 'CAS329')
+  choose('UK')
+end
+
 Given('I am on the vehicle details page with unrecognized vehicle to check') do
   add_vrn_and_country_to_session
   mock_unrecognized_vehicle
