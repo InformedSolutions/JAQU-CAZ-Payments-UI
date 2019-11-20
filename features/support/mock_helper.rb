@@ -9,17 +9,6 @@ module MockHelper
     'https://www.payments.service.gov.uk/'
   end
 
-  # Mocks response from clean-air-zones endpoint in VCCS API
-  def mock_chargeable_caz
-    caz_list = read_file('caz_list_response.json')
-    allow(ChargeableZonesService).to receive(:call).and_return(caz_list['cleanAirZones'])
-  end
-
-  # Mocks response for a compliant vehicle
-  def mock_non_chargeable_caz
-    allow(ChargeableZonesService).to receive(:call).and_return([])
-  end
-
   # Mocks response from compliance endpoint in VCCS API
   def mock_vehicle_compliance
     compliance_data = read_file('vehicle_compliance_birmingham_response.json')
@@ -34,6 +23,30 @@ module MockHelper
     allow(ComplianceCheckerApi)
       .to receive(:vehicle_details)
       .and_return(vehicle_details)
+  end
+
+  def mock_dvla_response
+    response = read_file('vehicle_compliance_birmingham_response.json')
+    dvla_response = response['complianceOutcomes'].map { |caz_data| Caz.new(caz_data) }
+
+    allow(ChargeableZonesService)
+      .to receive(:call)
+      .and_return(dvla_response)
+  end
+
+  def mock_non_dvla_response
+    response = read_file('caz_list_response.json')
+    non_dvla_response = response['cleanAirZones'].map { |caz_data| Caz.new(caz_data) }
+
+    allow(ChargeableZonesService)
+      .to receive(:call)
+      .and_return(non_dvla_response)
+  end
+
+  def mock_compliant_vehicle
+    allow(ChargeableZonesService)
+      .to receive(:call)
+      .and_return([])
   end
 
   # Mock response from vehicle details endpoint in VCCS API for not found in DVLA vehicle
@@ -53,13 +66,6 @@ module MockHelper
     allow(PaymentStatus).to receive(:new).and_return(
       OpenStruct.new(success?: success, user_email: 'user_email@example.com')
     )
-  end
-
-  def mock_clean_air_zones
-    caz_data = read_file('caz_list_response.json')
-    allow(ComplianceCheckerApi)
-      .to receive(:clean_air_zones)
-      .and_return(caz_data['cleanAirZones'])
   end
 
   private

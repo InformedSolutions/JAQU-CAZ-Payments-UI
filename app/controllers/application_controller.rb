@@ -94,4 +94,10 @@ class ApplicationController < ActionController::Base
   def charge
     vehicle_details('daily_charge')
   end
+
+  # Logs and redirects to +path+
+  def redirect_back_to(path, alert, template)
+    log_invalid_form "Redirecting back to :#{template}"
+    redirect_to path, alert: alert
+  end
 end

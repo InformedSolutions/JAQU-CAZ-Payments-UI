@@ -23,7 +23,6 @@ Then('I should have payment id in the session') do
 end
 
 Then('I press pay for another CAZ') do
-  mock_clean_air_zones
-  mock_vehicle_compliance
+  mock_dvla_response
   click_link 'Pay for another Clean Air Zone'
 end

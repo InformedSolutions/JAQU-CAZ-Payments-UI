@@ -5,10 +5,21 @@ require 'rails_helper'
 RSpec.describe ComplianceDetails, type: :model do
   subject(:details) { described_class.new(vehicle_details) }
 
-  let(:vehicle_details) { { 'vrn' => vrn, 'country' => country, 'la_id' => zone_id } }
+  let(:vehicle_details) do
+    {
+      'vrn' => vrn,
+      'country' => country,
+      'la_id' => zone_id,
+      'unrecognised' => unrecognised,
+      'type' => type
+    }
+  end
+
   let(:vrn) { 'CU57ABC' }
   let(:country) { 'UK' }
   let(:zone_id) { SecureRandom.uuid }
+  let(:unrecognised) { false }
+  let(:type) { 'car' }
 
   let(:outcomes) do
     [
@@ -24,6 +35,19 @@ RSpec.describe ComplianceDetails, type: :model do
   end
   let(:name) { 'Leeds' }
   let(:url) { 'www.wp.pl' }
+
+  let(:unrecognised_response) do
+    {
+      'charges' =>
+      [
+        {
+          'cleanAirZoneId' => '39e54ed8-3ed2-441d-be3f-38fc9b70c8d3',
+          'name' => 'Birmingham',
+          'charge' => 15
+        }
+      ]
+    }
+  end
 
   context 'when the vehicle is registered in the UK' do
     before do
@@ -63,21 +87,19 @@ RSpec.describe ComplianceDetails, type: :model do
     end
 
     context 'when vehicle is unrecognised' do
-      let(:vehicle_details) do
-        { 'vrn' => vrn, 'country' => country, 'la_id' => zone_id, 'unrecognised' => true }
-      end
+      let(:unrecognised) { true }
 
       before do
         allow(ComplianceCheckerApi)
-          .to receive(:non_dvla_vehicle_compliance)
-          .with(vrn, [zone_id], nil)
-          .and_return('complianceOutcomes' => outcomes)
+          .to receive(:unrecognised_compliance)
+          .with(type, zone_id)
+          .and_return(unrecognised_response)
       end
 
-      it 'calls :non_dvla_vehicle_compliance with right params' do
+      it 'calls :unrecognised_compliance with right params' do
         expect(ComplianceCheckerApi)
-          .to receive(:non_dvla_vehicle_compliance)
-          .with(vrn, [zone_id], nil)
+          .to receive(:unrecognised_compliance)
+          .with(type, zone_id)
         details.zone_name
       end
 
@@ -89,23 +111,19 @@ RSpec.describe ComplianceDetails, type: :model do
   end
 
   context 'when the vehicle is registered outside of the UK' do
-    let(:vehicle_details) do
-      { 'vrn' => vrn, 'country' => country, 'la_id' => zone_id, 'type' => type }
-    end
     let(:country) { 'non-UK' }
-    let(:type) { 'Car' }
 
     before do
       allow(ComplianceCheckerApi)
-        .to receive(:non_dvla_vehicle_compliance)
-        .with(vrn, [zone_id], type)
-        .and_return('complianceOutcomes' => outcomes)
+        .to receive(:unrecognised_compliance)
+        .with(type, zone_id)
+        .and_return(unrecognised_response)
     end
 
-    it 'calls :non_dvla_vehicle_compliance with right params' do
+    it 'calls :unrecognised_compliance with right params' do
       expect(ComplianceCheckerApi)
-        .to receive(:non_dvla_vehicle_compliance)
-        .with(vrn, [zone_id], type)
+        .to receive(:unrecognised_compliance)
+        .with(type, zone_id)
       details.zone_name
     end
   end

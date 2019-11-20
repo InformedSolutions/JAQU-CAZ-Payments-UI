@@ -12,8 +12,12 @@ RSpec.describe 'ChargesController - GET #local_authority', type: :request do
 
     context 'with any chargeable CAZ' do
       before do
-        caz_list = read_file('caz_list_response.json')
-        allow(ChargeableZonesService).to receive(:call).and_return(caz_list['cleanAirZones'])
+        response = read_file('vehicle_compliance_birmingham_response.json')
+        dvla_response = response['complianceOutcomes'].map { |caz_data| Caz.new(caz_data) }
+
+        allow(ChargeableZonesService)
+          .to receive(:call)
+          .and_return(dvla_response)
       end
 
       context 'when the vehicle has correct data' do

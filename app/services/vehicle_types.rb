@@ -18,15 +18,19 @@ class VehicleTypes < BaseService
   private
 
   # Array of available types to choose.
+  # rubocop:disable Metrics/MethodLength
   def types
     [
-      { value: 'bus', name: 'Bus/Coach' },
+      { value: 'bus', name: 'Bus' },
+      { value: 'coach', name: 'Coach' },
       { value: 'hgv', name: 'Heavy goods vehicle' },
-      { value: 'lgv', name: 'Large van' },
+      { value: 'taxi_or_phv', name: 'Taxi' },
+      { value: 'large_van', name: 'Large van' },
       { value: 'minibus', name: 'Minibus' },
       { value: 'small_van', name: 'Small van' },
-      { value: 'car', name: 'Car' },
+      { value: 'private_car', name: 'Car' },
       { value: 'motorcycle', name: 'Motorcycle' }
     ]
   end
+  # rubocop:enable Metrics/MethodLength:
 end
