@@ -6,7 +6,7 @@ RSpec.describe VehicleTypes do
   subject(:service_call) { described_class.call }
 
   it 'returns 9 types' do
-    expect(service_call.length).to eq(9)
+    expect(service_call.length).to eq(8)
   end
 
   it 'returns objects with name and value' do
