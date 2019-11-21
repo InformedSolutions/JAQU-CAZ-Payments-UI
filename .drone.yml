@@ -272,13 +272,13 @@ kind: pipeline
 type: docker
 name: payments-web-sit
 trigger:
-branch:
-  - release/*
-event:
-  - pull_request
-  - push
+  branch:
+    - release/*
+  event:
+    - pull_request
+    - push
 concurrency:
-limit: 1
+  limit: 1
 
 volumes:
 - name: docker_sock
