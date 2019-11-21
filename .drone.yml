@@ -252,7 +252,7 @@ steps:
         from_secret: browserstack_username
       BS_AUTHKEY:
         from_secret: browserstack_auth_key
-      BASEURL_PAYMENTS: 'https://payments-alb-dev-1894331684.eu-west-2.elb.amazonaws.com/'
+      BASEURL_PAYMENTS: 'https://dev.paycleanairzonecharge.co.uk/'
       BROWSER_SET: 'min'
       BUILD: ${DRONE_BUILD_NUMBER}
       LOCATION: browserstack
@@ -262,8 +262,7 @@ steps:
     when:
       event:
         - push
-
-
+  ################################################# End DEV Steps #######################################################
 ---
 
 
@@ -355,38 +354,6 @@ steps:
       - name: docker_sock
         path: /var/run/docker.sock
 
-  # Invoke terraform scripts to ensure ecr is available for deploy step.
-  - name: initialise ecr
-    image: hashicorp/terraform:0.12.3
-    commands:
-      - apk update && apk add bash
-      - mkdir ~/.ssh
-      - echo -n "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
-      - chmod 600 ~/.ssh/id_rsa
-      - touch ~/.ssh/known_hosts
-      - chmod 600 ~/.ssh/known_hosts
-      - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
-      - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
-      - cd JAQU-CAZ-IAC
-      - cd terraform/projects/payments/layers/00.global
-      - PATH=$PATH:../../../../bin/
-      - chmod +x ../../../../bin/tf
-      - tf init
-      - tf workspace select default
-      - tf apply -auto-approve
-    environment:
-      TF_VAR_access_key:
-        from_secret: aws_access_key_id
-      TF_VAR_secret_key:
-        from_secret: aws_secret_access_key
-      TF_VAR_account_id:
-        from_secret: aws_account_id
-      GIT_PRIVATE_SSH:
-        from_secret: github_private_key
-    when:
-      event:
-        - push
-
   # Push built image to ECR registry
   - name: publish image to ecr
     image: plugins/ecr
@@ -400,7 +367,7 @@ steps:
       dockerfile: Dockerfile.build
       region: eu-west-2
       tags:
-        - latest
+        - release
         - ${DRONE_BUILD_NUMBER}
       build_args:
         - secret_key_base=${DRONE_COMMIT}
@@ -408,26 +375,66 @@ steps:
       event:
         - push
 
-  - name: sonar scan
-    image: aosapps/drone-sonar-plugin
-    environment:
-      SONAR_HOST:
-        from_secret: sonar_host
-      SONAR_TOKEN:
-        from_secret: sonar_token
-      sonar.ruby.coverage.reportPaths: coverage/.resultset.json
+  - name: plan updates to sit
+    image: hashicorp/terraform:0.12.3
     commands:
-      - sonar-scanner
-        -Dsonar.projectKey=${DRONE_REPO}
-        -Dsonar.projectName=${DRONE_REPO}
-        -Dsonar.host.url=$SONAR_HOST
-        -Dsonar.login=$SONAR_TOKEN
-        -Dproject.settings=./sonar-project.properties
+      - apk update && apk add bash
+      - mkdir ~/.ssh
+      - echo -n "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
+      - chmod 600 ~/.ssh/id_rsa
+      - touch ~/.ssh/known_hosts
+      - chmod 600 ~/.ssh/known_hosts
+      - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
+      - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
+      - cd JAQU-CAZ-IAC
+      - cd terraform/projects/payments/layers/01.networking
+      - PATH=$PATH:../../../../bin/
+      - chmod +x ../../../../bin/tf
+      - tf init
+      - tf workspace select sit || tf workspace new sit
+      - tf plan
+      - cd ../02.backends
+      - tf init
+      - tf workspace select sit || tf workspace new sit
+      - tf plan
+      - cd ../04.web
+      - tf init
+      - tf workspace select sit || tf workspace new sit
+      - tf plan
+    environment:
+      TF_VAR_build_number: ${DRONE_BUILD_NUMBER}
+      TF_VAR_secret_key_base: ${DRONE_COMMIT}
+      TF_VAR_google_analytics_id: UA-144774549-2
+      TF_VAR_access_key:
+        from_secret: aws_access_key_id
+      TF_VAR_secret_key:
+        from_secret: aws_secret_access_key
+      GIT_PRIVATE_SSH:
+        from_secret: github_private_key
+      TF_VAR_enable_https_redirect: false
+    when:
+      event:
+        - pull_request
+
+  - name: provisioning warning
+    image: docker:git
+    commands:
+      - echo "Pipeline failed. If a deployment is being made for the first time into an environment terraform backends will not yet exist which means this is to be expected. If not terraform related, please see logs for further details"
+    when:
+      status:
+        - failure
 
   - name: deploy to sit
     image: hashicorp/terraform:0.12.3
     commands:
       - apk update && apk add bash
+      - mkdir ~/.ssh
+      - echo -n "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
+      - chmod 600 ~/.ssh/id_rsa
+      - touch ~/.ssh/known_hosts
+      - chmod 600 ~/.ssh/known_hosts
+      - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
+      - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
       - cd JAQU-CAZ-IAC
       - cd terraform/projects/payments/layers/01.networking
       - PATH=$PATH:../../../../bin/
@@ -451,6 +458,8 @@ steps:
         from_secret: aws_access_key_id
       TF_VAR_secret_key:
         from_secret: aws_secret_access_key
+      GIT_PRIVATE_SSH:
+        from_secret: github_private_key
       TF_VAR_enable_https_redirect: false
     when:
       event:
@@ -521,7 +530,7 @@ steps:
         from_secret: browserstack_username
       BS_AUTHKEY:
         from_secret: browserstack_auth_key
-      BASEURL_PAYMENTS: 'https://payments-alb-sit-1894331684.eu-west-2.elb.amazonaws.com/'
+      BASEURL_PAYMENTS: 'https://sit.paycleanairzonecharge.co.uk/'
       BROWSER_SET: 'min'
       BUILD: ${DRONE_BUILD_NUMBER}
       LOCATION: browserstack
