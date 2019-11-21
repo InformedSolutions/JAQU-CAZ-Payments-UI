@@ -111,8 +111,7 @@ class PaymentsController < ApplicationController
     payment_id = vehicle_details('payment_id')
     return if payment_id
 
-    Rails.logger.warn 'Payment id is missing'
-    redirect_to enter_details_vehicles_path
+    redirect_to_enter_details('Payment')
   end
 
   # Clears details of the payment in the session

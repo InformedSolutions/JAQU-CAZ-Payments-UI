@@ -65,11 +65,16 @@ class ApplicationController < ActionController::Base
   def check_vrn
     return if vrn
 
-    Rails.logger.warn 'VRN is missing in the session. Redirecting to :enter_details'
+    redirect_to_enter_details('VRN')
+  end
+
+  # Logs warning and redirects enter_details page
+  def redirect_to_enter_details(value)
+    Rails.logger.warn "#{value} is missing in the session. Redirecting to :enter_details"
     redirect_to enter_details_vehicles_path
   end
 
-  # Checks if LA ID, la name and dailt_charge are present in the session.
+  # Checks if LA ID, la name and daily_charge are present in the session.
   # If not, redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
   def check_compliance_details
     return if la_id && la_name && charge
