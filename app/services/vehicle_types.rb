@@ -18,7 +18,6 @@ class VehicleTypes < BaseService
   private
 
   # Array of available types to choose.
-  # rubocop:disable Metrics/MethodLength
   def types
     [
       { value: 'bus', name: 'Bus' },
@@ -31,5 +30,4 @@ class VehicleTypes < BaseService
       { value: 'motorcycle', name: 'Motorcycle' }
     ]
   end
-  # rubocop:enable Metrics/MethodLength:
 end
