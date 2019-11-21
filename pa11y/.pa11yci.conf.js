@@ -3,7 +3,7 @@ var config = {
         standard: 'WCAG2AA',
         // ignore issue with role=presentation on start button
         ignore: ["WCAG2AA.Principle1.Guideline1_3.1_3_1.F92,ARIA4"],
-        timeout: 5000,
+        timeout: 15000,
         wait: 1500,
         chromeLaunchConfig: {
             args: [
@@ -15,57 +15,104 @@ var config = {
     urls: [
         '${BASE_URL}',
         '${BASE_URL}/refunds/scenarios',
+        '${BASE_URL}/refunds/details',
         '${BASE_URL}/vehicles/enter_details',
-        // {
-        //     "url": '${BASE_URL}/vehicles/enter_details?non_dvla_vehicles',
-        //     "actions": [
-        //         "set field #vrn to CAS310",
-        //         "click element registration-country-2",
-        //         "click element input[type=submit]",
-        //         "wait for element #confirm-registration to be visible",
-        //         "click element #confirm-registration",
-        //         "click element input[type=submit]"
-        //     ]
-        // },
-        // {
-        //     "url": '${BASE_URL}/vehicles/enter_details?unrecognised_vehicles',
-        //     "actions": [
-        //         "set field #vrn to ZZZ9988",
-        //         "click element registration-country-1",
-        //         "click element input[type=submit]"
-        //     ]
-        // },
-        // {
-        //     "url": '${BASE_URL}/vehicles/enter_details?incorrect_details',
-        //     "actions": [
-        //         "set field #vrn to CAS310",
-        //         "click element registration-country-1",
-        //         "click element input[type=submit]",
-        //         "wait for element #confirm-vehicle-2 to be visible",
-        //         "click element #confirm-vehicle-2",
-        //         "click element input[type=submit]"
-        //     ]
-        // },
-        // {
-        //     "url": '${BASE_URL}/vehicles/enter_details?payment_summary',
-        //     "actions": [
-        //         "set field #vrn to CAS310",
-        //         "click element registration-country-1",
-        //         "click element input[type=submit]",
-        //         "wait for element #confirm-vehicle-1 to be visible",
-        //         "click element #confirm-vehicle-1",
-        //         "click element input[type=submit]",
-        //         "wait for element #birmingham to be visible",
-        //         "click element #birmingham",
-        //         "click element input[type=submit]",
-        //         "wait for element #confirm-exempt to be visible",
-        //         "click element #confirm-exempt",
-        //         "click element input[type=submit]",
-        //         "wait for element #date-0 to be visible",
-        //         "click element #date-0",
-        //         "click element input[type=submit]"
-        //     ]
-        // }
+        {
+            "url": '${BASE_URL}/vehicles/enter_details?caz-selection',
+            "actions": [
+                "set field #vrn to CAS310",
+                "click element #registration-country-1",
+                "click element input[type=submit]",
+                "wait for element #confirm-vehicle-1 to be visible",
+                "click element #confirm-vehicle-1",
+                "click element input[type=submit]",
+                "wait for element #birmingham to be visible"
+            ]
+        },
+        {
+            "url": '${BASE_URL}/vehicles/enter_details?confirm-terms-agreement',
+            "actions": [
+                "set field #vrn to CAS310",
+                "click element #registration-country-1",
+                "click element input[type=submit]",
+                "wait for element #confirm-vehicle-1 to be visible",
+                "click element #confirm-vehicle-1",
+                "click element input[type=submit]",
+                "wait for element #birmingham to be visible",
+                "click element #birmingham",
+                "click element input[type=submit]",
+                "wait for element #confirm-exempt to be visible",
+            ]
+        },
+        
+        {
+            "url": '${BASE_URL}/vehicles/enter_details?select-date',
+            "actions": [
+                "set field #vrn to CAS310",
+                "click element #registration-country-1",
+                "click element input[type=submit]",
+                "wait for element #confirm-vehicle-1 to be visible",
+                "click element #confirm-vehicle-1",
+                "click element input[type=submit]",
+                "wait for element #birmingham to be visible",
+                "click element #birmingham",
+                "click element input[type=submit]",
+                "wait for element #confirm-exempt to be visible",
+                "click element #confirm-exempt",
+                "click element input[type=submit]",
+                "wait for element #date-0 to be visible"
+            ]
+        },
+        {
+            "url": '${BASE_URL}/vehicles/enter_details?payment_summary',
+            "actions": [
+                "set field #vrn to CAS310",
+                "click element #registration-country-1",
+                "click element input[type=submit]",
+                "wait for element #confirm-vehicle-1 to be visible",
+                "click element #confirm-vehicle-1",
+                "click element input[type=submit]",
+                "wait for element #birmingham to be visible",
+                "click element #birmingham",
+                "click element input[type=submit]",
+                "wait for element #confirm-exempt to be visible",
+                "click element #confirm-exempt",
+                "click element input[type=submit]",
+                "wait for element #date-0 to be visible",
+                "click element #date-0",
+                "click element input[type=submit]"
+            ]
+        },        
+        {
+            "url": '${BASE_URL}/vehicles/enter_details?non_dvla_vehicles',
+            "actions": [
+                "set field #vrn to CAS310",
+                "click element #registration-country-2",
+                "click element input[type=submit]",
+                "wait for element #confirm-registration to be visible",
+                "click element #confirm-registration",
+                "click element input[type=submit]"
+            ]
+        },
+        {
+            "url": '${BASE_URL}/vehicles/enter_details?unrecognised_vehicles',
+            "actions": [
+                "set field #vrn to ZZZ9988",
+                "click element #registration-country-1",
+                "click element input[type=submit]"
+            ]
+        },
+        {
+            "url": '${BASE_URL}/vehicles/enter_details?incorrect_details',
+            "actions": [
+                "set field #vrn to CAS310",
+                "click element #registration-country-1",
+                "click element input[type=submit]",
+                "wait for element #confirm-vehicle-2 to be visible",
+                "click element #confirm-vehicle-2",
+                "click element input[type=submit]"
+            ]
+        }
     ]
 };
 
