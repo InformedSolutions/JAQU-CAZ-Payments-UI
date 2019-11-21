@@ -252,7 +252,7 @@ steps:
         from_secret: browserstack_username
       BS_AUTHKEY:
         from_secret: browserstack_auth_key
-      BASEURL_PAYMENTS: 'https://payments-alb-dev-1894331684.eu-west-2.elb.amazonaws.com/'
+      BASEURL_PAYMENTS: 'https://dev.paycleanairzonecharge.co.uk/'
       BROWSER_SET: 'min'
       BUILD: ${DRONE_BUILD_NUMBER}
       LOCATION: browserstack
@@ -530,7 +530,7 @@ steps:
         from_secret: browserstack_username
       BS_AUTHKEY:
         from_secret: browserstack_auth_key
-      BASEURL_PAYMENTS: 'https://payments-alb-sit-1894331684.eu-west-2.elb.amazonaws.com/'
+      BASEURL_PAYMENTS: 'https://sit.paycleanairzonecharge.co.uk/'
       BROWSER_SET: 'min'
       BUILD: ${DRONE_BUILD_NUMBER}
       LOCATION: browserstack
