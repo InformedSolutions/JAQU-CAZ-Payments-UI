@@ -13,6 +13,8 @@ class ChargeableZonesService < BaseService
   #   * +vrn+ - string, eg. 'CU57ABC'
   #   * +country+ - string, country of the vehicle registration - UK or non-UK
   #   * +unrecognised+ - boolean, unrecognised vehicle's registration
+  #   * +type+ - string, type of the vehicle selected by the user
+  #
   def initialize(vehicle_details:)
     @vrn = vehicle_details['vrn']
     @type = vehicle_details['type']
