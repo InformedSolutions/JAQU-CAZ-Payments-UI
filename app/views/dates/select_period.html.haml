@@ -16,7 +16,9 @@
         £50 a week.
       = form_tag confirm_select_period_dates_path, method: :post do
         %fieldset.govuk-fieldset
-          %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
+          %legend.govuk-visually-hidden
+            Select period
+
           - if alert
             = render 'dates/select_period_input/errored'
           - else
