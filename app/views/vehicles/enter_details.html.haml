@@ -20,7 +20,9 @@
       = render 'common/draft_tag'
       = form_tag enter_details_vehicles_path, method: :post do
         %fieldset.govuk-fieldset
-          %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
+          %legend.govuk-visually-hidden
+            Enter vehicle registration details
+
           - if @errors[:vrn].present?
             = render 'vehicles/vrn_input/errored', message: @errors[:vrn].first
           - else
@@ -30,4 +32,5 @@
             = render 'vehicles/country_input/errored', message: @errors[:country].first
           - else
             = render 'vehicles/country_input/normal'
+
           = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'

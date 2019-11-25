@@ -44,11 +44,14 @@
       = form_tag confirm_unrecognised_vehicles_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
           %fieldset.govuk-fieldset
-            %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
+            %legend.govuk-visually-hidden
+              Confirm that the registration number is correct
+
             - if alert
               %span#unrecognised-vehicle-error.govuk-error-message
                 %span.govuk-visually-hidden Error:
                 Confirm that the registration number is correct
+
             .govuk-checkboxes
               .govuk-checkboxes__item
                 %input.govuk-checkboxes__input{name: 'confirm-registration',
