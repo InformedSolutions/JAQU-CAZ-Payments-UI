@@ -15,8 +15,8 @@ class ChargeableZonesService < BaseService
   #   * +unrecognised+ - boolean, unrecognised vehicle's registration
   def initialize(vehicle_details:)
     @vrn = vehicle_details['vrn']
+    @type = vehicle_details['type']
     @non_dvla = vehicle_details['country'] != 'UK' || vehicle_details['unrecognised']
-    @taxi = vehicle_details['taxi']
   end
 
   # The caller method for the service.
@@ -27,8 +27,12 @@ class ChargeableZonesService < BaseService
   #
   # Returns an array of Caz objects
   def call
-    chargeable_zones = non_dvla ? zones_data : dvla_data
-    chargeable_zones.map { |caz_data| Caz.new(caz_data) }
+    chargeable_ids = non_dvla ? non_dlva_data : dvla_data
+    # TODO: charge to filter_map when updated to ruby 2.7
+    # https://blog.saeloun.com/2019/05/25/ruby-2-7-enumerable-filter-map.html
+    zone_data
+      .select { |zone| zone['cleanAirZoneId'].in?(chargeable_ids) }
+      .map { |zone| Caz.new(zone) }
   end
 
   private
@@ -36,18 +40,31 @@ class ChargeableZonesService < BaseService
   # Calls +ComplianceCheckerApi.clean_air_zones+ and then calls
   # +ComplianceCheckerApi.vehicle_compliance+ to check if any of zones has charge price
   def dvla_data
-    zone_ids = zones_data.map { |caz_data| caz_data['cleanAirZoneId'] }
     vehicle_compliance_response = ComplianceCheckerApi.vehicle_compliance(vrn, zone_ids)
-    vehicle_compliance_response['complianceOutcomes'].select do |zone|
-      zone['charge'].to_i.positive?
-    end
+    select_chargeable(vehicle_compliance_response['complianceOutcomes'])
+  end
+
+  def non_dlva_data
+    vehicle_compliance_response = ComplianceCheckerApi.unrecognised_compliance(type, zone_ids)
+    select_chargeable(vehicle_compliance_response['charges'])
   end
 
   # Variable used internally by the service
-  attr_reader :vrn, :non_dvla
+  attr_reader :vrn, :non_dvla, :type
 
-  # Calling API and returns the list of available local authorities.
-  def zones_data
-    @zones_data ||= ComplianceCheckerApi.clean_air_zones
+  # Calling API and returns the list of the available local authorities.
+  def zone_data
+    @zone_data ||= ComplianceCheckerApi.clean_air_zones
+  end
+
+  # Returns an array of IDS of the available local authorities.
+  def zone_ids
+    zone_data.map { |zone| zone['cleanAirZoneId'] }
+  end
+
+  def select_chargeable(data)
+    # TODO: charge to filter_map when updated to ruby 2.7
+    # https://blog.saeloun.com/2019/05/25/ruby-2-7-enumerable-filter-map.html
+    data.select { |zone| zone['charge'].to_i.positive? }.map { |zone| zone['cleanAirZoneId'] }
   end
 end

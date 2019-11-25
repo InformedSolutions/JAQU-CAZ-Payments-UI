@@ -79,6 +79,6 @@ class ComplianceDetails
 
   # Get compliance data for non-DVLA registered vehicle
   def non_dvla_compliance_data
-    ComplianceCheckerApi.unrecognised_compliance(type, zone_id)['charges']
+    ComplianceCheckerApi.unrecognised_compliance(type, [zone_id])['charges']
   end
 end

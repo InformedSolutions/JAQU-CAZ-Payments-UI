@@ -19,7 +19,7 @@ RSpec.describe ComplianceDetails, type: :model do
   let(:country) { 'UK' }
   let(:zone_id) { SecureRandom.uuid }
   let(:unrecognised) { false }
-  let(:type) { 'car' }
+  let(:type) { 'private_car' }
 
   let(:outcomes) do
     [
@@ -92,14 +92,14 @@ RSpec.describe ComplianceDetails, type: :model do
       before do
         allow(ComplianceCheckerApi)
           .to receive(:unrecognised_compliance)
-          .with(type, zone_id)
+          .with(type, [zone_id])
           .and_return(unrecognised_response)
       end
 
       it 'calls :unrecognised_compliance with right params' do
         expect(ComplianceCheckerApi)
           .to receive(:unrecognised_compliance)
-          .with(type, zone_id)
+          .with(type, [zone_id])
         details.zone_name
       end
 
@@ -116,14 +116,14 @@ RSpec.describe ComplianceDetails, type: :model do
     before do
       allow(ComplianceCheckerApi)
         .to receive(:unrecognised_compliance)
-        .with(type, zone_id)
+        .with(type, [zone_id])
         .and_return(unrecognised_response)
     end
 
     it 'calls :unrecognised_compliance with right params' do
       expect(ComplianceCheckerApi)
         .to receive(:unrecognised_compliance)
-        .with(type, zone_id)
+        .with(type, [zone_id])
       details.zone_name
     end
   end
