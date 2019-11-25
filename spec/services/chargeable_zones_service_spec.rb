@@ -7,71 +7,91 @@ RSpec.describe ChargeableZonesService do
 
   let(:vehicle_details) do
     {
-      'vrn' => 'CU57ABC',
+      'vrn' => vrn,
       'country' => country,
-      'unrecognised' => unrecognised
+      'unrecognised' => unrecognised,
+      'type' => type
     }
   end
 
-  let(:caz_list_response) do
-    response = read_file('caz_list_response.json')
-    response['cleanAirZones'].map { |caz_data| Caz.new(caz_data) }
-  end
+  let(:vrn) { 'CU57ABC' }
   let(:country) { 'UK' }
   let(:unrecognised) { false }
+  let(:type) { nil }
 
-  describe '#call' do
-    before { mock_chargeable_zones }
+  before { mock_chargeable_zones }
 
-    context 'when country is UK' do
-      context 'and charge price more then zero' do
-        before do
-          mock_vehicle_compliance
-        end
+  context 'when country is UK' do
+    context 'and charge price is more then zero for many CAZes' do
+      before { mock_vehicle_compliance }
 
-        let(:compliance_data) do
-          response = read_file('vehicle_compliance_birmingham_response.json')
-          response['complianceOutcomes'].map { |caz_data| Caz.new(caz_data) }
-        end
+      it_behaves_like 'a chargeable zones service'
 
-        it 'returns chargeable caz zones' do
-          expect(service_call.to_json).to eq(compliance_data.to_json)
-        end
-      end
-
-      context 'and charge price equals to zero' do
-        before do
-          mock_vehicle_with_zero_charge
-        end
-
-        it 'returns zero caz zones' do
-          expect(service_call).to be_empty
-        end
+      it 'calls ComplianceCheckerApi.vehicle_compliance with the right params' do
+        expect(ComplianceCheckerApi)
+          .to receive(:vehicle_compliance)
+          .with(vrn, mocked_zone_ids)
+        service_call
       end
     end
 
-    context 'when country is Non-UK' do
-      let(:country) { 'Non-UK' }
+    context 'and charge price is more then zero for one CAZ' do
+      before { mock_private_car_compliance }
 
-      before do
-        mock_chargeable_zones
-      end
-
-      it 'returns all caz zones' do
-        expect(service_call.to_json).to eq(caz_list_response.to_json)
-      end
+      it_behaves_like 'a chargeable zones service', 1
     end
 
-    context 'when vehicle is unrecognised' do
-      let(:unrecognised) { true }
+    context 'and charge price equals to zero in all CAZes' do
+      before { mock_vehicle_with_zero_charge }
 
-      before do
-        mock_vehicle_compliance
+      it 'returns zero caz zones' do
+        expect(service_call).to be_empty
       end
+    end
+  end
 
-      it 'returns all caz zones' do
-        expect(service_call.to_json).to eq(caz_list_response.to_json)
-      end
+  context 'when country is Non-UK' do
+    let(:country) { 'Non-UK' }
+    let(:type) { 'private_car' }
+    let(:one_charge) { false }
+
+    before do
+      mock_chargeable_zones
+      mock_unrecognised_compliance(one_charge)
+    end
+
+    it_behaves_like 'a chargeable zones service'
+
+    it 'calls ComplianceCheckerApi.unrecognised_compliance with the right params' do
+      expect(ComplianceCheckerApi)
+        .to receive(:unrecognised_compliance)
+        .with(type, mocked_zone_ids)
+      service_call
+    end
+
+    context 'when charge for one CAZ equals 0' do
+      let(:one_charge) { true }
+
+      it_behaves_like 'a chargeable zones service', 1
+    end
+  end
+
+  context 'when vehicle is unrecognised' do
+    let(:unrecognised) { true }
+    let(:type) { 'private_car' }
+
+    before do
+      mock_vehicle_compliance
+      mock_unrecognised_compliance
+    end
+
+    it_behaves_like 'a chargeable zones service'
+
+    it 'calls ComplianceCheckerApi.unrecognised_compliance with the right params' do
+      expect(ComplianceCheckerApi)
+        .to receive(:unrecognised_compliance)
+        .with(type, mocked_zone_ids)
+      service_call
     end
   end
 end

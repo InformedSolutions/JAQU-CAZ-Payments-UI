@@ -145,7 +145,7 @@ class ComplianceCheckerApi < BaseApi
     # ==== Attributes
     #
     # * +type+ - string, eg. 'car'
-    # * +zone_id+ - string, zone ID which vehicle compliance is check against
+    # * +zones+ - Array of zones IDs which vehicle compliance is check against
     #
     # ==== Result
     #
@@ -155,10 +155,14 @@ class ComplianceCheckerApi < BaseApi
     #   * +name+ - string, eg. "Birmingham"
     #   * +charge+ - number, determines how much owner of the vehicle will have to pay in this CAZ
     #
-    def unrecognised_compliance(type, zone_id)
-      log_action "Getting vehicle unrecognised type compliance, type: #{type}, zone_id: #{zone_id}"
-      endpoint = "/vehicles/unrecognised/#{type}/compliance"
-      request(:get, endpoint, query: { zones: zone_id })
+    def unrecognised_compliance(type, zones)
+      zones = zones.join(',')
+      log_action "Getting vehicle unrecognised type compliance, type: #{type}, zones: #{zones}"
+      request(
+        :get,
+        "/vehicles/unrecognised/#{type}/compliance",
+        query: { zones: zones }
+      )
     end
   end
 end
