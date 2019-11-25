@@ -1,3 +1,71 @@
+  #################################################### Nightly Steps ############################################################
+kind: pipeline
+type: docker
+name: payments-web-nightly
+trigger:
+  event:
+    - cron
+concurrency:
+  limit: 1
+volumes:
+- name: docker_sock
+  host:
+    path: /var/run/docker.sock
+
+steps:
+
+  # Execute OWASP Zap tests
+  - name: owasp zap tests
+    image: owasp/zap2docker-stable
+    commands:
+      - mkdir -p /zap/wrk
+      - cp zap.conf /zap/wrk/zap.conf
+      - cd /zap
+      - zap-full-scan.py -t https://dev.paycleanairzonecharge.co.uk -c zap.conf
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+
+    # Build end to end tests docker image
+  - name: build end to end test image
+    image: docker:git
+    commands:
+      - mkdir ~/.ssh
+      - echo -n "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
+      - chmod 600 ~/.ssh/id_rsa
+      - touch ~/.ssh/known_hosts
+      - chmod 600 ~/.ssh/known_hosts
+      - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
+      - git clone git@github.com:InformedSolutions/JAQU-CAZ-QA-selenium.git
+      - cd JAQU-CAZ-QA-selenium
+      - docker build -t selenium-jaqu .
+    environment:
+      GIT_PRIVATE_SSH:
+        from_secret: github_private_key
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+
+    # Run end to end tests
+  - name: run end to end tests
+    image: selenium-jaqu
+    pull: never
+    environment:
+      BS_USERNAME:
+        from_secret: browserstack_username
+      BS_AUTHKEY:
+        from_secret: browserstack_auth_key
+      BASEURL_PAYMENTS: 'https://dev.paycleanairzonecharge.co.uk/'
+      BROWSER_SET: 'min'
+      BUILD: ${DRONE_BUILD_NUMBER}
+      LOCATION: browserstack
+    commands:
+      - cd JAQU-CAZ-QA-selenium
+      - cucumber -t @PAYMENTS --retry 3
+  ################################################# End Nightly Steps ############################################################
+
+---
+
   #################################################### DEV Steps ############################################################
 
 kind: pipeline
