@@ -245,7 +245,7 @@ steps:
     environment:
       TF_VAR_build_number: ${DRONE_BUILD_NUMBER}
       TF_VAR_secret_key_base: ${DRONE_COMMIT}
-      TF_VAR_google_analytics_id: UA-144774549-2
+      TF_VAR_google_analytics_id: UA-144774549-5
       TF_VAR_access_key:
         from_secret: aws_access_key_id
       TF_VAR_secret_key:
@@ -499,7 +499,7 @@ steps:
     environment:
       TF_VAR_build_number: ${DRONE_BUILD_NUMBER}
       TF_VAR_secret_key_base: ${DRONE_COMMIT}
-      TF_VAR_google_analytics_id: UA-144774549-2
+      TF_VAR_google_analytics_id: UA-144774549-5
       TF_VAR_access_key:
         from_secret: aws_access_key_id
       TF_VAR_secret_key:
@@ -548,7 +548,7 @@ steps:
     environment:
       TF_VAR_build_number: ${DRONE_BUILD_NUMBER}
       TF_VAR_secret_key_base: ${DRONE_COMMIT}
-      TF_VAR_google_analytics_id: UA-144774549-2
+      TF_VAR_google_analytics_id: UA-144774549-5
       TF_VAR_access_key:
         from_secret: aws_access_key_id
       TF_VAR_secret_key:
