@@ -9,6 +9,7 @@ RSpec.describe VehicleDetails, type: :model do
   let(:type_approval) { 'M1' }
   let(:taxi_or_phv) { false }
   let(:type) { 'car' }
+  let(:las) { %w[Leeds Birmingham] }
 
   let(:response) do
     {
@@ -19,27 +20,18 @@ RSpec.describe VehicleDetails, type: :model do
       'model' => '208',
       'colour' => 'grey',
       'fuelType' => 'diesel',
-      'taxiOrPhv' => taxi_or_phv
+      'taxiOrPhv' => taxi_or_phv,
+      'licensingAuthoritiesNames' => las
     }
   end
 
   before do
-    allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(response)
+    allow(ComplianceCheckerApi).to receive(:vehicle_details).with(vrn).and_return(response)
   end
 
   describe '.registration_number' do
     it 'returns a proper registration number' do
       expect(subject.registration_number).to eq(vrn)
-    end
-  end
-
-  describe '.vrn_for_request' do
-    before do
-      allow(VrnParser).to receive(:call).and_return(vrn)
-    end
-
-    it 'returns a proper vrn' do
-      expect(subject.vrn_for_request).to eq(vrn)
     end
   end
 
@@ -67,6 +59,24 @@ RSpec.describe VehicleDetails, type: :model do
     end
   end
 
+  describe '.exempt?' do
+    describe 'when key is not present' do
+      it 'returns a nil' do
+        expect(subject.exempt?).to eq(nil)
+      end
+    end
+
+    describe 'when key is present' do
+      before do
+        allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return('exempt' => true)
+      end
+
+      it 'returns a true' do
+        expect(subject.exempt?).to eq(true)
+      end
+    end
+  end
+
   describe '.taxi_private_hire_vehicle' do
     describe 'when taxi_or_phv value is false' do
       it "returns a 'No'" do
@@ -90,7 +100,7 @@ RSpec.describe VehicleDetails, type: :model do
 
     context 'when key is not present' do
       before do
-        allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return({})
+        allow(ComplianceCheckerApi).to receive(:vehicle_details).with(vrn).and_return({})
       end
 
       it 'returns a nil' do
@@ -128,7 +138,7 @@ RSpec.describe VehicleDetails, type: :model do
 
     context 'when key is not present' do
       before do
-        allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return({})
+        allow(ComplianceCheckerApi).to receive(:vehicle_details).with(vrn).and_return({})
       end
 
       it 'returns a nil' do
@@ -150,6 +160,32 @@ RSpec.describe VehicleDetails, type: :model do
       it 'returns a nil' do
         expect(compliance.undetermined?).to eq('true')
       end
+    end
+  end
+
+  describe '.leeds_taxi?' do
+    subject(:taxi) { compliance.leeds_taxi? }
+
+    context 'when Leeds is in licensingAuthoritiesNames' do
+      it { is_expected.to be_truthy }
+    end
+
+    context 'when Leeds is NOT in licensingAuthoritiesNames' do
+      let(:las) { %w[Birmingham London] }
+
+      it { is_expected.to be_falsey }
+    end
+
+    context 'when licensingAuthoritiesNames is empty' do
+      let(:las) { [] }
+
+      it { is_expected.to be_falsey }
+    end
+
+    context 'when licensingAuthoritiesNames is nil' do
+      let(:las) { nil }
+
+      it { is_expected.to be_falsey }
     end
   end
 end

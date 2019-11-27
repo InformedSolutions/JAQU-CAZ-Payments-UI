@@ -3,9 +3,9 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.6.3'
+ruby '2.6.5'
 
-gem 'rails', '~> 6.0.0'
+gem 'rails', '~> 6.0.1'
 
 gem 'bootsnap', require: false
 gem 'brakeman'
@@ -16,6 +16,7 @@ gem 'logstash-logger'
 gem 'puma'
 gem 'rubocop-rails'
 gem 'sass-rails'
+gem 'scss_lint-govuk', require: false
 gem 'sdoc', require: false
 gem 'sqlite3'
 gem 'turbolinks'
@@ -24,7 +25,6 @@ gem 'webpacker'
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'dotenv-rails'
-  gem 'govuk-lint'
   gem 'haml-rails'
   gem 'rspec-rails'
 end
@@ -45,6 +45,7 @@ group :test do
   gem 'selenium-webdriver'
   gem 'simplecov', require: false
   gem 'webdrivers'
+  gem 'webmock'
 end
 
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]

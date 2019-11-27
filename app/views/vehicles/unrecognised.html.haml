@@ -1,9 +1,15 @@
-= link_to 'Back', enter_details_vehicles_path, class: 'govuk-back-link'
+= link_to 'Back', enter_details_vehicles_path, class: 'govuk-back-link', id: 'back-link'
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
     .govuk-grid-column-two-thirds
+      - if alert
+        = render 'common/error_summary',
+          error_msg_div: '#unrecognised-vehicle-error',
+          error_msg: 'Confirm that the registration number is correct'
+
       %h1.govuk-heading-xl Vehicle details not found
       %h1.govuk-heading-m We can't find the details of this vehicle
+      = render 'common/draft_tag'
       %p
         We might not be able to find the details for the vehicle
         = @vrn
@@ -35,14 +41,17 @@
         Please confirm that the registration number
         %b= @vrn
         is correct.
-      = form_tag confirm_unrecognised_registration_vehicles_path, method: :post do
+      = form_tag confirm_unrecognised_vehicles_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
           %fieldset.govuk-fieldset
-            %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
+            %legend.govuk-visually-hidden
+              Confirm that the registration number is correct
+
             - if alert
-              %span#caz-select-error.govuk-error-message
+              %span#unrecognised-vehicle-error.govuk-error-message
                 %span.govuk-visually-hidden Error:
                 Confirm that the registration number is correct
+
             .govuk-checkboxes
               .govuk-checkboxes__item
                 %input.govuk-checkboxes__input{name: 'confirm-registration',

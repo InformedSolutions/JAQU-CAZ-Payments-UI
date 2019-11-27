@@ -6,6 +6,9 @@
 class VrnForm
   include ActiveModel::Validations
 
+  # VRN and country getters
+  attr_reader :vrn, :country
+
   # Checks if country is selected and UK or Non-UK
   validates :country, inclusion: {
     in: %w[UK Non-UK], message: I18n.t('vrn_form.country_missing')
@@ -30,14 +33,11 @@ class VrnForm
   # * +country+ - string, eg. 'UK'
   #
   def initialize(vrn, country)
-    @vrn = vrn&.gsub(/\s+/, '')&.upcase
+    @vrn = vrn&.delete(' ')&.upcase
     @country = country
   end
 
   private
-
-  # VRN and country getters
-  attr_reader :vrn, :country
 
   # Checks if selected country in UK. Returns boolean.
   def uk?

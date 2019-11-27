@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'VehiclesController - POST #submit_details', type: :request do
   subject(:http_request) do
-    post submit_details_vehicles_path, params: { vrn: vrn, 'registration-country': country }
+    post enter_details_vehicles_path, params: { vrn: vrn, 'registration-country': country }
   end
 
   let(:vrn) { 'CU57ABC' }
@@ -18,8 +18,11 @@ RSpec.describe 'VehiclesController - POST #submit_details', type: :request do
     end
 
     it 'sets VRN in the session' do
-      http_request
-      expect(session[:vrn]).to eq(vrn)
+      expect(session[:vehicle_details]['vrn']).to eq(vrn)
+    end
+
+    it 'sets country in the session' do
+      expect(session[:vehicle_details]['country']).to eq(country)
     end
   end
 

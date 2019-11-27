@@ -16,12 +16,7 @@ class VehicleDetails
 
   # Returns a string, eg. 'CU57ABC'.
   def registration_number
-    @vrn
-  end
-
-  # Returns a string, eg. 'CU57ABC'.
-  def vrn_for_request
-    VrnParser.call(vrn: @vrn)
+    vrn
   end
 
   # Returns a string, eg. 'Car'.
@@ -72,7 +67,20 @@ class VehicleDetails
     string_field('model')
   end
 
+  # Returns information if vehicle is exempted - boolean
+  def exempt?
+    compliance_api['exempt']
+  end
+
+  # Returns if vehicle is register in Leeds as taxi or PHV
+  def leeds_taxi?
+    compliance_api['licensingAuthoritiesNames']&.include?('Leeds')
+  end
+
   private
+
+  # Reader function for the vehicle registration number
+  attr_reader :vrn
 
   ##
   # Converts the first character of +key+ value to uppercase.
@@ -116,6 +124,6 @@ class VehicleDetails
   #     * +financialAssistance+
   #     * +boundary+
   def compliance_api
-    @compliance_api ||= ComplianceCheckerApi.vehicle_details(vrn_for_request)
+    @compliance_api ||= ComplianceCheckerApi.vehicle_details(vrn)
   end
 end

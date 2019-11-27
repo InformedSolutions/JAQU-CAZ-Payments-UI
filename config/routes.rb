@@ -6,17 +6,18 @@ Rails.application.routes.draw do
   resources :vehicles, only: [] do
     collection do
       get :enter_details
-      post :submit_details
+      post :enter_details, to: 'vehicles#submit_details'
       get :details
       post :confirm_details
       get :incorrect_details
       get :unrecognised
-      post :confirm_unrecognised_registration
+      post :confirm_unrecognised
       get :compliant
+      get :exempt
     end
   end
 
-  resources :non_uk_vehicles, only: [:index] do
+  resources :non_dvla_vehicles, only: [:index] do
     collection do
       post :confirm_registration
       get :choose_type
@@ -28,11 +29,26 @@ Rails.application.routes.draw do
     collection do
       get :local_authority
       post :submit_local_authority
+      get :review_payment
+    end
+  end
+
+  resources :dates, only: [] do
+    collection do
+      get :select_period
+      post :confirm_select_period
+
       get :daily_charge
       post :confirm_daily_charge
-      get :dates
-      post :confirm_dates
-      get :review_payment
+
+      get :weekly_charge
+      post :confirm_weekly_charge
+
+      get :select_daily_date
+      post :confirm_daily_date
+
+      get :select_weekly_date
+      post :confirm_date_weekly
     end
   end
 
@@ -43,5 +59,19 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :payments, only: %i[index create] do
+    collection do
+      get :success
+      get :failure
+    end
+  end
+
   get :build_id, to: 'application#build_id'
+
+  get :service_unavailable, to: 'application#server_unavailable'
+  match '/404', to: 'errors#not_found', via: :all
+  # There is no 422 error page in design systems
+  match '/422', to: 'errors#internal_server_error', via: :all
+  match '/500', to: 'errors#internal_server_error', via: :all
+  match '/503', to: 'errors#service_unavailable', via: :all
 end

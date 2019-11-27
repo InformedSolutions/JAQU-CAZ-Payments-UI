@@ -6,6 +6,22 @@
 # Also, contains some basic endpoints used for build purposes.
 #
 class ApplicationController < ActionController::Base
+  # Escapes all API related error with rendering 503 page
+  rescue_from Errno::ECONNREFUSED,
+              SocketError,
+              BaseApi::Error500Exception,
+              BaseApi::Error422Exception,
+              BaseApi::Error400Exception,
+              with: :redirect_to_server_unavailable
+
+  # enable basic HTTP authentication on production environment if HTTP_BASIC_PASSWORD variable present
+  http_basic_authenticate_with name: ENV['HTTP_BASIC_USER'],
+                               password: ENV['HTTP_BASIC_PASSWORD'],
+                               except: :build_id,
+                               if: lambda {
+                                     Rails.env.production? && ENV['HTTP_BASIC_PASSWORD'].present?
+                                   }
+
   ##
   # Build ID endpoint
   #
@@ -22,14 +38,27 @@ class ApplicationController < ActionController::Base
 
   private
 
+  # Logs an exception and redirects to service unavailable page.
+  # Used to escape API calls related exceptions.
+  def redirect_to_server_unavailable(exception)
+    Rails.logger.error "#{exception.class}: #{exception.message}"
+
+    render template: 'errors/service_unavailable', status: :service_unavailable
+  end
+
   # Logs invalid form on +warn+ level
   def log_invalid_form(msg)
     Rails.logger.warn("The form is invalid. #{msg}")
   end
 
-  # Gets VRN from session. Returns string, eg 'CU1234'
+  # Gets VRN from vehicle_details hash in the session. Returns string, eg 'CU1234'
   def vrn
-    session[:vrn]
+    vehicle_details('vrn')
+  end
+
+  # Gets LA name from vehicle_details hash in the session. Returns string, eg 'Leeds'
+  def la_name
+    vehicle_details('la_name')
   end
 
   # Checks if VRN is present in session.
@@ -37,11 +66,44 @@ class ApplicationController < ActionController::Base
   def check_vrn
     return if vrn
 
-    Rails.logger.warn 'VRN is missing in the session. Redirecting to :enter_details'
+    redirect_to_enter_details('VRN')
+  end
+
+  # Logs warning and redirects enter_details page
+  def redirect_to_enter_details(value)
+    Rails.logger.warn "#{value} is missing in the session. Redirecting to :enter_details"
     redirect_to enter_details_vehicles_path
   end
 
-  def return_path(custom_path: enter_details_vehicles_path)
-    request.referer || custom_path
+  # Checks if LA ID, la name and daily_charge are present in the session.
+  # If not, redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
+  def check_compliance_details
+    return if la_id && la_name && charge
+
+    Rails.logger.warn(
+      'Compliance details are missing in the session. Redirecting to :local_authority'
+    )
+    redirect_to local_authority_charges_path
+  end
+
+  # Gets LA from vehicle_details hash in the session. Returns string, eg '39e54ed8-3ed2-441d-be3f-38fc9b70c8d3'
+  def la_id
+    vehicle_details('la_id')
+  end
+
+  # Returns hash's value for current +field+
+  def vehicle_details(field)
+    session.dig(:vehicle_details, field)
+  end
+
+  # Gets charge from vehicle_details hash in the session. Returns integer, eg 50
+  def charge
+    vehicle_details('daily_charge')
+  end
+
+  # Logs and redirects to +path+
+  def redirect_back_to(path, alert, template)
+    log_invalid_form "Redirecting back to :#{template}"
+    redirect_to path, alert: alert
   end
 end

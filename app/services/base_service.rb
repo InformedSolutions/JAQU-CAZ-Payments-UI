@@ -10,8 +10,20 @@ class BaseService
   # ==== Attributes
   #
   # Accepts all arguments and passes them to the service initializer
-
+  #
   def self.call(**args)
     new(args).call
+  end
+
+  ##
+  # Default initializer. May be overridden in each service
+  #
+  def initialize(_options = {}); end
+
+  private
+
+  # Logs msg on +info+ level
+  def log_action(msg)
+    Rails.logger.info "[#{self.class.name}] #{msg}"
   end
 end

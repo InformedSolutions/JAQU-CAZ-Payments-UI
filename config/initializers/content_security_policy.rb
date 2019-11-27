@@ -6,21 +6,22 @@
 # For further information see the following documentation
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
 
-if Rails.env.production? && ENV.fetch('ENABLE_CSP', false)
+if Rails.env.production?
   Rails.application.config.content_security_policy do |policy|
-    policy.default_src :self, :https
-    policy.font_src    :self, :https
-    policy.img_src     :self, :https
-    policy.object_src  :none
-    policy.script_src  :self, :https
-    policy.style_src   :self, :https
-    policy.connect_src :self, :https
+    policy.default_src     :none
+    policy.font_src        :self, :https, :data
+    policy.img_src         :self, :https
+    policy.object_src      :none
+    policy.script_src      :self, :https, 'https://www.googletagmanager.com', 'https://www.google-analytics.com'
+    policy.style_src       :self, :https
+    policy.connect_src     :self, :https
+    policy.frame_ancestors :none
   end
 end
 
 # If you are using UJS then enable automatic nonce generation
-# Rails.application.config.content_security_policy_nonce_generator =
-# -> request { SecureRandom.base64(16) }
+Rails.application.config.content_security_policy_nonce_generator =
+  ->(_request) { SecureRandom.base64(16) }
 
 # Report CSP violations to a specified URI
 # For further information see the following documentation:

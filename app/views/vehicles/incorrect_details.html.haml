@@ -1,8 +1,9 @@
-= link_to 'Back', details_vehicles_path, class: 'govuk-back-link'
+= link_to 'Back', details_vehicles_path, class: 'govuk-back-link', id: 'back-link'
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
     .govuk-grid-column-two-thirds
       %h1.govuk-heading-l Incorrect vehicle details
+      = render 'common/draft_tag'
       %p
         If your vehicle details are incorrect, you may need to
         = succeed '.' do

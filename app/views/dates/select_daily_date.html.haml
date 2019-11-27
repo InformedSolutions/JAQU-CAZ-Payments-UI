@@ -1,0 +1,59 @@
+= link_to 'Back', daily_charge_dates_path, class: 'govuk-back-link', id: 'back-link'
+
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      - if alert
+        = render 'common/error_summary',
+          error_msg_div: '#select-daily-date-error',
+          error_msg: 'Select a date that you wish to pay for'
+
+      %h1.govuk-heading-l Which days do you want to pay for?
+      = render 'common/draft_tag'
+      %p
+        A daily charge period runs from midnight to midnight.
+      %details.govuk-details{'data-module': 'govuk-details'}
+        %summary.govuk-details__summary
+          %span.govuk-details__summary-text
+            Why can't I see my date?
+        .govuk-details__text
+          %p
+            You can't pay for more than 6 days in the past and 6 days ahead.
+          %p
+            If your dates are not displayed:
+            %ul.govuk-list-govuk-list--bullet
+              %li
+                %p
+                  because they are too far in the past, you will receive a fine in the post to the
+                  address DVLA holds for you.
+              %li
+                %p
+                  because they are too far in the future, you can check back here nearer the time.
+
+      = form_tag confirm_daily_date_dates_path, method: :post do
+        .govuk-form-group{class: ('govuk-form-group--error' if alert)}
+          %fieldset.govuk-fieldset
+            %legend.govuk-visually-hidden
+              Select daily date
+
+            - if alert
+              %span#select-daily-date-error.govuk-error-message
+                %span.govuk-visually-hidden Error:
+                Select a date that you wish to pay for
+
+            .govuk-checkboxes
+              - @dates.each_with_index do |date, index|
+                .govuk-checkboxes__item
+                  %input.govuk-checkboxes__input{name: 'dates[]',
+                                                 type: 'checkbox',
+                                                 value: date[:value],
+                                                 id: "date-#{index}",
+                                                 checked: checked_daily?(date[:value])}
+                  %label.govuk-label.govuk-checkboxes__label{for: "date-#{index}"}
+                    - if date[:today]
+                      %b
+                        = date[:name]
+                      (Today)
+                    - else
+                      = date[:name]
+        = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'

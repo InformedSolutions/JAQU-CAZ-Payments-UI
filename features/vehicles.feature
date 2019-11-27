@@ -43,12 +43,14 @@ Feature: Vehicles
     Then I should see "Your vehicle is not UK-Registered"
       And I press the Continue
     Then I should see "Confirm that the registration number is correct"
+      And I should see "There is a problem"
       And I should be on the non UK page
     Then I choose I confirm registration
       And I press the Continue
     Then I should see "What is your vehicle?"
       And I press the Confirm
     Then I should see "Tell us what type of vehicle you want to pay for"
+      And I should see "There is a problem"
       And I choose Car type
       And I press the Confirm
     Then I should see "Which Clean Air Zone do you need to pay for?"
@@ -62,6 +64,7 @@ Feature: Vehicles
     Then I should see "Vehicle details not found"
       And I press the Continue
     Then I should see "Confirm that the registration number is correct"
+      And I should see "There is a problem"
       And I should be on the unrecognised page
     Then I choose I confirm registration
       And I press the Continue
@@ -77,3 +80,22 @@ Feature: Vehicles
     Then I choose that the details are correct
       And I press the Confirm
       And I should see "There is no charge for this vehicle"
+    Then I press "Back" link
+      And I should be on the vehicle details page
+
+  Scenario: User enters a exempt vehicle's registration and choose UK country
+    Given I am on the home page
+    Then I press the Start now button
+    Then I enter a exempt vehicle's registration and choose UK
+      And I press the Continue
+    Then I should see "There is no charge for this vehicle"
+      And I press "Back" link
+    Then I should be on the enter details page
+
+  Scenario: User wants to return with vehicle's registration which cannot be recognised
+    Given I am on the vehicle details page with unrecognized vehicle to check
+    Then I choose I confirm registration
+      And I press the Continue
+      And I should be on the choose type page
+    Then I press "Back" link
+      And I should be on the unrecognised page

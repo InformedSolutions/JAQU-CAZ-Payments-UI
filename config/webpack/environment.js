@@ -7,8 +7,6 @@ const erbLoader = {
   loader: 'rails-erb-loader'
 };
 
-// skip adding random hash
-
 const myFileOptions = {
     name(file) {
         if (file.includes(sourcePath)) {

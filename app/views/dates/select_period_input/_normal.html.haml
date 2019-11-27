@@ -1,0 +1,14 @@
+.govuk-form-group
+  .govuk-radios
+    .govuk-radios__item
+      %input#period-1.govuk-radios__input{name: 'period',
+                                          type: 'radio',
+                                          value: 'daily-charge'}
+      %label.govuk-label.govuk-radios__label{for: 'period-1'}
+        Pay for 1 day (£12.50)
+    .govuk-radios__item
+      %input#period-2.govuk-radios__input{name: 'period',
+                                          type: 'radio',
+                                          value: 'weekly-charge'}
+      %label.govuk-label.govuk-radios__label{for: 'period-2'}
+        Pay for 7 days (£50.00)

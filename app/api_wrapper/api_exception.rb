@@ -18,12 +18,12 @@ class ApiException < StandardError
   # ==== Attributes
   #
   # * +status+ - string or integer, HTTP error status
-  # * +status_message+ - string, HTTP error message
+  # * +status_msg+ - string, HTTP error message
   # * +body+ - request body
-  def initialize(status, status_message, body)
+  def initialize(status, status_msg, body)
     @status         = status.to_i
-    @status_message = status_message
-    @message        = body.is_a?(Hash) ? body['message'] : status_message
+    @status_message = status_msg
+    @message        = body.is_a?(Hash) ? body.transform_keys(&:downcase)['message'] : status_msg
     @body           = body
   end
 

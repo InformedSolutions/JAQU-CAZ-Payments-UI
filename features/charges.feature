@@ -7,7 +7,7 @@ Feature: Charges
     Given I am on the vehicles details page
     Then I choose that the details are correct
       And I press the Confirm
-    Then I should be on the local authorities page
+      And I should be on the local authorities page
     Then I press "Back" link
       And I should be on the vehicle details page
 
@@ -17,26 +17,29 @@ Feature: Charges
       And I press the Confirm
     Then I should be on the incorrect details page
       And I press the Continue
-    Then I should be on the local authorities page
+      And I should be on the local authorities page
     Then I press "Back" link
       And I should be on the incorrect details page
 
   Scenario: User wants to return with vehicle registered not in the UK
-    Given I am on the choose type page
+    Given I am on the choose type page for non-UK vehicle
     Then I choose Car type
       And I press the Confirm
-    Then I should be on the local authorities page
+      And I should be on the local authorities page
     Then I press "Back" link
       And I should be on the choose type page
 
   Scenario: User wants to return without the previous page
     Given I am on the select local authority page
     Then I press "Back" link
-      And I should be on the enter details page
+      And I should be on the vehicle details page
 
   Scenario: User selects LA to pay for
     Given My vehicle is not compliant
       And I am on the select local authority page
+    Then I press the Continue
+      And I should see "There is a problem"
+      And I should see "Which clean air zone are you paying for?"
     Then I select Birmingham
       And I press the Continue
     Then I should be on the daily charge page
@@ -44,7 +47,7 @@ Feature: Charges
 
   Scenario: Vehicle is compliant in all CAZ
     Given My vehicle is compliant
-      And I am on the select local authority page
+      And I am go the local authority page
     Then I should be on the compliant vehicle page
 
   Scenario: User does not confirm exemption
@@ -57,7 +60,7 @@ Feature: Charges
     Given I am on the daily charge page
       And I confirm exemption
       And I press the Continue
-    Then I should be on the pick dates page
+    Then I should be on the pick daily dates page
 
   Scenario: User selects dates to pay for
     Given I am on the dates page
@@ -67,3 +70,28 @@ Feature: Charges
     Then I choose today date
       And I press the Continue
     Then I should see "Review your payment"
+      And I have selected dates in the session
+
+  Scenario: User wants review payment and press the change registration number link
+    Given I am on the review payment page
+      And I should see "Review your payment"
+    Then I press the Change Registration number link
+      And I should see "Vehicle registration details"
+
+  Scenario: User wants review payment and press the change clean air zone link
+    Given I am on the review payment page
+      And I should see "Review your payment"
+    Then I press the Change Clean Air Zone link
+      And I should see "Which Clean Air Zone do you need to pay for?"
+
+  Scenario: User wants review daily payment and press the change payment for link
+    Given I am on the review payment page
+      And I should see "Review your payment"
+    Then I press the Change Payment for link
+      And I should be on the pick daily dates page
+
+  Scenario: User wants review weekly payment and press the change payment for link
+    Given I am on the review weekly payment page
+      And I should see "Review your payment"
+    Then I press the Change Payment for link
+      And I should be on the select period page

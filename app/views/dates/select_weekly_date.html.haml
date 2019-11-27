@@ -1,0 +1,58 @@
+= link_to 'Back', weekly_charge_dates_path, class: 'govuk-back-link', id: 'back-link'
+
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      - if alert
+        = render 'common/error_summary',
+          error_msg_div: '#select-weekly-date-error',
+          error_msg: 'Select a date that you wish to pay for'
+
+      %h1.govuk-heading-l When do you want your 7-day period to start?
+      = render 'common/draft_tag'
+      %p
+        You have to pay by midnight on the next working day after you drive in the zone.
+      %details.govuk-details{'data-module': 'govuk-details'}
+        %summary.govuk-details__summary
+          %span.govuk-details__summary-text
+            Why can't I see my dates?
+        .govuk-details__text
+          %p
+            You can't pay more than 7 days ahead.
+          %p
+            You have to pay the charge by midnight on the next working day after you have driven in
+            a Clean Air Zone. If the payment window has closed you won't be able to pay here, and
+            you will be sent a fine in the post. This will be sent to the address the DVLA holds
+            for the vehicle's owner.
+
+      = form_tag confirm_date_weekly_dates_path, method: :post do
+        .govuk-form-group{class: ('govuk-form-group--error' if alert)}
+          %fieldset.govuk-fieldset
+            %legend.govuk-visually-hidden
+              Select weekly date
+
+            - if alert
+              %span#select-weekly-date-error.govuk-error-message
+                %span.govuk-visually-hidden Error:
+                Select a date that you wish to pay for
+            .govuk-radios
+              - @dates.each_with_index do |date, index|
+                .govuk-radios__item
+                  %input.govuk-radios__input{'aria-describedby': 'date-hint',
+                                                 name: 'dates[]',
+                                                 type: 'radio',
+                                                 value: date[:value],
+                                                 id: "date-#{index}",
+                                                 checked: checked_weekly?(date[:value])}
+                  %label.govuk-label.govuk-radios__label{for: "date-#{index}"}
+                    - if date[:today]
+                      %b
+                        = date[:name]
+                      (Today)
+                    - else
+                      = date[:name]
+                  %span#date-hint.govuk-hint.govuk-radios__hint
+                    = date[:hint]
+        = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
+
+      %p= link_to 'Pay for 1 day instead', select_period_dates_path, id: 'pay_instead'

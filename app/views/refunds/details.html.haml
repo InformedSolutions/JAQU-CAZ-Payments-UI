@@ -1,8 +1,9 @@
-= link_to 'Back', scenarios_refunds_path, class: 'govuk-back-link'
+= link_to 'Back', scenarios_refunds_path, class: 'govuk-back-link', id: 'back-link'
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
     .govuk-grid-column-two-thirds
       %h1.govuk-heading-l Claim a refund
+      = render 'common/draft_tag'
       %p
         Call the Clean Air Zone you entered to claim your refund
         %ul.govuk-list-govuk-list--bullet
