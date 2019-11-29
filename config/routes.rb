@@ -67,6 +67,7 @@ Rails.application.routes.draw do
   end
 
   get :build_id, to: 'application#build_id'
+  get :health, to: 'application#health'
 
   get :service_unavailable, to: 'application#server_unavailable'
   match '/404', to: 'errors#not_found', via: :all
