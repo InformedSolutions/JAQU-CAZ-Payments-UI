@@ -17,10 +17,23 @@ class ApplicationController < ActionController::Base
   # enable basic HTTP authentication on production environment if HTTP_BASIC_PASSWORD variable present
   http_basic_authenticate_with name: ENV['HTTP_BASIC_USER'],
                                password: ENV['HTTP_BASIC_PASSWORD'],
-                               except: :build_id,
+                               except: %i[build_id health],
                                if: lambda {
                                      Rails.env.production? && ENV['HTTP_BASIC_PASSWORD'].present?
                                    }
+
+  ##
+  # Health endpoint
+  #
+  # Used as a healthcheck - returns 200 HTTP status
+  #
+  # ==== Path
+  #
+  #    GET /health.json
+  #
+  def health
+    render json: 'OK', status: :ok
+  end
 
   ##
   # Build ID endpoint
