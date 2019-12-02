@@ -4,11 +4,10 @@
   %span#vrn-error.govuk-error-message
     %span.govuk-visually-hidden Error:
     = message
-  %input#vrn.govuk-input.govuk-input--width-10{'aria-labelledby': 'vrn-label',
-                                               'aria-describedby': 'vrn-error',
-                                               name: 'vrn',
-                                               type: 'text',
-                                               class: 'govuk-input--error',
-                                               style: 'text-transform: uppercase;',
-                                               maxlength: 15, 
-                                               value: params[:vrn]}
+  %input#vrn.govuk-input.vrn-input{'aria-labelledby': 'vrn-label',
+                                   'aria-describedby': 'vrn-error',
+                                   name: 'vrn',
+                                   type: 'text',
+                                   class: 'govuk-input--error',
+                                   maxlength: 15,
+                                   value: params[:vrn]}
