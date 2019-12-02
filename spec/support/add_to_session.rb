@@ -23,8 +23,7 @@ module AddToSession
   end
 
   def add_to_session(data = {})
-    data.transform_keys!(&:to_s)
-    encoded_data = RackSessionAccess.encode(vehicle_details: data)
+    encoded_data = RackSessionAccess.encode(vehicle_details: data.stringify_keys)
     put RackSessionAccess.path, params: { data: encoded_data }
   end
 
