@@ -12,19 +12,15 @@ volumes:
   host:
     path: /var/run/docker.sock
 
-steps:
-
-  # Execute OWASP Zap tests
-  - name: owasp zap tests
+services:
+  - name: zap
     image: owasp/zap2docker-stable
     commands:
-      - mkdir -p /zap/wrk
-      - cp zap.conf /zap/wrk/zap.conf
-      - cd /zap
-      - zap-full-scan.py -t https://dev.paycleanairzonecharge.co.uk -c zap.conf
-    volumes:
-      - name: docker_sock
-        path: /var/run/docker.sock
+      - zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true -config api.disablekey=true
+    ports:
+      - 8080
+
+steps:
 
     # Build end to end tests docker image
   - name: build end to end test image
@@ -46,6 +42,32 @@ steps:
       - name: docker_sock
         path: /var/run/docker.sock
 
+  - name: run owasp zap tests
+    image: test-tools-image
+    pull: never
+    failure: ignore
+    environment:
+      ZAP: true
+      ZAP_PROXY_URL: 'zap'
+      BASEURL_PAYMENTS: 'https://payments-alb-dev-1894331684.eu-west-2.elb.amazonaws.com/'
+      PAYMENTS_BASIC_USER: 'PaymentsDevUser1'
+      PAYMENTS_BASIC_PASSWORD: 'CleanAir99'
+      SCREENSHOT_TYPE: 'base'
+      LOCATION: local
+    commands:
+      - cd JAQU-CAZ-QA-selenium
+      - cucumber -t @ZAPPAYMENTS
+
+  - name: security warning
+    image: docker:git
+    commands:
+      - echo "OWASP ZAP tests failed. Please check outputs in case of false positives."
+    when:
+      status:
+        - failure
+      event:
+        -pull_request
+
     # Run end to end tests
   - name: run end to end tests
     image: selenium-jaqu
@@ -62,6 +84,8 @@ steps:
     commands:
       - cd JAQU-CAZ-QA-selenium
       - cucumber -t @PAYMENTS --retry 3
+
+      
   ################################################# End Nightly Steps ############################################################
 
 ---
