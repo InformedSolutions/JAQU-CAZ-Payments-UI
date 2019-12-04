@@ -10,17 +10,11 @@
       %p You'll need the registration number of the vehicle.
 
       %p
-        = link_to 'Check if your vehicle meets clean air standards',
-          Rails.configuration.x.check_air_standard_url,
-          target: '_blank',
-          class: 'govuk-link'
+        = external_link_to 'Check if your vehicle meets clean air standards',
+          Rails.configuration.x.check_air_standard_url
         or
         = succeed '.' do
-          = link_to 'discover alternatives to having to pay',
-            nil,
-            target: '_blank',
-            class: 'govuk-link'
-
+          = external_link_to 'discover alternatives to having to pay', nil
       %p
         You must pay the Clean Air Zone charge by midnight on the next working day after you drive in a Clean Air Zone.
       %a.govuk-button.govuk-button--start{role: 'button',
@@ -48,10 +42,7 @@
       %p
         Find out more about
         = succeed '.' do
-          = link_to 'Clean Air Zones',
-            nil,
-            target: '_blank',
-            class: 'govuk-link'
+          = external_link_to 'Clean Air Zones', nil
 
     .govuk-grid-column-one-third
       %aside#related-items-label.app-related-items{role: 'complementary'}
@@ -60,10 +51,10 @@
         %nav{'aria-labelledby': 'related-items-label', role: 'navigation'}
           %ul.govuk-list{class: 'govuk-!-font-size-16'}
             %li
-              = link_to 'Am I exempt?', nil, target: '_blank', class: 'govuk-link'
+              = external_link_to 'Am I exempt?', nil
             %li
               = link_to 'Can I claim a refund?', scenarios_refunds_path, class: 'govuk-link'
             %li
-              = link_to 'Create Fleet Account', nil, target: '_blank', class: 'govuk-link'
+              = external_link_to 'Create Fleet Account', nil
             %li
-              = link_to 'Fleet User Account', nil, target: '_blank', class: 'govuk-link'
+              = external_link_to 'Fleet User Account', nil
