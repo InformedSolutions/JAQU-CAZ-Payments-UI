@@ -27,4 +27,18 @@ module ApplicationHelper
   def determinate_payment_for_path(weekly_period)
     weekly_period ? select_period_dates_path : select_daily_date_dates_path
   end
+
+  # Used for external inline links in the app.
+  # Returns a link with blank target and area-label.
+  #
+  # Reference: https://www.w3.org/WAI/GL/wiki/Using_aria-label_for_link_purpose
+  def external_link_to(text, url, html_options = {})
+    html_options.symbolize_keys!.reverse_merge!(
+      target: '_blank',
+      class: 'govuk-link',
+      rel: 'noopener',
+      'area-label': "#{html_options[:'area-label'] || text} - #{I18n.t('external_link')}"
+    )
+    link_to text, url, html_options
+  end
 end
