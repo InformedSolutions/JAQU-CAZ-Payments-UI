@@ -4,7 +4,7 @@ type: docker
 name: payments-web-nightly
 trigger:
   event:
-    - cron
+    - pull_request
 concurrency:
   limit: 1
 volumes:
@@ -65,8 +65,7 @@ steps:
     when:
       status:
         - failure
-      event:
-        -pull_request
+
 
     # Run end to end tests
   - name: run end to end tests
