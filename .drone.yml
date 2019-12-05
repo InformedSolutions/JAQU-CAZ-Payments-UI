@@ -21,7 +21,7 @@ steps:
       - mkdir -p /zap/wrk
       - cp zap.conf /zap/wrk/zap.conf
       - cd /zap
-      - zap-full-scan.py -t https://dev.paycleanairzonecharge.co.uk -c zap.conf
+      - zap-full-scan.py -t https://PaymentsDevUser1:CleanAir99@dev.paycleanairzonecharge.co.uk/ -c zap.conf
     volumes:
       - name: docker_sock
         path: /var/run/docker.sock
@@ -55,7 +55,7 @@ steps:
         from_secret: browserstack_username
       BS_AUTHKEY:
         from_secret: browserstack_auth_key
-      BASEURL_PAYMENTS: 'https://dev.paycleanairzonecharge.co.uk/'
+      BASEURL_PAYMENTS: 'https://PaymentsDevUser1:CleanAir99@dev.paycleanairzonecharge.co.uk/'
       BROWSER_SET: 'min'
       BUILD: ${DRONE_BUILD_NUMBER}
       LOCATION: browserstack
@@ -347,7 +347,7 @@ steps:
         from_secret: browserstack_username
       BS_AUTHKEY:
         from_secret: browserstack_auth_key
-      BASEURL_PAYMENTS: 'https://dev.paycleanairzonecharge.co.uk/'
+      BASEURL_PAYMENTS: 'https://PaymentsDevUser1:CleanAir99@dev.paycleanairzonecharge.co.uk/'
       BROWSER_SET: 'min'
       BUILD: ${DRONE_BUILD_NUMBER}
       LOCATION: browserstack
