@@ -14,17 +14,17 @@ volumes:
 
 steps:
 
-  # Execute OWASP Zap tests
-  - name: owasp zap tests
-    image: owasp/zap2docker-stable
-    commands:
-      - mkdir -p /zap/wrk
-      - cp zap.conf /zap/wrk/zap.conf
-      - cd /zap
-      - zap-full-scan.py -t https://PaymentsDevUser1:CleanAir99@dev.paycleanairzonecharge.co.uk/ -c zap.conf
-    volumes:
-      - name: docker_sock
-        path: /var/run/docker.sock
+  # # Execute OWASP Zap tests
+  # - name: owasp zap tests
+  #   image: owasp/zap2docker-stable
+  #   commands:
+  #     - mkdir -p /zap/wrk
+  #     - cp zap.conf /zap/wrk/zap.conf
+  #     - cd /zap
+  #     - zap-full-scan.py -t https://PaymentsDevUser1:CleanAir99@dev.paycleanairzonecharge.co.uk/ -c zap.conf
+  #   volumes:
+  #     - name: docker_sock
+  #       path: /var/run/docker.sock
 
     # Build end to end tests docker image
   - name: build end to end test image
