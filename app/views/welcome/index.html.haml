@@ -34,10 +34,11 @@
         %br
         Standards rates apply.
 
-      %h2.govuk-heading-s Exemptions
+      %h2.govuk-heading-s Explore the topic
       %p
-        Find out if you are exempt from
-        = external_link_to 'paying the charge', nil, id: 'pay-charge'
+        Find out more about
+        = succeed '.' do
+          = external_link_to 'Clean Air Zones', nil
 
     .govuk-grid-column-one-third
       %aside#related-items-label.app-related-items{role: 'complementary'}
@@ -46,8 +47,10 @@
         %nav{'aria-labelledby': 'related-items-label', role: 'navigation'}
           %ul.govuk-list{class: 'govuk-!-font-size-16'}
             %li
-              = external_link_to 'Create a business account', nil, id: 'create-account'
+              = external_link_to 'Am I exempt?', nil
             %li
-              = external_link_to 'Sign in to your business account', nil, id: 'sign-in'
+              = link_to 'Can I claim a refund?', scenarios_refunds_path, class: 'govuk-link'
             %li
-              = link_to 'Claim a refund', scenarios_refunds_path, class: 'govuk-link', id: 'refund'
+              = external_link_to 'Create Fleet Account', nil
+            %li
+              = external_link_to 'Fleet User Account', nil
