@@ -8,36 +8,34 @@
           error_msg: 'Confirm that the registration number is correct'
 
       %h1.govuk-heading-xl Vehicle details not found
-      %h1.govuk-heading-m We can't find the details of this vehicle
       = render 'common/draft_tag'
-      %p
-        We might not be able to find the details for the vehicle
-        = @vrn
-        because it's not registered
-        with the DVLA.
       %p
         Try
         = link_to 'entering your details', enter_details_vehicles_path, class: 'govuk-link'
-        again making sure that you have no mixed up letters and numbers
-        (for example, the letters
+        again making sure you have not mixed up letters and numbers (for example, the letters
         <strong>I</strong> and <strong>O</strong> with the numbers <strong>1</strong> and <strong>0</strong>).
-      %h1.govuk-heading-m If you believe your vehicle should be registered in the UK
+
+      %h1.govuk-heading-m Check your registration details
       %p
-        If your details are still not recognised, and you believe your vehicle should be registered
-        in the UK, contact the
+        If the details still can not be found and you believe your vehicle should be registered in
+        the UK, contact the
         = external_link_to 'DVLA', 'https://www.gov.uk/change-vehicle-details-registration-certificate'
         to update the details it holds for your vehicle.
+
+      %h1.govuk-heading-m You still have to pay the Clean Air Zone charge
       %p
-        You will still have to pay the Clean Air Zone charge (payment has to be made by midnight
-        the next working day after you drive in the zone). If your vehicle meets Clean Air standards,
-        you will be able to claim a
-        = link_to 'refund once your vehicle details are updated.',
+        If your vehicle <strong>does</strong> meet Clean Air standards, you will be able to claim a refund when your
+        = link_to 'vehicle details are updated.',
           scenarios_refunds_path,
           class: 'govuk-link'
+      %p
+        Payment must be made a maximum of 7 days after you have driven in the zone or you may
+        receive a penalty charge notice (PCN).
       %p
         Please confirm that the registration number
         %b= @vrn
         is correct.
+
       = form_tag confirm_unrecognised_vehicles_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
           %fieldset.govuk-fieldset
