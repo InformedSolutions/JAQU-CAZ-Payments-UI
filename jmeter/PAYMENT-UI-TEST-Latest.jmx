@@ -36,12 +36,12 @@
         <collectionProp name="Arguments.arguments">
           <elementProp name="BASE_URL_1" elementType="Argument">
             <stringProp name="Argument.name">BASE_URL_1</stringProp>
-            <stringProp name="Argument.value">${__P(baseurl2,dev.paycleanairzonecharge.co.uk}</stringProp>
+            <stringProp name="Argument.value">${__P(baseurl1,dev.paycleanairzonecharge.co.uk)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="BASE_URL_2" elementType="Argument">
             <stringProp name="Argument.name">BASE_URL_2</stringProp>
-            <stringProp name="Argument.value">${__P(baseurl2,payments.service.gov.uk}</stringProp>
+            <stringProp name="Argument.value">${__P(baseurl2,payments.service.gov.uk)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="caz-session" elementType="Argument">
