@@ -49,7 +49,7 @@ steps:
     environment:
       ZAP: true
       ZAP_PROXY_URL: 'zap'
-      BASEURL_PAYMENTS: 'https://PaymentsDevUser1:CleanAir99@dev.paycleanairzonecharge.co.uk/'
+      BASEURL_PAYMENTS: 'https://PaymentsDevUser1:CleanAir99@dev.paycleanairzonecharge.co.uk'
       SCREENSHOT_TYPE: 'base'
       LOCATION: local
     commands:
