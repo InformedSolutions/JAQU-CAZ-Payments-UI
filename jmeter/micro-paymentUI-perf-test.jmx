@@ -29,7 +29,7 @@
           </elementProp>
           <elementProp name="BASE_URL_2" elementType="Argument">
             <stringProp name="Argument.name">BASE_URL_2</stringProp>
-            <stringProp name="Argument.value">${__P(baseurl2,payments.service.gov.uk(}</stringProp>
+            <stringProp name="Argument.value">${__P(baseurl2,payments.service.gov.uk)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="local-authority" elementType="Argument">
@@ -65,7 +65,7 @@
       <AuthManager guiclass="AuthPanel" testclass="AuthManager" testname="HTTP Authorization Manager" enabled="true">
         <collectionProp name="AuthManager.auth_list">
           <elementProp name="" elementType="Authorization">
-            <stringProp name="Authorization.url">https://dev.paycleanairzonecharge.co.uk/</stringProp>
+            <stringProp name="Authorization.url">https://dev.paycleanairzonecharge.co.uk</stringProp>
             <stringProp name="Authorization.username">PaymentsDevUser1</stringProp>
             <stringProp name="Authorization.password">CleanAir99</stringProp>
             <stringProp name="Authorization.domain"></stringProp>
@@ -91,7 +91,7 @@
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <stringProp name="LoopController.loops">2</stringProp>
+          <stringProp name="LoopController.loops">5</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">1</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
