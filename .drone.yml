@@ -54,7 +54,7 @@ steps:
       LOCATION: local
     commands:
       - cd JAQU-CAZ-QA-selenium
-      - bundle exec cucumber -t @ZAPPAYMENTS
+      - cucumber -t @ZAPPAYMENTS
 
   - name: security warning
     image: docker:git
@@ -137,7 +137,7 @@ steps:
         path: /var/run/docker.sock
     commands:
       - yarn install
-      - bundle exec rspec -f d
+      - rspec -f d
 
   # Execute integration/scenario tests
   - name: integration tests
@@ -149,7 +149,7 @@ steps:
       - name: docker_sock
         path: /var/run/docker.sock
     commands:
-      - bundle exec cucumber
+      - cucumber
 
   # Invoke static code analysis through Ruby libraries and assets (js + stylesheets)
   - name: static code analysis (Ruby + assets)
@@ -159,17 +159,17 @@ steps:
       - name: docker_sock
         path: /var/run/docker.sock
     commands:
-      - bundle exec rubocop
-      - bundle exec scss-lint app/javascript
+      - rubocop
+      - scss-lint app/javascript
 
   # Invoke security analysis through Ruby libraries
   - name: security tests (Ruby)
     image: test-payments-frontend
     pull: never
     commands:
-       - bundle exec bundle audit check --update
+       - bundle audit check --update
        - yarn audit
-       - bundle exec brakeman --except Redirect,LinkToHref
+       - brakeman --except Redirect,LinkToHref
     volumes:
       - name: docker_sock
         path: /var/run/docker.sock
@@ -373,7 +373,7 @@ steps:
       LOCATION: browserstack
     commands:
       - cd JAQU-CAZ-QA-selenium
-      - bundle exec cucumber -t @PAYMENTS --retry 3
+      - cucumber -t @PAYMENTS --retry 3
     when:
       event:
         - push
@@ -432,7 +432,7 @@ steps:
         path: /var/run/docker.sock
     commands:
       - yarn install
-      - bundle exec rspec -f d
+      - rspec -f d
 
   # Execute integration/scenario tests
   - name: integration tests
@@ -454,15 +454,15 @@ steps:
       - name: docker_sock
         path: /var/run/docker.sock
     commands:
-      - bundle exec rubocop
-      - bundle exec scss-lint app/javascript
+      - rubocop
+      - scss-lint app/javascript
 
   # Invoke security analysis through Ruby libraries
   - name: security tests (Ruby)
     image: test-payments-frontend
     pull: never
     commands:
-       - bundle exec bundle audit check --update
+       - bundle audit check --update
        - yarn audit
        - bunde exec brakeman --except Redirect,LinkToHref
     volumes:
@@ -651,7 +651,7 @@ steps:
       LOCATION: browserstack
     commands:
       - cd JAQU-CAZ-QA-selenium
-      - bundle exec cucumber -t @PAYMENTS --retry 3
+      - cucumber -t @PAYMENTS --retry 3
     when:
       event:
         - push
