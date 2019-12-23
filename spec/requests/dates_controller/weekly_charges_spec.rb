@@ -12,7 +12,8 @@ RSpec.describe 'DatesController - GET #weekly_charge', type: :request do
     instance_double(ComplianceDetails,
                     zone_name: 'Leeds',
                     charge: 50,
-                    exemption_or_discount_url: 'www.wp.pl')
+                    exemption_or_discount_url: 'www.wp.pl',
+                    compliance_url: 'www.wp.pl')
   end
 
   before do

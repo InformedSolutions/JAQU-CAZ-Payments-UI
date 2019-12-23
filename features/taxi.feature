@@ -19,7 +19,7 @@ Feature: Charges
       And I should see "Confirm you have checked if you are eligible for an exemption"
     Then I choose I confirm that I am not exempt
       And I press the Continue
-      And I should see "When do you want your 7-day period to start?"
+      And I should see "Choose your dates"
     Then I press the Continue
       And I should see "Select a date that you wish to pay for"
     Then I select Today
