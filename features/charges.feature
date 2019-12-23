@@ -64,7 +64,7 @@ Feature: Charges
 
   Scenario: User selects dates to pay for
     Given I am on the dates page
-      And I should see "Which days do you want to pay for?"
+      And I should see "Choose your dates"
     Then I press the Continue
       And I should see "Select a date that you wish to pay for"
     Then I choose today date
