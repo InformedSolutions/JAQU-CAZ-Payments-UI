@@ -9,7 +9,7 @@ Feature: Charges
       And I press the Confirm
     Then I select Leeds
       And I press the Continue
-      And I should see "What would you like to do?"
+      And I should see "How many days do you want to pay for?"
     Then I press the Continue
       And I should see "State if you are paying for 1 day or 7 days"
     Then I select Pay for 7 days
