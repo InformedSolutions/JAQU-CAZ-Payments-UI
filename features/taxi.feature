@@ -14,7 +14,7 @@ Feature: Charges
       And I should see "State if you are paying for 1 day or 7 days"
     Then I select Pay for 7 days
       And I press the Continue
-      And I should see "Pay a Leeds Clean Air Zone weekly charge"
+      And I should see "Pay a weekly Leeds Clean Air Zone charge"
     Then I press the Continue
       And I should see "Confirm you have checked if you are eligible for an exemption"
     Then I choose I confirm that I am not exempt

@@ -9,27 +9,24 @@
           error_msg: 'Confirm you have checked if you are eligible for an exemption'
 
       %h1.govuk-heading-l
-        Pay a
+        Pay a weekly
         = @compliance_details.zone_name
-        Clean Air Zone weekly charge
+        Clean Air Zone charge
       = render 'common/draft_tag'
       %p
         The weekly charge for your vehicle is:
       %h2.govuk-heading-m
         = parse_charge(@weekly_charge)
       %p
-        Paying the weekly charge lets you drive the same vehilce in the Leeds Clean Air Zone as
-        often as you like within a 7-day period.
-      %p
-        You must pay for the weekly charge either on the first day or by midnight on the next
-        working day after you drive in a Clean Air Zone.
+        You only need to pay the charge once for the 7 days.
       .govuk-warning-text
         %span.govuk-warning-text__icon{'aria-hidden': true } !
         %strong.govuk-warning-text__text
           %span.govuk-warning-text__assistive
             Warning
-          If you don't pay by midnight on the next working day after you have driven in the zone,
-          you will be sent a fine.
+          You have up to 7 days to pay the charge after your last day driving in the zone, or you
+          will pay a penalty charge notice (PCN).
+
       = form_tag confirm_weekly_charge_dates_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
           %fieldset.govuk-fieldset
@@ -49,14 +46,15 @@
                 %label.govuk-label.govuk-checkboxes__label{for: 'confirm-exempt'}
                   I confirm that I am not exempt from the
                   = @compliance_details.zone_name
-                  Clean Air Zone charge
-                  (full details about who is exempt from paying the charge in
-                  = @compliance_details.zone_name
-                  can be found
+                  Clean Air Zone charge.
+                  (Find out who is exempt from
                   = succeed ').' do
-                    = external_link_to('here',
+                    = external_link_to("paying the charge in #{@compliance_details.zone_name}",
                                        @compliance_details.exemption_or_discount_url ,
                                        id: 'exemption-link')
         = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
 
-        %p= link_to 'Discover alternatives having to pay', '#', id: 'discover-alternatives'
+        %p
+          = external_link_to('Get support to upgrade or replace your vehicle',
+                   @compliance_details.compliance_url,
+                   id: 'support-link')
