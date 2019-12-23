@@ -51,6 +51,6 @@
             %li
               = link_to 'Can I claim a refund?', scenarios_refunds_path, class: 'govuk-link'
             %li
-              = external_link_to 'Create Fleet Account', nil
+              = external_link_to 'Create Fleet Account', Rails.configuration.x.fleets_ui_accounts_url
             %li
-              = external_link_to 'Fleet User Account', nil
+              = external_link_to 'Fleet User Account', Rails.configuration.x.fleets_ui_url

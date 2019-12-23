@@ -18,14 +18,14 @@ RUN apk add --no-cache --update build-base linux-headers tzdata nodejs \
 RUN mkdir -p /home/app
 WORKDIR /home/app
 COPY Gemfile Gemfile.lock /home/app/
-RUN gem install bundler && bundle config force_ruby_platform true \
- && bundle install --without development test
+RUN gem install bundler -v 2.0.2 && bundle config force_ruby_platform true \
+ && bundle config set without 'development test' && bundle install
 
 # Install node packages and precompile assets
 COPY . /home/app
 
 RUN yarn install --frozen-lockfile --non-interactive \
- && bundle exec rails assets:precompile \
+ && rails assets:precompile \
  && yarn cache clean \
  && rm -rf /home/app/node_modules
 

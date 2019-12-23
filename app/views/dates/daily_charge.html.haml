@@ -9,7 +9,7 @@
           error_msg: alert
 
       %h1.govuk-heading-l
-        Pay a
+        Pay a daily
         = @compliance_details.zone_name
         Clean Air Zone charge
       = render 'common/draft_tag'
@@ -18,7 +18,7 @@
       %h2.govuk-heading-m
         = parse_charge(@compliance_details.charge)
       %p
-        You only need to pay once per day (the daily charge period runs from midnight to midnight).
+        The charge period runs from midnight to midnight.
       .govuk-warning-text
         %span.govuk-warning-text__icon{'aria-hidden': true } !
         %strong.govuk-warning-text__text
@@ -55,6 +55,6 @@
                                       id: 'exemption-link')
         = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
       %p
-        = external_link_to('Discover alternatives to having to pay',
+        = external_link_to('Get support to upgrade or replace your vehicle',
                            @compliance_details.compliance_url,
-                           id: 'alternative-link')
+                           id: 'support-link')
