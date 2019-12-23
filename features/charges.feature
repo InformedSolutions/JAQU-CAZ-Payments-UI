@@ -43,7 +43,7 @@ Feature: Charges
     Then I select Birmingham
       And I press the Continue
     Then I should be on the daily charge page
-      And I should see "Pay a Birmingham Clean Air Zone charge"
+      And I should see "Pay a daily Birmingham Clean Air Zone charge"
 
   Scenario: Vehicle is compliant in all CAZ
     Given My vehicle is compliant

@@ -35,4 +35,4 @@ Feature: Charges
     Then I press the Continue
     Then I select Pay for 1 day
       And I press the Continue
-      And I should see "Pay a Leeds Clean Air Zone charge"
+      And I should see "Pay a daily Leeds Clean Air Zone charge"
