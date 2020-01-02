@@ -377,6 +377,19 @@ steps:
     when:
       event:
         - push
+
+  # Execute jMeter scripts via taurus
+  - name: micro-performance tests
+    image: blazemeter/taurus
+    commands:
+      - bzt -o modules.jmeter.properties.baseurl1=dev.paycleanairzonecharge.co.uk -o modules.jmeter.properties.baseurl2=payments.service.gov.uk jmeter/PAYMENT-UI-TEST-Latest.jmx jmeter/assertion.yml
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    when:
+      event:
+        - push
+
   ################################################# End DEV Steps #######################################################
 ---
 
