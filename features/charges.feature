@@ -94,4 +94,4 @@ Feature: Charges
     Given I am on the review weekly payment page
       And I should see "Review your payment"
     Then I press the Change Payment for link
-      And I should be on the select period page
+      And I should be on the pick weekly dates page

@@ -7,7 +7,7 @@ en:
   vrn_form:
     vrn_missing: 'Enter the registration number of the vehicle'
     country_missing: 'Tell us if your vehicle is UK or non-UK registered'
-    vrn_invalid: 'Enter the registration number of the vehicle in valid format'
+    vrn_invalid: 'Enter the registration number of the vehicle in a valid format'
     vrn_too_long: 'The registration number of the vehicle is too long'
     vrn_too_short: 'The registration number of the vehicle is too short'
   la_form:
