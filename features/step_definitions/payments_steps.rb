@@ -26,3 +26,7 @@ Then('I press pay for another CAZ') do
   mock_dvla_response
   click_link 'Pay for another Clean Air Zone'
 end
+
+Then('I should not see pay for another CAZ link') do
+  expect(page).not_to have_content('Pay for another Clean Air Zone')
+end
