@@ -48,8 +48,6 @@ module SessionManipulation
       values.stringify_keys!
       session[SESSION_KEY] = session[SESSION_KEY].slice(*previous_keys).merge(values)
       log_action "User's current session: #{session[SESSION_KEY]}"
-      log_action "Level is: #{self.class::LEVEL}"
-      log_action "Previous keys are: #{previous_keys}"
     end
   end
 end
