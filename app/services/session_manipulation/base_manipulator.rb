@@ -15,7 +15,7 @@ module SessionManipulation
     SUBKEYS = {
       1 => %w[vrn country],
       2 => %w[leeds_taxi unrecognised],
-      3 => %w[type incorrect],
+      3 => %w[type incorrect chargeable_zones],
       4 => %w[la_id daily_charge la_name weekly_possible],
       5 => %w[dates total_charge weekly],
       6 => %w[payment_id],
@@ -48,6 +48,8 @@ module SessionManipulation
       values.stringify_keys!
       session[SESSION_KEY] = session[SESSION_KEY].slice(*previous_keys).merge(values)
       log_action "User's current session: #{session[SESSION_KEY]}"
+      log_action "Level is: #{self.class::LEVEL}"
+      log_action "Previous keys are: #{previous_keys}"
     end
   end
 end

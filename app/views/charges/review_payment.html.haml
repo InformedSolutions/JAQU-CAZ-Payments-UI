@@ -24,7 +24,7 @@
               %th.govuk-table__header{scope: 'row', id: 'value-la'}
                 = @la_name
               %td.govuk-table__cell
-                = link_to 'Change', local_authority_charges_path, class: 'govuk-link', id: 'change-la'
+                = link_to 'Change', local_authority_charges_path, class: 'govuk-link', id: 'change-la' if @chargeable_zones > 1
             %tr.govuk-table__row
               %td.govuk-table__cell Payment for
               %th.govuk-table__header{scope: 'row', id: 'value-dates'}

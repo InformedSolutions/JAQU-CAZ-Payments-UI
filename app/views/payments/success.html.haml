@@ -47,10 +47,11 @@
       %h2.govuk-heading-m
         Other tasks
       %ul.govuk-list.govuk-list--bullet
-        %li
-          = link_to 'Pay for another Clean Air Zone',
-            local_authority_charges_path,
-            id: 'check-another-caz'
+        - if @chargeable_zones > 1
+          %li
+            = link_to 'Pay for another Clean Air Zone',
+              local_authority_charges_path,
+              id: 'check-another-caz'
         %li
           = link_to 'Pay for another vehicle',
             enter_details_vehicles_path,
