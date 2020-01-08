@@ -5,7 +5,14 @@ require 'rails_helper'
 RSpec.describe 'PaymentsApi.create_payment' do
   subject(:call) do
     PaymentsApi.create_payment(
-      vrn: vrn, amount: amount, zone_id: zone_id, days: days, return_url: return_url
+      vrn: vrn,
+      zone_id: zone_id,
+      return_url: return_url,
+      payment_details: {
+        days: days,
+        amount: amount,
+        tariff: tariff
+      }
     )
   end
 
@@ -14,6 +21,7 @@ RSpec.describe 'PaymentsApi.create_payment' do
   let(:zone_id) { SecureRandom.uuid }
   let(:days) { [Date.current, Date.tomorrow].map(&:to_s) }
   let(:return_url) { 'www.wp.pl' }
+  let(:tariff) { 'BCC01-private_car' }
 
   context 'when the response status is 200' do
     before do
@@ -28,11 +36,16 @@ RSpec.describe 'PaymentsApi.create_payment' do
     end
 
     it 'calls API with right params' do
-      expect(call).to have_requested(:post, /payments/).with(body: {
-        days: days, vrn: vrn, amount: amount * 100,
-        'cleanAirZoneId' => zone_id,
-        'returnUrl' => return_url
-      }.to_json)
+      expect(call)
+        .to have_requested(:post, /payments/)
+        .with(body: {
+                days: days,
+                vrn: vrn,
+                amount: amount * 100,
+                tariffCode: tariff,
+                'cleanAirZoneId' => zone_id,
+                'returnUrl' => return_url
+              })
     end
   end
 

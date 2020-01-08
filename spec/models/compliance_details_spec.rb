@@ -20,12 +20,15 @@ RSpec.describe ComplianceDetails, type: :model do
   let(:zone_id) { SecureRandom.uuid }
   let(:unrecognised) { false }
   let(:type) { 'private_car' }
+  let(:tariff) { 'BCC01-private_car' }
+  let(:charge) { 15 }
 
   let(:outcomes) do
     [
       {
         'name' => name,
-        'charge' => 5,
+        'charge' => charge,
+        'tariffCode' => tariff,
         'informationUrls' => {
           'exemptionOrDiscount' => url,
           'becomeCompliant' => url
@@ -42,8 +45,9 @@ RSpec.describe ComplianceDetails, type: :model do
       [
         {
           'cleanAirZoneId' => '39e54ed8-3ed2-441d-be3f-38fc9b70c8d3',
-          'name' => 'Birmingham',
-          'charge' => 15
+          'name' => name,
+          'tariffCode' => tariff,
+          'charge' => charge
         }
       ]
     }
@@ -62,17 +66,7 @@ RSpec.describe ComplianceDetails, type: :model do
       details.zone_name
     end
 
-    describe '.zone_name' do
-      it 'returns CAZ name' do
-        expect(details.zone_name).to eq(name)
-      end
-    end
-
-    describe '.charge' do
-      it 'returns charge value' do
-        expect(details.charge).to eq(5)
-      end
-    end
+    it_behaves_like 'compliance details fields'
 
     describe '.exemption_or_discount_url' do
       it 'returns URL' do
@@ -107,6 +101,8 @@ RSpec.describe ComplianceDetails, type: :model do
         expect(ComplianceCheckerApi).not_to receive(:vehicle_compliance)
         details.zone_name
       end
+
+      it_behaves_like 'compliance details fields'
     end
   end
 
@@ -126,5 +122,7 @@ RSpec.describe ComplianceDetails, type: :model do
         .with(type, [zone_id])
       details.zone_name
     end
+
+    it_behaves_like 'compliance details fields'
   end
 end

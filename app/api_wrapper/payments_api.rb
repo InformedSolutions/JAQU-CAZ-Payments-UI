@@ -23,18 +23,23 @@ class PaymentsApi < BaseApi
     # ==== Attributes
     #
     # * +vrn+ - Vehicle registration number
-    # * +amount+ - Total charge value, eg. 50
     # * +zone_id+ - ID of the selected CAZ
-    # * +days+ - array of the selected days in the right format, eg. ['2019-05-14', '2019-05-15']
     # * +return_url+ - URL where GOC.UK Pay should redirect after the payment is done
+    # * +payment_details+ - hash
+    #   * +amount+ - Total charge value, eg. 50
+    #   * +days+ - Array of the selected days in the right format, eg. ['2019-05-14', '2019-05-15']
+    #   * +tariff+ -
     #
     # ==== Example
     #
     #    PaymentsApi.create_payment(
     #      vrn: 'CU57ABC',
-    #      amount: 50,
     #      zone_id: '86b64512-154c-4033-a64d-92e8ed19275f',
-    #      days: ['2019-05-14', '2019-05-15'],
+    #      payment_details: {
+    #        days: ['2019-05-14', '2019-05-15'],
+    #        amount: 50,
+    #        tariff: 'BCC01-private_car'
+    #      },
     #      return_url: 'http://example.com'
     #    )
     #
@@ -54,15 +59,16 @@ class PaymentsApi < BaseApi
     # * {422 Exception}[rdoc-ref:BaseApi::Error422Exception] - invalid data
     # * {500 Exception}[rdoc-ref:BaseApi::Error500Exception] - backend API error
     #
-    def create_payment(vrn:, amount:, zone_id:, days:, return_url:)
-      amount_in_pence = (amount.to_f * 100).to_i
+    def create_payment(vrn:, zone_id:, payment_details:, return_url:)
+      amount_in_pence = (payment_details[:amount].to_f * 100).to_i
       log_action(
-        "Getting a payment, vrn: #{vrn}, amount: #{amount_in_pence}p, zone id: #{zone_id}, days: #{days.join(',')}"
+        "Creating a payment, vrn: #{vrn}, amount: #{amount_in_pence}p, " \
+        "zone id: #{zone_id}, days: #{payment_details[:days].join(',')}"
       )
       request(
         :post,
         '/payments',
-        body: payment_creation_body(days, vrn, amount_in_pence, zone_id, return_url)
+        body: payment_creation_body(vrn, amount_in_pence, zone_id, payment_details, return_url)
       )
     end
 
@@ -100,12 +106,13 @@ class PaymentsApi < BaseApi
     private
 
     # Returns parsed to JSON hash of the payment creation parameters with proper keys
-    def payment_creation_body(days, vrn, amount, zone_id, return_url)
+    def payment_creation_body(vrn, amount, zone_id, payment_details, return_url)
       {
-        days: days,
+        days: payment_details[:days],
         vrn: vrn,
         amount: amount,
         cleanAirZoneId: zone_id,
+        tariffCode: payment_details[:tariff],
         returnUrl: return_url
       }.to_json
     end
