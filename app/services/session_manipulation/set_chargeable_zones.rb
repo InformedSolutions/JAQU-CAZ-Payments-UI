@@ -1,11 +1,9 @@
-# frozen_string_literal: true
-
 module SessionManipulation
   ##
-  # Service used to mark vehicle as a taxi of PHV registered in Leeds.
+  # Service used to add number of zones in which a vehicle is chargeable to the session.
   #
   # ==== Usage
-  #    SessionManipulation::SetLeedsTaxi.call(session: session)
+  #    SessionManipulation::SetChargeableZones.call(session: session)
   #
   class SetChargeableZones < BaseManipulator
     # Level used to clearing keys in the session
@@ -15,14 +13,14 @@ module SessionManipulation
     #
     # ==== Attributes
     # * +session+ - the user's session
-    # * +la_id+ - UUID, id of the Clean Air Zone
+    # * +chargeable_zones+ - int, the number of zones that a vehicle is chargeable in
     #
     def initialize(session:, chargeable_zones:)
       @session = session
       @chargeable_zones = chargeable_zones
     end
 
-    # Sets +leeds_taxi+ to true in the session. Used by the class level method +.call+
+    # Sets +chargeable_zones+ variable in the session. Used by the class level method +.call+
     def call
       add_fields(chargeable_zones: chargeable_zones)
     end
