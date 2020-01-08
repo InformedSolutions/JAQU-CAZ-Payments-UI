@@ -18,7 +18,8 @@ module AddToSession
       weekly_possible: weekly,
       dates: payment_dates(details, weekly),
       weekly: weekly,
-      total_charge: payment_total_charge(details, weekly)
+      total_charge: payment_total_charge(details, weekly),
+      chargeable_zones: 2
     )
   end
 

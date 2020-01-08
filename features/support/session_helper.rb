@@ -13,10 +13,11 @@ module SessionHelper
     page.set_rack_session(vehicle_details: compliance_details)
   end
 
-  def add_vehicle_details_to_session(add_dates: false, add_payment_id: false)
+  def add_vehicle_details_to_session(add_dates: false, add_payment_id: false, chargeable_zones: 2)
     details = compliance_details
     details.merge!(dates: dates, total_charge: dates.length * 9) if add_dates || add_payment_id
     details[:payment_id] = SecureRandom.uuid if add_payment_id
+    details[:chargeable_zones] = chargeable_zones
     page.set_rack_session(vehicle_details: details)
   end
 
@@ -26,7 +27,8 @@ module SessionHelper
       dates: (Date.current..(Date.current + 6.days)).map(&:to_s),
       total_charge: 50,
       weekly_possible: true,
-      weekly: true
+      weekly: true,
+      chargeable_zones: 2
     }
 
     page.set_rack_session(vehicle_details: details)

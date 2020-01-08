@@ -62,6 +62,7 @@ class PaymentsController < ApplicationController
   # * +la_name+ - selected local authority, required in the session
   # * +dates+ - selected dates, required in the session
   # * +total_charge+ - total charge for selected dates, required in the session
+  # * +chargeable_zones+ - number of zones in which the vehicle is chargeable, required in the session
   #
   def success
     @payment_id = vehicle_details('payment_id')
@@ -70,6 +71,7 @@ class PaymentsController < ApplicationController
     @la_name = la_name
     @dates = vehicle_details('dates')
     @total_charge = vehicle_details('total_charge')
+    @chargeable_zones = vehicle_details('chargeable_zones')
     clear_payment_in_session
   end
 

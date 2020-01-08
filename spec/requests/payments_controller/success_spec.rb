@@ -19,7 +19,8 @@ RSpec.describe 'PaymentsController - GET #success', type: :request do
       user_email: user_email,
       la_name: 'Leeds',
       dates: dates,
-      total_charge: charge
+      total_charge: charge,
+      chargeable_zones: 2
     )
     subject
   end
