@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SessionManipulation
   ##
   # Service used to add number of zones in which a vehicle is chargeable to the session.
