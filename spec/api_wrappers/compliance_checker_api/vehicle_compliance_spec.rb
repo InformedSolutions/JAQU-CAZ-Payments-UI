@@ -7,11 +7,12 @@ RSpec.describe 'ComplianceCheckerApi.vehicle_details' do
 
   let(:vrn) { 'CAS310' }
   let(:zones) { %w[birmingham leeds] }
+  let(:url) { %r{#{vrn}/compliance\?zones=} }
 
   context 'when call returns 200' do
     before do
       vehicle_details = file_fixture('vehicle_compliance_birmingham_response.json').read
-      stub_request(:get, /compliance\?zones=/).to_return(
+      stub_request(:get, url).to_return(
         status: 200,
         body: vehicle_details
       )
@@ -23,8 +24,14 @@ RSpec.describe 'ComplianceCheckerApi.vehicle_details' do
 
     it 'returns compliance data for zones' do
       expect(call['complianceOutcomes'][0].keys).to contain_exactly(
-        'cleanAirZoneId', 'charge', 'name', 'informationUrls'
+        'cleanAirZoneId', 'charge', 'name', 'informationUrls', 'tariffCode'
       )
+    end
+
+    it 'calls API with right params' do
+      expect(call)
+        .to have_requested(:get, url)
+        .with(query: { zones: zones.join(',') })
     end
   end
 
