@@ -5,11 +5,11 @@ module SessionManipulation
   # Service used to add number of zones in which a vehicle is chargeable to the session.
   #
   # ==== Usage
-  #    SessionManipulation::SetChargeableZones.call(session: session)
+  #    SessionManipulation::SetChargeableZones.call(session: session, chargeable_zones: 2)
   #
   class SetChargeableZones < BaseManipulator
     # Level used to clearing keys in the session
-    LEVEL = 3
+    LEVEL = 4
 
     # Initializer function. Used by the class level method +.call+
     #
