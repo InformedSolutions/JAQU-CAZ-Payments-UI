@@ -43,26 +43,25 @@ var config = {
                 "click element input[type=submit]",
                 "wait for element #confirm-exempt to be visible",
             ]
-        },
-        
-        {
-            "url": '${BASE_URL}/vehicles/enter_details?select-date',
-            "actions": [
-                "set field #vrn to CAS394",
-                "click element #registration-country-1",
-                "click element input[type=submit]",
-                "wait for element #confirm-vehicle-1 to be visible",
-                "click element #confirm-vehicle-1",
-                "click element input[type=submit]",
-                "wait for element #birmingham to be visible",
-                "click element #birmingham",
-                "click element input[type=submit]",
-                "wait for element #confirm-exempt to be visible",
-                "click element #confirm-exempt",
-                "click element input[type=submit]",
-                "wait for element #date-0 to be visible"
-            ]
-        },
+        },        
+        //{
+            //"url": '${BASE_URL}/vehicles/enter_details?select-date',
+            //"actions": [
+                //"set field #vrn to CAS394",
+                //"click element #registration-country-1",
+                //"click element input[type=submit]",
+                //"wait for element #confirm-vehicle-1 to be visible",
+                //"click element #confirm-vehicle-1",
+                //"click element input[type=submit]",
+                //"wait for element #birmingham to be visible",
+                //"click element #birmingham",
+                //"click element input[type=submit]",
+                //"wait for element #confirm-exempt to be visible",
+                //"click element #confirm-exempt",
+                //"click element input[type=submit]",
+                //"wait for element #date-0 to be visible"
+            //]
+        //},
         {
             "url": '${BASE_URL}/vehicles/enter_details?payment_summary',
             "actions": [
