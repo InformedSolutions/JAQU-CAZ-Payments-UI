@@ -25,6 +25,10 @@ class ChargesController < ApplicationController
   #
   def local_authority
     @zones = ChargeableZonesService.call(vehicle_details: session[:vehicle_details])
+    SessionManipulation::SetChargeableZones.call(
+      session: session,
+      chargeable_zones: @zones.length
+    )
     return redirect_to compliant_vehicles_path if @zones.empty?
 
     @return_path = local_authority_return_path
@@ -74,6 +78,7 @@ class ChargesController < ApplicationController
     @weekly_period = vehicle_details('weekly')
     @total_charge = vehicle_details('total_charge')
     @return_path = review_payment_return_path
+    @chargeable_zones = vehicle_details('chargeable_zones')
   end
 
   private

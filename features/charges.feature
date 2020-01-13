@@ -84,6 +84,12 @@ Feature: Charges
     Then I press the Change Clean Air Zone link
       And I should see "Which Clean Air Zone do you need to pay for?"
 
+  Scenario: User wants to review payment and cannot see a change clean air zone link
+    Given I am on the review payment page
+      And I should see "Review your payment"
+    When I am only chargeable in one Clean Air Zone
+    Then I should not see the Change Clean Air Zone link
+
   Scenario: User wants review daily payment and press the change payment for link
     Given I am on the review payment page
       And I should see "Review your payment"
@@ -94,4 +100,4 @@ Feature: Charges
     Given I am on the review weekly payment page
       And I should see "Review your payment"
     Then I press the Change Payment for link
-      And I should be on the select period page
+      And I should be on the pick weekly dates page

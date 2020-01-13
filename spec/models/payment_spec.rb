@@ -8,7 +8,8 @@ RSpec.describe Payment, type: :model do
                   'vrn' => vrn,
                   'dates' => dates,
                   'la_id' => zone_id,
-                  'total_charge' => total_charge
+                  'total_charge' => total_charge,
+                  'tariff_code' => tariff
                 },
                 url)
   end
@@ -17,6 +18,7 @@ RSpec.describe Payment, type: :model do
   let(:zone_id) { SecureRandom.uuid }
   let(:dates) { [Date.current, Date.tomorrow].map(&:to_s) }
   let(:total_charge) { 25 }
+  let(:tariff) { 'BCC01-private_car' }
 
   let(:payment_id) { SecureRandom.uuid }
   let(:url) { 'www.wp.pl' }
@@ -24,14 +26,22 @@ RSpec.describe Payment, type: :model do
   before do
     allow(PaymentsApi)
       .to receive(:create_payment)
-      .with(vrn: vrn, zone_id: zone_id, amount: total_charge, days: dates, return_url: url)
       .and_return('paymentId' => payment_id, 'nextUrl' => url)
   end
 
   it 'calls PaymentsApi.create_payment with proper params' do
     expect(PaymentsApi)
       .to receive(:create_payment)
-      .with(vrn: vrn, zone_id: zone_id, amount: total_charge, days: dates, return_url: url)
+      .with(
+        vrn: vrn,
+        zone_id: zone_id,
+        return_url: url,
+        payment_details: {
+          amount: total_charge,
+          days: dates,
+          tariff: tariff
+        }
+      )
     payment.payment_id
   end
 

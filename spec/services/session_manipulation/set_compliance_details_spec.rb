@@ -10,11 +10,13 @@ RSpec.describe SessionManipulation::SetComplianceDetails do
   let(:la_id) { SecureRandom.uuid }
   let(:la_name) { 'Leeds' }
   let(:daily_charge) { 12.5 }
+  let(:tariff) { 'BCC01-private_car' }
 
   before do
-    details = instance_double('ComplianceDetails')
-    allow(details).to receive(:zone_name).and_return(la_name)
-    allow(details).to receive(:charge).and_return(daily_charge)
+    details = instance_double('ComplianceDetails',
+                              zone_name: la_name,
+                              charge: daily_charge,
+                              tariff_code: tariff)
     allow(ComplianceDetails).to receive(:new).and_return(details)
   end
 
@@ -44,6 +46,10 @@ RSpec.describe SessionManipulation::SetComplianceDetails do
       expect(session[:vehicle_details]['weekly_possible']).to be_falsey
     end
 
+    it 'sets tariff_code' do
+      expect(session[:vehicle_details]['tariff_code']).to eq(tariff)
+    end
+
     context 'when vehicle is a taxi in Leeds' do
       let(:session) { { vehicle_details: details.merge('leeds_taxi' => true) } }
 
@@ -59,7 +65,7 @@ RSpec.describe SessionManipulation::SetComplianceDetails do
 
       it 'clears keys from next steps' do
         expect(session[:vehicle_details].keys).to contain_exactly(
-          'vrn', 'country', 'la_id', 'la_name', 'daily_charge', 'weekly_possible'
+          'vrn', 'country', 'la_id', 'la_name', 'daily_charge', 'weekly_possible', 'tariff_code'
         )
       end
     end

@@ -4,7 +4,7 @@ var config = {
         // ignore issue with role=presentation on start button
         ignore: ["WCAG2AA.Principle1.Guideline1_3.1_3_1.F92,ARIA4"],
         timeout: 15000,
-        wait: 1500,
+        wait: 2500,
         chromeLaunchConfig: {
             args: [
                 "--no-sandbox"
@@ -20,7 +20,7 @@ var config = {
         {
             "url": '${BASE_URL}/vehicles/enter_details?caz-selection',
             "actions": [
-                "set field #vrn to CAS310",
+                "set field #vrn to CAS394",
                 "click element #registration-country-1",
                 "click element input[type=submit]",
                 "wait for element #confirm-vehicle-1 to be visible",
@@ -32,7 +32,7 @@ var config = {
         {
             "url": '${BASE_URL}/vehicles/enter_details?confirm-terms-agreement',
             "actions": [
-                "set field #vrn to CAS310",
+                "set field #vrn to CAS394",
                 "click element #registration-country-1",
                 "click element input[type=submit]",
                 "wait for element #confirm-vehicle-1 to be visible",
@@ -48,7 +48,7 @@ var config = {
         {
             "url": '${BASE_URL}/vehicles/enter_details?select-date',
             "actions": [
-                "set field #vrn to CAS310",
+                "set field #vrn to CAS394",
                 "click element #registration-country-1",
                 "click element input[type=submit]",
                 "wait for element #confirm-vehicle-1 to be visible",
@@ -66,7 +66,7 @@ var config = {
         {
             "url": '${BASE_URL}/vehicles/enter_details?payment_summary',
             "actions": [
-                "set field #vrn to CAS310",
+                "set field #vrn to CAS394",
                 "click element #registration-country-1",
                 "click element input[type=submit]",
                 "wait for element #confirm-vehicle-1 to be visible",

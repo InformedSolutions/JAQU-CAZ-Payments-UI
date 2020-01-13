@@ -326,13 +326,14 @@ steps:
     image: pa11y-ci
     pull: never
     environment:
-      BASE_URL: https://PaymentsDevUser1:CleanAir99@dev.paycleanairzonecharge.co.uk/
+      BASE_URL: https://PaymentsDevUser1:CleanAir99@dev.paycleanairzonecharge.co.uk
     commands:
       - mkdir screenshots
       - /usr/local/bin/pa11y-ci -c pa11y/.pa11yci.conf.js
     when:
       event:
         - push
+
 
   ################################################# End DEV Steps #######################################################
 ---

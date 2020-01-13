@@ -34,6 +34,11 @@ class ComplianceDetails
     compliance_data[:charge]
   end
 
+  # Returns a string eg. 'BCC01-private_car'
+  def tariff_code
+    compliance_data[:tariff_code]
+  end
+
   # Displays CAZ dedicated link for checking exemptions and discounts.
   #
   # Returns an URL, eg. 'www.example.com'.

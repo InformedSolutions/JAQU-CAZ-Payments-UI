@@ -10,13 +10,15 @@ RSpec.describe 'ChargesController - POST #submit_local_authority', type: :reques
   let(:zone_id) { SecureRandom.uuid }
   let(:zone_name) { 'Leeds' }
   let(:charge) { 50 }
+  let(:tariff) { 'BCC01-private_car' }
 
   context 'with VRN set' do
     before do
       add_vrn_to_session
       details = instance_double(ComplianceDetails,
                                 zone_name: zone_name,
-                                charge: charge)
+                                charge: charge,
+                                tariff_code: tariff)
       allow(ComplianceDetails).to receive(:new).and_return(details)
     end
 

@@ -31,6 +31,10 @@ Given('My vehicle is not compliant') do
   mock_non_dvla_response
 end
 
+When('I am only chargeable in one Clean Air Zone') do
+  add_vehicle_details_to_session(add_dates: true, chargeable_zones: 2)
+end
+
 Then('I select Birmingham') do
   choose('Birmingham')
 end
@@ -92,4 +96,8 @@ end
 
 Then('I am go the select period page') do
   visit review_payment_charges_path
+end
+
+Then('I should not see the Change Clean Air Zone link') do
+  expect(page).not_to have_selector('#change-la')
 end
