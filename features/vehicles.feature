@@ -45,6 +45,10 @@ Feature: Vehicles
     Then I should see "Confirm that the registration number is correct"
       And I should see "There is a problem"
       And I should be on the non UK page
+    Then I press "Check another vehicle" link
+      And I should be on the enter details page
+    Then I press the Back link
+      And I should be on the non UK page
     Then I choose I confirm registration
       And I press the Continue
     Then I should see "What is your vehicle?"
