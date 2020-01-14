@@ -14,6 +14,7 @@ RSpec.describe SessionManipulation::ClearPaymentDetails do
       'unrecognised' => true,
       'type' => 'car',
       'incorrect' => true,
+      'chargeable_zones' => 2,
       'la_id' => SecureRandom.uuid,
       'daily_charge' => 12.5,
       'la_name' => 'Leeds',
@@ -22,14 +23,16 @@ RSpec.describe SessionManipulation::ClearPaymentDetails do
       'total_charge' => 50,
       'weekly' => true,
       'payment_id' => SecureRandom.uuid,
-      'user_email' => 'test@example.com'
+      'user_email' => 'test@example.com',
+      'payment_reference' => 1,
+      'external_id' => 'external reference'
     }
   end
 
   it 'clears details from steps above vehicle details' do
     service
     expect(session[:vehicle_details].keys).to contain_exactly(
-      'vrn', 'country', 'leeds_taxi', 'unrecognised', 'type', 'incorrect'
+      'vrn', 'country', 'leeds_taxi', 'unrecognised', 'type', 'incorrect', 'chargeable_zones'
     )
   end
 end

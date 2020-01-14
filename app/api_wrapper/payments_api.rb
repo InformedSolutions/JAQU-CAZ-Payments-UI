@@ -85,6 +85,8 @@ class PaymentsApi < BaseApi
     # ==== Result
     #
     # Returned payment details will have the following fields:
+    # * +referenceNumber+ - integer, central reference number of the payment
+    # * +externalPaymentId+ - string, external identifier for the payment
     # * +status+ - string, status of the payment eg. "success"
     # * +userEmail+ - email, email submitted by the user during the payment process
     #

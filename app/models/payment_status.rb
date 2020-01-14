@@ -30,6 +30,16 @@ class PaymentStatus
     payment_data['userEmail']
   end
 
+  # Returns the central reference number of the payment.
+  def payment_reference
+    payment_data['referenceNumber']
+  end
+
+  # Returns the external payment ID.
+  def external_id
+    payment_data['externalPaymentId']
+  end
+
   # Checks if payment was successful. Return boolean
   def success?
     status.eql?('SUCCESS')
