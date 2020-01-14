@@ -40,3 +40,12 @@
                   %label.govuk-label.govuk-checkboxes__label{for: 'confirm-registration'}
                     I confirm that the registration number is correct.
           = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
+
+    .govuk-grid-column-one-third
+      %aside#related-items-label.app-related-items{role: 'complementary'}
+        %h2.govuk-heading-m
+          Related tasks
+        %nav{'aria-labelledby': 'related-items-label', role: 'navigation'}
+          %ul.govuk-list{class: 'govuk-!-font-size-16'}
+            %li
+              = link_to 'Check another vehicle', enter_details_vehicles_path, id: 'check-another-vrn'
