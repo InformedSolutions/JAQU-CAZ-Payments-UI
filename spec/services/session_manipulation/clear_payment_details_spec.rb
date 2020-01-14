@@ -32,7 +32,7 @@ RSpec.describe SessionManipulation::ClearPaymentDetails do
   it 'clears details from steps above vehicle details' do
     service
     expect(session[:vehicle_details].keys).to contain_exactly(
-      'vrn', 'country', 'leeds_taxi', 'unrecognised', 'type', 'incorrect', 'chargeable_zones'
+      'vrn', 'country', 'leeds_taxi', 'unrecognised', 'type', 'incorrect'
     )
   end
 end
