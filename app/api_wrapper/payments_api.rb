@@ -100,9 +100,10 @@ class PaymentsApi < BaseApi
     # * {404 Exception}[rdoc-ref:BaseApi::Error404Exception] - payment not found
     # * {500 Exception}[rdoc-ref:BaseApi::Error500Exception] - backend API error
     #
-    def payment_status(payment_id:)
+    def payment_status(payment_id:, caz_name:)
       log_action "Getting a payment status for id: #{payment_id}"
-      request(:get, "/payments/#{payment_id}")
+      request(:put, "/payments/#{payment_id}",
+              body: payment_status_body(caz_name))
     end
 
     private
@@ -116,6 +117,13 @@ class PaymentsApi < BaseApi
         cleanAirZoneId: zone_id,
         tariffCode: payment_details[:tariff],
         returnUrl: return_url
+      }.to_json
+    end
+
+    # Returns parsed to JSON hash of the payment status reconciliation parameters with proper keys
+    def payment_status_body(caz_name)
+      {
+        cleanAirZoneName: caz_name
       }.to_json
     end
   end

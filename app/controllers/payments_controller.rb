@@ -21,7 +21,7 @@ class PaymentsController < ApplicationController
   # * +payment_id+ - vehicle registration number, required in the session
   #
   def index
-    payment = PaymentStatus.new(vehicle_details('payment_id'))
+    payment = PaymentStatus.new(vehicle_details('payment_id'), vehicle_details('la_name'))
     if payment.success?
       SessionManipulation::SetPaymentDetails
         .call(session: session, email: payment.user_email,

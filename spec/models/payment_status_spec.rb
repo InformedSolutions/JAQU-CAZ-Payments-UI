@@ -3,16 +3,17 @@
 require 'rails_helper'
 
 RSpec.describe PaymentStatus, type: :model do
-  subject(:payment_status) { described_class.new(id) }
+  subject(:payment_status) { described_class.new(id, 'Leeds') }
 
   let(:id) { SecureRandom.uuid }
   let(:status) { 'success' }
   let(:email) { 'test@example.com' }
 
   before do
-    allow(PaymentsApi).to receive(:payment_status).with(payment_id: id).and_return(
-      'paymentId' => id, 'status' => status, 'userEmail' => email
-    )
+    allow(PaymentsApi).to receive(:payment_status)
+      .with(payment_id: id, caz_name: 'Leeds').and_return(
+        'paymentId' => id, 'status' => status, 'userEmail' => email
+      )
   end
 
   describe '.id' do
