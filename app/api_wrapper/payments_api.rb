@@ -80,7 +80,8 @@ class PaymentsApi < BaseApi
     #
     # ==== Example
     #
-    #    PaymentsApi.payment_status(payment_id: '86b64512-154c-4033-a64d-92e8ed19275f')
+    #    PaymentsApi.payment_status(payment_id: '86b64512-154c-4033-a64d-92e8ed19275f', 
+    #                               caz_name: 'Leeds')
     #
     # ==== Result
     #
@@ -101,7 +102,7 @@ class PaymentsApi < BaseApi
     # * {500 Exception}[rdoc-ref:BaseApi::Error500Exception] - backend API error
     #
     def payment_status(payment_id:, caz_name:)
-      log_action "Getting a payment status for id: #{payment_id}"
+      log_action "Getting a payment status for id: #{payment_id}, in CAZ: #{caz_name}"
       request(:put, "/payments/#{payment_id}",
               body: payment_status_body(caz_name))
     end
