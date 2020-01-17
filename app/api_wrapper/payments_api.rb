@@ -72,11 +72,12 @@ class PaymentsApi < BaseApi
       )
     end
 
-    # Calls +/v1/payments/:id+ endpoint with +GET+ method which returns details of the payment.
+    # Calls +/v1/payments/:id+ endpoint with +PUT+ method which returns details of the payment.
     #
     # ==== Attributes
     #
     # * +payment_id+ - Payment ID returned by backend API during the payment creation
+    # * +caz_name+ - the name of the Clean Air Zone for which the payment is being made
     #
     # ==== Example
     #
