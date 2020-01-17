@@ -80,7 +80,7 @@ class PaymentsApi < BaseApi
     #
     # ==== Example
     #
-    #    PaymentsApi.payment_status(payment_id: '86b64512-154c-4033-a64d-92e8ed19275f', 
+    #    PaymentsApi.payment_status(payment_id: '86b64512-154c-4033-a64d-92e8ed19275f',
     #                               caz_name: 'Leeds')
     #
     # ==== Result
