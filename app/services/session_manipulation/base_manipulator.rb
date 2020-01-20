@@ -20,7 +20,7 @@ module SessionManipulation
       5 => %w[la_id daily_charge la_name weekly_possible tariff_code],
       6 => %w[dates total_charge weekly],
       7 => %w[payment_id],
-      8 => %w[user_email]
+      8 => %w[user_email payment_reference external_id]
     }.freeze
 
     # Base initializer for the service

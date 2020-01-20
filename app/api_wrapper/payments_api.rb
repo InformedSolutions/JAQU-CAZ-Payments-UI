@@ -72,19 +72,23 @@ class PaymentsApi < BaseApi
       )
     end
 
-    # Calls +/v1/payments/:id+ endpoint with +GET+ method which returns details of the payment.
+    # Calls +/v1/payments/:id+ endpoint with +PUT+ method which returns details of the payment.
     #
     # ==== Attributes
     #
     # * +payment_id+ - Payment ID returned by backend API during the payment creation
+    # * +caz_name+ - the name of the Clean Air Zone for which the payment is being made
     #
     # ==== Example
     #
-    #    PaymentsApi.payment_status(payment_id: '86b64512-154c-4033-a64d-92e8ed19275f')
+    #    PaymentsApi.payment_status(payment_id: '86b64512-154c-4033-a64d-92e8ed19275f',
+    #                               caz_name: 'Leeds')
     #
     # ==== Result
     #
     # Returned payment details will have the following fields:
+    # * +referenceNumber+ - integer, central reference number of the payment
+    # * +externalPaymentId+ - string, external identifier for the payment
     # * +status+ - string, status of the payment eg. "success"
     # * +userEmail+ - email, email submitted by the user during the payment process
     #
@@ -98,9 +102,10 @@ class PaymentsApi < BaseApi
     # * {404 Exception}[rdoc-ref:BaseApi::Error404Exception] - payment not found
     # * {500 Exception}[rdoc-ref:BaseApi::Error500Exception] - backend API error
     #
-    def payment_status(payment_id:)
-      log_action "Getting a payment status for id: #{payment_id}"
-      request(:get, "/payments/#{payment_id}")
+    def payment_status(payment_id:, caz_name:)
+      log_action "Getting a payment status for id: #{payment_id}, in CAZ: #{caz_name}"
+      request(:put, "/payments/#{payment_id}",
+              body: payment_status_body(caz_name))
     end
 
     private
@@ -114,6 +119,13 @@ class PaymentsApi < BaseApi
         cleanAirZoneId: zone_id,
         tariffCode: payment_details[:tariff],
         returnUrl: return_url
+      }.to_json
+    end
+
+    # Returns parsed to JSON hash of the payment status reconciliation parameters with proper keys
+    def payment_status_body(caz_name)
+      {
+        cleanAirZoneName: caz_name
       }.to_json
     end
   end

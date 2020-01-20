@@ -21,9 +21,11 @@ class PaymentsController < ApplicationController
   # * +payment_id+ - vehicle registration number, required in the session
   #
   def index
-    payment = PaymentStatus.new(vehicle_details('payment_id'))
+    payment = PaymentStatus.new(vehicle_details('payment_id'), vehicle_details('la_name'))
     if payment.success?
-      SessionManipulation::SetUserEmail.call(session: session, email: payment.user_email)
+      SessionManipulation::SetPaymentDetails
+        .call(session: session, email: payment.user_email,
+              payment_reference: payment.payment_reference, external_id: payment.external_id)
       redirect_to success_payments_path
     else
       redirect_to failure_payments_path
@@ -58,6 +60,7 @@ class PaymentsController < ApplicationController
   # ==== Params
   # * +payment_id+ - vehicle registration number, required in the session
   # * +user_email+ - user email address, required in the session
+  # * +reference_number+ - payment reference number, required in the session
   # * +vrn+ - vehicle registration number, required in the session
   # * +la_name+ - selected local authority, required in the session
   # * +dates+ - selected dates, required in the session
@@ -67,6 +70,8 @@ class PaymentsController < ApplicationController
   def success
     @payment_id = vehicle_details('payment_id')
     @user_email = vehicle_details('user_email')
+    @payment_reference = vehicle_details('payment_reference')
+    @external_id = vehicle_details('external_id')
     @vrn = vrn
     @la_name = la_name
     @dates = vehicle_details('dates')

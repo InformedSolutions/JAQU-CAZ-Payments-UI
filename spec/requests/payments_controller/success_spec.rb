@@ -20,7 +20,9 @@ RSpec.describe 'PaymentsController - GET #success', type: :request do
       la_name: 'Leeds',
       dates: dates,
       total_charge: charge,
-      chargeable_zones: 2
+      chargeable_zones: 2,
+      payment_reference: 1,
+      external_id: 'external id'
     )
     subject
   end

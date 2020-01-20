@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'PaymentsApi.payment_status' do
-  subject(:call) { PaymentsApi.payment_status(payment_id: id) }
+  subject(:call) { PaymentsApi.payment_status(payment_id: id, caz_name: 'leeds') }
 
   let(:id) { SecureRandom.uuid }
   let(:status) { 'success' }
@@ -11,7 +11,7 @@ RSpec.describe 'PaymentsApi.payment_status' do
 
   context 'when the response status is 200' do
     before do
-      stub_request(:get, /payments/).to_return(
+      stub_request(:put, /payments/).to_return(
         status: 200,
         body: { 'paymentId' => id, 'status' => status, 'userEmail' => email }.to_json
       )
@@ -24,7 +24,7 @@ RSpec.describe 'PaymentsApi.payment_status' do
 
   context 'when the response status is 500' do
     before do
-      stub_request(:get, /payments/).to_return(
+      stub_request(:put, /payments/).to_return(
         status: 500,
         body: { 'message' => 'Something went wrong' }.to_json
       )
