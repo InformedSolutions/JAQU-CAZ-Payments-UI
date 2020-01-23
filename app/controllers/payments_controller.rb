@@ -23,9 +23,7 @@ class PaymentsController < ApplicationController
   def index
     payment = PaymentStatus.new(vehicle_details('payment_id'), vehicle_details('la_name'))
     if payment.success?
-      SessionManipulation::SetPaymentDetails
-        .call(session: session, email: payment.user_email,
-              payment_reference: payment.payment_reference, external_id: payment.external_id)
+      save_payment_details(payment)
       redirect_to success_payments_path
     else
       redirect_to failure_payments_path
@@ -61,9 +59,9 @@ class PaymentsController < ApplicationController
   #    GET /payments/success
   #
   # ==== Params
-  # * +payment_id+ - vehicle registration number, required in the session
+  # * +external_id+ - payment ID , required in the session
   # * +user_email+ - user email address, required in the session
-  # * +reference_number+ - payment reference number, required in the session
+  # * +payment_reference+ - payment reference number, required in the session
   # * +vrn+ - vehicle registration number, required in the session
   # * +la_name+ - selected local authority, required in the session
   # * +dates+ - selected dates, required in the session
@@ -71,15 +69,7 @@ class PaymentsController < ApplicationController
   # * +chargeable_zones+ - number of zones in which the vehicle is chargeable, required in the session
   #
   def success
-    @payment_id = vehicle_details('payment_id')
-    @user_email = vehicle_details('user_email')
-    @payment_reference = vehicle_details('payment_reference')
-    @external_id = vehicle_details('external_id')
-    @vrn = vrn
-    @la_name = la_name
-    @dates = vehicle_details('dates')
-    @total_charge = vehicle_details('total_charge')
-    @chargeable_zones = vehicle_details('chargeable_zones')
+    @payment_details = PaymentDetails.new(session[:vehicle_details])
     clear_payment_in_session
   end
 
@@ -129,5 +119,15 @@ class PaymentsController < ApplicationController
   # Clears details of the payment in the session
   def clear_payment_in_session
     SessionManipulation::ClearPaymentDetails.call(session: session)
+  end
+
+  # Save payment details using SessionManipulation::SetPaymentDetails
+  def save_payment_details(payment)
+    SessionManipulation::SetPaymentDetails.call(
+      session: session,
+      email: payment.user_email,
+      payment_reference: payment.payment_reference,
+      external_id: payment.external_id
+    )
   end
 end

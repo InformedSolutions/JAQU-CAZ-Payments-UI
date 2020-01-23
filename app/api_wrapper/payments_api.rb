@@ -11,11 +11,6 @@
 class PaymentsApi < BaseApi
   base_uri ENV.fetch('PAYMENTS_API_URL', '') + '/v1'
 
-  headers(
-    'Content-Type' => 'application/json',
-    'X-Correlation-ID' => -> { SecureRandom.uuid }
-  )
-
   class << self
     # Calls +/v1/payments+ endpoint with +POST+ method which triggers the payment creation
     # and returns details of the requested vehicle.

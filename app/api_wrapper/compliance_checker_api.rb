@@ -11,11 +11,6 @@
 class ComplianceCheckerApi < BaseApi
   base_uri ENV.fetch('COMPLIANCE_CHECKER_API_URL', 'localhost:3001') + '/v1/compliance-checker'
 
-  headers(
-    'Content-Type' => 'application/json',
-    'X-Correlation-ID' => -> { SecureRandom.uuid }
-  )
-
   class << self
     ##
     # Calls +/v1/compliance-checker/vehicles/:vrn/details+ endpoint with +GET+ method

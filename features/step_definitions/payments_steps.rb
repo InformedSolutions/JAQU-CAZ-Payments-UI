@@ -2,6 +2,7 @@
 
 Given("I'm getting redirected from GOV.UK Pay") do
   add_vehicle_details_to_session(add_payment_id: true)
+  mock_vehicle_compliance
   visit payments_path
 end
 

@@ -4,10 +4,12 @@ require 'rails_helper'
 
 RSpec.describe SessionManipulation::SetPaymentDetails do
   subject(:service) do
-    described_class
-      .call(session: session, email: email,
-            payment_reference: payment_reference,
-            external_id: external_id)
+    described_class.call(
+      session: session,
+      email: email,
+      payment_reference: payment_reference,
+      external_id: external_id
+    )
   end
 
   let(:session) { { vehicle_details: {} } }
