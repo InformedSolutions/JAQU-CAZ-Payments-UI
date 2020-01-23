@@ -30,6 +30,14 @@ class Payment
     payment_details['paymentId']
   end
 
+  def payment_reference
+    payment_details['centralReference']
+  end
+
+  def external_id
+    payment_details['paymentProviderId']
+  end
+
   # Return URL for continuing of the payment process
   def gov_uk_pay_url
     payment_details['nextUrl']

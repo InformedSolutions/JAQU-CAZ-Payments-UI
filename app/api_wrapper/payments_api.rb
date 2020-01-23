@@ -47,6 +47,8 @@ class PaymentsApi < BaseApi
     #
     # Returned payment details will have the following fields:
     # * +paymentId+ - uuid, ID of the payment created in GovUK.Pay
+    # * +centralReference+ - long, central reference of the payment
+    # * +paymentProviderId+ - string, external identifier of the payment
     # * +nextUrl+ - URL, url returned by GovUK.Pay to proceed the payment
     #
     # ==== Serialization

@@ -48,6 +48,9 @@ class PaymentsController < ApplicationController
   def create
     payment = Payment.new(session[:vehicle_details], payments_url)
     SessionManipulation::SetPaymentId.call(session: session, payment_id: payment.payment_id)
+    SessionManipulation::SetPaymentDetails.call(session: session, email: nil,
+                                                payment_reference: payment.payment_reference,
+                                                external_id: payment.external_id)
     redirect_to payment.gov_uk_pay_url
   end
 
@@ -87,10 +90,12 @@ class PaymentsController < ApplicationController
   #    GET /payments/failure
   #
   # ==== Params
-  # * +payment_id+ - vehicle registration number, required in the session
+  # * +payment_reference+ - payment reference, required in the session
+  # * +external_id+ - external payment id, required in the session
   #
   def failure
-    @payment_id = vehicle_details('payment_id')
+    @payment_reference = vehicle_details('payment_reference')
+    @external_id = vehicle_details('external_id')
     clear_payment_in_session
   end
 
