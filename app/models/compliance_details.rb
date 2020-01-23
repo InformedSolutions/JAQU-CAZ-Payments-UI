@@ -53,6 +53,18 @@ class ComplianceDetails
     url(:become_compliant)
   end
 
+  # Displays root path to the CAZ campaign site
+  #
+  # Returns an URL, eg. 'www.example.com'.
+  def main_info_url
+    url(:main_info)
+  end
+
+  # Returns a string, eg. 'www.example.com'.
+  def public_transport_options_url
+    url(:public_transport_options)
+  end
+
   private
 
   # Attributes used to perform the backend call

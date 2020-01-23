@@ -11,6 +11,7 @@ RSpec.describe 'PaymentsController - GET #success', type: :request do
   let(:charge) { 10 }
   let(:payment_id) { 'XYZ123ABC' }
   let(:user_email) { 'user_email@example.com' }
+  let(:url) { 'www.wp.pl' }
 
   before do
     add_to_session(
@@ -24,6 +25,11 @@ RSpec.describe 'PaymentsController - GET #success', type: :request do
       payment_reference: 1,
       external_id: 'external id'
     )
+    allow(ComplianceDetails)
+      .to receive(:new)
+      .and_return(instance_double(ComplianceDetails,
+                                  compliance_url: url,
+                                  public_transport_options_url: url))
     subject
   end
 

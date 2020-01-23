@@ -31,7 +31,9 @@ RSpec.describe ComplianceDetails, type: :model do
         'tariffCode' => tariff,
         'informationUrls' => {
           'exemptionOrDiscount' => url,
-          'becomeCompliant' => url
+          'becomeCompliant' => url,
+          'mainInfo' => url,
+          'publicTransportOptions' => url
         }
       }
     ]
@@ -68,15 +70,16 @@ RSpec.describe ComplianceDetails, type: :model do
 
     it_behaves_like 'compliance details fields'
 
-    describe '.exemption_or_discount_url' do
-      it 'returns URL' do
-        expect(details.exemption_or_discount_url).to eq(url)
-      end
-    end
-
-    describe '.compliance_url' do
-      it 'returns URL' do
-        expect(details.compliance_url).to eq(url)
+    describe 'urls' do
+      %i[exemption_or_discount_url
+         compliance_url
+         main_info_url
+         public_transport_options_url].each do |method|
+        describe ".#{method}" do
+          it 'returns URL' do
+            expect(details.public_send(method)).to eq(url)
+          end
+        end
       end
     end
 
