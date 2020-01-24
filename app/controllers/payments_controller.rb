@@ -22,10 +22,10 @@ class PaymentsController < ApplicationController
   #
   def index
     payment = PaymentStatus.new(vehicle_details('payment_id'), vehicle_details('la_name'))
+    SessionManipulation::SetPaymentDetails
+      .call(session: session, email: payment.user_email,
+            payment_reference: payment.payment_reference, external_id: payment.external_id)
     if payment.success?
-      SessionManipulation::SetPaymentDetails
-        .call(session: session, email: payment.user_email,
-              payment_reference: payment.payment_reference, external_id: payment.external_id)
       redirect_to success_payments_path
     else
       redirect_to failure_payments_path
@@ -48,9 +48,6 @@ class PaymentsController < ApplicationController
   def create
     payment = Payment.new(session[:vehicle_details], payments_url)
     SessionManipulation::SetPaymentId.call(session: session, payment_id: payment.payment_id)
-    SessionManipulation::SetPaymentDetails.call(session: session, email: nil,
-                                                payment_reference: payment.payment_reference,
-                                                external_id: payment.external_id)
     redirect_to payment.gov_uk_pay_url
   end
 
