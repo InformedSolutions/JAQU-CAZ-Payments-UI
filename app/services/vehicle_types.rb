@@ -23,9 +23,8 @@ class VehicleTypes < BaseService
       { value: 'bus', name: 'Bus' },
       { value: 'coach', name: 'Coach' },
       { value: 'hgv', name: 'Heavy goods vehicle' },
-      { value: 'large_van', name: 'Large van' },
+      { value: 'van', name: 'Van' },
       { value: 'minibus', name: 'Minibus' },
-      { value: 'small_van', name: 'Small van' },
       { value: 'private_car', name: 'Car' },
       { value: 'motorcycle', name: 'Motorcycle' }
     ]
