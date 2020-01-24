@@ -75,7 +75,7 @@ steps:
         from_secret: browserstack_auth_key
       BASEURL_PAYMENTS: 'https://PaymentsDevUser1:CleanAir99@dev.paycleanairzonecharge.co.uk'
       BROWSER_SET: 'min'
-      BUILD: ${DRONE_BUILD_NUMBER}
+      BUILD: PAYMENTS-UI-${DRONE_BUILD_NUMBER}
       LOCATION: browserstack
     commands:
       - cd JAQU-CAZ-QA-selenium
@@ -617,7 +617,7 @@ steps:
         from_secret: browserstack_auth_key
       BASEURL_PAYMENTS: 'https://sit.paycleanairzonecharge.co.uk/'
       BROWSER_SET: 'min'
-      BUILD: ${DRONE_BUILD_NUMBER}
+      BUILD: PAYMENTS-UI-${DRONE_BUILD_NUMBER}
       LOCATION: browserstack
     commands:
       - cd JAQU-CAZ-QA-selenium
