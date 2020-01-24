@@ -8,6 +8,12 @@
 class BaseApi
   include HTTParty
 
+  headers(
+    'Content-Type' => 'application/json',
+    'Accept' => 'application/json',
+    'X-Correlation-ID' => -> { SecureRandom.uuid }
+  )
+
   ##
   # Class representing 500 HTTP response code (Internal Server Error) returned by API
   class Error500Exception < ApiException; end

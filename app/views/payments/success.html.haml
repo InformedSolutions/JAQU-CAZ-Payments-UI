@@ -11,16 +11,16 @@
           Payment reference
           %br
             %strong
-              = @payment_reference
+              = @payment_details.reference
           %br
           GOV.UK payment ID
           %br
             %strong
-              = @external_id
+              = @payment_details.external_id
       %p
         A receipt will be sent to
         = succeed '.' do
-          = @user_email
+          = @payment_details.user_email
       %p You can use the payment reference above as proof of payment.
       %h1.govuk-heading-m You have paid for:
       %table.govuk-table
@@ -28,23 +28,30 @@
           %tr.govuk-table__row
             %td.govuk-table__cell Registration number
             %th.govuk-table__header{scope: 'row'}
-              = @vrn
+              = @payment_details.vrn
           %tr.govuk-table__row
             %td.govuk-table__cell Clean Air Zone
             %th.govuk-table__header{scope: 'row'}
-              = @la_name
+              = @payment_details.la_name
           %tr.govuk-table__row
             %td.govuk-table__cell Payment for
             %th.govuk-table__header{scope: 'row'}
-              = parse_dates(@dates).join(', ')
+              = parse_dates(@payment_details.dates).join(', ')
           %tr.govuk-table__row
             %td.govuk-table__cell Total charge
             %th.govuk-table__header{scope: 'row'}
-              = parse_charge(@total_charge)
-      %p
-        = link_to 'Avoid having to pay in the future', nil
-        by finding out about options such as vehicle grants and
-        alternative ways to travel.
+              = parse_charge(@payment_details.total_charge)
+      %h2.govuk-heading-m
+        Alternatives to paying the charge
+      %ul.govuk-list.govuk-list--bullet
+        %li
+          = external_link_to 'Get support to upgrade or replace your vehicle',
+                             @payment_details.compliance_details.compliance_url,
+                             id: 'become-compliant-url'
+        %li
+          = external_link_to 'Explore cycling and public transport options',
+                             @payment_details.compliance_details.public_transport_options_url,
+                             id: 'public-transport-options-url'
       = render 'common/print_link'
 
 
@@ -52,7 +59,7 @@
       %h2.govuk-heading-m
         Other tasks
       %ul.govuk-list.govuk-list--bullet
-        - if @chargeable_zones > 1
+        - if @payment_details.chargeable_zones_count > 1
           %li
             = link_to 'Pay for another Clean Air Zone',
               local_authority_charges_path,
