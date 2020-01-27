@@ -22,11 +22,14 @@ RSpec.describe Payment, type: :model do
 
   let(:payment_id) { SecureRandom.uuid }
   let(:url) { 'www.wp.pl' }
+  let(:payment_reference) { '1056' }
+  let(:external_id) { '0ntoo845dhr52v8dcmqoulbam9' }
 
   before do
     allow(PaymentsApi)
       .to receive(:create_payment)
-      .and_return('paymentId' => payment_id, 'nextUrl' => url)
+      .and_return('paymentId' => payment_id, 'centralReference' => payment_reference,
+                  'paymentProviderId' => external_id, 'nextUrl' => url)
   end
 
   it 'calls PaymentsApi.create_payment with proper params' do
@@ -48,6 +51,18 @@ RSpec.describe Payment, type: :model do
   describe '.payment_id' do
     it 'returns id' do
       expect(payment.payment_id).to eq(payment_id)
+    end
+  end
+
+  describe '.payment_reference' do
+    it 'returns reference' do
+      expect(payment.payment_reference).to eq(payment_reference)
+    end
+  end
+
+  describe '.external_id' do
+    it 'returns id' do
+      expect(payment.external_id).to eq(external_id)
     end
   end
 

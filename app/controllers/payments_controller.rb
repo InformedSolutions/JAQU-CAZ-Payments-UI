@@ -81,8 +81,7 @@ class PaymentsController < ApplicationController
   # * +external_id+ - external payment id, required in the session
   #
   def failure
-    @payment_reference = vehicle_details('payment_reference')
-    @external_id = vehicle_details('external_id')
+    @payment_details = PaymentDetails.new(session[:vehicle_details])
     clear_payment_in_session
   end
 
