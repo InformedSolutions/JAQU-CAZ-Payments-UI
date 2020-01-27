@@ -6,7 +6,7 @@
       - if alert
         = render 'common/error_summary',
           error_msg_div: '#select-daily-date-error',
-          error_msg: 'Select a date that you wish to pay for'
+          error_msg: alert
 
       %h1.govuk-heading-l Choose your dates
       = render 'common/draft_tag'
@@ -22,7 +22,7 @@
             - if alert
               %span#select-daily-date-error.govuk-error-message
                 %span.govuk-visually-hidden Error:
-                Select a date that you wish to pay for
+                = alert
 
             .govuk-checkboxes
               - @dates.each_with_index do |date, index|
@@ -31,7 +31,8 @@
                                                  type: 'checkbox',
                                                  value: date[:value],
                                                  id: "date-#{index}",
-                                                 checked: checked_daily?(date[:value])}
+                                                 checked: checked_daily?(date[:value]),
+                                                 disabled: date[:disabled]}
                   %label.govuk-label.govuk-checkboxes__label{for: "date-#{index}"}
                     - if date[:today]
                       %b

@@ -15,3 +15,7 @@ en:
   confirmation_form:
     answer_missing: 'You must choose an answer'
     exemption: Confirm you have checked if you are eligible for an exemption
+  dates:
+    daily:
+      empty: Select a date that you wish to pay for
+      paid: You have already paid for the selected date

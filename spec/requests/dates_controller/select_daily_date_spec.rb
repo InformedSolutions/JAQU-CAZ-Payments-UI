@@ -8,6 +8,7 @@ RSpec.describe 'DatesController - GET #select_daily_date', type: :request do
   context 'with VRN in the session' do
     before do
       add_details_to_session
+      allow(PaymentsApi).to receive(:paid_payments_dates).and_return([])
       http_request
     end
 
