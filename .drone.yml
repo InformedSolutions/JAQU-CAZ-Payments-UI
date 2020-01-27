@@ -81,7 +81,7 @@ steps:
       - cd JAQU-CAZ-QA-selenium
       - cucumber -t @PAYMENTS --retry 3
 
-      
+
   ################################################# End Nightly Steps ############################################################
 
 ---
@@ -622,6 +622,161 @@ steps:
     commands:
       - cd JAQU-CAZ-QA-selenium
       - cucumber -t @PAYMENTS --retry 3
+    when:
+      event:
+        - push
+
+
+
+---
+#################################################### Preprod Steps ############################################################
+
+kind: pipeline
+type: docker
+name: payments-web-preprod
+trigger:
+  branch:
+    - staging
+  event:
+    - pull_request
+    - push
+concurrency:
+  limit: 1
+
+volumes:
+- name: docker_sock
+  host:
+    path: /var/run/docker.sock
+
+steps:
+
+  - name: plan updates to preprod
+    image: hashicorp/terraform:0.12.3
+    commands:
+      - apk update && apk add bash
+      - mkdir ~/.ssh
+      - echo -n "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
+      - chmod 600 ~/.ssh/id_rsa
+      - touch ~/.ssh/known_hosts
+      - chmod 600 ~/.ssh/known_hosts
+      - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
+      - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
+      - cd JAQU-CAZ-IAC
+      - cd terraform/projects/payments/layers/01.networking
+      - PATH=$PATH:../../../../bin/
+      - chmod +x ../../../../bin/tf
+      - tf init
+      - tf workspace select preprod || tf workspace new preprod
+      - tf plan
+      - cd ../02.backends
+      - tf init
+      - tf workspace select preprod || tf workspace new preprod
+      - tf plan
+      - cd ../04.web
+      - tf init
+      - tf workspace select preprod || tf workspace new preprod
+      - tf plan
+    environment:
+      TF_VAR_build_number: ${DRONE_BUILD_NUMBER}
+      TF_VAR_secret_key_base: ${DRONE_COMMIT}
+      TF_VAR_google_analytics_id: UA-144774549-5
+      TF_VAR_access_key:
+        from_secret: aws_access_key_id
+      TF_VAR_secret_key:
+        from_secret: aws_secret_access_key
+      GIT_PRIVATE_SSH:
+        from_secret: github_private_key
+      TF_VAR_enable_https_redirect: false
+    when:
+      event:
+        - pull_request
+
+  - name: provisioning warning
+    image: docker:git
+    commands:
+      - echo "Pipeline failed. If a deployment is being made for the first time into an environment terraform backends will not yet exist which means this is to be expected. If not terraform related, please see logs for further details"
+    when:
+      status:
+        - failure
+
+
+  - name: deploy to preprod
+    image: hashicorp/terraform:0.12.3
+    commands:
+      - apk add --update bash python python-dev py-pip build-base jq
+      - pip install awscli
+      - TASKDEF=`aws ecs describe-services --cluster payments-cluster-sit --services payments-sit-ecs-service | jq --raw-output '.services[0].taskDefinition'`
+      - export TF_VAR_build_number=`aws ecs describe-task-definition --task-definition $TASKDEF | jq --raw-output '.taskDefinition.containerDefinitions[0].image' | cut -f 2 -d ':'`
+      - mkdir ~/.ssh
+      - echo -n "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
+      - chmod 600 ~/.ssh/id_rsa
+      - touch ~/.ssh/known_hosts
+      - chmod 600 ~/.ssh/known_hosts
+      - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
+      - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
+      - cd JAQU-CAZ-IAC
+      - git checkout preprod
+      - cd terraform/projects/vccs/layers/01.networking
+      - PATH=$PATH:../../../../bin/
+      - chmod +x ../../../../bin/tf
+      - tf init
+      - tf workspace select preprod || tf workspace new preprod
+      - tf apply -auto-approve
+      - cd ../02.backends
+      - tf init
+      - tf workspace select preprod || tf workspace new preprod
+      - tf apply -auto-approve
+      - cd ../04.web
+      - tf init
+      - tf workspace select preprod || tf workspace new preprod
+      - tf apply -auto-approve
+    environment:
+      TF_VAR_build_number: ${DRONE_BUILD_NUMBER}
+      TF_VAR_secret_key_base: ${DRONE_COMMIT}
+      TF_VAR_google_analytics_id: UA-144774549-5
+      TF_VAR_access_key:
+        from_secret: aws_access_key_id
+      TF_VAR_secret_key:
+        from_secret: aws_secret_access_key
+      GIT_PRIVATE_SSH:
+        from_secret: github_private_key
+      TF_VAR_enable_https_redirect: false
+    when:
+      event:
+        - push
+
+  - name: codedeploy ui preprod
+    image: golang:alpine
+    commands:
+      - apk add --update bash python python-dev py-pip build-base jq
+      - pip install awscli
+      - aws deploy create-deployment --application-name payments-codedeploy-service-preprod --deployment-config-name CodeDeployDefault.ECSAllAtOnce --deployment-group-name payments-codedeploy-service-preprod --description "Deployment ECS" --s3-location bucket=jaqu-projects-lambda-bucket,bundleType=yaml,key=payments/preprod/appspec.yaml
+    environment:
+      AWS_ACCESS_KEY_ID:
+        from_secret: aws_access_key_id
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: aws_secret_access_key
+      AWS_DEFAULT_REGION: eu-west-2
+    when:
+      event:
+        - push
+
+  # Build docker image
+  - name: await ecs rollout
+    image: docker
+    environment:
+      build_id_url: https://preprod.paycleanairzonecharge.co.uk/build_id
+      build_id: ${DRONE_BUILD_NUMBER}
+    commands:
+      - apk add --update bash python python-dev py-pip build-base jq
+      - apk add curl
+      - pip install awscli
+      - TASKDEF=`aws ecs describe-services --cluster payments-cluster-sit --services payments-sit-ecs-service | jq --raw-output '.services[0].taskDefinition'`
+      - export build_id=`aws ecs describe-task-definition --task-definition $TASKDEF | jq --raw-output '.taskDefinition.containerDefinitions[0].image' | cut -f 2 -d ':'`
+      - sh build_utils/check_build_number.sh
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
     when:
       event:
         - push
