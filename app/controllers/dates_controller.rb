@@ -91,7 +91,7 @@ class DatesController < ApplicationController
   end
 
   ##
-  # Renders the list of dates to pick.
+  # Renders the list of dates to pick. Already paid dates are marked as disabled.
   #
   # ==== Path
   #    GET /charges/select_daily_date
@@ -104,11 +104,11 @@ class DatesController < ApplicationController
   #
   def select_daily_date
     @local_authority = la_id
-    @dates = Dates::Daily.call
+    @dates = Dates::Daily.call(vrn: vrn, zone_id: @local_authority)
   end
 
   ##
-  # Validates if user selects at least one date.
+  # Validates if user selects at least one date and the dates were not paid before.
   #
   # ==== Path
   #    POST /dates/confirm_daily_date
@@ -124,11 +124,13 @@ class DatesController < ApplicationController
   # * +dates+ - lack of the date redirects back to {daily charge}[rdoc-ref:DatesController.select_daily_date]
   #
   def confirm_daily_date
-    if params[:dates]
-      SessionManipulation::CalculateTotalCharge.call(session: session, dates: params[:dates])
+    dates = params[:dates]
+    if dates && check_already_paid(dates)
+      SessionManipulation::CalculateTotalCharge.call(session: session, dates: dates)
       redirect_to review_payment_charges_path
     else
-      redirect_back_to(select_daily_date_dates_path, true, :dates)
+      alert = I18n.t(dates ? 'paid' : 'empty', scope: 'dates.daily')
+      redirect_back_to(select_daily_date_dates_path, alert, :dates)
     end
   end
 
@@ -189,7 +191,7 @@ class DatesController < ApplicationController
   #
   def select_weekly_date
     @local_authority = la_id
-    @dates = Dates::Weekly.call
+    @dates = Dates::Weekly.call(vrn: vrn, zone_id: @local_authority)
   end
 
   ##
@@ -252,5 +254,10 @@ class DatesController < ApplicationController
     Rails.logger.warn "Vehicle with VRN #{vrn} is not allowed for weekly Leeds discount"
     Rails.logger.warn "Current vehicle_details in session: #{session[:vehicle_details]}#"
     redirect_to daily_charge_dates_path
+  end
+
+  # Checks if given dates were not paid before. Returns boolean
+  def check_already_paid(dates)
+    Dates::CheckPaidDaily.call(vrn: vrn, zone_id: la_id, dates: dates)
   end
 end

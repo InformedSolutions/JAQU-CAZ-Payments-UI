@@ -6,23 +6,25 @@
       - if alert
         = render 'common/error_summary',
           error_msg_div: '#select-daily-date-error',
-          error_msg: 'Select a date that you wish to pay for'
+          error_msg: alert
 
-      %h1.govuk-heading-l Choose your dates
+      %h1.govuk-heading-l Which days do you want to pay for?
       = render 'common/draft_tag'
       %p
         A daily charge period runs from midnight to midnight.
+      = render 'dates/daily/details'
+      = render 'dates/daily/inset' if @dates.any? { |date| date[:disabled] }
 
       = form_tag confirm_daily_date_dates_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
           %fieldset.govuk-fieldset
             %legend.govuk-visually-hidden
-              Select daily date
+              Which days do you want to pay for?
 
             - if alert
               %span#select-daily-date-error.govuk-error-message
                 %span.govuk-visually-hidden Error:
-                Select a date that you wish to pay for
+                = alert
 
             .govuk-checkboxes
               - @dates.each_with_index do |date, index|
@@ -31,34 +33,8 @@
                                                  type: 'checkbox',
                                                  value: date[:value],
                                                  id: "date-#{index}",
-                                                 checked: checked_daily?(date[:value])}
+                                                 checked: checked_daily?(date[:value]),
+                                                 disabled: date[:disabled]}
                   %label.govuk-label.govuk-checkboxes__label{for: "date-#{index}"}
-                    - if date[:today]
-                      %b
-                        = date[:name]
-                      (Today)
-                    - else
-                      = date[:name]
-
-        %details.govuk-details{'data-module': 'govuk-details'}
-          %summary.govuk-details__summary
-            %span.govuk-details__summary-text
-              Why can't I see my date?
-          .govuk-details__text
-            %p
-              If the date you want to pay for is not displayed, it may be because:
-              %ul.govuk-list-govuk-list--bullet
-                %li
-                  %p
-                    The 7 day period you had to pay has ended.
-                    %br
-                    You may be subject to a penalty
-                    charge notice (PCN).
-                %li
-                  %p
-                    The date is too far in the future.
-                    %br
-                    You should check back here closer to the
-                    date you want.
-
+                    = display_daily(date)
         = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
