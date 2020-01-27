@@ -648,6 +648,7 @@ volumes:
   host:
     path: /var/run/docker.sock
 
+steps:
 
   - name: plan updates to preprod
     image: hashicorp/terraform:0.12.3
