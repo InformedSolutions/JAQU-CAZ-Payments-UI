@@ -126,7 +126,7 @@ class DatesController < ApplicationController
   def confirm_daily_date
     dates = params[:dates]
     if dates && check_already_paid(dates)
-      SessionManipulation::CalculateTotalCharge.call(session: session, dates: params[:dates])
+      SessionManipulation::CalculateTotalCharge.call(session: session, dates: dates)
       redirect_to review_payment_charges_path
     else
       alert = I18n.t(dates ? 'paid' : 'empty', scope: 'dates.daily')

@@ -86,7 +86,6 @@ describe DatesHelper do
           expect(method).to eq("<b>#{name}</b> (Today) - Paid")
         end
       end
-
     end
   end
 end
