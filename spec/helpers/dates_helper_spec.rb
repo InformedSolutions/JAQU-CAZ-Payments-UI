@@ -50,4 +50,43 @@ describe DatesHelper do
       it { is_expected.to be_falsey }
     end
   end
+
+  describe '.display_daily' do
+    subject(:method) { helper.display_daily(date) }
+
+    let(:date) { { name: name, value: value, today: today, disabled: disabled } }
+    let(:name) { 'Wednesday 22 January 2020' }
+    let(:value) { '2020-01-22' }
+    let(:today) { false }
+    let(:disabled) { false }
+
+    it 'returns name' do
+      expect(method).to eq(name)
+    end
+
+    context 'when date is today' do
+      let(:today) { true }
+
+      it 'returns bolded name and adds today mark' do
+        expect(method).to eq("<b>#{name}</b> (Today)")
+      end
+    end
+
+    context 'when date is disabled' do
+      let(:disabled) { true }
+
+      it 'returns name with paid mark' do
+        expect(method).to eq("#{name} - Paid")
+      end
+
+      context 'when date is today' do
+        let(:today) { true }
+
+        it 'returns bolded name and adds both today and paid marks' do
+          expect(method).to eq("<b>#{name}</b> (Today) - Paid")
+        end
+      end
+
+    end
+  end
 end

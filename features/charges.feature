@@ -101,3 +101,13 @@ Feature: Charges
       And I should see "Review your payment"
     Then I press the Change Payment for link
       And I should be on the pick weekly dates page
+
+  Scenario: User wants to paid for already paid date
+    Given I am on the dates page with paid charge for today
+    Then I should see a disabled checkbox
+      And I should see "If you can't select the date you want"
+    Then I choose a date that was already paid
+      And I press the Continue
+    Then I should be on the pick daily dates page
+      And I should see "You have already paid for the selected date"
+

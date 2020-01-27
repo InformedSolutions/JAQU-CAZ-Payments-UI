@@ -14,4 +14,11 @@ module DatesHelper
   def checked_weekly?(value)
     value == session.dig(:vehicle_details, 'dates')&.first
   end
+
+  # Returns the date's name with today nad paid marks
+  def display_daily(date)
+    value = date[:today] ? content_tag(:b, date[:name]) + ' (Today)' : date[:name]
+    value += ' - Paid' if date[:disabled]
+    value
+  end
 end

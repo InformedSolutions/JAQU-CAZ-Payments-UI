@@ -103,6 +103,32 @@ class PaymentsApi < BaseApi
               body: payment_status_body(caz_name))
     end
 
+    ##
+    # Calls +/v1/payments/paid+ endpoint with +POST+ method,
+    # which returns information about already paid payment in a given time-frame.
+    #
+    # ==== Attributes
+    #
+    # * +vrn+ - Vehicle registration number
+    # * +zone_id+ - ID of the selected CAZ
+    # * +start_date+ - start date of the search time-frame in the right format, eg "2019-10-21"
+    # * +end_date+ - end date of the search time-frame in the right format, eg "2019-10-21"
+    #
+    # ==== Results
+    #
+    # Returns an array of dates, eg. ["2019-10-21", "2019-10-22"].
+    # Empty array means there was no paid payment in the given time-frame.
+    #
+    def paid_payments_dates(vrn:, zone_id:, start_date:, end_date:)
+      log_action("Getting paid payments for vrn: #{vrn} in #{zone_id} (#{start_date} - #{end_date})")
+      request(:post, '/payments/paid', body: {
+        vrns: [vrn],
+        cleanAirZoneId: zone_id,
+        startDate: start_date,
+        endDate: end_date
+      }.to_json)['results'].first['paidDates']
+    end
+
     private
 
     # Returns parsed to JSON hash of the payment creation parameters with proper keys

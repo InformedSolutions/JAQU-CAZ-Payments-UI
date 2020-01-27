@@ -14,16 +14,33 @@ module Dates
     VALUE_DATE_FORMAT = '%Y-%m-%d'
 
     ##
+    # ==== Params
+    #
+    # * +vrn+ - Vehicle registration number
+    # * +zone_id+ - ID of the selected CAZ
+    #
     # ==== Attributes
     # * +today+ - current date
     #
-    def initialize(*)
+    def initialize(vrn:, zone_id:)
       @today = Date.current
+      @vrn = vrn
+      @zone_id = zone_id
     end
 
     private
 
-    # today get function
-    attr_reader :today
+    # Readers functions
+    attr_reader :today, :vrn, :zone_id
+
+    # Calls PaymentsApi.paid_payments_dates for already paid dates in a given time-frame
+    def paid_dates
+      @paid_dates ||= PaymentsApi.paid_payments_dates(
+        vrn: vrn,
+        zone_id: zone_id,
+        start_date: start_date.strftime(VALUE_DATE_FORMAT),
+        end_date: end_date.strftime(VALUE_DATE_FORMAT)
+      )
+    end
   end
 end

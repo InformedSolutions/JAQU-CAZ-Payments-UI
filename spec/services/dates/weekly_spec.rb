@@ -3,7 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe Dates::Weekly do
-  subject(:dates) { described_class.call }
+  subject(:dates) { described_class.call(vrn: vrn, zone_id: zone_id) }
+
+  let(:vrn) { 'CU123AB' }
+  let(:zone_id) { SecureRandom.uuid }
 
   describe '.call' do
     it 'returns eight days' do
