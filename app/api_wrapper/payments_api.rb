@@ -127,6 +127,9 @@ class PaymentsApi < BaseApi
         startDate: start_date,
         endDate: end_date
       }.to_json)['results'].first['paidDates']
+    rescue BaseApi::Error500Exception
+      # TODO: Remove this when backend API is ready
+      []
     end
 
     private
