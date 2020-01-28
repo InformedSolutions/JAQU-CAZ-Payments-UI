@@ -368,7 +368,7 @@ type: docker
 name: payments-web-st
 trigger:
   branch:
-    - release/*
+    - release-candidate/*
   event:
     - pull_request
     - push
@@ -463,7 +463,7 @@ steps:
       dockerfile: Dockerfile.build
       region: eu-west-2
       tags:
-        - release
+        - release-candidate
         - ${DRONE_BUILD_NUMBER}
       build_args:
         - secret_key_base=${DRONE_COMMIT}
