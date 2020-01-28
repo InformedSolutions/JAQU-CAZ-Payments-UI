@@ -73,8 +73,8 @@ steps:
         from_secret: browserstack_username
       BS_AUTHKEY:
         from_secret: browserstack_auth_key
-      BASEURL_PAYMENTS: 'https://PaymentsDevUser1:CleanAir99@dev.paycleanairzonecharge.co.uk'
-      BROWSER_SET: 'min'
+      BASEURL_PAYMENTS: 'https://PaymentsDevUser1:CleanAir99@dev.paycleanairzonecharge.co.uk/'
+      BROWSER_SET: 'payments'
       BUILD: PAYMENTS-UI-${DRONE_BUILD_NUMBER}
       LOCATION: browserstack
     commands:
