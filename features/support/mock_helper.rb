@@ -74,6 +74,10 @@ module MockHelper
     )
   end
 
+  def mock_paid_dates(dates: [])
+    allow(PaymentsApi).to receive(:paid_payments_dates).and_return(dates)
+  end
+
   private
 
   # Reads provided file from +spec/fixtures/files+ directory

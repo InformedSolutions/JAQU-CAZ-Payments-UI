@@ -18,6 +18,7 @@ end
 Given('I am on the daily charge page') do
   add_vrn_country_la_to_session
   mock_vehicle_compliance
+  mock_paid_dates
 
   visit daily_charge_dates_path
 end
@@ -49,6 +50,7 @@ end
 
 Then('I am on the dates page') do
   add_vehicle_details_to_session
+  mock_paid_dates
   visit select_daily_date_dates_path
 end
 
@@ -86,6 +88,7 @@ end
 
 Then('I press the Change Payment for link') do
   mock_vehicle_compliance
+  mock_paid_dates
   find('#change-dates').click
 end
 
@@ -100,4 +103,19 @@ end
 
 Then('I should not see the Change Clean Air Zone link') do
   expect(page).not_to have_selector('#change-la')
+end
+
+Given('I am on the dates page with paid charge for today') do
+  add_vehicle_details_to_session
+  mock_paid_dates(dates: [Date.current.strftime('%Y-%m-%d')])
+  visit select_daily_date_dates_path
+end
+
+Then('I should see a disabled checkbox') do
+  expect(find('#date-6')).to be_disabled
+end
+
+Then('I choose a date that was already paid') do
+  find('#date-7').click
+  allow(Dates::CheckPaidDaily).to receive(:call).and_return(false)
 end

@@ -19,6 +19,7 @@ class VehiclesController < ApplicationController
   #
   def enter_details
     @errors = {}
+    @return_url = request.referer ? determinate_back_path : root_path
   end
 
   ##
@@ -201,5 +202,26 @@ class VehiclesController < ApplicationController
     @errors = form.errors.messages
     log_invalid_form 'Rendering :enter_details.'
     render enter_details_vehicles_path
+  end
+
+  # Returns path depends on last request
+  def determinate_back_path
+    last_request = request.referer
+    if back_button_paths.any? { |path| last_request.include?(path) }
+      last_request
+    else
+      root_path
+    end
+  end
+
+  # back button paths on enter details page
+  def back_button_paths
+    [
+      non_dvla_vehicles_path,
+      incorrect_details_vehicles_path,
+      unrecognised_vehicles_path,
+      compliant_vehicles_path,
+      exempt_vehicles_path
+    ]
   end
 end

@@ -9,21 +9,32 @@ module Dates
   # and display them on +app/views/dates/select_daily_date.html.haml+
   #
   class Daily < Base
+    # Overrides default by setting start and end dates
+    def initialize(vrn:, zone_id:)
+      super(vrn: vrn, zone_id: zone_id)
+      @start_date = today - 6.days
+      @end_date = today + 6.days
+    end
+
     # Build the list of dates and return them, e.g.
-    # [{value: "2019-10-11", name: "Friday 11 October 2019", today: false},...]
+    # [{value: "2019-10-11", name: "Friday 11 October 2019", today: false, disabled: false},...]
     def call
-      ((today - 6.days)..(today + 6.days)).map { |date| parse(date) }
+      (start_date..end_date).map { |date| parse(date) }
     end
 
     private
 
     # Create hash of dates
     def parse(date)
+      value = date.strftime(VALUE_DATE_FORMAT)
       {
         name: date.strftime(DISPLAY_DATE_FORMAT),
-        value: date.strftime(VALUE_DATE_FORMAT),
-        today: date.today?
+        value: value,
+        today: date.today?,
+        disabled: value.in?(paid_dates)
       }
     end
+
+    attr_reader :start_date, :end_date
   end
 end
