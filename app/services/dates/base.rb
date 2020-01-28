@@ -31,7 +31,7 @@ module Dates
     private
 
     # Readers functions
-    attr_reader :today, :vrn, :zone_id
+    attr_reader :today, :vrn, :zone_id, :start_date, :end_date
 
     # Calls PaymentsApi.paid_payments_dates for already paid dates in a given time-frame
     def paid_dates

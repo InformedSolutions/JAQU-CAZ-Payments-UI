@@ -51,8 +51,8 @@ describe DatesHelper do
     end
   end
 
-  describe '.display_daily' do
-    subject(:method) { helper.display_daily(date) }
+  describe '.display_date' do
+    subject(:method) { helper.display_date(date) }
 
     let(:date) { { name: name, value: value, today: today, disabled: disabled } }
     let(:name) { 'Wednesday 22 January 2020' }

@@ -104,10 +104,10 @@ Feature: Charges
 
   Scenario: User wants to paid for already paid date
     Given I am on the dates page with paid charge for today
-    Then I should see a disabled checkbox
+    Then I should see a disabled today checkbox
       And I should see "If you can't select the date you want"
     Then I choose a date that was already paid
       And I press the Continue
     Then I should be on the pick daily dates page
-      And I should see "You have already paid for the selected date"
+      And I should see "You have already paid for at least one of the selected dates"
 

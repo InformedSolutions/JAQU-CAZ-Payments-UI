@@ -36,5 +36,5 @@
                                                  checked: checked_daily?(date[:value]),
                                                  disabled: date[:disabled]}
                   %label.govuk-label.govuk-checkboxes__label{for: "date-#{index}"}
-                    = display_daily(date)
+                    = display_date(date)
         = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
