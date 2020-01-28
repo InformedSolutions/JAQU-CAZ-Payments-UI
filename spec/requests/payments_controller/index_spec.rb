@@ -49,16 +49,16 @@ RSpec.describe 'PaymentsController - GET #index', type: :request do
         expect(response).to redirect_to(failure_payments_path)
       end
 
-      it 'doesn\'t set user email in the session' do
-        expect(session[:vehicle_details]['user_email']).to be_nil
+      it 'does set user email in the session' do
+        expect(session[:vehicle_details]['user_email']).to eq(user_email)
       end
 
-      it 'doesn\'t set payment reference in the session' do
-        expect(session[:vehicle_details]['payment_reference']).to be_nil
+      it 'does set payment reference in the session' do
+        expect(session[:vehicle_details]['payment_reference']).to eq(payment_reference)
       end
 
-      it 'doesn\'t set external id in the session' do
-        expect(session[:vehicle_details]['external_id']).to be_nil
+      it 'does set external id in the session' do
+        expect(session[:vehicle_details]['external_id']).to eq(external_id)
       end
     end
   end

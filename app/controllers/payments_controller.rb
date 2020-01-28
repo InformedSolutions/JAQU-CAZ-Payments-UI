@@ -22,8 +22,8 @@ class PaymentsController < ApplicationController
   #
   def index
     payment = PaymentStatus.new(vehicle_details('payment_id'), vehicle_details('la_name'))
+    save_payment_details(payment)
     if payment.success?
-      save_payment_details(payment)
       redirect_to success_payments_path
     else
       redirect_to failure_payments_path
@@ -77,10 +77,11 @@ class PaymentsController < ApplicationController
   #    GET /payments/failure
   #
   # ==== Params
-  # * +payment_id+ - vehicle registration number, required in the session
+  # * +payment_reference+ - payment reference, required in the session
+  # * +external_id+ - external payment id, required in the session
   #
   def failure
-    @payment_reference = vehicle_details('payment_reference')
+    @payment_details = PaymentDetails.new(session[:vehicle_details])
     clear_payment_in_session
   end
 

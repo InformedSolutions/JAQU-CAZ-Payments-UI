@@ -25,9 +25,19 @@ class Payment
     @return_url = return_url
   end
 
-  # Returns ID assigned to the payment by GovUK.Pay
+  # Returns internal ID of the payment
   def payment_id
     payment_details['paymentId']
+  end
+
+  # Returns central reference denoting payment
+  def payment_reference
+    payment_details['centralReference']
+  end
+
+  # Returns ID assigned to the payment by GovUK.Pay
+  def external_id
+    payment_details['paymentProviderId']
   end
 
   # Return URL for continuing of the payment process
