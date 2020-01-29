@@ -20,5 +20,5 @@ en:
       empty: Select a date that you wish to pay for
       paid: You have already paid for at least one of the selected dates
     weekly:
-      empty: Select a time-frame that you wish to pay for
-      paid: You have already paid for at least one day in the selected time-frame
+      empty: Select a week that you wish to pay for
+      paid: You have already paid for at least one day in the selected week

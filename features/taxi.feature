@@ -22,7 +22,7 @@ Feature: Leeds Taxi
       And I press the Continue
       And I should see "Choose your dates"
     Then I press the Continue
-      And I should see "Select a time-frame that you wish to pay for"
+      And I should see "Select a week that you wish to pay for"
     Then I select Today
       And I press the Continue
     Then I should see "Review your payment"
@@ -46,4 +46,4 @@ Feature: Leeds Taxi
       And I should see an active "tomorrow" radio
     Then I choose a time-frame that was already paid
       And I press the Continue
-    Then I should see "You have already paid for at least one day in the selected time-frame"
+    Then I should see "You have already paid for at least one day in the selected week"
