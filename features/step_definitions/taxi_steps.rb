@@ -24,6 +24,28 @@ Then('I select Today') do
   choose('Today')
 end
 
+Given('I have already paid for today') do
+  mock_paid_dates(dates: [Date.current.strftime('%Y-%m-%d')])
+end
+
+Given('I am on the weekly dates page') do
+  add_weekly_possible_details
+  visit select_weekly_date_dates_path
+end
+
+Then('I should see a disabled {string} radio') do |date|
+  expect(find("input[value='#{Date.public_send(date).strftime('%Y-%m-%d')}']")).to be_disabled
+end
+
+Then('I should see an active {string} radio') do |date|
+  expect(find("input[value='#{Date.public_send(date).strftime('%Y-%m-%d')}']")).not_to be_disabled
+end
+
+Then('I choose a time-frame that was already paid') do
+  first("input:not([disabled])[type='radio']").click
+  allow(Dates::CheckPaidDaily).to receive(:call).and_return(false)
+end
+
 # Mocks taxi response from vehicle details endpoint in VCCS API
 def mock_vehicle_details_taxi
   vehicle_details = read_file('vehicle_details_taxi_response.json')

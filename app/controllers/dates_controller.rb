@@ -195,7 +195,7 @@ class DatesController < ApplicationController
   end
 
   ##
-  # Validates if user selects at least one date.
+  # Validates if user selects at least one date and there was no payment for any date in the given time-frame.
   #
   # ==== Path
   #    POST /charges/confirm_date_weekly
@@ -211,13 +211,15 @@ class DatesController < ApplicationController
   # * +charge+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
   def confirm_date_weekly
-    if params[:dates]
+    dates = params[:dates]
+    if dates && check_already_paid_weekly(dates)
       SessionManipulation::CalculateTotalCharge.call(
-        session: session, dates: params[:dates], weekly: true
+        session: session, dates: dates, weekly: true
       )
       redirect_to review_payment_charges_path
     else
-      redirect_back_to(select_weekly_date_dates_path, true, :dates)
+      alert = I18n.t(dates ? 'paid' : 'empty', scope: 'dates.weekly')
+      redirect_back_to(select_weekly_date_dates_path, alert, :dates)
     end
   end
 
@@ -259,5 +261,10 @@ class DatesController < ApplicationController
   # Checks if given dates were not paid before. Returns boolean
   def check_already_paid(dates)
     Dates::CheckPaidDaily.call(vrn: vrn, zone_id: la_id, dates: dates)
+  end
+
+  # Checks if given time-frame were not paid before. Returns boolean
+  def check_already_paid_weekly(dates)
+    Dates::CheckPaidWeekly.call(vrn: vrn, zone_id: la_id, date: dates.first)
   end
 end

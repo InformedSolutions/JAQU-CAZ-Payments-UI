@@ -16,7 +16,7 @@ module DatesHelper
   end
 
   # Returns the date's name with today and paid marks
-  def display_daily(date)
+  def display_date(date)
     value = date[:today] ? content_tag(:b, date[:name]) + ' (Today)' : date[:name]
     value += ' - Paid' if date[:disabled]
     value

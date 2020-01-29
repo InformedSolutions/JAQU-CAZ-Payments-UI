@@ -28,11 +28,11 @@ module Dates
 
     # Checks if none of the given dates were already paid
     def call
-      dates.none? { |date| date.in?(paid_dates) }
+      (dates & paid_dates).empty?
     end
 
     private
 
-    attr_reader :dates, :start_date, :end_date
+    attr_reader :dates
   end
 end

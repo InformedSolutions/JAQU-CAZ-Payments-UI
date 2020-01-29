@@ -111,11 +111,15 @@ Given('I am on the dates page with paid charge for today') do
   visit select_daily_date_dates_path
 end
 
-Then('I should see a disabled checkbox') do
-  expect(find('#date-6')).to be_disabled
+Then('I should see a disabled today checkbox') do
+  expect(find("input[value='#{Date.current.strftime('%Y-%m-%d')}']")).to be_disabled
 end
 
 Then('I choose a date that was already paid') do
-  find('#date-7').click
+  first("input[type='checkbox']").click
   allow(Dates::CheckPaidDaily).to receive(:call).and_return(false)
+end
+
+Given('I have not paid for any day') do
+  mock_paid_dates
 end

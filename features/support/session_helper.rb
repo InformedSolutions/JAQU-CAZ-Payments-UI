@@ -21,6 +21,11 @@ module SessionHelper
     page.set_rack_session(vehicle_details: details)
   end
 
+  def add_weekly_possible_details
+    details = { **compliance_details, weekly_possible: true }
+    page.set_rack_session(vehicle_details: details)
+  end
+
   def add_weekly_vehicle_details_to_session
     details = {
       **compliance_details,
