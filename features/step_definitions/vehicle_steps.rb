@@ -21,7 +21,7 @@ Then("I enter a vehicle's registration and choose Non-UK") do
 end
 
 And('I choose I confirm registration') do
-  check('I confirm that the registration number is correct.')
+  check('I confirm the number plate is correct.')
 end
 
 Then("I enter a only vehicle's registration") do
