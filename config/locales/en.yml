@@ -22,3 +22,4 @@ en:
     weekly:
       empty: Select a week that you wish to pay for
       paid: You have already paid for at least one day in the selected week
+  confirmation_alert: Confirm the number plate is correct

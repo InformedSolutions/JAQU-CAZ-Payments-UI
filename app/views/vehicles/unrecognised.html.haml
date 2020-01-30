@@ -5,7 +5,7 @@
       - if alert
         = render 'common/error_summary',
           error_msg_div: '#unrecognised-vehicle-error',
-          error_msg: 'Confirm that the number plate is correct'
+          error_msg: I18n.t('confirmation_alert')
 
       %h1.govuk-heading-xl Vehicle details could not be found
       = render 'common/draft_tag'
@@ -48,12 +48,12 @@
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
           %fieldset.govuk-fieldset
             %legend.govuk-visually-hidden
-              Confirm that the number plate is correct
+              = I18n.t('confirmation_alert')
 
             - if alert
               %span#unrecognised-vehicle-error.govuk-error-message
                 %span.govuk-visually-hidden Error:
-                Confirm that the number plate is correct
+                = I18n.t('confirmation_alert')
 
             .govuk-checkboxes
               .govuk-checkboxes__item
@@ -62,5 +62,5 @@
                                                value: 'yes',
                                                id: 'confirm-registration'}
                 %label.govuk-label.govuk-checkboxes__label{for: 'confirm-registration'}
-                  I confirm that the number plate is correct.
+                  I confirm the number plate is correct.
         = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'

@@ -40,9 +40,9 @@ Feature: Vehicles
       And I should see "Vehicle registration details"
     Then I enter a vehicle's registration and choose Non-UK
       And I press the Continue
-    Then I should see "Your vehicle is not UK-Registered"
+    Then I should see "Your vehicle is registered outside the UK"
       And I press the Continue
-    Then I should see "Confirm that the registration number is correct"
+    Then I should see "Confirm the number plate is correct"
       And I should see "There is a problem"
       And I should be on the non UK page
     Then I press "Check another vehicle" link
@@ -65,9 +65,9 @@ Feature: Vehicles
       And I should see "Vehicle registration details"
     Then I enter a unrecognised vehicle's registration and choose UK
       And I press the Continue
-    Then I should see "Vehicle details not found"
+    Then I should see "Vehicle details could not be found"
       And I press the Continue
-    Then I should see "Confirm that the registration number is correct"
+    Then I should see "Confirm the number plate is correct"
       And I should see "There is a problem"
       And I should be on the unrecognised page
     Then I choose I confirm registration
