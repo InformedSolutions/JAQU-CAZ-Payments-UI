@@ -5,11 +5,11 @@ en:
     vrn: For example, CU57ABC
     country: Where was the vehicle registered?
   vrn_form:
-    vrn_missing: 'Enter the registration number of the vehicle'
+    vrn_missing: 'Enter the number plate of the vehicle'
     country_missing: 'Tell us if your vehicle is UK or non-UK registered'
-    vrn_invalid: 'Enter the registration number of the vehicle in a valid format'
-    vrn_too_long: 'The registration number of the vehicle is too long'
-    vrn_too_short: 'The registration number of the vehicle is too short'
+    vrn_invalid: 'Enter the number plate of the vehicle in a valid format'
+    vrn_too_long: 'The number plate of the vehicle is too long'
+    vrn_too_short: 'The number plate of the vehicle is too short'
   la_form:
     la_missing: 'Which clean air zone are you paying for?'
   confirmation_form:
@@ -22,3 +22,4 @@ en:
     weekly:
       empty: Select a week that you wish to pay for
       paid: You have already paid for at least one day in the selected week
+  confirmation_alert: Confirm the number plate is correct

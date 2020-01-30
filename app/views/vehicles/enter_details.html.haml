@@ -16,11 +16,11 @@
                 %li
                   = link_to(messages.first, "##{field}-error")
       %h1.govuk-heading-xl
-        Vehicle registration details
+        Enter the number plate of the vehicle
       = form_tag enter_details_vehicles_path, method: :post do
         %fieldset.govuk-fieldset
           %legend.govuk-visually-hidden
-            Enter vehicle registration details
+            Enter the number plate of the vehicle
 
           - if @errors[:vrn].present?
             = render 'vehicles/vrn_input/errored', message: @errors[:vrn].first

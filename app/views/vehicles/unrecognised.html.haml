@@ -5,46 +5,59 @@
       - if alert
         = render 'common/error_summary',
           error_msg_div: '#unrecognised-vehicle-error',
-          error_msg: 'Confirm that the registration number is correct'
+          error_msg: I18n.t('confirmation_alert')
 
-      %h1.govuk-heading-xl Vehicle details not found
+<<<<<<< HEAD
+      %h1.govuk-heading-xl Vehicle details could not be found
+=======
+      %h1.govuk-heading-xl Vehicle details could not be found
+      = render 'common/draft_tag'
+>>>>>>> 1bf384dc20cd4c7ced9a2067fe2b89c72f8eaac4
       %p
         Try
         = link_to 'entering your details', enter_details_vehicles_path, class: 'govuk-link'
         again making sure you have not mixed up letters and numbers (for example, the letters
-        <strong>I</strong> and <strong>O</strong> with the numbers <strong>1</strong> and <strong>0</strong>).
+        %b I
+        and
+        %b O
+        with the numbers
+        %b 1
+        and
+        %b 0
+        ).
 
       %h1.govuk-heading-m Check your registration details
       %p
         If the details still can not be found and you believe your vehicle should be registered in
-        the UK, contact the
-        = external_link_to 'DVLA', 'https://www.gov.uk/change-vehicle-details-registration-certificate'
-        to update the details it holds for your vehicle.
+        the UK, you can
+        = external_link_to 'update the details',
+                           'https://www.gov.uk/change-vehicle-details-registration-certificate/how-to-tell-dvla'
+        the DVLA holds for your vehicle.
 
       %h1.govuk-heading-m You still have to pay the Clean Air Zone charge
       %p
-        If your vehicle <strong>does</strong> meet Clean Air standards, you will be able to claim a refund when your
-        = link_to 'vehicle details are updated.',
-          scenarios_refunds_path,
-          class: 'govuk-link'
+        If your vehicle
+        %b does
+        meet Clean Air standards, you can claim a refund when your vehicle details are updated.
       %p
         Payment must be made a maximum of 7 days after you have driven in the zone or you may
         receive a penalty charge notice (PCN).
       %p
-        Please confirm that the registration number
-        %b= @vrn
+        Confirm the number plate
+        %b
+          = @vrn
         is correct.
 
       = form_tag confirm_unrecognised_vehicles_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
           %fieldset.govuk-fieldset
             %legend.govuk-visually-hidden
-              Confirm that the registration number is correct
+              = I18n.t('confirmation_alert')
 
             - if alert
               %span#unrecognised-vehicle-error.govuk-error-message
                 %span.govuk-visually-hidden Error:
-                Confirm that the registration number is correct
+                = I18n.t('confirmation_alert')
 
             .govuk-checkboxes
               .govuk-checkboxes__item
@@ -53,5 +66,5 @@
                                                value: 'yes',
                                                id: 'confirm-registration'}
                 %label.govuk-label.govuk-checkboxes__label{for: 'confirm-registration'}
-                  I confirm that the registration number is correct.
+                  I confirm the number plate is correct.
         = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
