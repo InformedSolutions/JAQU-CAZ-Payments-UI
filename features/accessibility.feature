@@ -7,3 +7,4 @@ Feature: Accessibility statement
     Given I am on the home page
     When I press "Accessibility statement" footer link
     Then I should see "Accessibility statement"
+    And I should see "Accessibility statement" title

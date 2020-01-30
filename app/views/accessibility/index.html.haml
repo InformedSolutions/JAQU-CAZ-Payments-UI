@@ -1,10 +1,12 @@
+- title_and_header = 'Accessibility statement for Pay a Clean Air Zone Charge'
+- content_for(:title, title_and_header)
 = link_to 'Return to the homepage', root_path, class: 'govuk-back-link'
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
     .govuk-grid-column-two-thirds
       %h1.govuk-heading-xl
-        Accessibility statement for Pay a Clean Air Zone Charge
+        = title_and_header
 
       This website is run by the Joint Air Quality Unit (JAQU) supported by the Department of
       Transport and Department for Environment, Food and Rural Affairs. We want as many people as
