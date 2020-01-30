@@ -17,7 +17,6 @@
                   = link_to(messages.first, "##{field}-error")
       %h1.govuk-heading-xl
         Vehicle registration details
-      = render 'common/draft_tag'
       = form_tag enter_details_vehicles_path, method: :post do
         %fieldset.govuk-fieldset
           %legend.govuk-visually-hidden
