@@ -24,7 +24,7 @@ Feature: Vehicles
       And I should see "Vehicle registration details"
     Then I enter a vehicle's registration and choose UK
       And I press the Continue
-      And I should see "Are these the vehicle's details?"
+      And I should see "Are these vehicle details correct?"
     Then I press the Confirm
       And I should see "You must choose an answer"
       And I should see "Select yes if the details are correct"
@@ -80,7 +80,7 @@ Feature: Vehicles
       And I should see "Vehicle registration details"
     Then I enter a compliant vehicle's registration and choose UK
       And I press the Continue
-      And I should see "Are these the vehicle's details?"
+      And I should see "Are these vehicle details correct?"
     Then I choose that the details are correct
       And I press the Confirm
       And I should see "There is no charge for this vehicle"
