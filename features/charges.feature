@@ -76,7 +76,7 @@ Feature: Charges
     Given I am on the review payment page
       And I should see "Review your payment"
     Then I press the Change Registration number link
-      And I should see "Vehicle registration details"
+      And I should be on the enter details page
 
   Scenario: User wants review payment and press the change clean air zone link
     Given I am on the review payment page
