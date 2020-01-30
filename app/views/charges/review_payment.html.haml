@@ -28,7 +28,12 @@
             %tr.govuk-table__row
               %td.govuk-table__cell Payment for
               %th.govuk-table__header{scope: 'row', id: 'value-dates'}
-                = parse_dates(@dates).join(', ')
+                - parse_dates(@dates).each do |date| 
+                  - unless date.eql? parse_dates(@dates).last
+                    = date + ','
+                    %br
+                  - else
+                    = date
               %td.govuk-table__cell
                 = link_to 'Change', determinate_payment_for_path(@weekly_period), class: 'govuk-link', id: 'change-dates'
             %tr.govuk-table__row
