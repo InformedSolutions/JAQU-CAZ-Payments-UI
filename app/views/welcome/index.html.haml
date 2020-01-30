@@ -4,14 +4,11 @@
       %h1.govuk-heading-l Pay a Clean Air Zone charge
       = render 'common/draft_tag'
       %p
-        You can use this service to pay a daily charge for driving in a Clean Air Zone if your
-        vehicle does not meet Clean Air Standards.
+        Use this service to pay a daily charge for driving in a Clean Air Zone
+        if your vehicle does not meet emission standards.
       %p
-        Before you start, you'll need the registration details (number plate) of the vehicle you
-        want to pay for.
-      %p
-        Payment must be made a maximum of 7 days after you have driven in the zone or you will
-        receive a penalty charge notice (PCN).
+        Payment must be made a maximum of 7 days after you have driven in the zone
+        or you may receive a penalty charge notice (PCN).
       %a.govuk-button.govuk-button--start{role: 'button',
                                           'data-draggable': false,
                                           'data-module': 'govuk-button',
@@ -26,6 +23,10 @@
                                       xmlns: 'http://www.w3.org/2000/svg'}
           %path{d: 'M0 0h13l20 20-20 20H0l20-20z', fill: 'currentColor'}
 
+      %h2.govuk-heading-m Before you start
+      %p
+        You’ll need the number plate (registration number) of the vehicle you want to drive.
+
       %h2.govuk-heading-m Other ways to pay
       %p
         Pay by phone on 0300 457 8915
@@ -34,12 +35,6 @@
         %br
         Standards rates apply.
 
-      %h2.govuk-heading-s Explore the topic
-      %p
-        Find out more about
-        = succeed '.' do
-          = external_link_to 'Clean Air Zones', nil
-
     .govuk-grid-column-one-third
       %aside#related-items-label.app-related-items{role: 'complementary'}
         %h2.govuk-heading-m
@@ -47,10 +42,6 @@
         %nav{'aria-labelledby': 'related-items-label', role: 'navigation'}
           %ul.govuk-list{class: 'govuk-!-font-size-16'}
             %li
-              = external_link_to 'Am I exempt?', nil
-            %li
-              = link_to 'Can I claim a refund?', scenarios_refunds_path, class: 'govuk-link'
-            %li
-              = external_link_to 'Create Fleet Account', Rails.configuration.x.fleets_ui_accounts_url
-            %li
-              = external_link_to 'Fleet User Account', Rails.configuration.x.fleets_ui_url
+              = external_link_to 'Check if you qualify for an exemption or refund',
+                                 'www.gov.uk/guidance/driving-in-a-clean-air-zone',
+                                 id: 'exemption-or-refund-link'
