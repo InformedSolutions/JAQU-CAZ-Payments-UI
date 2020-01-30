@@ -66,6 +66,8 @@ Rails.application.routes.draw do
     end
   end
 
+  get :accessibility_statement, to: 'accessibility#index'
+
   get :build_id, to: 'application#build_id'
   get :health, to: 'application#health'
 

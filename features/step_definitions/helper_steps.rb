@@ -27,3 +27,9 @@ end
 Then('I press the Back link') do
   click_link('Back')
 end
+
+Then('I press {string} footer link') do |string|
+  within('footer.govuk-footer') do
+    click_link string
+  end
+end

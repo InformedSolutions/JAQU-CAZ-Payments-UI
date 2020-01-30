@@ -13,11 +13,8 @@
             %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
               %h1.govuk-fieldset__heading
                 What is your vehicle?
-
-            = render 'common/draft_tag'
             %p
-              Since we are not able to find your vehicle's details, you'll need to tell us what type of
-              vehicle you want to pay for.
+              As we don't hold data for your vehicle, you need to tell us what type it is.
             - if alert
               %span#choose-type-error.govuk-error-message
                 %span.govuk-visually-hidden Error:
