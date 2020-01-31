@@ -3,7 +3,12 @@
     %p
       GOV.UK uses cookies to make the site simpler.
     .cookie-banner__buttons
-      .cookie-banner__button.cookie-banner__button-accept
-        %a.button.govuk-button.govuk-link{href: nil, role: 'button', id: 'close-banner'} Accept cookies
       .cookie-banner__button.cookie-banner__button-settings
-        %a.button.govuk-button.govuk-link{href: 'https://www.gov.uk/help/cookies', target: '_blank', role: 'button', id: 'cookie-settings'} Cookie settings
+        %button.button.govuk-button.govuk-link#close-banner{role: 'button', autofocus: true}
+          Accept cookies
+      .cookie-banner__button.cookie-banner__button-settings
+        = link_to 'Cookie settings',
+                  cookies_path,
+                  class: 'button govuk-button govuk-link',
+                  id: 'cookie-settings',
+                  role: 'button'
