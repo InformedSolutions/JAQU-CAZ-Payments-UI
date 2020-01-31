@@ -12,7 +12,7 @@
             There is a problem
           .govuk-error-summary__body
             %ul.govuk-list.govuk-error-summary__list
-              - @errors.each do |field, messages|
+              - @errors.reverse_each do |field, messages|
                 %li
                   = link_to(messages.first, "##{field}-error")
       %h1.govuk-heading-xl
