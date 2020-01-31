@@ -26,7 +26,7 @@ group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'dotenv-rails'
   gem 'haml-rails'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 4.0.0.beta'
 end
 
 group :development do
@@ -43,7 +43,7 @@ group :test do
   gem 'rack_session_access'
   gem 'rails-controller-testing'
   gem 'selenium-webdriver'
-  gem 'simplecov', require: false
+  gem 'simplecov', '~> 0.17.1', require: false
   gem 'webdrivers'
   gem 'webmock'
 end

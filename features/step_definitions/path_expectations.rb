@@ -63,3 +63,7 @@ end
 Then('I should be on the failed payments page') do
   expect_path(failure_payments_path)
 end
+
+Then('I should be on the cookies page') do
+  expect_path(cookies_path)
+end
