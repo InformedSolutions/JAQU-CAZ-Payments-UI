@@ -31,8 +31,8 @@ Feature: Payments
     When I am only chargeable in one Clean Air Zone
     Then I should not see pay for another CAZ link
 
-  Scenario: User wants to start a new payment after unsuccessful payment process
+  Scenario: User wants to go back to the start after unsuccessful payment process
     Given I have finished the payment unsuccessfully
       And I'm getting redirected from GOV.UK Pay
-    Then I press "Start a new payment" link
-      And I should be on the enter details page
+    Then I press "Return to start page" link
+      And I should be on the start page

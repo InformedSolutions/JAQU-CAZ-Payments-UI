@@ -4,6 +4,10 @@ def expect_path(path)
   expect(page).to have_current_path(path)
 end
 
+Then('I should be on the start page') do
+  expect_path(root_path)
+end
+
 Then('I should be on the enter details page') do
   expect_path(enter_details_vehicles_path)
 end
