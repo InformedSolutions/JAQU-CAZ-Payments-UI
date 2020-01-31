@@ -17,9 +17,10 @@ class ComplianceDetails
   #
   def initialize(vehicle_details)
     @vrn = vehicle_details['vrn']
-    @type = vehicle_details['type']
+    @type = vehicle_details['type'] || ''
     @zone_id = vehicle_details['la_id']
     @non_dvla = vehicle_details['country'] != 'UK' || vehicle_details['unrecognised']
+    @leeds_taxi = vehicle_details['leeds_taxi'] || false
   end
 
   # Returns a string, eg. 'Birmingham'.
@@ -65,10 +66,18 @@ class ComplianceDetails
     url(:public_transport_options)
   end
 
+  def dynamic_compliance_url
+    if (leeds_taxi && zone_name == 'Leeds') || (type.include?('car') && zone_name == 'Birmingham')
+      return compliance_url
+    end
+
+    additional_urls_file[zone_name.downcase]['fleet']
+  end
+
   private
 
   # Attributes used to perform the backend call
-  attr_reader :vrn, :zone_id, :non_dvla, :type
+  attr_reader :vrn, :zone_id, :non_dvla, :type, :leeds_taxi
 
   # Helper method used to take given url from URLs hash
   #
@@ -97,5 +106,9 @@ class ComplianceDetails
   # Get compliance data for non-DVLA registered vehicle
   def non_dvla_compliance_data
     ComplianceCheckerApi.unrecognised_compliance(type, [zone_id])['charges']
+  end
+
+  def additional_urls_file
+    YAML.load_file('additional_url.yml')
   end
 end

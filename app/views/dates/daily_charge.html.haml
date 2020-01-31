@@ -54,6 +54,6 @@
                                       id: 'exemption-link')
         = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
       %p
-        = external_link_to('Discover alternatives to having to pay',
-                           @compliance_details.main_info_url,
-                           id: 'caz-info-link')
+        = external_link_to("Get support to upgrade or replace your vehicle in #{@compliance_details.zone_name}",
+                           @compliance_details.dynamic_compliance_url,
+                           id: 'compliance-link')

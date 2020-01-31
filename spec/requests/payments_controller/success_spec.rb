@@ -28,8 +28,8 @@ RSpec.describe 'PaymentsController - GET #success', type: :request do
     allow(ComplianceDetails)
       .to receive(:new)
       .and_return(instance_double(ComplianceDetails,
-                                  compliance_url: url,
-                                  public_transport_options_url: url))
+                                  public_transport_options_url: url,
+                                  dynamic_compliance_url: url))
     subject
   end
 
