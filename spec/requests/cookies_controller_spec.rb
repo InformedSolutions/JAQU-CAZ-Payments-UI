@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe CookiesController do
-  describe 'GET #indexc' do
+  describe 'GET #index' do
     subject(:http_request) { get cookies_path }
 
     it 'returns http success' do
