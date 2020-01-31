@@ -5,7 +5,7 @@
       - if alert
         = render 'common/error_summary',
           error_msg_div: '#local-authority-error',
-          error_msg: 'State which Clean Air Zone you are paying for'
+          error_msg: 'You must choose one Clean Air Zone'
 
       = form_tag submit_local_authority_charges_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}

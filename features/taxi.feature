@@ -12,7 +12,7 @@ Feature: Leeds Taxi
       And I press the Continue
       And I should see "How many days do you want to pay for?"
     Then I press the Continue
-      And I should see "State if you are paying for 1 day or 7 days"
+      And I should see "Choose to pay for 1 day or 7 days"
     Then I select Pay for 7 days
       And I press the Continue
       And I should see "Pay a weekly Leeds Clean Air Zone charge"
