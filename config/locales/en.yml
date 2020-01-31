@@ -11,9 +11,9 @@ en:
     vrn_too_long: 'The number plate of the vehicle is too long'
     vrn_too_short: 'The number plate of the vehicle is too short'
   la_form:
-    la_missing: 'Which clean air zone are you paying for?'
+    la_missing: 'You must choose one Clean Air Zone'
   confirmation_form:
-    answer_missing: 'You must choose an answer'
+    answer_missing: 'Select yes if the details are correct'
     exemption: Confirm you have checked if you are eligible for an exemption
   dates:
     daily:

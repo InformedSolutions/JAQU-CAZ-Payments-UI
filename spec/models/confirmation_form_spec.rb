@@ -35,7 +35,9 @@ RSpec.describe ConfirmationForm, type: :model do
     end
 
     it 'has a proper error message' do
-      expect(form.errors.messages[:confirmation]).to include('You must choose an answer')
+      expect(form.errors.messages[:confirmation]).to include(
+        'Select yes if the details are correct'
+      )
     end
   end
 end

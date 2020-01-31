@@ -26,7 +26,7 @@ Feature: Vehicles
       And I press the Continue
       And I should see "Are these vehicle details correct?"
     Then I press the Confirm
-      And I should see "You must choose an answer"
+      And I should see "Select yes if the details are correct"
       And I should see "Select yes if the details are correct"
     Then I choose that the details are incorrect
       And I press the Confirm
