@@ -1,0 +1,92 @@
+- content_for(:title, 'Privacy Notice')
+= link_to 'Return to the homepage', root_path, class: 'govuk-back-link'
+
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      %h1.govuk-heading-xl
+        Privacy Notice
+      %p
+        The
+        = service_name
+        is operated by the Joint Air Quality Unit (JAQU),
+        a team established jointly between the Department for Environment,
+        Food and Rural Affairs (Defra) and the Department for Transport (DfT).
+      %p
+        The purpose of the
+        = service_name
+        is to enable you to pay to enter a Clean Air Zone.
+      %p
+        To use
+        = service_name
+        charge you need to enter a vehicle registration mark (VRM).
+        JAQU treats VRMs as personal data because DVLA, which is an executive agency of DfT,
+        is able to identify registered keepers from VRMs.
+        However, the VRM you enter will only be retained in the Vehicle Checker for 24 hours
+        after your enquiry has been answered
+        and will not be accessible in any way by JAQU, DfT and Defra,
+        or shared with any other organisation.
+
+      %p
+        You can raise any queries about the information provided by
+        = service_name
+        by filling in
+        = succeed '.' do
+          = external_link_to('the webform',
+                             'https://vehiclecheck.cleanairzone.defra.gov.uk/contact_forms',
+                             id: 'vccs-contact-form-link')
+        Along with your query, you will need to give your name and email address,
+        which will be used to respond to you.
+        Information, including your name and email address,
+        that you send using the webform will not be kept by
+        = succeed ',' do
+          = service_name
+        but Gov.Notify will send the information to JAQU,
+        or another organisation acting on JAQU’s behalf, to respond to you.
+        Your personal information will be kept for no longer than a year and then deleted.
+      %p
+        The processing of personal data in
+        = service_name
+        is necessary for the performance of a task carried out
+        in the exercise of official authority vested in both DfT and Defra, as partners in JAQU.
+      %p
+        If you have any questions about how your personal data is processed by the CAZ Vehicle Checker,
+        or are interested in exercising any of your rights in relation to that processing,
+        please contact:
+      %ul.govuk-list-govuk-list--bullet
+        %li
+          %p
+            Data Protection Manager for JAQU
+            %br
+            Defra
+            %br
+            Information Rights Team
+            %br
+            Area 1E
+            %br
+            Nobel House
+            %br
+            17 Smith Square
+            %br
+            London
+            %br
+            SW1P 3JR
+        %li
+          %p
+            Email:
+            = mail_to 'data.protection@defra.gov.uk'
+      %p
+        A list of your rights under the
+        - link = 'https://ico.org.uk/for-organisations/guide-to-the-general-data-protection-regulation-gdpr/individual-rights/'
+        = external_link_to('General Data Protection Regulation and the Data Protection Act 2018',
+                            link,
+                            id: 'general-data-link')
+
+      %p
+        Defra’s and DfT’s Personal Information Charters are available at:
+      %p
+        - defra_link = 'https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs/about/personal-information-charter'
+        = external_link_to('Defra', defra_link, id: 'defra-link')
+      %p
+        - dtf_link = 'https://www.gov.uk/government/organisations/department-for-transport/about/personal-information-charter'
+        = external_link_to('DfT', dtf_link, id: 'dtf-link')
