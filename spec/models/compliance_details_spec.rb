@@ -19,8 +19,8 @@ RSpec.describe ComplianceDetails, type: :model do
   let(:country) { 'UK' }
   let(:zone_id) { SecureRandom.uuid }
   let(:unrecognised) { false }
-  let(:type) { 'private_car' }
-  let(:tariff) { 'BCC01-private_car' }
+  let(:type) { 'bus' }
+  let(:tariff) { 'BCC01-bus' }
   let(:charge) { 15 }
 
   let(:outcomes) do
@@ -78,6 +78,41 @@ RSpec.describe ComplianceDetails, type: :model do
         describe ".#{method}" do
           it 'returns URL' do
             expect(details.public_send(method)).to eq(url)
+          end
+        end
+      end
+
+      describe 'dynamic_compliance_url' do
+        let(:leeds_fleet_url) { YAML.load_file('additional_url.yml')['leeds']['fleet'] }
+        let(:birmingham_fleet_url) { YAML.load_file('additional_url.yml')['birmingham']['fleet'] }
+
+        describe 'Leeds' do
+          it 'returns leeds_fleet_url' do
+            expect(details.dynamic_compliance_url).to eq(leeds_fleet_url)
+          end
+
+          describe 'taxi' do
+            before { vehicle_details.merge!('leeds_taxi' => true) }
+
+            it 'returns compliance_url' do
+              expect(details.dynamic_compliance_url).to eq(details.compliance_url)
+            end
+          end
+        end
+
+        describe 'Birmingham' do
+          let(:name) { 'Birmingham' }
+
+          it 'returns birmingham_fleet_url' do
+            expect(details.dynamic_compliance_url).to eq(birmingham_fleet_url)
+          end
+
+          describe 'car' do
+            let(:type) { 'private_car' }
+
+            it 'returns compliance_url' do
+              expect(details.dynamic_compliance_url).to eq(details.compliance_url)
+            end
           end
         end
       end

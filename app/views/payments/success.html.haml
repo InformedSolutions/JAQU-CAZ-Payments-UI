@@ -40,15 +40,18 @@
             %td.govuk-table__cell Total charge
             %th.govuk-table__header{scope: 'row'}
               = parse_charge(@payment_details.total_charge)
+      %p
+        You may be able to claim a refund in certain circumstances.
+        Contact the local authority in the area you're driving in the find out more.
       %h2.govuk-heading-m
         Alternatives to paying the charge
       %ul.govuk-list.govuk-list--bullet
         %li
-          = external_link_to 'Get support to upgrade or replace your vehicle',
-                             @payment_details.compliance_details.compliance_url,
+          = external_link_to "Get support to upgrade or replace your vehicle in #{@payment_details.la_name}",
+                             @payment_details.compliance_details.dynamic_compliance_url,
                              id: 'become-compliant-url'
         %li
-          = external_link_to 'Explore cycling and public transport options',
+          = external_link_to "Explore cycling and public transport options in #{@payment_details.la_name}",
                              @payment_details.compliance_details.public_transport_options_url,
                              id: 'public-transport-options-url'
       = render 'common/print_link'
