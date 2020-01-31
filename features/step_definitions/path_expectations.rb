@@ -67,3 +67,7 @@ end
 Then('I should be on the cookies page') do
   expect_path(cookies_path)
 end
+
+Then('I should be on the privacy notice page') do
+  expect_path(policies_path)
+end
