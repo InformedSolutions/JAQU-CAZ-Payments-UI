@@ -20,7 +20,7 @@ RSpec.describe ComplianceDetails, type: :model do
   let(:zone_id) { SecureRandom.uuid }
   let(:unrecognised) { false }
   let(:type) { 'bus' }
-  let(:tariff) { 'BCC01-bus' }
+  let(:tariff) { 'BCC01-BUS' }
   let(:charge) { 15 }
 
   let(:outcomes) do
@@ -108,10 +108,18 @@ RSpec.describe ComplianceDetails, type: :model do
           end
 
           describe 'car' do
-            let(:type) { 'private_car' }
+            let(:tariff) { 'BCC01-PRIVATE_CAR' }
 
             it 'returns compliance_url' do
               expect(details.dynamic_compliance_url).to eq(details.compliance_url)
+            end
+          end
+
+          describe 'undefined' do
+            let(:tariff) { nil }
+
+            it 'returns birmingham_fleet_url' do
+              expect(details.dynamic_compliance_url).to eq(birmingham_fleet_url)
             end
           end
         end
