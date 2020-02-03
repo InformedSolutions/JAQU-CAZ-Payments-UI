@@ -17,11 +17,7 @@ class Payment
   #   * +tariff_code+ - code of the payment tariff, eg. 'BCC01-private_car'
   #
   def initialize(charge_details, return_url)
-    @vrn = charge_details['vrn']
-    @dates = charge_details['dates']
-    @zone_id = charge_details['la_id']
-    @total_charge = charge_details['total_charge']
-    @tariff = charge_details['tariff_code']
+    @charge_details = charge_details
     @return_url = return_url
   end
 
@@ -48,19 +44,42 @@ class Payment
   private
 
   # Reader functions for variables
-  attr_reader :vrn, :dates, :zone_id, :total_charge, :tariff, :return_url
+  attr_reader :charge_details, :return_url
 
   # Calls PaymentsApi.create_payment with right data
   def payment_details
     @payment_details ||= PaymentsApi.create_payment(
-      vrn: vrn,
-      zone_id: zone_id,
-      payment_details: {
-        amount: total_charge,
-        days: dates,
-        tariff: tariff
-      },
+      vrn: charge_details['vrn'],
+      zone_id: charge_details['la_id'],
+      transactions: charge_details['weekly'] ? weekly_transactions : daily_transactions,
       return_url: return_url
     )
+  end
+
+  # Creates transactions array for a daily flow
+  def daily_transactions
+    charge_details['dates'].map do |day|
+      transaction(day, charge_details['daily_charge'])
+    end
+  end
+
+  # Creates transactions array for a weekly flow with fixed charges
+  def weekly_transactions
+    transactions = charge_details['dates'].map do |day|
+      transaction(day, 7.14)
+    end
+    # Set value for the sum to equal 50
+    transactions.last[:charge] = 7.16
+    transactions
+  end
+
+  # Create single transaction object
+  def transaction(day, charge)
+    {
+      vrn: charge_details['vrn'],
+      travelDate: day,
+      tariffCode: charge_details['tariff_code'],
+      charge: charge
+    }
   end
 end
