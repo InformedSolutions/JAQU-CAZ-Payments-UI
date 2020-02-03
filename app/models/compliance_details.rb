@@ -17,7 +17,7 @@ class ComplianceDetails
   #
   def initialize(vehicle_details)
     @vrn = vehicle_details['vrn']
-    @type = vehicle_details['type'] || ''
+    @type = (vehicle_details['type'] || '').downcase
     @zone_id = vehicle_details['la_id']
     @non_dvla = vehicle_details['country'] != 'UK' || vehicle_details['unrecognised']
     @leeds_taxi = vehicle_details['leeds_taxi'] || false
@@ -25,7 +25,7 @@ class ComplianceDetails
 
   # Returns a string, eg. 'Birmingham'.
   def zone_name
-    compliance_data[:name]
+    compliance_data[:name].humanize
   end
 
   # Determines how much owner of the vehicle will have to pay in this CAZ.
@@ -67,7 +67,7 @@ class ComplianceDetails
   end
 
   def dynamic_compliance_url
-    if (leeds_taxi && zone_name == 'Leeds') || (type.include?('car') && zone_name == 'Birmingham')
+    if (leeds_taxi && zone_name == 'Leeds') || (car? && zone_name == 'Birmingham')
       return compliance_url
     end
 
@@ -108,7 +108,13 @@ class ComplianceDetails
     ComplianceCheckerApi.unrecognised_compliance(type, [zone_id])['charges']
   end
 
+  # Reads additional_url.yml
   def additional_urls_file
     YAML.load_file('additional_url.yml')
+  end
+
+  # Checks if given tariff describes a car. Returns boolean
+  def car?
+    tariff_code&.downcase&.include?('car')
   end
 end
