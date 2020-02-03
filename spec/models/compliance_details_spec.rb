@@ -32,6 +32,7 @@ RSpec.describe ComplianceDetails, type: :model do
         'informationUrls' => {
           'exemptionOrDiscount' => url,
           'becomeCompliant' => url,
+          'becomeCompliantFleet' => url,
           'mainInfo' => url,
           'publicTransportOptions' => url
         }
@@ -73,6 +74,7 @@ RSpec.describe ComplianceDetails, type: :model do
     describe 'urls' do
       %i[exemption_or_discount_url
          compliance_url
+         fleet_compliance_url
          main_info_url
          public_transport_options_url].each do |method|
         describe ".#{method}" do
@@ -83,12 +85,9 @@ RSpec.describe ComplianceDetails, type: :model do
       end
 
       describe 'dynamic_compliance_url' do
-        let(:leeds_fleet_url) { YAML.load_file('additional_url.yml')['leeds']['fleet'] }
-        let(:birmingham_fleet_url) { YAML.load_file('additional_url.yml')['birmingham']['fleet'] }
-
         describe 'Leeds' do
           it 'returns leeds_fleet_url' do
-            expect(details.dynamic_compliance_url).to eq(leeds_fleet_url)
+            expect(details.dynamic_compliance_url).to eq(details.fleet_compliance_url)
           end
 
           describe 'taxi' do
@@ -104,7 +103,7 @@ RSpec.describe ComplianceDetails, type: :model do
           let(:name) { 'Birmingham' }
 
           it 'returns birmingham_fleet_url' do
-            expect(details.dynamic_compliance_url).to eq(birmingham_fleet_url)
+            expect(details.dynamic_compliance_url).to eq(details.fleet_compliance_url)
           end
 
           describe 'car' do
@@ -119,7 +118,7 @@ RSpec.describe ComplianceDetails, type: :model do
             let(:tariff) { nil }
 
             it 'returns birmingham_fleet_url' do
-              expect(details.dynamic_compliance_url).to eq(birmingham_fleet_url)
+              expect(details.dynamic_compliance_url).to eq(details.fleet_compliance_url)
             end
           end
         end

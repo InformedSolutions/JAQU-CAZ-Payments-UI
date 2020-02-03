@@ -54,6 +54,13 @@ class ComplianceDetails
     url(:become_compliant)
   end
 
+  # Displays CAZ dedicated link for becoming compliant for fleets.
+  #
+  # Returns an URL, eg. 'www.example.com'.
+  def fleet_compliance_url
+    url(:become_compliant_fleet)
+  end
+
   # Displays root path to the CAZ campaign site
   #
   # Returns an URL, eg. 'www.example.com'.
@@ -71,7 +78,7 @@ class ComplianceDetails
       return compliance_url
     end
 
-    additional_urls_file[zone_name.downcase]['fleet']
+    fleet_compliance_url
   end
 
   private
@@ -106,11 +113,6 @@ class ComplianceDetails
   # Get compliance data for non-DVLA registered vehicle
   def non_dvla_compliance_data
     ComplianceCheckerApi.unrecognised_compliance(type, [zone_id])['charges']
-  end
-
-  # Reads additional_url.yml
-  def additional_urls_file
-    YAML.load_file('additional_url.yml')
   end
 
   # Checks if given tariff describes a car. Returns boolean
