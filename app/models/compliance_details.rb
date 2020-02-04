@@ -66,12 +66,14 @@ class ComplianceDetails
     url(:public_transport_options)
   end
 
+  # Returns "get support" link based on conditions
   def dynamic_compliance_url
+    zone_links = additional_urls_file[zone_name.downcase]
     if (leeds_taxi && zone_name == 'Leeds') || (car? && zone_name == 'Birmingham')
-      return compliance_url
+      return zone_links['non_fleet']
     end
 
-    additional_urls_file[zone_name.downcase]['fleet']
+    zone_links['fleet']
   end
 
   private
@@ -113,8 +115,8 @@ class ComplianceDetails
     YAML.load_file('additional_url.yml')
   end
 
-  # Checks if given tariff describes a car. Returns boolean
+  # Checks if the vehicle is a car. Returns boolean
   def car?
-    tariff_code&.downcase&.include?('car')
+    type&.downcase&.include?('car')
   end
 end
