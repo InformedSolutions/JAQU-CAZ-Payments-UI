@@ -105,6 +105,7 @@ class DatesController < ApplicationController
   def select_daily_date
     @local_authority = la_id
     @dates = Dates::Daily.call(vrn: vrn, zone_id: @local_authority)
+    @all_paid = (@dates.count { |date| date[:disabled] }) == @dates.length
   end
 
   ##
@@ -192,6 +193,7 @@ class DatesController < ApplicationController
   def select_weekly_date
     @local_authority = la_id
     @dates = Dates::Weekly.call(vrn: vrn, zone_id: @local_authority)
+    @all_paid = (@dates.count { |date| date[:disabled] }) == @dates.length
   end
 
   ##

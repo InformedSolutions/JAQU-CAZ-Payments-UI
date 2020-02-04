@@ -12,8 +12,8 @@
       %p
         A daily charge period runs from midnight to midnight.
       = render 'dates/daily/details'
-      = render 'dates/daily/inset' if @dates.any? { |date| date[:disabled] }
-
+      = render 'dates/daily/inset' if @dates.any? { |date| date[:disabled] }  && ! @all_paid
+      = render 'dates/daily/all_paid' if @all_paid
       = form_tag confirm_daily_date_dates_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
           %fieldset.govuk-fieldset
@@ -36,4 +36,4 @@
                                                  disabled: date[:disabled]}
                   %label.govuk-label.govuk-checkboxes__label{for: "date-#{index}"}
                     = display_date(date)
-        = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
+        = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button' if ! @all_paid
