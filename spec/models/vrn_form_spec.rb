@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe VrnForm, type: :model do
+describe VrnForm, type: :model do
   subject(:form) { described_class.new(vrn, country) }
 
   let(:vrn) { 'CU57ABC' }
@@ -101,7 +101,7 @@ RSpec.describe VrnForm, type: :model do
       context 'when VRN has special signs' do
         let(:vrn) { 'ABCDE$%' }
 
-        it { is_expected.to be_valid }
+        it_behaves_like 'an invalid vrn input', I18n.t('vrn_form.vrn_invalid')
       end
 
       context 'when VRN has too many numbers' do

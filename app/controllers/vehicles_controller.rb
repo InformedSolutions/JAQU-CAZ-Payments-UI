@@ -67,6 +67,7 @@ class VehiclesController < ApplicationController
     return redirect_to(exempt_vehicles_path) if @vehicle_details.exempt?
 
     SessionManipulation::SetLeedsTaxi.call(session: session) if @vehicle_details.leeds_taxi?
+    SessionManipulation::SetType.call(session: session, type: @vehicle_details.type)
   end
 
   ##

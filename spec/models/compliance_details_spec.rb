@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ComplianceDetails, type: :model do
+describe ComplianceDetails, type: :model do
   subject(:details) { described_class.new(vehicle_details) }
 
   let(:vehicle_details) do
@@ -83,43 +83,43 @@ RSpec.describe ComplianceDetails, type: :model do
       end
 
       describe 'dynamic_compliance_url' do
-        let(:leeds_fleet_url) { YAML.load_file('additional_url.yml')['leeds']['fleet'] }
-        let(:birmingham_fleet_url) { YAML.load_file('additional_url.yml')['birmingham']['fleet'] }
-
         describe 'Leeds' do
-          it 'returns leeds_fleet_url' do
-            expect(details.dynamic_compliance_url).to eq(leeds_fleet_url)
+          let(:leeds_urls) { YAML.load_file('additional_url.yml')['leeds'] }
+
+          it 'returns leeds fleet url' do
+            expect(details.dynamic_compliance_url).to eq(leeds_urls['fleet'])
           end
 
           describe 'taxi' do
             before { vehicle_details.merge!('leeds_taxi' => true) }
 
-            it 'returns compliance_url' do
-              expect(details.dynamic_compliance_url).to eq(details.compliance_url)
+            it 'returns leeds non fleet url' do
+              expect(details.dynamic_compliance_url).to eq(leeds_urls['non_fleet'])
             end
           end
         end
 
         describe 'Birmingham' do
           let(:name) { 'Birmingham' }
+          let(:birmingham_urls) { YAML.load_file('additional_url.yml')['birmingham'] }
 
-          it 'returns birmingham_fleet_url' do
-            expect(details.dynamic_compliance_url).to eq(birmingham_fleet_url)
+          it 'returns birmingham fleet url' do
+            expect(details.dynamic_compliance_url).to eq(birmingham_urls['fleet'])
           end
 
           describe 'car' do
-            let(:tariff) { 'BCC01-PRIVATE_CAR' }
+            let(:type) { 'car' }
 
-            it 'returns compliance_url' do
-              expect(details.dynamic_compliance_url).to eq(details.compliance_url)
+            it 'returns birmingham non_fleet url' do
+              expect(details.dynamic_compliance_url).to eq(birmingham_urls['non_fleet'])
             end
           end
 
           describe 'undefined' do
-            let(:tariff) { nil }
+            let(:type) { nil }
 
-            it 'returns birmingham_fleet_url' do
-              expect(details.dynamic_compliance_url).to eq(birmingham_fleet_url)
+            it 'returns birmingham fleet url' do
+              expect(details.dynamic_compliance_url).to eq(birmingham_urls['fleet'])
             end
           end
         end
