@@ -22,7 +22,10 @@ class VrnForm
     maximum: 7, too_long: I18n.t('vrn_form.vrn_too_long')
   }, if: -> { uk? }
   # Checks if VRN is in valid format when vehicle is registered in the UK
-  validate :vrn_format, if: -> { uk? }
+  validate :vrn_uk_format, if: -> { uk? }
+
+  # Checks if VRN contains only alphanumerics when vehicle is not registered in the UK
+  validate :vrn_non_uk_format, unless: -> { uk? }
 
   ##
   # Initializer method
@@ -45,11 +48,23 @@ class VrnForm
   end
 
   # Checks if VRN matches any possible VRN format
-  def vrn_format
+  def vrn_uk_format
     return if FORMAT_REGEXPS.any? do |reg|
       reg.match(vrn).present?
     end
 
+    add_format_error
+  end
+
+  # Checks if VRN contains only alphanumerics
+  def vrn_non_uk_format
+    return if /^[A-Za-z0-9]+$/.match(vrn).present?
+
+    add_format_error
+  end
+
+  # Adds format error
+  def add_format_error
     errors.add(:vrn, I18n.t('vrn_form.vrn_invalid'))
   end
 
