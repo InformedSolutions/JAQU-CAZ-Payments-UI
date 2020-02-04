@@ -1,5 +1,6 @@
 leeds:
   fleet: 'https://www.leeds.gov.uk/business/environmental-health-for-business/air-quality/support-for-buses-coaches-and-hgvs-clean-air-charging-zone'
-
+  non_fleet: 'https://www.leeds.gov.uk/business/environmental-health-for-business/air-quality/support-for-taxis-and-private-hire-clean-air-charging-zone'
 birmingham:
   fleet: 'https://businessbreathes.co.uk/fleet-operator'
+  non_fleet: 'https://www.brumbreathes.co.uk/info/6/upgrading-car/5/upgrading-car-1'

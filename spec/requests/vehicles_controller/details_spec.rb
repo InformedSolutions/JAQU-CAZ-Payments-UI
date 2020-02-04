@@ -16,6 +16,11 @@ RSpec.describe 'VehiclesController - GET #details', type: :request do
       expect(response).to be_successful
     end
 
+    it 'sets type in the session' do
+      http_request
+      expect(session[:vehicle_details]['type']).not_to be_nil
+    end
+
     context 'when vehicle is exempted' do
       let(:vehicle_details_stub) { instance_double('VehicleDetails', exempt?: true) }
 
