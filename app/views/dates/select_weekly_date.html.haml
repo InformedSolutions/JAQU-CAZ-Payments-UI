@@ -11,6 +11,7 @@
       %h1.govuk-heading-l Choose your dates
       %p
         A weekly charge allows you to drive in Leeds for 7 consecutive days.
+      = render 'dates/daily/all_paid' if @all_paid
       %details.govuk-details{'data-module': 'govuk-details'}
         %summary.govuk-details__summary
           %span.govuk-details__summary-text
@@ -48,6 +49,6 @@
                     = display_date(date)
                   %span#date-hint.govuk-hint.govuk-radios__hint
                     = date[:hint]
-        = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
+        = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button' if ! @all_paid
 
       %p= link_to 'Pay for 1 day instead', select_period_dates_path, id: 'pay_instead'
