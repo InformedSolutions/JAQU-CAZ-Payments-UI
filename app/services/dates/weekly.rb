@@ -12,7 +12,7 @@ module Dates
     # Overrides default by setting start and end dates
     def initialize(vrn:, zone_id:)
       super(vrn: vrn, zone_id: zone_id)
-      @start_date = today - 1.day
+      @start_date = today - 6.days
       @end_date = today + 12.days
     end
 
