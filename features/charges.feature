@@ -111,3 +111,12 @@ Feature: Charges
     Then I should be on the pick daily dates page
       And I should see "You have already paid for at least one of the selected dates"
 
+  Scenario: User cannot pay for any more dates
+    Given I am on the dates page with all charges paid
+      And I should see "You paid for everything"
+    Then I should not see the continue button
+
+  Scenario: User cannot buy an overlapping pass
+    Given I am on the pick weekly dates page with no passes available to buy
+      And I should see "You paid for everything"
+    Then I should not see the continue button
