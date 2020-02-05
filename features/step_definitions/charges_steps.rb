@@ -111,6 +111,12 @@ Given('I am on the dates page with paid charge for today') do
   visit select_daily_date_dates_path
 end
 
+Given('I am on the dates page with all charges paid') do
+  add_vehicle_details_to_session
+  mock_paid_dates(paid_period)
+  visit select_daily_date_dates_path
+end
+
 Then('I should see a disabled today checkbox') do
   expect(find("input[value='#{Date.current.strftime('%Y-%m-%d')}']")).to be_disabled
 end
@@ -122,4 +128,22 @@ end
 
 Given('I have not paid for any day') do
   mock_paid_dates
+end
+
+Then('I should not see the continue button') do
+  expect(page).not_to have_selector('input[type="submit"]')
+end
+
+Given('I am on the pick weekly dates page with no passes available to buy') do
+  add_weekly_vehicle_details_to_session
+  mock_paid_dates(paid_period)
+  visit select_weekly_date_dates_path
+end
+
+private
+
+def paid_period
+  {
+    dates: ((Date.current - 6.days)..(Date.current + 6.days)).map(&:to_s)
+  }
 end
