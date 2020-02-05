@@ -139,6 +139,7 @@ Given('I am on the pick weekly dates page with no passes available to buy') do
   mock_paid_dates(paid_period)
   visit select_weekly_date_dates_path
 end
+
 private
 
 def paid_period
