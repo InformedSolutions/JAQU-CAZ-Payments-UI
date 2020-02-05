@@ -17,8 +17,8 @@ RSpec.describe Dates::Weekly do
   end
 
   describe '.call' do
-    it 'returns eight days' do
-      expect(subject.count).to eq(8)
+    it 'returns thirteen days' do
+      expect(subject.count).to eq(13)
     end
 
     it 'calls PaymentsApi.paid_payments_dates with right params' do
@@ -27,21 +27,21 @@ RSpec.describe Dates::Weekly do
         .with(
           vrn: vrn,
           zone_id: zone_id,
-          start_date: Date.yesterday.strftime(value_format),
+          start_date: (Date.current - 6.days).strftime(value_format),
           end_date: (Date.current + 12.days).strftime(value_format)
         )
       dates
     end
 
     describe 'date object' do
-      let(:yesterday) { Date.current.yesterday }
+      let(:start) { (Date.current - 6.days) }
 
       it 'returns right display date' do
-        expect(dates.first[:name]).to eq(yesterday.strftime('%A %d %B %Y'))
+        expect(dates.first[:name]).to eq(start.strftime('%A %d %B %Y'))
       end
 
       it 'returns right value date' do
-        expect(dates.first[:value]).to eq(yesterday.strftime(value_format))
+        expect(dates.first[:value]).to eq(start.strftime(value_format))
       end
 
       it 'marks six days ago as not today' do
@@ -49,7 +49,7 @@ RSpec.describe Dates::Weekly do
       end
 
       it 'marks today as today' do
-        expect(dates[1][:today]).to be_truthy
+        expect(dates[6][:today]).to be_truthy
       end
     end
 
@@ -62,7 +62,7 @@ RSpec.describe Dates::Weekly do
         let(:paid_dates) { [Date.current.strftime(value_format)] }
 
         it 'returns 2 disabled dates' do
-          expect(dates.filter { |date| date[:disabled] }.length).to eq(2)
+          expect(dates.filter { |date| date[:disabled] }.length).to eq(7)
         end
       end
     end
