@@ -136,7 +136,7 @@ end
 
 Given('I am on the pick weekly dates page with no passes available to buy') do
   add_weekly_vehicle_details_to_session
-  mock_paid_dates(dates: ((Date.current - 6.days)..(Date.current + 6.days)).map(&:to_s))
+  mock_paid_dates(paid_period)
   visit select_weekly_date_dates_path
 end
 private
