@@ -35,7 +35,12 @@
           %tr.govuk-table__row
             %td.govuk-table__cell Payment for
             %th.govuk-table__header{scope: 'row'}
-              = parse_dates(@payment_details.dates).join(', ')
+              - parse_dates(@payment_details.dates).each do |date| 
+                - unless date.eql? parse_dates(@payment_details.dates).last
+                  = date + ','
+                  %br
+                - else
+                  = date
           %tr.govuk-table__row
             %td.govuk-table__cell Total charge
             %th.govuk-table__header{scope: 'row'}
