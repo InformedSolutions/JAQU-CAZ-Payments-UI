@@ -68,13 +68,13 @@ RSpec.describe Payment, type: :model do
             vrn: vrn,
             travelDate: dates.first,
             tariffCode: tariff,
-            charge: charge
+            charge: (charge.to_f * 100).to_i
           },
           {
             vrn: vrn,
             travelDate: dates.last,
             tariffCode: tariff,
-            charge: charge
+            charge: (charge.to_f * 100).to_i
           }
         ]
       end
@@ -99,7 +99,7 @@ RSpec.describe Payment, type: :model do
       end
 
       it 'returns total charge of 50' do
-        expect(payment.send(:weekly_transactions).sum { |t| t[:charge] }).to eq(50.0)
+        expect(payment.send(:weekly_transactions).sum { |t| t[:charge] }).to eq(5000)
       end
 
       context 'API call' do
@@ -110,7 +110,7 @@ RSpec.describe Payment, type: :model do
               vrn: vrn,
               travelDate: dates.first,
               tariffCode: tariff,
-              charge: 7.16
+              charge: 716
             }
           ]
         end

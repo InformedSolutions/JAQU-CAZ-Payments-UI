@@ -69,7 +69,7 @@ class Payment
       transaction(day, 7.14)
     end
     # Set value for the sum to equal 50
-    transactions.last[:charge] = 7.16
+    transactions.last[:charge] = amount_in_pence(7.16)
     transactions
   end
 
@@ -79,7 +79,12 @@ class Payment
       vrn: charge_details['vrn'],
       travelDate: day,
       tariffCode: charge_details['tariff_code'],
-      charge: charge
+      charge: amount_in_pence(charge)
     }
+  end
+
+  # convert amount in pence
+  def amount_in_pence(amount)
+    (amount.to_f * 100).to_i
   end
 end
