@@ -8,20 +8,32 @@ RSpec.describe 'PaymentsApi.create_payment' do
       vrn: vrn,
       zone_id: zone_id,
       return_url: return_url,
-      payment_details: {
-        days: days,
-        amount: amount,
-        tariff: tariff
-      }
+      transactions: transactions
     )
   end
 
   let(:vrn) { 'CU57ABC' }
-  let(:amount) { 80 }
+  let(:charge) { 80 }
   let(:zone_id) { SecureRandom.uuid }
   let(:days) { [Date.current, Date.tomorrow].map(&:to_s) }
   let(:return_url) { 'www.wp.pl' }
   let(:tariff) { 'BCC01-private_car' }
+  let(:transactions) do
+    [
+      {
+        vrn: vrn,
+        travelDate: days.first,
+        tariffCode: tariff,
+        charge: charge
+      },
+      {
+        vrn: vrn,
+        travelDate: days.last,
+        tariffCode: tariff,
+        charge: charge
+      }
+    ]
+  end
 
   context 'when the response status is 200' do
     before do
@@ -39,10 +51,7 @@ RSpec.describe 'PaymentsApi.create_payment' do
       expect(call)
         .to have_requested(:post, /payments/)
         .with(body: {
-                days: days,
-                vrn: vrn,
-                amount: amount * 100,
-                tariffCode: tariff,
+                'transactions' => transactions,
                 'cleanAirZoneId' => zone_id,
                 'returnUrl' => return_url
               })

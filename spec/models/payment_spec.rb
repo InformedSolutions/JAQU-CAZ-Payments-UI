@@ -8,8 +8,10 @@ RSpec.describe Payment, type: :model do
                   'vrn' => vrn,
                   'dates' => dates,
                   'la_id' => zone_id,
+                  'daily_charge' => charge,
                   'total_charge' => total_charge,
-                  'tariff_code' => tariff
+                  'tariff_code' => tariff,
+                  'weekly' => weekly
                 },
                 url)
   end
@@ -17,8 +19,10 @@ RSpec.describe Payment, type: :model do
   let(:vrn) { 'CU57ABC' }
   let(:zone_id) { SecureRandom.uuid }
   let(:dates) { [Date.current, Date.tomorrow].map(&:to_s) }
-  let(:total_charge) { 25 }
+  let(:charge) { 25 }
+  let(:total_charge) { charge * dates.length }
   let(:tariff) { 'BCC01-private_car' }
+  let(:weekly) { false }
 
   let(:payment_id) { SecureRandom.uuid }
   let(:url) { 'www.wp.pl' }
@@ -30,22 +34,6 @@ RSpec.describe Payment, type: :model do
       .to receive(:create_payment)
       .and_return('paymentId' => payment_id, 'centralReference' => payment_reference,
                   'paymentProviderId' => external_id, 'nextUrl' => url)
-  end
-
-  it 'calls PaymentsApi.create_payment with proper params' do
-    expect(PaymentsApi)
-      .to receive(:create_payment)
-      .with(
-        vrn: vrn,
-        zone_id: zone_id,
-        return_url: url,
-        payment_details: {
-          amount: total_charge,
-          days: dates,
-          tariff: tariff
-        }
-      )
-    payment.payment_id
   end
 
   describe '.payment_id' do
@@ -69,6 +57,76 @@ RSpec.describe Payment, type: :model do
   describe '.gov_uk_pay_url' do
     it 'returns URL' do
       expect(payment.gov_uk_pay_url).to eq(url)
+    end
+  end
+
+  describe 'transactions' do
+    context 'when daily flow is selected' do
+      let(:expected_transactions) do
+        [
+          {
+            vrn: vrn,
+            travelDate: dates.first,
+            tariffCode: tariff,
+            charge: charge
+          },
+          {
+            vrn: vrn,
+            travelDate: dates.last,
+            tariffCode: tariff,
+            charge: charge
+          }
+        ]
+      end
+
+      it 'calls PaymentsApi.create_payment with proper params' do
+        expect(PaymentsApi)
+          .to receive(:create_payment)
+          .with(
+            vrn: vrn,
+            zone_id: zone_id,
+            return_url: url,
+            transactions: expected_transactions
+          )
+        payment.payment_id
+      end
+    end
+
+    context 'when weekly flow is selected' do
+      let(:weekly) { true }
+      let(:dates) do
+        (1..7).map { |i| (Date.current + i.days).to_s }
+      end
+
+      it 'returns total charge of 50' do
+        expect(payment.send(:weekly_transactions).sum { |t| t[:charge] }).to eq(50.0)
+      end
+
+      context 'API call' do
+        let(:dates) { [Date.current.to_s] }
+        let(:expected_transactions) do
+          [
+            {
+              vrn: vrn,
+              travelDate: dates.first,
+              tariffCode: tariff,
+              charge: 7.16
+            }
+          ]
+        end
+
+        it 'calls PaymentsApi.create_payment with proper params' do
+          expect(PaymentsApi)
+            .to receive(:create_payment)
+            .with(
+              vrn: vrn,
+              zone_id: zone_id,
+              return_url: url,
+              transactions: expected_transactions
+            )
+          payment.payment_id
+        end
+      end
     end
   end
 end
