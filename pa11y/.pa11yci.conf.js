@@ -59,8 +59,8 @@ var config = {
                 "wait for element #confirm-exempt to be visible",
                 "click element #confirm-exempt",
                 "click element input[type=submit]",
-                "wait for element #date-0 to be visible",
-                "click element #date-0",
+                "wait for element #date-6 to be visible",
+                "click element #date-6",
             ]
         },
         {
