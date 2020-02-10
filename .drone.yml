@@ -130,8 +130,6 @@ steps:
   - name: unit tests
     image: test-payments-frontend
     pull: never
-    environment:
-      COMPLIANCE_CHECKER_API_URL: http://localhost
     volumes:
       - name: docker_sock
         path: /var/run/docker.sock
@@ -143,8 +141,6 @@ steps:
   - name: integration tests
     image: test-payments-frontend
     pull: never
-    environment:
-      COMPLIANCE_CHECKER_API_URL: https://s5fbiclr6j.execute-api.eu-west-2.amazonaws.com/dev
     volumes:
       - name: docker_sock
         path: /var/run/docker.sock
@@ -168,8 +164,8 @@ steps:
     pull: never
     commands:
        - bundle audit check --update
-       # Exclude node-sass till https://github.com/sass/node-sass/issues/2816 is fixed
-       - yarn run improved-yarn-audit --exclude 961
+       # to exclude id from audit(e.g. 961) just add `--exclude 961`
+       - yarn run improved-yarn-audit
        - brakeman --except Redirect,LinkToHref
     volumes:
       - name: docker_sock
@@ -405,8 +401,6 @@ steps:
   - name: unit tests
     image: test-payments-frontend
     pull: never
-    environment:
-      COMPLIANCE_CHECKER_API_URL: http://localhost
     volumes:
       - name: docker_sock
         path: /var/run/docker.sock
@@ -418,8 +412,6 @@ steps:
   - name: integration tests
     image: test-payments-frontend
     pull: never
-    environment:
-      COMPLIANCE_CHECKER_API_URL: https://zhapjjzdkg.execute-api.eu-west-2.amazonaws.com/st
     volumes:
       - name: docker_sock
         path: /var/run/docker.sock
@@ -443,8 +435,8 @@ steps:
     pull: never
     commands:
        - bundle audit check --update
-       # Exclude node-sass till https://github.com/sass/node-sass/issues/2816 is fixed
-       - yarn run improved-yarn-audit --exclude 961
+       # to exclude id from audit(e.g. 961) just add `--exclude 961`
+       - yarn run improved-yarn-audit
        - brakeman --except Redirect,LinkToHref
     volumes:
       - name: docker_sock
@@ -657,8 +649,6 @@ steps:
   - name: unit tests
     image: test-payments-frontend
     pull: never
-    environment:
-      COMPLIANCE_CHECKER_API_URL: http://localhost
     volumes:
       - name: docker_sock
         path: /var/run/docker.sock
@@ -670,8 +660,6 @@ steps:
   - name: integration tests
     image: test-payments-frontend
     pull: never
-    environment:
-      COMPLIANCE_CHECKER_API_URL: https://zhapjjzdkg.execute-api.eu-west-2.amazonaws.com/sit
     volumes:
       - name: docker_sock
         path: /var/run/docker.sock
@@ -695,8 +683,8 @@ steps:
     pull: never
     commands:
        - bundle audit check --update
-       # Exclude node-sass till https://github.com/sass/node-sass/issues/2816 is fixed
-       - yarn run improved-yarn-audit --exclude 961
+       # to exclude id from audit(e.g. 961) just add `--exclude 961`
+       - yarn run improved-yarn-audit
        - brakeman --except Redirect,LinkToHref
     volumes:
       - name: docker_sock

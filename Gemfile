@@ -15,7 +15,6 @@ gem 'httparty'
 gem 'logstash-logger'
 gem 'puma'
 gem 'rubocop-rails'
-gem 'sass-rails'
 gem 'scss_lint-govuk', require: false
 gem 'sdoc', require: false
 gem 'sqlite3'
