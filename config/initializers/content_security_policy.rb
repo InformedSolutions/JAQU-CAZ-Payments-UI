@@ -7,15 +7,19 @@
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
 
 if Rails.env.production?
+  ga_urls = %w[https://www.googletagmanager.com https://www.google-analytics.com]
+  defaults = %i[self https]
+  defaults.push(ENV['CLOUDFRONT_ENDPOINT']) if ENV['CLOUDFRONT_ENDPOINT']
+
   Rails.application.config.content_security_policy do |policy|
-    policy.default_src     :none
-    policy.font_src        :self, :https, :data
-    policy.img_src         :self, :https
-    policy.object_src      :none
-    policy.script_src      :self, :https, 'https://www.googletagmanager.com', 'https://www.google-analytics.com'
-    policy.style_src       :self, :https
-    policy.connect_src     :self, :https
-    policy.frame_ancestors :none
+    policy.default_src(:none)
+    policy.font_src(*defaults, :data)
+    policy.img_src(*defaults)
+    policy.object_src(:none)
+    policy.script_src(*defaults, *ga_urls)
+    policy.style_src(*defaults)
+    policy.connect_src(*defaults)
+    policy.frame_ancestors(:none)
   end
 end
 

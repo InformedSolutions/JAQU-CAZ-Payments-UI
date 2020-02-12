@@ -33,7 +33,9 @@ Rails.application.configure do
     'X-Content-Type-Options' => 'nosniff',
     'X-XSS-Protection' => '1; mode=block',
     'Strict-Transport-Security' => 'max-age=31536000',
-    'Pragma' => 'no-cache'
+    'Pragma' => 'no-cache',
+    'X-UA-Compatible' => 'IE=Edge',
+    'Access-Control-Allow-Origin' => '*'
   }
 
   # Compress CSS using a preprocessor.
@@ -43,7 +45,7 @@ Rails.application.configure do
   config.assets.compile = false
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  # config.action_controller.asset_host = 'http://assets.example.com'
+  config.action_controller.asset_host = ENV['CLOUDFRONT_ENDPOINT'] if ENV['CLOUDFRONT_ENDPOINT']
 
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
