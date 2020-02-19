@@ -10,6 +10,15 @@ Style/Documentation:
 Style/GuardClause:
   Enabled: false
 
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
+
 Layout/LineLength:
   Max: 99
   IgnoredPatterns: ['(\A|\s)#']
