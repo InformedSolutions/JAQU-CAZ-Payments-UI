@@ -9,11 +9,17 @@ var config = {
             args: [
                 "--no-sandbox"
             ]
-        },
-        hideElements: [".govuk-header__logotype-crown", ".govuk-footer__licence-logo"]
+        }
     },
     urls: [
-        '${BASE_URL}',
+        '${BASE_URL}?home_page',
+        {
+            "url": "${BASE_URL}?cookie_control",
+            "actions": [
+                "wait for element #ccc-close to be visible",
+                "click element #ccc-close"
+            ]
+        },
         '${BASE_URL}/refunds/scenarios',
         '${BASE_URL}/refunds/details',
         '${BASE_URL}/vehicles/enter_details',
@@ -46,7 +52,7 @@ var config = {
         },        
         {
             "url": '${BASE_URL}/vehicles/enter_details?select-date',
-            "actions": [                
+            "actions": [
                 "set field #vrn to CAS310",
                 "click element #registration-country-1",
                 "click element input[type=submit]",
@@ -57,9 +63,13 @@ var config = {
                 "click element #birmingham",
                 "click element input[type=submit]",
                 "wait for element #confirm-exempt to be visible",
+                "screen capture test1.png",
                 "click element #confirm-exempt",
+                "screen capture test2.png",
                 "click element input[type=submit]",
+                "screen capture test3.png",
                 "wait for element #date-6 to be visible",
+                "screen capture test3.png",
                 "click element #date-6",
             ]
         },
@@ -120,9 +130,7 @@ var config = {
  * Simple method to replace nested URLs in a pa11y configuration definition
  */
 function replacePa11yBaseUrls(urls, defaults) {
-
     console.error('BASE_URL:', process.env.BASE_URL);
-
     //Iterate existing urls object from configuration
     for (var idx = 0; idx < urls.length; idx++) {
         if (typeof urls[idx] === 'object') {
@@ -141,11 +149,11 @@ function replacePa11yBaseUrls(urls, defaults) {
         urls: urls
     }
 
-	console.log('\n')
-	console.log('Generated pa11y configuration:\n')
-	console.log(result)
+    console.log('\n')
+    console.log('Generated pa11y configuration:\n')
+    console.log(result)
 
     return result
-};
+}
 
 module.exports = replacePa11yBaseUrls(config.urls, config.defaults);
