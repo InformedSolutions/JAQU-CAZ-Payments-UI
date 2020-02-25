@@ -1045,7 +1045,7 @@ steps:
       - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
       - cd JAQU-CAZ-IAC
       - cd terraform/projects/payments/layers/01.networking
-      - PATH=$PATH:../../../../bin/#################################################### End preprod Steps ############################################################
+      - PATH=$PATH:../../../../bin/
       - chmod +x ../../../../bin/tf
       - tf init
       - tf workspace select prod || tf workspace new prod
