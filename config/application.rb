@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'boot'
-
+require_relative 'log_format'
 require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
@@ -27,5 +27,12 @@ module CitizensChargePayment
     config.exceptions_app = routes
 
     config.time_zone = 'London'
+
+    # Use custom logging formatter so that IP addresses are removed.
+    config.logger = LogStashLogger.new(type: :stdout, formatter: Formatter)
+
+    # Use the lowest log level to ensure availability of diagnostic information
+    # when problems arise.
+    config.log_level = :debug
   end
 end
