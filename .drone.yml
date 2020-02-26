@@ -1087,7 +1087,7 @@ steps:
     commands:
       - apk add --update bash python python-dev py-pip build-base jq
       - pip install awscli
-      - TASKDEF=`aws ecs describe-services --cluster payments-cluster-prod --services payments-prod-ecs-service | jq --raw-output '.services[0].taskDefinition'`
+      - TASKDEF=`aws ecs describe-services --cluster payments-cluster-preprod --services payments-preprod-ecs-service | jq --raw-output '.services[0].taskDefinition'`
       - export TF_VAR_build_number=`aws ecs describe-task-definition --task-definition $TASKDEF | jq --raw-output '.taskDefinition.containerDefinitions[0].image' | cut -f 2 -d ':'`
       - mkdir ~/.ssh
       - echo -n "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
