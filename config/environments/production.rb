@@ -107,7 +107,6 @@ Rails.application.configure do
   # Send deprecation notices to registered listeners.
   config.active_support.deprecation = :notify
 
-
   # Use custom logging formatter with tagged logging so that IP addresses are removed
   # and request IDs are retained.
   logger = LogStashLogger.new(type: :stdout)
