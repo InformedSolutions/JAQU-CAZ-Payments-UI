@@ -1061,13 +1061,14 @@ steps:
     environment:
       TF_VAR_build_number: ${DRONE_BUILD_NUMBER}
       TF_VAR_secret_key_base: ${DRONE_COMMIT}
-      TF_VAR_google_analytics_id: UA-144774549-5
+      TF_VAR_google_analytics_id: UA-150934733-5
       TF_VAR_access_key:
         from_secret: aws_access_key_id
       TF_VAR_secret_key:
         from_secret: aws_secret_access_key
       GIT_PRIVATE_SSH:
         from_secret: github_private_key
+      TF_VAR_feedback_url: https://www.surveymonkey.co.uk/r/2T8BX2D
       TF_VAR_enable_https_redirect: false
     when:
       event:
@@ -1115,13 +1116,15 @@ steps:
     environment:
       TF_VAR_build_number: ${DRONE_BUILD_NUMBER}
       TF_VAR_secret_key_base: ${DRONE_COMMIT}
-      TF_VAR_google_analytics_id: UA-144774549-5
+      TF_VAR_google_analytics_id: UA-150934733-5
       TF_VAR_access_key:
         from_secret: aws_access_key_id
       TF_VAR_secret_key:
         from_secret: aws_secret_access_key
       GIT_PRIVATE_SSH:
         from_secret: github_private_key
+      TF_VAR_region: eu-west-2
+      TF_VAR_feedback_url: https://www.surveymonkey.co.uk/r/2T8BX2D
       TF_VAR_enable_https_redirect: false
     when:
       event:
