@@ -1006,7 +1006,11 @@ steps:
       build_id_url: https://preprod.paycleanairzonecharge.co.uk/build_id
       build_id: ${DRONE_BUILD_NUMBER}
     commands:
+      - apk add --update bash python python-dev py-pip build-base jq
       - apk add curl
+      - pip install awscli
+      - TASKDEF=`aws ecs describe-services --cluster payments-cluster-sit --services payments-sit-ecs-service | jq --raw-output '.services[0].taskDefinition'`
+      - export build_id=`aws ecs describe-task-definition --task-definition $TASKDEF | jq --raw-output '.taskDefinition.containerDefinitions[0].image' | cut -f 2 -d ':'`
       - sh build_utils/check_build_number.sh
     volumes:
       - name: docker_sock
@@ -1159,7 +1163,11 @@ steps:
       build_id_url: https://prod.paycleanairzonecharge.co.uk/build_id
       build_id: ${DRONE_BUILD_NUMBER}
     commands:
+      - apk add --update bash python python-dev py-pip build-base jq
       - apk add curl
+      - pip install awscli
+      - TASKDEF=`aws ecs describe-services --cluster payments-cluster-preprod --services payments-preprod-ecs-service | jq --raw-output '.services[0].taskDefinition'`
+      - export build_id=`aws ecs describe-task-definition --task-definition $TASKDEF | jq --raw-output '.taskDefinition.containerDefinitions[0].image' | cut -f 2 -d ':'`
       - sh build_utils/check_build_number.sh
     volumes:
       - name: docker_sock
