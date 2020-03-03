@@ -1005,6 +1005,11 @@ steps:
     environment:
       build_id_url: https://preprod.paycleanairzonecharge.co.uk/build_id
       build_id: ${DRONE_BUILD_NUMBER}
+      AWS_ACCESS_KEY_ID:
+        from_secret: aws_access_key_id
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: aws_secret_access_key
+      AWS_DEFAULT_REGION: eu-west-2
     commands:
       - apk add --update bash python python-dev py-pip build-base jq
       - apk add curl
@@ -1162,6 +1167,11 @@ steps:
     environment:
       build_id_url: https://prod.paycleanairzonecharge.co.uk/build_id
       build_id: ${DRONE_BUILD_NUMBER}
+      AWS_ACCESS_KEY_ID:
+        from_secret: aws_access_key_id
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: aws_secret_access_key
+      AWS_DEFAULT_REGION: eu-west-2
     commands:
       - apk add --update bash python python-dev py-pip build-base jq
       - apk add curl
