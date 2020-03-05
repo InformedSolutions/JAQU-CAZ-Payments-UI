@@ -10,19 +10,27 @@
   var necessaryDescription = 'Necessary cookies enable core functionality. The website cannot function properly without these cookies, and they can only be deactivated by changing your browser preferences.'
   var cookiesDescription = "We use Google Analytics to measure how you use the website so we can improve it based on user needs. Google Analytics sets cookies that store anonymised information about how you got to the site, the pages you visit, how long you spend on each page and what you click on while you're visiting the site."
 
+  // Remove 'Accept Recommended Settings' button from DOM
+  function hideAcceptButton() {
+	  var recommendedSettingsButton = document.getElementById("ccc-button-holder");
+	  recommendedSettingsButton.parentNode.removeChild(recommendedSettingsButton);
+  }
+
   var config = {
     apiKey: apiKey,
     product: product,
     position: 'left',
     initialState: 'open',
-    rejectButton: true,
+    onLoad: hideAcceptButton,
+    rejectButton: false,
+    closeStyle: 'button',
     text: {
       title: 'This site uses cookies',
       intro:  introText,
       necessaryTitle: 'Necessary Cookies',
       necessaryDescription: necessaryDescription,
-      acceptRecommended: 'Accept all cookies',
-      rejectSettings: 'Reject all cookies'
+      acceptRecommended: "",
+      closeLabel: "Save and close"
     },
     branding: {
       fontColor: '#333',
