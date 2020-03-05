@@ -16,8 +16,8 @@ var config = {
         {
             "url": "${BASE_URL}?cookie_control",
             "actions": [
-                "wait for element #ccc-close to be visible",
-                "click element #ccc-close"
+                "wait for element #ccc-dismiss-button to be visible",
+                "click element #ccc-dismiss-button"
             ]
         },
         '${BASE_URL}/refunds/scenarios',
