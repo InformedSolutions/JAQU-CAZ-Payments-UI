@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
 ##
-# This class wraps calls being made to the VCCS backend API.
-# The base URL for the calls is configured by +COMPLIANCE_CHECKER_API_URL+ environment variable.
+# This class wraps calls being made to the Payments backend API related to Vehicle Compliance.
+# The base URL for the calls is configured by +PAYMENTS_API_URL+ environment variable.
 #
 # All calls will automatically have the correlation ID and JSON content type added to the header.
 #
 # All methods are on the class level, so there is no initializer method.
 
 class ComplianceCheckerApi < BaseApi
-  base_uri ENV.fetch('COMPLIANCE_CHECKER_API_URL', 'localhost:3001') + '/v1/compliance-checker'
+  base_uri ENV.fetch('PAYMENTS_API_URL', 'localhost:3001') + '/v1/payments'
 
   class << self
     ##
-    # Calls +/v1/compliance-checker/vehicles/:vrn/details+ endpoint with +GET+ method
+    # Calls +/v1/payments/vehicles/:vrn/details+ endpoint with +GET+ method
     # and returns details of the requested vehicle.
     #
     # ==== Attributes
@@ -53,7 +53,7 @@ class ComplianceCheckerApi < BaseApi
     end
 
     ##
-    # Calls +/v1/compliance-checker/vehicles/:vrn/compliance+ endpoint with +GET+ method
+    # Calls +/v1/payments/vehicles/:vrn/compliance+ endpoint with +GET+ method
     # and returns compliance details of the requested vehicle for requested zones.
     #
     # ==== Attributes
@@ -106,7 +106,7 @@ class ComplianceCheckerApi < BaseApi
     end
 
     ##
-    # Calls +/v1/compliance-checker/clean-air-zones+ endpoint with +GET+ method
+    # Calls +/v1/payments/clean-air-zones+ endpoint with +GET+ method
     # and returns the list of available Clean Air Zones.
     #
     # ==== Example
@@ -134,7 +134,7 @@ class ComplianceCheckerApi < BaseApi
     end
 
     ##
-    # Calls +/v1/compliance-checker/vehicles/unrecognised/:type/compliance+ endpoint with +GET+ method
+    # Calls +/v1/payments/vehicles/unrecognised/:type/compliance+ endpoint with +GET+ method
     # and returns compliance details for non DVLA vehicle on requested zone.
     #
     # ==== Attributes
