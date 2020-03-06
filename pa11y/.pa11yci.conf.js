@@ -63,13 +63,9 @@ var config = {
                 "click element #birmingham",
                 "click element input[type=submit]",
                 "wait for element #confirm-exempt to be visible",
-                "screen capture test1.png",
                 "click element #confirm-exempt",
-                "screen capture test2.png",
                 "click element input[type=submit]",
-                "screen capture test3.png",
                 "wait for element #date-6 to be visible",
-                "screen capture test3.png",
                 "click element #date-6",
             ]
         },
