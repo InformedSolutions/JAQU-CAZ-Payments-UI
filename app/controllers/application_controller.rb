@@ -119,4 +119,9 @@ class ApplicationController < ActionController::Base
     log_invalid_form "Redirecting back to :#{template}"
     redirect_to path, alert: alert
   end
+
+  # Assign back button url
+  def assign_back_button_url
+    @back_button_url = request.referer || root_path
+  end
 end

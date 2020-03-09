@@ -1,11 +1,13 @@
-- content_for(:title, 'Privacy Notice')
-= link_to 'Return to the homepage', root_path, class: 'govuk-back-link'
+- title_and_header = 'Privacy Notice'
+- content_for(:title, title_and_header)
+
+= link_to 'Back', @back_button_url, class: 'govuk-back-link'
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
     .govuk-grid-column-two-thirds
       %h1.govuk-heading-xl
-        Privacy Notice
+        = title_and_header
       %p
         The
         = service_name
