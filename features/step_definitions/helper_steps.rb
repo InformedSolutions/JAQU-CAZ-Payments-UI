@@ -33,3 +33,7 @@ Then('I press {string} footer link') do |string|
     click_link string
   end
 end
+
+Given('I am on the enter details page') do
+  visit enter_details_vehicles_path
+end
