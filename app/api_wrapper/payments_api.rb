@@ -60,7 +60,7 @@ class PaymentsApi < BaseApi
     #
     def create_payment(vrn:, zone_id:, transactions:, return_url:)
       log_action(
-        "Creating a payment for vrn: #{vrn}, zone id: #{zone_id}, days count: #{transactions.size}"
+        "Creating a payment for vehicle with zone id: #{zone_id}, days count: #{transactions.size}"
       )
       body = payment_creation_body(transactions, zone_id, return_url)
       log_action("Request body: #{body}")
@@ -120,7 +120,7 @@ class PaymentsApi < BaseApi
     # Empty array means there was no paid payment in the given time-frame.
     #
     def paid_payments_dates(vrn:, zone_id:, start_date:, end_date:)
-      log_action("Getting paid payments for vrn: #{vrn} in #{zone_id} (#{start_date} - #{end_date})")
+      log_action("Getting paid payments for vehicle in #{zone_id} (#{start_date} - #{end_date})")
       request(:post, '/payments/paid', body: {
         vrns: [vrn],
         cleanAirZoneId: zone_id,

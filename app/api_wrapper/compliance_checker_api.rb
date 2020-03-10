@@ -48,7 +48,7 @@ class ComplianceCheckerApi < BaseApi
     # * {500 Exception}[rdoc-ref:BaseApi::Error500Exception] - backend API error
     #
     def vehicle_details(vrn)
-      log_action "Getting vehicle details, vrn: #{vrn}"
+      log_action "Getting vehicle details for VRN"
       request(:get, "/vehicles/#{vrn}/details")
     end
 
@@ -101,7 +101,7 @@ class ComplianceCheckerApi < BaseApi
     #
     def vehicle_compliance(vrn, zones)
       zones = zones.join(',')
-      log_action "Getting vehicle compliance, vrn: #{vrn}, zones: #{zones}"
+      log_action "Getting compliance for vehicle in zones: #{zones}"
       request(:get, "/vehicles/#{vrn}/compliance", query: { zones: zones })
     end
 
