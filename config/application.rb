@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative 'boot'
-require_relative 'log_format'
 require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
@@ -12,6 +11,9 @@ module CitizensChargePayment
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0
+
+    # Load lib folder files
+    config.eager_load_paths << Rails.root.join('lib')
 
     default_url = 'https://www.example.com'
     config.x.feedback_url = ENV.fetch('FEEDBACK_URL', default_url)
@@ -27,12 +29,5 @@ module CitizensChargePayment
     config.exceptions_app = routes
 
     config.time_zone = 'London'
-
-    # Use custom logging formatter so that IP addresses are removed.
-    config.logger = LogStashLogger.new(type: :stdout, formatter: Formatter)
-
-    # Use the lowest log level to ensure availability of diagnostic information
-    # when problems arise.
-    config.log_level = :debug
   end
 end

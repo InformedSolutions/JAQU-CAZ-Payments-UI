@@ -107,12 +107,11 @@ Rails.application.configure do
   # Send deprecation notices to registered listeners.
   config.active_support.deprecation = :notify
 
-  # Use custom logging formatter with tagged logging so that IP addresses are removed
-  # and request IDs are retained.
-  logger = LogStashLogger.new(type: :stdout)
-
-  # Use tagged logging to include request id on production.
-  config.logger = ActiveSupport::TaggedLogging.new(logger)
+  # Use custom logging formatter so that IP any other PII can be removed.
+  config.log_formatter = CustomLogger.new
+  logger               = ActiveSupport::Logger.new(STDOUT)
+  logger.formatter     = config.log_formatter
+  config.logger        = ActiveSupport::TaggedLogging.new(logger)
 
   # Do not dump schema after migrations.
   # config.active_record.dump_schema_after_migration = false

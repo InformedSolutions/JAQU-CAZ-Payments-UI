@@ -12,7 +12,6 @@ gem 'brakeman'
 gem 'bundler-audit'
 gem 'haml'
 gem 'httparty'
-gem 'logstash-logger'
 gem 'puma'
 gem 'rubocop-rails'
 gem 'scss_lint-govuk', require: false
