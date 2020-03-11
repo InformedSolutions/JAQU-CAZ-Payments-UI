@@ -821,50 +821,6 @@ steps:
         - push
 
 
-  # Build end to end tests docker image
-  - name: build end to end test image
-    image: docker:git
-    commands:
-      - mkdir ~/.ssh
-      - echo -n "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
-      - chmod 600 ~/.ssh/id_rsa
-      - touch ~/.ssh/known_hosts
-      - chmod 600 ~/.ssh/known_hosts
-      - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
-      - git clone git@github.com:InformedSolutions/JAQU-CAZ-QA-selenium.git
-      - cd JAQU-CAZ-QA-selenium
-      - docker build -t selenium-jaqu .
-    environment:
-      GIT_PRIVATE_SSH:
-        from_secret: github_private_key
-    volumes:
-      - name: docker_sock
-        path: /var/run/docker.sock
-    when:
-      event:
-        - push
-
-  # Run end to end tests
-  - name: run end to end tests
-    image: selenium-jaqu
-    pull: never
-    environment:
-      BS_USERNAME:
-        from_secret: browserstack_username
-      BS_AUTHKEY:
-        from_secret: browserstack_auth_key
-      BASEURL_PAYMENTS: 'https://sit.paycleanairzonecharge.co.uk/'
-      BROWSER_SET: 'min'
-      BUILD: PAYMENTS-UI-${DRONE_BUILD_NUMBER}
-      LOCATION: browserstack
-    commands:
-      - cd JAQU-CAZ-QA-selenium
-      - cucumber -t @PAYMENTS --retry 3
-    when:
-      event:
-        - push
-
-
 #################################################### End SIT Steps ############################################################
 ---
 
@@ -917,7 +873,6 @@ steps:
       - tf workspace select preprod || tf workspace new preprod
       - tf plan
     environment:
-      TF_VAR_build_number: ${DRONE_BUILD_NUMBER}
       TF_VAR_secret_key_base: ${DRONE_COMMIT}
       TF_VAR_google_analytics_id: UA-144774549-5
       TF_VAR_access_key:
@@ -972,7 +927,6 @@ steps:
       - tf workspace select preprod || tf workspace new preprod
       - tf apply -auto-approve
     environment:
-      TF_VAR_build_number: ${DRONE_BUILD_NUMBER}
       TF_VAR_secret_key_base: ${DRONE_COMMIT}
       TF_VAR_google_analytics_id: UA-144774549-5
       TF_VAR_access_key:
@@ -1008,7 +962,6 @@ steps:
     image: docker
     environment:
       build_id_url: https://preprod.paycleanairzonecharge.co.uk/build_id
-      build_id: ${DRONE_BUILD_NUMBER}
       AWS_ACCESS_KEY_ID:
         from_secret: aws_access_key_id
       AWS_SECRET_ACCESS_KEY:
@@ -1079,7 +1032,6 @@ steps:
       - tf workspace select prod || tf workspace new prod
       - tf plan
     environment:
-      TF_VAR_build_number: ${DRONE_BUILD_NUMBER}
       TF_VAR_secret_key_base: ${DRONE_COMMIT}
       TF_VAR_google_analytics_id: UA-150934733-5
       TF_VAR_access_key:
@@ -1134,7 +1086,6 @@ steps:
       - tf workspace select preprod || tf workspace new prod
       - tf apply -auto-approve
     environment:
-      TF_VAR_build_number: ${DRONE_BUILD_NUMBER}
       TF_VAR_secret_key_base: ${DRONE_COMMIT}
       TF_VAR_google_analytics_id: UA-150934733-5
       TF_VAR_access_key:
@@ -1169,8 +1120,7 @@ steps:
   - name: await ecs rollout
     image: docker
     environment:
-      build_id_url: https://prod.paycleanairzonecharge.co.uk/build_id
-      build_id: ${DRONE_BUILD_NUMBER}
+      build_id_url: https://pay.cleanairzone.defra.gov.uk/build_id
       AWS_ACCESS_KEY_ID:
         from_secret: aws_access_key_id
       AWS_SECRET_ACCESS_KEY:
