@@ -883,6 +883,11 @@ steps:
         from_secret: github_private_key
       TF_VAR_enable_https_redirect: false
       TF_VAR_feedback_url: https://www.surveymonkey.co.uk/r/TK6F8N6
+      AWS_ACCESS_KEY_ID:
+        from_secret: aws_access_key_id
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: aws_secret_access_key
+      AWS_DEFAULT_REGION: eu-west-2
     when:
       event:
         - pull_request
@@ -937,6 +942,11 @@ steps:
         from_secret: github_private_key
       TF_VAR_enable_https_redirect: false
       TF_VAR_feedback_url: https://www.surveymonkey.co.uk/r/TK6F8N6
+      AWS_ACCESS_KEY_ID:
+        from_secret: aws_access_key_id
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: aws_secret_access_key
+      AWS_DEFAULT_REGION: eu-west-2
     when:
       event:
         - push
@@ -1008,7 +1018,10 @@ steps:
   - name: plan updates to prod
     image: hashicorp/terraform:0.12.3
     commands:
-      - apk update && apk add bash
+      - apk add --update bash python python-dev py-pip build-base jq
+      - pip install awscli
+      - TASKDEF=`aws ecs describe-services --cluster payments-cluster-preprod --services payments-preprod-ecs-service | jq --raw-output '.services[0].taskDefinition'`
+      - export TF_VAR_build_number=`aws ecs describe-task-definition --task-definition $TASKDEF | jq --raw-output '.taskDefinition.containerDefinitions[0].image' | cut -f 2 -d ':'`
       - mkdir ~/.ssh
       - echo -n "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
       - chmod 600 ~/.ssh/id_rsa
@@ -1042,6 +1055,11 @@ steps:
         from_secret: github_private_key
       TF_VAR_feedback_url: https://www.surveymonkey.co.uk/r/TK6F8N6
       TF_VAR_enable_https_redirect: false
+      AWS_ACCESS_KEY_ID:
+        from_secret: aws_access_key_id
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: aws_secret_access_key
+      AWS_DEFAULT_REGION: eu-west-2
     when:
       event:
         - pull_request
@@ -1096,6 +1114,11 @@ steps:
         from_secret: github_private_key
       TF_VAR_feedback_url: https://www.surveymonkey.co.uk/r/TK6F8N6
       TF_VAR_enable_https_redirect: false
+      AWS_ACCESS_KEY_ID:
+        from_secret: aws_access_key_id
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: aws_secret_access_key
+      AWS_DEFAULT_REGION: eu-west-2
     when:
       event:
         - push
