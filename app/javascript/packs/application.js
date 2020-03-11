@@ -21,4 +21,5 @@ import cookieControl from "../src/cookieControl";
 document.body.classList.add('js-enabled');
 
 initAll();
+initPrintLink();
 cookieControl();
