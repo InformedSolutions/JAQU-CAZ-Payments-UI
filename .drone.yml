@@ -185,6 +185,7 @@ steps:
       - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
       - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
       - cd JAQU-CAZ-IAC
+      - git checkout develop
       - cd terraform/projects/payments/layers/00.global
       - PATH=$PATH:../../../../bin/
       - chmod +x ../../../../bin/tf
@@ -246,6 +247,7 @@ steps:
     commands:
       - apk update && apk add bash
       - cd JAQU-CAZ-IAC
+      - git checkout develop
       - cd terraform/projects/payments/layers/01.networking
       - PATH=$PATH:../../../../bin/
       - chmod +x ../../../../bin/tf
@@ -262,7 +264,8 @@ steps:
       - tf apply -auto-approve
     environment:
       TF_VAR_build_number: ${DRONE_BUILD_NUMBER}
-      TF_VAR_secret_key_base: ${DRONE_COMMIT}
+      TF_VAR_secret_key_base:
+         from_secret: payments_ruby_secret
       TF_VAR_google_analytics_id: UA-144774549-5
       TF_VAR_access_key:
         from_secret: aws_access_key_id
@@ -467,6 +470,7 @@ steps:
       - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
       - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
       - cd JAQU-CAZ-IAC
+      - git checkout st
       - cd terraform/projects/payments/layers/01.networking
       - PATH=$PATH:../../../../bin/
       - chmod +x ../../../../bin/tf
@@ -483,7 +487,8 @@ steps:
       - tf plan
     environment:
       TF_VAR_build_number: ${DRONE_BUILD_NUMBER}
-      TF_VAR_secret_key_base: ${DRONE_COMMIT}
+      TF_VAR_secret_key_base:
+         from_secret: payments_ruby_secret
       TF_VAR_google_analytics_id: UA-144774549-5
       TF_VAR_access_key:
         from_secret: aws_access_key_id
@@ -517,6 +522,7 @@ steps:
       - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
       - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
       - cd JAQU-CAZ-IAC
+      - git checkout st
       - cd terraform/projects/payments/layers/01.networking
       - PATH=$PATH:../../../../bin/
       - chmod +x ../../../../bin/tf
@@ -533,7 +539,8 @@ steps:
       - tf apply -auto-approve
     environment:
       TF_VAR_build_number: ${DRONE_BUILD_NUMBER}
-      TF_VAR_secret_key_base: ${DRONE_COMMIT}
+      TF_VAR_secret_key_base:
+         from_secret: payments_ruby_secret
       TF_VAR_google_analytics_id: UA-144774549-5
       TF_VAR_access_key:
         from_secret: aws_access_key_id
@@ -708,6 +715,7 @@ steps:
       - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
       - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
       - cd JAQU-CAZ-IAC
+      - git checkout sit
       - cd terraform/projects/payments/layers/01.networking
       - PATH=$PATH:../../../../bin/
       - chmod +x ../../../../bin/tf
@@ -724,7 +732,8 @@ steps:
       - tf plan
     environment:
       TF_VAR_build_number: ${DRONE_BUILD_NUMBER}
-      TF_VAR_secret_key_base: ${DRONE_COMMIT}
+      TF_VAR_secret_key_base:
+         from_secret: payments_ruby_secret
       TF_VAR_google_analytics_id: UA-144774549-5
       TF_VAR_access_key:
         from_secret: aws_access_key_id
@@ -758,6 +767,7 @@ steps:
       - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
       - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
       - cd JAQU-CAZ-IAC
+      - git checkout sit
       - cd terraform/projects/payments/layers/01.networking
       - PATH=$PATH:../../../../bin/
       - chmod +x ../../../../bin/tf
@@ -774,7 +784,8 @@ steps:
       - tf apply -auto-approve
     environment:
       TF_VAR_build_number: ${DRONE_BUILD_NUMBER}
-      TF_VAR_secret_key_base: ${DRONE_COMMIT}
+      TF_VAR_secret_key_base:
+         from_secret: payments_ruby_secret
       TF_VAR_google_analytics_id: UA-144774549-5
       TF_VAR_access_key:
         from_secret: aws_access_key_id
@@ -879,7 +890,8 @@ steps:
       - tf workspace select preprod || tf workspace new preprod
       - tf plan
     environment:
-      TF_VAR_secret_key_base: ${DRONE_COMMIT}
+      TF_VAR_secret_key_base:
+         from_secret: payments_ruby_secret
       TF_VAR_google_analytics_id: UA-144774549-5
       TF_VAR_access_key:
         from_secret: aws_access_key_id
@@ -938,7 +950,8 @@ steps:
       - tf workspace select preprod || tf workspace new preprod
       - tf apply -auto-approve
     environment:
-      TF_VAR_secret_key_base: ${DRONE_COMMIT}
+      TF_VAR_secret_key_base:
+         from_secret: payments_ruby_secret
       TF_VAR_google_analytics_id: UA-144774549-5
       TF_VAR_access_key:
         from_secret: aws_access_key_id
@@ -1021,11 +1034,6 @@ trigger:
 concurrency:
   limit: 1
 
-volumes:
-- name: docker_sock
-  host:
-    path: /var/run/docker.sock
-
 steps:
 
   - name: plan updates to prod
@@ -1043,6 +1051,7 @@ steps:
       - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
       - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
       - cd JAQU-CAZ-IAC
+      - git checkout master
       - cd terraform/projects/payments/layers/01.networking
       - PATH=$PATH:../../../../bin/
       - chmod +x ../../../../bin/tf
@@ -1058,7 +1067,8 @@ steps:
       - tf workspace select prod || tf workspace new prod
       - tf plan
     environment:
-      TF_VAR_secret_key_base: ${DRONE_COMMIT}
+      TF_VAR_secret_key_base:
+         from_secret: payments_ruby_secret
       TF_VAR_google_analytics_id: UA-150934733-5
       TF_VAR_access_key:
         from_secret: aws_access_key_id
@@ -1117,7 +1127,8 @@ steps:
       - tf workspace select preprod || tf workspace new prod
       - tf apply -auto-approve
     environment:
-      TF_VAR_secret_key_base: ${DRONE_COMMIT}
+      TF_VAR_secret_key_base:
+        from_secret: payments_ruby_secret
       TF_VAR_google_analytics_id: UA-150934733-5
       TF_VAR_access_key:
         from_secret: aws_access_key_id
@@ -1201,6 +1212,13 @@ name: aws_secret_access_key
 get:
   path: /secret/drone.global
   name: awsSecretAccessKey
+
+---
+kind: secret
+name: payments_ruby_secret
+get:
+  path: /secret/drone.global
+  name: paymentsRubySecret
 
 ---
 kind: secret
