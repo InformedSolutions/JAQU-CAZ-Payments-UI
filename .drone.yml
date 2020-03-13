@@ -115,7 +115,7 @@ steps:
     - docker system prune -f
     volumes:
       - name: docker_sock
-        path: /var/run/docker.sock${DRONE_COMMIT}
+        path: /var/run/docker.sock
 
   # Build docker image
   - name: build
