@@ -82,8 +82,8 @@ describe DatesHelper do
       context 'when date is today' do
         let(:today) { true }
 
-        it 'returns bolded name and adds both today and paid marks' do
-          expect(method).to eq("<b>#{name}</b> (Today) - Paid")
+        it 'adds both today and paid marks' do
+          expect(method).to eq("#{name} (Today) - Paid")
         end
       end
     end

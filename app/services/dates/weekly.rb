@@ -43,7 +43,7 @@ module Dates
 
     def weekly_date_hint(date)
       week_end_date = (date + 6.days).strftime(DISPLAY_DATE_FORMAT)
-      "Your weekly ticket is valid until 11.59pm on #{week_end_date}"
+      "Your weekly charge is valid until 11.59pm on #{week_end_date}"
     end
   end
 end
