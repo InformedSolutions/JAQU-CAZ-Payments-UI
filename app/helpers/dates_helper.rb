@@ -23,6 +23,8 @@ module DatesHelper
     value
   end
 
+  private
+
   def today_not_paid(date)
     date[:today] & !date[:disabled]
   end
