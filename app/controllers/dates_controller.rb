@@ -83,12 +83,13 @@ class DatesController < ApplicationController
   #
   def confirm_daily_charge
     form = ConfirmationForm.new(params['confirm-exempt'])
-    unless form.valid?
+    if form.valid?
+      SessionManipulation::SetConfirmExempt.call(session: session)
+      redirect_to select_daily_date_dates_path
+    else
       alert = I18n.t('confirmation_form.exemption')
-      return redirect_back_to(daily_charge_dates_path, alert, :daily_charge)
+      redirect_back_to(daily_charge_dates_path, alert, :daily_charge)
     end
-    SessionManipulation::SetConfirmExempt.call(session: session)
-    redirect_to select_daily_date_dates_path
   end
 
   ##
@@ -217,9 +218,7 @@ class DatesController < ApplicationController
   def confirm_date_weekly
     dates = params[:dates]
     if dates && check_already_paid_weekly(dates)
-      SessionManipulation::CalculateTotalCharge.call(
-        session: session, dates: dates, weekly: true
-      )
+      SessionManipulation::CalculateTotalCharge.call(session: session, dates: dates, weekly: true)
       redirect_to review_payment_charges_path
     else
       alert = I18n.t(dates ? 'paid' : 'empty', scope: 'dates.weekly')
