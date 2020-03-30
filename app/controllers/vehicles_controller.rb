@@ -226,6 +226,7 @@ class VehiclesController < ApplicationController
     ]
   end
 
+  # persists whether or not vehicle details are correct into session and returns correct onward path
   def process_detail_form(form)
     SessionManipulation::SetConfirmVehicle.call(session: session, confirm_vehicle: form.confirmed?)
     form.confirmed? ? local_authority_charges_path : incorrect_details_vehicles_path
