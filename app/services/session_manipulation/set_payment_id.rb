@@ -10,7 +10,7 @@ module SessionManipulation
   #
   class SetPaymentId < BaseManipulator
     # Level used to clearing keys in the session
-    LEVEL = 8
+    LEVEL = 11
 
     # Initializer function. Used by the class level method +.call+
     #

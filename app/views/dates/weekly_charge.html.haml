@@ -41,6 +41,7 @@
                 %input.govuk-checkboxes__input{name: 'confirm-exempt',
                                                type: 'checkbox',
                                                value: 'yes',
+                                               checked: session.dig(:vehicle_details, 'confirm_exempt'),
                                                id: 'confirm-exempt'}
                 %label.govuk-label.govuk-checkboxes__label{for: 'confirm-exempt'}
                   I confirm that I am not exempt from paying the

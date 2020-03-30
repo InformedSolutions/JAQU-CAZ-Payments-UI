@@ -92,8 +92,7 @@ class VehiclesController < ApplicationController
       log_invalid_form 'Redirecting back.'
       return redirect_to details_vehicles_path, alert: form.errors.messages[:confirmation].first
     end
-
-    redirect_to form.confirmed? ? local_authority_charges_path : incorrect_details_vehicles_path
+    redirect_to process_detail_form(form)
   end
 
   ##
@@ -128,7 +127,6 @@ class VehiclesController < ApplicationController
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
   def unrecognised
-    SessionManipulation::SetUnrecognised.call(session: session)
     @vrn = vrn
   end
 
@@ -151,6 +149,7 @@ class VehiclesController < ApplicationController
   def confirm_unrecognised
     form = ConfirmationForm.new(params['confirm-registration'])
     if form.confirmed?
+      SessionManipulation::SetUnrecognised.call(session: session)
       redirect_to choose_type_non_dvla_vehicles_path
     else
       log_invalid_form 'Redirecting back.'
@@ -208,7 +207,8 @@ class VehiclesController < ApplicationController
   # Returns path depends on last request
   def determinate_back_path
     last_request = request.referer
-    if back_button_paths.any? { |path| last_request.include?(path) }
+    back = request.query_parameters.include?('back')
+    if !back && back_button_paths.any? { |path| last_request.include?(path) }
       last_request
     else
       root_path
@@ -224,5 +224,11 @@ class VehiclesController < ApplicationController
       compliant_vehicles_path,
       exempt_vehicles_path
     ]
+  end
+
+  # persists whether or not vehicle details are correct into session and returns correct onward path
+  def process_detail_form(form)
+    SessionManipulation::SetConfirmVehicle.call(session: session, confirm_vehicle: form.confirmed?)
+    form.confirmed? ? local_authority_charges_path : incorrect_details_vehicles_path
   end
 end
