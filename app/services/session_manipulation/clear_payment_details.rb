@@ -21,7 +21,7 @@ module SessionManipulation
 
     # Returns keys from steps before selecting LA
     def keys_to_keep
-      SUBKEYS.select { |key| key < 6 }.values.flatten
+      SUBKEYS.select { |key| key < 7 }.values.flatten
     end
   end
 end

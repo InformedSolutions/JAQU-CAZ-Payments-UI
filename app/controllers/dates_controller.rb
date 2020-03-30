@@ -42,6 +42,7 @@ class DatesController < ApplicationController
   #
   def confirm_select_period
     if params[:period]
+      SessionManipulation::SetChargePeriod.call(session: session, charge_period: params[:period])
       determinate_next_page
     else
       redirect_back_to(select_period_dates_path, true, :select_period)
@@ -82,12 +83,12 @@ class DatesController < ApplicationController
   #
   def confirm_daily_charge
     form = ConfirmationForm.new(params['confirm-exempt'])
-    if form.confirmed?
-      redirect_to select_daily_date_dates_path
-    else
+    unless form.valid?
       alert = I18n.t('confirmation_form.exemption')
-      redirect_back_to(daily_charge_dates_path, alert, :daily_charge)
+      return redirect_back_to(daily_charge_dates_path, alert, :daily_charge)
     end
+    SessionManipulation::SetConfirmExempt.call(session: session)
+    redirect_to select_daily_date_dates_path
   end
 
   ##
@@ -171,6 +172,7 @@ class DatesController < ApplicationController
   def confirm_weekly_charge
     form = ConfirmationForm.new(params['confirm-exempt'])
     if form.confirmed?
+      SessionManipulation::SetConfirmExempt.call(session: session)
       redirect_to select_weekly_date_dates_path
     else
       alert = I18n.t('confirmation_form.exemption')
@@ -248,15 +250,14 @@ class DatesController < ApplicationController
 
   # Define the back button path on daily and weekly charge page.
   def determinate_return_path
-    vehicle_details('taxi') ? select_period_dates_path : local_authority_charges_path
+    vehicle_details('leeds_taxi') ? select_period_dates_path : local_authority_charges_path
   end
 
   # Checks if weekly Leeds discount is possible
   def check_weekly
     return if vehicle_details('weekly_possible')
 
-    Rails.logger.warn "Vehicle with VRN #{vrn} is not allowed for weekly Leeds discount"
-    Rails.logger.warn "Current vehicle_details in session: #{session[:vehicle_details]}#"
+    Rails.logger.warn "Current vehicle is not allowed for weekly Leeds discount, vehicle_details in session: #{session[:vehicle_details]}#"
     redirect_to daily_charge_dates_path
   end
 
