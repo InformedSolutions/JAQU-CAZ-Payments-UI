@@ -48,11 +48,11 @@
 
             .govuk-radios.govuk-radios--inline
               .govuk-radios__item
-                %input#confirm-vehicle-1.govuk-radios__input{name: 'confirm-vehicle', type: 'radio', value: 'yes'}
+                %input#confirm-vehicle-1.govuk-radios__input{name: 'confirm-vehicle', type: 'radio', checked: session.dig(:vehicle_details, 'confirm_vehicle'), value: 'yes'}
                 %label.govuk-label.govuk-radios__label{for: 'confirm-vehicle-1'}
                   Yes
               .govuk-radios__item
-                %input#confirm-vehicle-2.govuk-radios__input{name: 'confirm-vehicle', type: 'radio', value: 'no'}
+                %input#confirm-vehicle-2.govuk-radios__input{name: 'confirm-vehicle', type: 'radio', checked: session.dig(:vehicle_details, 'confirm_vehicle') == false, value: 'no'}
                 %label.govuk-label.govuk-radios__label{for: 'confirm-vehicle-2'}
                   No
         = submit_tag 'Confirm', class: 'govuk-button', 'data-module': 'govuk-button'

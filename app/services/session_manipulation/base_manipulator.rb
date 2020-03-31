@@ -13,15 +13,18 @@ module SessionManipulation
 
     # Subkeys of vehicle values in order of setting
     SUBKEYS = {
-      1 => %w[vrn country],
-      2 => %w[leeds_taxi unrecognised],
-      3 => %w[type],
-      4 => %w[incorrect],
-      5 => %w[chargeable_zones],
-      6 => %w[la_id daily_charge la_name weekly_possible tariff_code],
-      7 => %w[dates total_charge weekly],
-      8 => %w[payment_id],
-      9 => %w[user_email payment_reference external_id]
+      1 => %w[vrn country confirm_vehicle],
+      2 => %w[unrecognised leeds_taxi confirm_registration],
+      3 => %w[confirm_vehicle],
+      4 => %w[type],
+      5 => %w[incorrect la_id],
+      6 => %w[chargeable_zones],
+      7 => %w[daily_charge la_name weekly_possible tariff_code],
+      8 => %w[charge_period],
+      9 => %w[confirm_exempt],
+      10 => %w[dates total_charge weekly],
+      11 => %w[payment_id],
+      12 => %w[user_email payment_reference external_id]
     }.freeze
 
     # Base initializer for the service

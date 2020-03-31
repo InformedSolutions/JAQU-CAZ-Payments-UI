@@ -16,10 +16,6 @@ RSpec.describe 'VehiclesController - GET #unrecognised', type: :request do
     expect(response).to have_http_status(:success)
   end
 
-  it 'sets unrecognised in the session' do
-    expect(session[:vehicle_details]['unrecognised']).to be_truthy
-  end
-
   it 'assigns the @vrn' do
     expect(assigns(:vrn)).to eq(vrn)
   end
