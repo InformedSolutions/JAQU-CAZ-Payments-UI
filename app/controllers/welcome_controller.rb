@@ -5,13 +5,14 @@
 #
 class WelcomeController < ApplicationController
   ##
-  # Renders the home page.
+  # Renders the home page. 
+  # Clears anything already in the session should the user wish to start from scratch.
   #
   # ==== Path
   #    GET /
   #    GET /welcome/index
   #
   def index
-    # No variables or interactions on root page
+    SessionManipulation::ClearPaymentDetails.call(session: session)
   end
 end
