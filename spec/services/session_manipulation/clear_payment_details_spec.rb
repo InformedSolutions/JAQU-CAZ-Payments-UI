@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe SessionManipulation::ClearPaymentDetails do
-  subject(:service) { described_class.call(session: session) }
+RSpec.describe SessionManipulation::ClearSessionDetails do
+  subject(:service) { described_class.call(session: session, key: 7) }
 
   let(:session) { { vehicle_details: details } }
   let(:details) do
@@ -34,7 +34,18 @@ RSpec.describe SessionManipulation::ClearPaymentDetails do
   end
 
   it 'clears details from steps above vehicle details' do
-    service
-    expect(session[:vehicle_details].keys).to be_empty
+    service   
+    expect(session[:vehicle_details].keys).to contain_exactly(
+        'vrn',
+        'country',
+        'confirm_vehicle',
+        'leeds_taxi',
+        'unrecognised',
+        'confirm_registration',
+        'type',
+        'incorrect',
+        'la_id',
+        'chargeable_zones'
+      )
   end
 end

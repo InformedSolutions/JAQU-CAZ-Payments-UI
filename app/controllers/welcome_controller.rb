@@ -13,6 +13,8 @@ class WelcomeController < ApplicationController
   #    GET /welcome/index
   #
   def index
-    SessionManipulation::ClearPaymentDetails.call(session: session)
+    if vrn
+      SessionManipulation::ClearSessionDetails.call(session: session, key: 1)
+    end
   end
 end
