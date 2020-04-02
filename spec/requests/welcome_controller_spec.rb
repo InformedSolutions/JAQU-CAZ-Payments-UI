@@ -8,12 +8,12 @@ RSpec.describe WelcomeController, type: :request do
 
     let(:payment_id) { 'XYZ123ABC' }
     let(:vrn) { 'CU57ABC' }
-  
+
     before do
       add_to_session(payment_id: payment_id, vrn: vrn)
       subject
     end
-  
+
     it 'returns http success' do
       expect(response).to have_http_status(:success)
     end

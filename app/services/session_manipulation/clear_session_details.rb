@@ -10,7 +10,6 @@ module SessionManipulation
   #    SessionManipulation::ClearSessionDetails.call(session: session, key: 1)
   #
   class ClearSessionDetails < BaseManipulator
-
     # Initializer function. Used by the class level method +.call+
     #
     # ==== Attributes

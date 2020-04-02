@@ -20,7 +20,7 @@ RSpec.describe 'PaymentsController - GET #success', type: :request do
   it 'clears payment details in session' do
     expect(session[:vehicle_details]['payment_id']).to be_nil
   end
-  
+
   it 'does not clear other details in session' do
     expect(session[:vehicle_details]['vrn']).to eq(vrn)
   end

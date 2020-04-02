@@ -34,18 +34,18 @@ RSpec.describe SessionManipulation::ClearSessionDetails do
   end
 
   it 'clears details from steps above vehicle details' do
-    service   
+    service
     expect(session[:vehicle_details].keys).to contain_exactly(
-        'vrn',
-        'country',
-        'confirm_vehicle',
-        'leeds_taxi',
-        'unrecognised',
-        'confirm_registration',
-        'type',
-        'incorrect',
-        'la_id',
-        'chargeable_zones'
-      )
+      'vrn',
+      'country',
+      'confirm_vehicle',
+      'leeds_taxi',
+      'unrecognised',
+      'confirm_registration',
+      'type',
+      'incorrect',
+      'la_id',
+      'chargeable_zones'
+    )
   end
 end

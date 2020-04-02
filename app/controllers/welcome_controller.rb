@@ -5,7 +5,7 @@
 #
 class WelcomeController < ApplicationController
   ##
-  # Renders the home page. 
+  # Renders the home page.
   # Clears anything already in the session should the user wish to start from scratch.
   #
   # ==== Path
@@ -13,8 +13,6 @@ class WelcomeController < ApplicationController
   #    GET /welcome/index
   #
   def index
-    if vrn
-      SessionManipulation::ClearSessionDetails.call(session: session, key: 1)
-    end
+    SessionManipulation::ClearSessionDetails.call(session: session, key: 1) if vrn
   end
 end
