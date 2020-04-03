@@ -34,5 +34,5 @@ Feature: Payments
   Scenario: User wants to go back to the start after unsuccessful payment process
     Given I have finished the payment unsuccessfully
       And I'm getting redirected from GOV.UK Pay
-    Then I press "Return to start page" link
+    Then I press "return to the start page" link
       And I should be on the start page
