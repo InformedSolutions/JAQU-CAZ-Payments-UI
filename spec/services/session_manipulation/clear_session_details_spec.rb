@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe SessionManipulation::ClearPaymentDetails do
-  subject(:service) { described_class.call(session: session) }
+RSpec.describe SessionManipulation::ClearSessionDetails do
+  subject(:service) { described_class.call(session: session, key: 7) }
 
   let(:session) { { vehicle_details: details } }
   let(:details) do

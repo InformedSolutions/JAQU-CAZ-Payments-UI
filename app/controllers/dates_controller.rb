@@ -249,7 +249,7 @@ class DatesController < ApplicationController
 
   # Define the back button path on daily and weekly charge page.
   def determinate_return_path
-    vehicle_details('leeds_taxi') ? select_period_dates_path : local_authority_charges_path
+    la_name == 'Leeds' && weekly_possible ? select_period_dates_path : local_authority_charges_path
   end
 
   # Checks if weekly Leeds discount is possible

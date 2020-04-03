@@ -74,6 +74,11 @@ class ApplicationController < ActionController::Base
     vehicle_details('la_name')
   end
 
+  # Gets if weekly charge is possible
+  def weekly_possible
+    vehicle_details('weekly_possible')
+  end
+
   # Checks if VRN is present in session.
   # If not, redirects to VehiclesController#enter_details
   def check_vrn
