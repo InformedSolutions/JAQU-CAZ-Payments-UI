@@ -27,7 +27,7 @@ steps:
     image: docker:git
     commands:
       - mkdir ~/.ssh
-      - echo -n "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
+      - echo -e "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
       - chmod 600 ~/.ssh/id_rsa
       - touch ~/.ssh/known_hosts
       - chmod 600 ~/.ssh/known_hosts
@@ -177,7 +177,7 @@ steps:
     commands:
       - apk update && apk add bash
       - mkdir ~/.ssh
-      - echo -n "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
+      - echo -e "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
       - chmod 600 ~/.ssh/id_rsa
       - touch ~/.ssh/known_hosts
       - chmod 600 ~/.ssh/known_hosts
@@ -461,7 +461,7 @@ steps:
     commands:
       - apk update && apk add bash
       - mkdir ~/.ssh
-      - echo -n "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
+      - echo -e "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
       - chmod 600 ~/.ssh/id_rsa
       - touch ~/.ssh/known_hosts
       - chmod 600 ~/.ssh/known_hosts
@@ -513,7 +513,7 @@ steps:
     commands:
       - apk update && apk add bash
       - mkdir ~/.ssh
-      - echo -n "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
+      - echo -e "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
       - chmod 600 ~/.ssh/id_rsa
       - touch ~/.ssh/known_hosts
       - chmod 600 ~/.ssh/known_hosts
@@ -705,7 +705,7 @@ steps:
     commands:
       - apk update && apk add bash
       - mkdir ~/.ssh
-      - echo -n "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
+      - echo -e "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
       - chmod 600 ~/.ssh/id_rsa
       - touch ~/.ssh/known_hosts
       - chmod 600 ~/.ssh/known_hosts
@@ -757,7 +757,7 @@ steps:
     commands:
       - apk update && apk add bash
       - mkdir ~/.ssh
-      - echo -n "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
+      - echo -e "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
       - chmod 600 ~/.ssh/id_rsa
       - touch ~/.ssh/known_hosts
       - chmod 600 ~/.ssh/known_hosts
@@ -955,7 +955,7 @@ steps:
     commands:
       - apk update && apk add bash
       - mkdir ~/.ssh
-      - echo -n "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
+      - echo -e "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
       - chmod 600 ~/.ssh/id_rsa
       - touch ~/.ssh/known_hosts
       - chmod 600 ~/.ssh/known_hosts
@@ -1007,7 +1007,7 @@ steps:
     commands:
       - apk update && apk add bash
       - mkdir ~/.ssh
-      - echo -n "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
+      - echo -e "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
       - chmod 600 ~/.ssh/id_rsa
       - touch ~/.ssh/known_hosts
       - chmod 600 ~/.ssh/known_hosts
@@ -1115,7 +1115,7 @@ steps:
     commands:
       - apk update && apk add bash
       - mkdir ~/.ssh
-      - echo -n "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
+      - echo -e "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
       - chmod 600 ~/.ssh/id_rsa
       - touch ~/.ssh/known_hosts
       - chmod 600 ~/.ssh/known_hosts
@@ -1175,7 +1175,7 @@ steps:
       - TASKDEF=`aws ecs describe-services --cluster payments-cluster-sit --services payments-sit-ecs-service | jq --raw-output '.services[0].taskDefinition'`
       - export TF_VAR_build_number=`aws ecs describe-task-definition --task-definition $TASKDEF | jq --raw-output '.taskDefinition.containerDefinitions[0].image' | cut -f 2 -d ':'`
       - mkdir ~/.ssh
-      - echo -n "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
+      - echo -e "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
       - chmod 600 ~/.ssh/id_rsa
       - touch ~/.ssh/known_hosts
       - chmod 600 ~/.ssh/known_hosts
@@ -1292,7 +1292,7 @@ steps:
       - TASKDEF=`aws ecs describe-services --cluster payments-cluster-preprod --services payments-preprod-ecs-service | jq --raw-output '.services[0].taskDefinition'`
       - export TF_VAR_build_number=`aws ecs describe-task-definition --task-definition $TASKDEF | jq --raw-output '.taskDefinition.containerDefinitions[0].image' | cut -f 2 -d ':'`
       - mkdir ~/.ssh
-      - echo -n "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
+      - echo -e "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
       - chmod 600 ~/.ssh/id_rsa
       - touch ~/.ssh/known_hosts
       - chmod 600 ~/.ssh/known_hosts
@@ -1352,7 +1352,7 @@ steps:
       - TASKDEF=`aws ecs describe-services --cluster payments-cluster-preprod --services payments-preprod-ecs-service | jq --raw-output '.services[0].taskDefinition'`
       - export TF_VAR_build_number=`aws ecs describe-task-definition --task-definition $TASKDEF | jq --raw-output '.taskDefinition.containerDefinitions[0].image' | cut -f 2 -d ':'`
       - mkdir ~/.ssh
-      - echo -n "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
+      - echo -e "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
       - chmod 600 ~/.ssh/id_rsa
       - touch ~/.ssh/known_hosts
       - chmod 600 ~/.ssh/known_hosts
