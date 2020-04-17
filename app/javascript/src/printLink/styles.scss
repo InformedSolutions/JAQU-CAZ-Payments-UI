@@ -5,15 +5,5 @@
 }
 
 .print-page-link {
-  display: block;
-  color: govuk-colour($colour: 'blue');
-  cursor: pointer;
-
-  &:hover {
-    color: govuk-colour($colour: "dark-blue");
-  }
-
-  &:visited {
-    color: govuk-colour($colour: "purple");
-  }
+  text-decoration: none;
 }
