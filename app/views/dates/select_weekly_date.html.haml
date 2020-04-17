@@ -1,3 +1,4 @@
+- content_for(:title, 'Choose your dates | Pay a Clean Air Zone Charge')
 = link_to 'Back', weekly_charge_dates_path, class: 'govuk-back-link', id: 'back-link'
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
@@ -13,8 +14,8 @@
         A weekly charge allows you to drive in Leeds for 7 consecutive days.
       - if @all_paid
         .govuk-inset-text
-          If the weekly charge you want to pay for is not available, 
-          it is because the 7 consecutive days from that date have been paid for, 
+          If the weekly charge you want to pay for is not available,
+          it is because the 7 consecutive days from that date have been paid for,
           either with a weekly or daily charge.
       %details.govuk-details{'data-module': 'govuk-details'}
         %summary.govuk-details__summary

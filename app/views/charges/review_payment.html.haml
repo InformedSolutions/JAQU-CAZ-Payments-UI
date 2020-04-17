@@ -1,4 +1,4 @@
-- content_for(:title, 'Confirm your payment')
+- content_for(:title, 'Review your payment | Pay a Clean Air Zone Charge')
 = link_to 'Back', @return_path, class: 'govuk-back-link', id: 'back-link'
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
@@ -27,7 +27,7 @@
             %tr.govuk-table__row
               %td.govuk-table__cell Payment for
               %th.govuk-table__header{scope: 'row', id: 'value-dates'}
-                - parse_dates(@dates).each do |date| 
+                - parse_dates(@dates).each do |date|
                   - unless date.eql? parse_dates(@dates).last
                     = date + ','
                     %br

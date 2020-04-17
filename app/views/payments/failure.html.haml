@@ -1,4 +1,4 @@
-- content_for(:title, service_name)
+- content_for(:title, 'Payment unsuccessful | Pay a Clean Air Zone Charge')
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
@@ -17,7 +17,7 @@
         The charge for your journey is not paid. You may receive a penalty charge notice (PCN) if payment is not made within 7 days from driving in the zone.
       %p
         If you would like to try the payment again
-        = succeed "." do 
+        = succeed "." do
           = link_to 'return to the start page', root_path
       = render 'common/print_link'
       %h2.govuk-heading-m
