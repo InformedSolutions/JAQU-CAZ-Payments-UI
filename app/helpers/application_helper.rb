@@ -41,4 +41,9 @@ module ApplicationHelper
     )
     link_to text, url, html_options
   end
+
+  # Returns content for title with global app name.
+  def page_title(title_text)
+    content_for(:title, "#{title_text} | Pay a Clean Air Zone Charge")
+  end
 end
