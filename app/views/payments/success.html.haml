@@ -35,7 +35,7 @@
           %tr.govuk-table__row
             %td.govuk-table__cell Payment for
             %th.govuk-table__header{scope: 'row'}
-              - parse_dates(@payment_details.dates).each do |date| 
+              - parse_dates(@payment_details.dates).each do |date|
                 - unless date.eql? parse_dates(@payment_details.dates).last
                   = date + ','
                   %br
@@ -52,7 +52,8 @@
         Alternatives to paying the charge
       %ul.govuk-list.govuk-list--bullet
         %li
-          = external_link_to "Get support to upgrade or replace your vehicle in #{@payment_details.la_name}",
+          Contact the local authority for support to upgrade or replace your vehicle in
+          = external_link_to @payment_details.la_name,
                              @payment_details.compliance_details.dynamic_compliance_url,
                              id: 'become-compliant-url'
         %li
