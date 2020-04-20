@@ -1,9 +1,9 @@
 @import "~govuk-frontend/govuk/helpers/all";
 
-.print-page-link__hidden {
-  display: none !important;
-}
-
-.print-page-link {
+.hide-text-decoration {
   text-decoration: none;
+
+  .link__hidden {
+    display: none !important;
+  }
 }
