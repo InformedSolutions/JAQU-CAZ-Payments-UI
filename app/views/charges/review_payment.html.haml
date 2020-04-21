@@ -1,4 +1,5 @@
-- page_title('Review your payment')
+- title_and_header = 'Review your payment'
+- page_title(title_and_header)
 = link_to 'Back', @return_path, class: 'govuk-back-link', id: 'back-link'
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
@@ -13,17 +14,23 @@
               %td.govuk-table__cell
               %td.govuk-table__cell
             %tr.govuk-table__row
-              %td.govuk-table__cell Registration number
+              %td.govuk-table__cell
+                = title_and_header
               %th.govuk-table__header{scope: 'row', id: 'value-vrn'}
                 = @vrn
               %td.govuk-table__cell
-                = link_to 'Change', enter_details_vehicles_path, class: 'govuk-link', id: 'change-vrn'
+                = link_to enter_details_vehicles_path, class: 'govuk-link', id: 'change-vrn' do
+                  Change
+                  %span.govuk-visually-hidden registration number
             %tr.govuk-table__row
               %td.govuk-table__cell Clean Air Zone
               %th.govuk-table__header{scope: 'row', id: 'value-la'}
                 = @la_name
               %td.govuk-table__cell
-                = link_to 'Change', local_authority_charges_path, class: 'govuk-link', id: 'change-la' if @chargeable_zones > 1
+                - if @chargeable_zones > 1
+                  = link_to local_authority_charges_path, class: 'govuk-link', id: 'change-la' do
+                    Change
+                    %span.govuk-visually-hidden Clean Air Zone
             %tr.govuk-table__row
               %td.govuk-table__cell Payment for
               %th.govuk-table__header{scope: 'row', id: 'value-dates'}
@@ -34,7 +41,9 @@
                   - else
                     = date
               %td.govuk-table__cell
-                = link_to 'Change', determinate_payment_for_path(@weekly_period), class: 'govuk-link', id: 'change-dates'
+                = link_to determinate_payment_for_path(@weekly_period), class: 'govuk-link', id: 'change-dates' do
+                  Change
+                  %span.govuk-visually-hidden payment for
             %tr.govuk-table__row
               %td.govuk-table__cell Total charge
               %th.govuk-table__header{scope: 'row', id: 'value-charge'}
