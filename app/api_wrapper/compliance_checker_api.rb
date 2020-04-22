@@ -76,14 +76,9 @@ class ComplianceCheckerApi < BaseApi
     #   * +name+ - string, eg. "Birmingham"
     #   * +charge+ - number, determines how much owner of the vehicle will have to pay in this CAZ
     #   * +informationUrls+ - object containing CAZ dedicated info links
-    #     * +emissionsStandards+
     #     * +mainInfo+
-    #     * +hoursOfOperation+
-    #     * +pricing+
     #     * +exemptionOrDiscount+
-    #     * +payCaz+
     #     * +becomeCompliant+
-    #     * +financialAssistance+
     #     * +boundary+
     #
     # ==== Serialization
