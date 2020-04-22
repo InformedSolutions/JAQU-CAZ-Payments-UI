@@ -5,18 +5,19 @@
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
     .govuk-grid-column-two-thirds
-      %h1.govuk-heading-l Review your payment
+      %h1.govuk-heading-l
+        =title_and_header
       = form_tag payments_path, method: :post do
         %table.govuk-table
+          %thead.govuk-table__head
+            %tr.govuk-table__row
+              %th.govuk-table__header.table-without-border{colspan: 3, id: 'table-header'}
+                Payment details
           %tbody.govuk-table__body
             %tr.govuk-table__row
               %td.govuk-table__cell
-              %td.govuk-table__cell
-              %td.govuk-table__cell
-            %tr.govuk-table__row
-              %td.govuk-table__cell
-                = title_and_header
-              %th.govuk-table__header{scope: 'row', id: 'value-vrn'}
+                Registration number
+              %td.govuk-table__header{scope: 'row', id: 'vrn'}
                 = @vrn
               %td.govuk-table__cell
                 = link_to enter_details_vehicles_path, class: 'govuk-link', id: 'change-vrn' do
@@ -24,7 +25,7 @@
                   %span.govuk-visually-hidden registration number
             %tr.govuk-table__row
               %td.govuk-table__cell Clean Air Zone
-              %th.govuk-table__header{scope: 'row', id: 'value-la'}
+              %td.govuk-table__header{scope: 'row', id: 'la-name'}
                 = @la_name
               %td.govuk-table__cell
                 - if @chargeable_zones > 1
@@ -33,7 +34,7 @@
                     %span.govuk-visually-hidden Clean Air Zone
             %tr.govuk-table__row
               %td.govuk-table__cell Payment for
-              %th.govuk-table__header{scope: 'row', id: 'value-dates'}
+              %td.govuk-table__header{scope: 'row', id: 'dates'}
                 - parse_dates(@dates).each do |date|
                   - unless date.eql? parse_dates(@dates).last
                     = date + ','
@@ -46,7 +47,7 @@
                   %span.govuk-visually-hidden payment for
             %tr.govuk-table__row
               %td.govuk-table__cell Total charge
-              %th.govuk-table__header{scope: 'row', id: 'value-charge'}
+              %td.govuk-table__header{scope: 'row', id: 'total-charge'}
                 = parse_charge(@total_charge)
               %td.govuk-table__cell
         = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'

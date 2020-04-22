@@ -23,18 +23,20 @@
       %p You can use the payment reference above as proof of payment.
       %h2.govuk-heading-m You have paid for:
       %table.govuk-table
+        %thead.govuk-table__head
+          %tr.govuk-table__row
+            %th.govuk-table__header.table-without-border{colspan: 2, id: 'table-header'}
+              Payment details
         %tbody.govuk-table__body
           %tr.govuk-table__row
-            %td.govuk-table__cell Registration number (number plate)
-            %th.govuk-table__header{scope: 'row'}
-              = @payment_details.vrn
+            %td.govuk-table__cell{scope: 'row'} Registration number (number plate)
+            %td.govuk-table__header{id: 'vrn'}= @payment_details.vrn
           %tr.govuk-table__row
-            %td.govuk-table__cell Clean Air Zone
-            %th.govuk-table__header{scope: 'row'}
-              = @payment_details.la_name
+            %td.govuk-table__cell{scope: 'row'} Clean Air Zone
+            %td.govuk-table__header{id: 'la-name'}= @payment_details.la_name
           %tr.govuk-table__row
-            %td.govuk-table__cell Payment for
-            %th.govuk-table__header{scope: 'row'}
+            %td.govuk-table__cell{scope: 'row'} Payment for
+            %td.govuk-table__header{id: 'dates'}
               - parse_dates(@payment_details.dates).each do |date|
                 - unless date.eql? parse_dates(@payment_details.dates).last
                   = date + ','
@@ -42,9 +44,8 @@
                 - else
                   = date
           %tr.govuk-table__row
-            %td.govuk-table__cell Total charge
-            %th.govuk-table__header{scope: 'row'}
-              = parse_charge(@payment_details.total_charge)
+            %td.govuk-table__cell{scope: 'row'} Total charge
+            %td.govuk-table__header{id: 'total-charge'}= parse_charge(@payment_details.total_charge)
       %p
         You may be able to claim a refund in certain circumstances.
         Contact the local authority in the area you're driving in to find out more.

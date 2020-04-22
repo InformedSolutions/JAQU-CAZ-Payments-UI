@@ -10,31 +10,36 @@
 
       %h1.govuk-heading-xl Are these vehicle details correct?
       %table.govuk-table
-        %tr.govuk-table__row
-          %td.govuk-table__cell{scope: 'row'} Vehicle registration
-          %th.govuk-table__cell{id: 'registration-number'}= @vehicle_details.registration_number
-        %tr.govuk-table__row
-          %td.govuk-table__cell{scope: 'row'} Vehicle type approval
-          %th.govuk-table__cell{id: 'type-approval'}= @vehicle_details.type_approval
-        %tr.govuk-table__row
-          %td.govuk-table__cell{scope: 'row'} CAZ vehicle type
-          %th.govuk-table__cell{id: 'type'}= @vehicle_details.type
-        %tr.govuk-table__row
-          %td.govuk-table__cell{scope: 'row'} Make
-          %th.govuk-table__cell{id: 'make'}= @vehicle_details.make
-        %tr.govuk-table__row
-          %td.govuk-table__cell{scope: 'row'} Model
-          %th.govuk-table__cell{id: 'model'}= @vehicle_details.model
-        %tr.govuk-table__row
-          %td.govuk-table__cell{scope: 'row'} Colour
-          %th.govuk-table__cell{id: 'colour'}= @vehicle_details.colour
-        %tr.govuk-table__row
-          %td.govuk-table__cell{scope: 'row'} Fuel type
-          %th.govuk-table__cell{id: 'fuel-type'}= @vehicle_details.fuel_type
-        - if @vehicle_details.taxi_private_hire_vehicle.eql?('Yes')
+        %thead.govuk-table__head
           %tr.govuk-table__row
-            %td.govuk-table__cell{scope: 'row'} Taxi
-            %th.govuk-table__cell{id: 'taxi'}= @vehicle_details.taxi_private_hire_vehicle
+            %th.govuk-table__header.table-without-border{colspan: 2, id: 'table-header'}
+              Vehicle details
+        %tbody.govuk-table__body
+          %tr.govuk-table__row
+            %td.govuk-table__cell{scope: 'row'} Vehicle registration
+            %td.govuk-table__header{id: 'registration-number'}= @vehicle_details.registration_number
+          %tr.govuk-table__row
+            %td.govuk-table__cell{scope: 'row'} Vehicle type approval
+            %td.govuk-table__header{id: 'type-approval'}= @vehicle_details.type_approval
+          %tr.govuk-table__row
+            %td.govuk-table__cell{scope: 'row'} CAZ vehicle type
+            %td.govuk-table__header{id: 'type'}= @vehicle_details.type
+          %tr.govuk-table__row
+            %td.govuk-table__cell{scope: 'row'} Make
+            %td.govuk-table__header{id: 'make'}= @vehicle_details.make
+          %tr.govuk-table__row
+            %td.govuk-table__cell{scope: 'row'} Model
+            %td.govuk-table__header{id: 'model'}= @vehicle_details.model
+          %tr.govuk-table__row
+            %td.govuk-table__cell{scope: 'row'} Colour
+            %td.govuk-table__header{id: 'colour'}= @vehicle_details.colour
+          %tr.govuk-table__row
+            %td.govuk-table__cell{scope: 'row'} Fuel type
+            %td.govuk-table__header{id: 'fuel-type'}= @vehicle_details.fuel_type
+          - if @vehicle_details.taxi_private_hire_vehicle.eql?('Yes')
+            %tr.govuk-table__row
+              %td.govuk-table__cell{scope: 'row'} Taxi
+              %td.govuk-table__header{id: 'taxi'}= @vehicle_details.taxi_private_hire_vehicle
 
       = form_tag confirm_details_vehicles_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
