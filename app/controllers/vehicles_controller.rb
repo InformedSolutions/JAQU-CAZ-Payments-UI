@@ -171,7 +171,7 @@ class VehiclesController < ApplicationController
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
   def compliant
-    # renders the static page
+    @return_url = request.referer
   end
 
   private
