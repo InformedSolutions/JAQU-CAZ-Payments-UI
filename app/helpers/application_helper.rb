@@ -39,7 +39,7 @@ module ApplicationHelper
       rel: 'noopener',
       'aria-label': "#{html_options[:'aria-label'] || text} - #{I18n.t('external_link')}"
     )
-    link_to text, url, html_options
+    link_to "#{text} (opens in a new window)", url, html_options
   end
 
   # Returns content for title with global app name.
