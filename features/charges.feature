@@ -118,5 +118,5 @@ Feature: Charges
 
   Scenario: User cannot buy an overlapping pass
     Given I am on the pick weekly dates page with no passes available to buy
-      And I should see "the 7 consecutive days from that date have been paid for"
+      And I should see "you have paid for a date in those 7 consecutive days"
     Then I should not see the continue button
