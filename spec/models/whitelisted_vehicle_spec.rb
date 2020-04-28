@@ -9,13 +9,7 @@ RSpec.describe WhitelistedVehicle, type: :model do
 
   let(:response) do
     {
-      'vrn' => vrn,
-      'category' => 'Other',
-      'reasonUpdated' => 'botak',
-      'updateTimestamp' => '2020-03-12 10:37:12',
-      'uploaderId' => 'abf7a857-8a41-4c6c-bd14-c1148e65f631',
-      'email' => 'whitelist_test2@informed.com',
-      'manufacturer' => 'bumtararara'
+      'vrn' => vrn
     }
   end
 
