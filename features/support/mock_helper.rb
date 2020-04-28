@@ -37,6 +37,13 @@ module MockHelper
     allow(ComplianceCheckerApi).to receive(:whitelisted_vehicle).and_return(whitelisted_vehicle)
   end
 
+  # Mocks exempt vehicle - non UK vehicle existing on Whitelist
+  def mock_non_exempt_whitelisted_vehicle
+    allow(ComplianceCheckerApi)
+      .to receive(:whitelisted_vehicle)
+      .and_raise(BaseApi:: Error404Exception.new(404, '', {}))
+  end
+
   def mock_dvla_response
     response = read_file('vehicle_compliance_birmingham_response.json')
     dvla_response = response['complianceOutcomes'].map { |caz_data| Caz.new(caz_data) }

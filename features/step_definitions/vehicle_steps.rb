@@ -15,7 +15,13 @@ Then("I enter a vehicle's registration and choose UK") do
   choose('UK')
 end
 
-Then("I enter a vehicle's registration and choose Non-UK") do
+Then("I enter an exempted non-UK vehicle's registration") do
+  mock_exempt_whitelisted_vehicle
+  fill_in_non_uk(vrn)
+end
+
+Then("I enter a not-exempted non-UK vehicle's registration") do
+  mock_non_exempt_whitelisted_vehicle
   fill_in_non_uk(vrn)
 end
 

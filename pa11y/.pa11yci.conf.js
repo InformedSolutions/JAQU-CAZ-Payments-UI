@@ -3,7 +3,7 @@ var config = {
         standard: 'WCAG2AA',
         // ignore issue with role=presentation on start button
         ignore: ["WCAG2AA.Principle1.Guideline1_3.1_3_1.F92,ARIA4"],
-        timeout: 15000,
+        timeout: 20000,
         wait: 2500,
         chromeLaunchConfig: {
             args: [
@@ -49,7 +49,7 @@ var config = {
                 "click element input[type=submit]",
                 "wait for element #confirm-exempt to be visible",
             ]
-        },        
+        },
         {
             "url": '${BASE_URL}/vehicles/enter_details?select-date',
             "actions": [
@@ -88,7 +88,7 @@ var config = {
                 "click element #date-0",
                 "click element input[type=submit]"
             ]
-        },        
+        },
         {
             "url": '${BASE_URL}/vehicles/enter_details?non_dvla_vehicles',
             "actions": [
