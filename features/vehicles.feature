@@ -36,30 +36,30 @@ Feature: Vehicles
     Then I press the Continue
       And I should see "Which Clean Air Zone do you need to pay for?"
 
-  Scenario: User enters a correct vehicle's registration and choose Non-UK country
-    Given I am on the home page
-    Then I press the Start now button
-      And I should be on the enter details page
-    Then I enter a vehicle's registration and choose Non-UK
-      And I press the Continue
-    Then I should see "Your vehicle is registered outside the UK"
-      And I press the Continue
-    Then I should see "Confirm the number plate is correct"
-      And I should see "There is a problem"
-      And I should be on the non UK page
-    Then I press "Check another vehicle" link
-      And I should be on the enter details page
-    Then I press the Back link
-      And I should be on the non UK page
-    Then I choose I confirm registration
-      And I press the Continue
-    Then I should see "What is your vehicle?"
-      And I press the Confirm
-    Then I should see "Tell us what type of vehicle you want to pay for"
-      And I should see "There is a problem"
-      And I choose Car type
-      And I press the Confirm
-    Then I should see "Which Clean Air Zone do you need to pay for?"
+  # Scenario: User enters a correct vehicle's registration and choose Non-UK country
+  #   Given I am on the home page
+  #   Then I press the Start now button
+  #     And I should be on the enter details page
+  #   Then I enter a vehicle's registration and choose Non-UK
+  #     And I press the Continue
+  #   Then I should see "Your vehicle is registered outside the UK"
+  #     And I press the Continue
+  #   Then I should see "Confirm the number plate is correct"
+  #     And I should see "There is a problem"
+  #     And I should be on the non UK page
+  #   Then I press "Check another vehicle" link
+  #     And I should be on the enter details page
+  #   Then I press the Back link
+  #     And I should be on the non UK page
+  #   Then I choose I confirm registration
+  #     And I press the Continue
+  #   Then I should see "What is your vehicle?"
+  #     And I press the Confirm
+  #   Then I should see "Tell us what type of vehicle you want to pay for"
+  #     And I should see "There is a problem"
+  #     And I choose Car type
+  #     And I press the Confirm
+  #   Then I should see "Which Clean Air Zone do you need to pay for?"
 
   Scenario: User enters a vehicle's registration which cannot be recognised
     Given I am on the home page

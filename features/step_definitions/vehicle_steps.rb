@@ -16,8 +16,7 @@ Then("I enter a vehicle's registration and choose UK") do
 end
 
 Then("I enter a vehicle's registration and choose Non-UK") do
-  fill_in('vrn', with: vrn)
-  choose('Non-UK')
+  fill_in_non_uk(vrn)
 end
 
 And('I choose I confirm registration') do
@@ -64,6 +63,11 @@ Then("I enter a exempt vehicle's registration and choose UK") do
   choose('UK')
 end
 
+Then("I enter a exempt vehicle's registration and choose non UK") do
+  mock_exempt_vehicle_details
+  fill_in_non_uk('CAS329')
+end
+
 Then('I should see {string} as vrn value') do |string|
   expect(page).to have_field('vrn', with: string)
 end
@@ -73,4 +77,11 @@ Given('I am on the vehicle details page with unrecognized vehicle to check') do
   mock_unrecognized_vehicle
 
   visit details_vehicles_path
+end
+
+private
+
+def fill_in_non_uk(vrn)
+  fill_in('vrn', with: vrn)
+  choose('Non-UK')
 end
