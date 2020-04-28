@@ -154,5 +154,29 @@ class ComplianceCheckerApi < BaseApi
         query: { zones: zones }
       )
     end
+
+    ##
+    # Calls +/v1/payments/whitelisted-vehicles/:vrn+ endpoint with +GET+ method
+    # and returns information specifying if the provided vehicle is whitelisted.
+    #
+    # ==== Attributes
+    #
+    # * +vrn+ - stringm eg. 'PAY002'
+    #
+    # ==== Result
+    #
+    # Returned whitelisted vehicle data with the followig fields:
+    # * +vrn+ - string, vehicle registration number, eg. 'CAS213'
+    # * +category+ - string, category of a vehicle
+    # * +reasonUpdated+ - string, the reason why vehicle was updated
+    # * +updateTimestamp+ - timestamp, timpestamp of the last operation that modified the vehicle.
+    # * +uploaderId+ - UUID, external identifier of the uploader
+    # * +email+ - string, users email
+    # * +manufacturer+ - string, the manufacturer of the vehicle
+    #
+    def whitelisted_vehicle(vrn)
+      log_action 'Getting whitelisted vehicles data'
+      request(:get, "/whitelisted-vehicles/#{vrn}")
+    end
   end
 end

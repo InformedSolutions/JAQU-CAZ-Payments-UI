@@ -31,6 +31,12 @@ module MockHelper
     allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(vehicle_details)
   end
 
+  # Mocks exempt vehicle - non UK vehicle existing on Whitelist
+  def mock_exempt_whitelisted_vehicle
+    whitelisted_vehicle = read_file('whitelisted_vehicle_response.json')
+    allow(ComplianceCheckerApi).to receive(:whitelisted_vehicle).and_return(whitelisted_vehicle)
+  end
+
   def mock_dvla_response
     response = read_file('vehicle_compliance_birmingham_response.json')
     dvla_response = response['complianceOutcomes'].map { |caz_data| Caz.new(caz_data) }

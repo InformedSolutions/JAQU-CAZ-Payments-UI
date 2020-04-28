@@ -64,6 +64,13 @@ Then("I enter a exempt vehicle's registration and choose UK") do
   choose('UK')
 end
 
+Then("I enter a exempt vehicle's registration and choose non UK") do
+  mock_exempt_vehicle_details
+
+  fill_in('vrn', with: 'CAS329')
+  choose('Non-UK')
+end
+
 Then('I should see {string} as vrn value') do |string|
   expect(page).to have_field('vrn', with: string)
 end
