@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'VehiclesController - POST #submit_type', type: :request do
   subject(:http_request) do
-    post submit_type_vehicles_path, params: { 'vehicle-type': vehicle_type }
+    post not_determined_vehicles_path, params: { 'vehicle-type': vehicle_type }
   end
 
   let(:vehicle_type) { 'car' }

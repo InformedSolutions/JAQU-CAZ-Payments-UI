@@ -10,7 +10,7 @@
           error_msg_div: '#choose-type-error',
           error_msg: 'Tell us what type of vehicle you want to pay for'
 
-      = form_tag submit_type_vehicles_path, method: :post do
+      = form_tag not_determined_vehicles_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
           %fieldset.govuk-fieldset
             %legend.govuk-fieldset__legend.govuk-fieldset__legend--l

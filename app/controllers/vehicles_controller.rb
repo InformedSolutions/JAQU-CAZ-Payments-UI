@@ -180,10 +180,13 @@ class VehiclesController < ApplicationController
   # ==== Path
   #
   #    GET /vehicles/not_determined
+  #
   # ==== Params
   # * +vrn+ - vehicle registration number, required in the session
+  #
   # ==== Validations
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  #
   def not_determined
     @types = VehicleTypes.call
     @return_path = details_vehicles_path
@@ -195,6 +198,7 @@ class VehiclesController < ApplicationController
   # If no, redirects to {choose_type}[rdoc-ref:VehiclesController.not_determined]
   #
   # ==== Path
+  #
   #    POST /vehicles/submit_type
   #
   # ==== Params

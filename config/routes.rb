@@ -5,7 +5,6 @@ Rails.application.routes.draw do
 
   resources :vehicles, only: [] do
     collection do
-      get :not_determined
       get :enter_details
       post :enter_details, to: 'vehicles#submit_details'
       get :details
@@ -15,7 +14,8 @@ Rails.application.routes.draw do
       post :confirm_unrecognised
       get :compliant
       get :exempt
-      post :submit_type
+      get :not_determined
+      post :not_determined, to: 'vehicles#submit_type'
     end
   end
 
