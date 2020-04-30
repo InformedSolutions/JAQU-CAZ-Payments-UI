@@ -53,7 +53,8 @@ RSpec.describe 'PaymentsApi.create_payment' do
         .with(body: {
                 'transactions' => transactions,
                 'cleanAirZoneId' => zone_id,
-                'returnUrl' => return_url
+                'returnUrl' => return_url,
+                'telephonePayment' => false
               })
     end
   end
