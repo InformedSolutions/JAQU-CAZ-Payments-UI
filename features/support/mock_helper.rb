@@ -53,6 +53,12 @@ module MockHelper
       .and_return(dvla_response)
   end
 
+  def mock_unsuccessful_dvla_response
+    allow(ChargeableZonesService)
+      .to receive(:call)
+      .and_raise(BaseApi:: Error422Exception.new(422, '', {}))
+  end
+
   def mock_non_dvla_response
     response = read_file('caz_list_response.json')
     non_dvla_response = response['cleanAirZones'].map { |caz_data| Caz.new(caz_data) }

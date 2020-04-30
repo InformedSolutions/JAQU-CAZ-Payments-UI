@@ -4,6 +4,8 @@
 # Controls selecting LAs where the user wants to pay for.
 #
 class ChargesController < ApplicationController
+  # 422 HTTP status from API means vehicle data incomplete so the compliance calculation is not possible.
+  rescue_from BaseApi::Error422Exception, with: :unable_to_determine_compliance
   # checks if VRN is present in the session
   before_action :check_vrn
   # checks if LA is present in the session
@@ -132,5 +134,12 @@ class ChargesController < ApplicationController
 
     Rails.logger.warn "Current vehicle_details in session: #{session[:vehicle_details]}"
     redirect_to_enter_details('Vehicle details')
+  end
+
+  # Redirects to 'Unable to determine compliance' page
+  def unable_to_determine_compliance
+    SessionManipulation::SetUnrecognised.call(session: session)
+
+    redirect_to not_determined_vehicles_path
   end
 end

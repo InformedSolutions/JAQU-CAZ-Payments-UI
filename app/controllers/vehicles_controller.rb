@@ -8,7 +8,7 @@ class VehiclesController < ApplicationController
   rescue_from BaseApi::Error404Exception, with: :vehicle_not_found
 
   # checks if VRN is present in the session
-  before_action :check_vrn, except: %i[enter_details submit_details]
+  before_action :check_vrn, except: %i[enter_details submit_details not_determined]
 
   ##
   # Renders the first step of checking the vehicle compliance.
@@ -172,6 +172,51 @@ class VehiclesController < ApplicationController
   #
   def compliant
     @return_url = request.referer || root_path
+  end
+
+  ##
+  # Renders a static page for users which VRN is recognised as compliant (no charge in all LAs)
+  #
+  # ==== Path
+  #
+  #    GET /vehicles/not_determined
+  #
+  # ==== Params
+  # * +vrn+ - vehicle registration number, required in the session
+  #
+  # ==== Validations
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  #
+  def not_determined
+    @types = VehicleTypes.call
+    @return_path = details_vehicles_path
+  end
+
+  ##
+  # Verifies if user choose a type of vehicle.
+  # If yes, renders {local authorities}[rdoc-ref:LocalAuthoritiesController.index]
+  # If no, redirects to {choose_type}[rdoc-ref:VehiclesController.not_determined]
+  #
+  # ==== Path
+  #
+  #    POST /vehicles/submit_type
+  #
+  # ==== Params
+  # * +vrn+ - vehicle registration number, required in the session
+  # * +vehicle-type+ - user's type of vehicle
+  #
+  # ==== Validations
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  # * +vehicle-type+ - lack of it redirects to {choose_type}[rdoc-ref:VehiclesController.not_determined]
+  #
+  def submit_type
+    type = params['vehicle-type']
+    if type.blank?
+      redirect_to not_determined_vehicles_path, alert: true
+    else
+      SessionManipulation::SetType.call(session: session, type: type)
+      redirect_to local_authority_charges_path
+    end
   end
 
   private
