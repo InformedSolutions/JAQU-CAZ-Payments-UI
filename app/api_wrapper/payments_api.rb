@@ -136,7 +136,8 @@ class PaymentsApi < BaseApi
       {
         cleanAirZoneId: zone_id,
         returnUrl: return_url,
-        transactions: transactions
+        transactions: transactions,
+        telephonePayment: false
       }
     end
 
