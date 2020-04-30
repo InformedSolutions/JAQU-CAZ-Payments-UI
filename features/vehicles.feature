@@ -108,10 +108,17 @@ Feature: Vehicles
       And I press "Back" link
     Then I should be on the enter details page
 
-  Scenario: User wants to return with vehicle's registration which cannot be recognised
-    Given I am on the vehicle details page with unrecognized vehicle to check
-    Then I choose I confirm registration
-      And I press the Continue
-      And I should be on the choose type page
-    Then I press "Back" link
-      And I should be on the unrecognised page
+  Scenario: User wants to pay for incomplete vehicle
+    Given I am on the home page
+      Then I press the Start now button
+        And I should be on the enter details page
+      Then I enter an incomplete vehicle's registration and choose UK
+        And I press the Continue
+        And I should see "Are these vehicle details correct?"
+      Then I choose that the details are correct
+        And I press the Confirm
+        And I should see "Vehicle details are incomplete"
+        And I should see "What is your vehicle?"
+        And I choose Car type
+        And I press the Confirm
+      Then I should see "Which Clean Air Zone do you need to pay for?"
