@@ -263,13 +263,8 @@ class VehiclesController < ApplicationController
 
   # back button paths on enter details page
   def back_button_paths
-    [
-      non_dvla_vehicles_path,
-      incorrect_details_vehicles_path,
-      unrecognised_vehicles_path,
-      compliant_vehicles_path,
-      exempt_vehicles_path
-    ]
+    [non_dvla_vehicles_path, incorrect_details_vehicles_path, unrecognised_vehicles_path,
+     compliant_vehicles_path, exempt_vehicles_path]
   end
 
   # persists whether or not vehicle details are correct into session and returns correct onward path
