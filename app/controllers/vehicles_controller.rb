@@ -68,6 +68,7 @@ class VehiclesController < ApplicationController
 
     SessionManipulation::SetLeedsTaxi.call(session: session) if @vehicle_details.leeds_taxi?
     SessionManipulation::SetType.call(session: session, type: @vehicle_details.type)
+    SessionManipulation::SetUndetermined.call(session: session) if @vehicle_details.undetermined?
   end
 
   ##
@@ -262,18 +263,20 @@ class VehiclesController < ApplicationController
 
   # back button paths on enter details page
   def back_button_paths
-    [
-      non_dvla_vehicles_path,
-      incorrect_details_vehicles_path,
-      unrecognised_vehicles_path,
-      compliant_vehicles_path,
-      exempt_vehicles_path
-    ]
+    [non_dvla_vehicles_path, incorrect_details_vehicles_path, unrecognised_vehicles_path,
+     compliant_vehicles_path, exempt_vehicles_path]
   end
 
   # persists whether or not vehicle details are correct into session and returns correct onward path
   def process_detail_form(form)
     SessionManipulation::SetConfirmVehicle.call(session: session, confirm_vehicle: form.confirmed?)
-    form.confirmed? ? local_authority_charges_path : incorrect_details_vehicles_path
+    return incorrect_details_vehicles_path unless form.confirmed?
+
+    confirmed_undetermined? ? not_determined_vehicles_path : local_authority_charges_path
+  end
+
+  # check if user confirmed details for undetermined vehicle
+  def confirmed_undetermined?
+    session['vehicle_details']['undetermined'].present?
   end
 end

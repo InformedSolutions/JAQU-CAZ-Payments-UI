@@ -138,7 +138,7 @@ class ChargesController < ApplicationController
 
   # Redirects to 'Unable to determine compliance' page
   def unable_to_determine_compliance
-    SessionManipulation::SetUnrecognised.call(session: session)
+    SessionManipulation::SetUndetermined.call(session: session)
 
     redirect_to not_determined_vehicles_path
   end
