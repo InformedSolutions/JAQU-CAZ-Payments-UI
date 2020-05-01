@@ -30,7 +30,7 @@ class ChargeableZonesService < BaseService
   #
   # Returns an array of Caz objects
   def call
-    chargeable_ids = non_dvla ? non_dlva_data : dvla_data
+    chargeable_ids = non_dvla ? non_dvla_data : dvla_data
     # TODO: charge to filter_map when updated to ruby 2.7
     # https://blog.saeloun.com/2019/05/25/ruby-2-7-enumerable-filter-map.html
     zone_data
@@ -41,13 +41,13 @@ class ChargeableZonesService < BaseService
   private
 
   # Calls +ComplianceCheckerApi.clean_air_zones+ and then calls
-  # +ComplianceCheckerApi.vehicle_compliance+ to check if nany of zones has charge price
+  # +ComplianceCheckerApi.vehicle_compliance+ to check if any of zones has charge price
   def dvla_data
     vehicle_compliance_response = ComplianceCheckerApi.vehicle_compliance(vrn, zone_ids)
     select_chargeable(vehicle_compliance_response['complianceOutcomes'])
   end
 
-  def non_dlva_data
+  def non_dvla_data
     vehicle_compliance_response = ComplianceCheckerApi.unrecognised_compliance(type, zone_ids)
     select_chargeable(vehicle_compliance_response['charges'])
   end

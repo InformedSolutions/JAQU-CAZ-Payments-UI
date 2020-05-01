@@ -105,6 +105,12 @@ module MockHelper
     allow(PaymentsApi).to receive(:paid_payments_dates).and_return(dates)
   end
 
+  def mock_single_caz_request(date = Date.current.to_s)
+    allow(FetchSingleCazData).to receive(:call).and_return(
+      OpenStruct.new(active_charge_start_date: date)
+    )
+  end
+
   private
 
   # Reads provided file from +spec/fixtures/files+ directory

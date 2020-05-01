@@ -16,11 +16,16 @@ module ApplicationHelper
     "£#{format('%<pay>.2f', pay: value.to_f)}"
   end
 
-  # Returns parsed date format, eg. 'Friday 11 October 2019'
+  # Returns collection of parsed dates, eg. ['Friday 11 October 2019']
   def parse_dates(dates)
     dates.map do |date_string|
-      date_string.to_date.strftime('%A %d %B %Y')
+      parse_single_date(date_string)
     end
+  end
+
+  # Returns parsed date format, eg. 'Friday 11 October 2019'
+  def parse_single_date(date_string)
+    date_string.to_date.strftime('%A %d %B %Y')
   end
 
   # Returns url path depends on which period was selected
