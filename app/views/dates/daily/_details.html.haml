@@ -8,10 +8,9 @@
       %ul.govuk-list-govuk-list--bullet
         %li
           %p
-            The 7 day period you had to pay has ended.
-            %br
-            You may be subject to a penalty
-            charge notice (PCN).
+            The Clean Air Zone charge came into operation on
+            = succeed('.') do
+              = parse_single_date(@charge_start_date)
         %li
           %p
             The date is too far in the future.

@@ -17,6 +17,7 @@ end
 
 Given('I am on the daily charge page') do
   add_vrn_country_la_to_session
+  mock_single_caz_request
   mock_vehicle_compliance
   mock_paid_dates
 
@@ -49,6 +50,7 @@ Then('I choose I confirm that I am not exempt') do
 end
 
 Then('I am on the dates page') do
+  mock_single_caz_request
   add_vehicle_details_to_session
   mock_paid_dates
   visit select_daily_date_dates_path
@@ -89,6 +91,7 @@ end
 Then('I press the Change Payment for link') do
   mock_vehicle_compliance
   mock_paid_dates
+  mock_single_caz_request
   find('#change-dates').click
 end
 
@@ -106,12 +109,14 @@ Then('I should not see the Change Clean Air Zone link') do
 end
 
 Given('I am on the dates page with paid charge for today') do
+  mock_single_caz_request(10.days.ago.to_s)
   add_vehicle_details_to_session
   mock_paid_dates(dates: [Date.current.strftime('%Y-%m-%d')])
   visit select_daily_date_dates_path
 end
 
 Given('I am on the dates page with all charges paid') do
+  mock_single_caz_request
   add_vehicle_details_to_session
   mock_paid_dates(paid_period)
   visit select_daily_date_dates_path

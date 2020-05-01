@@ -5,15 +5,22 @@ require 'rails_helper'
 RSpec.describe 'DatesController - GET #select_daily_date', type: :request do
   subject(:http_request) { get select_daily_date_dates_path }
 
+  let(:stubbed_caz) { instance_double 'Caz', active_charge_start_date: '2020-05-01' }
+
   context 'with VRN in the session' do
     before do
       add_details_to_session
       allow(PaymentsApi).to receive(:paid_payments_dates).and_return([])
+      allow(FetchSingleCazData).to receive(:call).and_return(stubbed_caz)
       http_request
     end
 
     it 'returns a success response' do
       expect(response).to have_http_status(:success)
+    end
+
+    it 'calls FetchSingleCazData service' do
+      expect(FetchSingleCazData).to have_received(:call)
     end
   end
 
