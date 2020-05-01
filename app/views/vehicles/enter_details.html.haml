@@ -21,9 +21,6 @@
         = title_and_header
       = form_tag enter_details_vehicles_path, method: :post do
         %fieldset.govuk-fieldset
-          %legend.govuk-visually-hidden
-            = title_and_header
-
           - if @errors[:vrn].present?
             = render 'vehicles/vrn_input/errored', message: @errors[:vrn].first
           - else
