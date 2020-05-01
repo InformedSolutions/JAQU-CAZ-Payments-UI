@@ -23,6 +23,13 @@ Then("I enter an incomplete vehicle's registration and choose UK") do
   choose('UK')
 end
 
+Then("I enter an undetermined vehicle's registration and choose UK") do
+  mock_undetermined_vehicle_details
+
+  fill_in('vrn', with: vrn)
+  choose('UK')
+end
+
 Then("I enter an exempted non-UK vehicle's registration") do
   mock_exempt_whitelisted_vehicle
   fill_in_non_uk(vrn)

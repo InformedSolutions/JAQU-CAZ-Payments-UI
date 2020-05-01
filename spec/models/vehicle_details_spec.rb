@@ -133,7 +133,7 @@ RSpec.describe VehicleDetails, type: :model do
 
   describe '.undetermined?' do
     it 'returns a proper type approval' do
-      expect(subject.undetermined?).to eq('false')
+      expect(subject.undetermined?).to eq(false)
     end
 
     context 'when key is not present' do
@@ -142,7 +142,7 @@ RSpec.describe VehicleDetails, type: :model do
       end
 
       it 'returns a nil' do
-        expect(compliance.undetermined?).to eq('true')
+        expect(compliance.undetermined?).to eq(true)
       end
     end
 
@@ -150,7 +150,7 @@ RSpec.describe VehicleDetails, type: :model do
       let(:type) { ' ' }
 
       it 'returns a nil' do
-        expect(compliance.undetermined?).to eq('true')
+        expect(compliance.undetermined?).to eq(true)
       end
     end
 
@@ -158,7 +158,7 @@ RSpec.describe VehicleDetails, type: :model do
       let(:type) { 'null' }
 
       it 'returns a nil' do
-        expect(compliance.undetermined?).to eq('true')
+        expect(compliance.undetermined?).to eq(true)
       end
     end
   end

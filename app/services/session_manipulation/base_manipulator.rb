@@ -14,7 +14,7 @@ module SessionManipulation
     # Subkeys of vehicle values in order of setting
     SUBKEYS = {
       1 => %w[vrn country confirm_vehicle],
-      2 => %w[unrecognised leeds_taxi confirm_registration],
+      2 => %w[unrecognised leeds_taxi confirm_registration undetermined],
       3 => %w[confirm_vehicle],
       4 => %w[type],
       5 => %w[incorrect la_id],

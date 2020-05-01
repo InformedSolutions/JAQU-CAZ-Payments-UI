@@ -18,7 +18,8 @@ class ChargeableZonesService < BaseService
   def initialize(vehicle_details:)
     @vrn = vehicle_details['vrn']
     @type = vehicle_details['type']
-    @non_dvla = vehicle_details['country'] != 'UK' || vehicle_details['unrecognised']
+    @non_dvla = vehicle_details['country'] != 'UK' || vehicle_details['unrecognised'] ||
+                vehicle_details['undetermined']
   end
 
   # The caller method for the service.

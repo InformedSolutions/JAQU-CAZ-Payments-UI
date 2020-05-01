@@ -25,6 +25,14 @@ module MockHelper
       .and_return(vehicle_details)
   end
 
+  # Mocks response from vehicle details endpoint in VCCS API
+  def mock_undetermined_vehicle_details
+    vehicle_details = read_file('undetermined_vehicle_details_response.json')
+    allow(ComplianceCheckerApi)
+      .to receive(:vehicle_details)
+      .and_return(vehicle_details)
+  end
+
   # Mocks exempt vehicle details endpoint in VCCS API
   def mock_exempt_vehicle_details
     vehicle_details = read_file('vehicle_details_exempt_response.json')

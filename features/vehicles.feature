@@ -116,11 +116,26 @@ Feature: Vehicles
     Then I press "Back" link
       And I should be on the unrecognised page
 
-  Scenario: User wants to pay for incomplete vehicle
+  Scenario: User wants to pay for incomplete (not able to get compliance from VCCS) vehicle
     Given I am on the home page
       Then I press the Start now button
         And I should be on the enter details page
       Then I enter an incomplete vehicle's registration and choose UK
+        And I press the Continue
+        And I should see "Are these vehicle details correct?"
+      Then I choose that the details are correct
+        And I press the Confirm
+        And I should see "Vehicle details are incomplete"
+        And I should see "What is your vehicle?"
+        And I choose Car type
+        And I press the Confirm
+      Then I should see "Which Clean Air Zone do you need to pay for?"
+
+  Scenario: User wants to pay for undetermined (without type) vehicle
+    Given I am on the home page
+      Then I press the Start now button
+        And I should be on the enter details page
+      Then I enter an undetermined vehicle's registration and choose UK
         And I press the Continue
         And I should see "Are these vehicle details correct?"
       Then I choose that the details are correct
