@@ -22,9 +22,10 @@ RSpec.describe 'VehiclesController - GET #details', type: :request do
     end
 
     context 'when vehicle is exempted' do
-      let(:vehicle_details_stub) { instance_double('VehicleDetails', exempt?: true) }
-
-      before { allow(VehicleDetails).to receive(:new).and_return(vehicle_details_stub) }
+      before do
+        vehicle_details_stub = instance_double('VehicleDetails', exempt?: true)
+        allow(VehicleDetails).to receive(:new).and_return(vehicle_details_stub)
+      end
 
       it 'redirects to exempt path' do
         http_request

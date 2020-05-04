@@ -23,17 +23,7 @@ module Dates
       (calculated_start_date..end_date).map { |date| parse(date) }
     end
 
-    # Finds the expected start_date considering the zone charge activation date
-    def calculated_start_date
-      return start_date unless charge_start_date
-
-      parsed_charge_start_date = Date.parse(charge_start_date)
-      parsed_charge_start_date > start_date ? parsed_charge_start_date : start_date
-    end
-
     private
-
-    attr_reader :charge_start_date
 
     # Create hash of dates
     def parse(date)

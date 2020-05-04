@@ -3,7 +3,7 @@
 ##
 # Controls selecting dates.
 #
-class DatesController < ApplicationController
+class DatesController < ApplicationController # rubocop:disable Metrics/ClassLength
   # checks if VRN is present in the session
   before_action :check_vrn
   # checks if LA is present in the session
@@ -106,7 +106,8 @@ class DatesController < ApplicationController
   #
   def select_daily_date
     @local_authority = la_id
-    @charge_start_date = FetchSingleCazData.call(zone_id: la_id)&.active_charge_start_date
+    @charge_start_date = FetchSingleCazData.call(zone_id: @local_authority)
+                                           &.active_charge_start_date
     @dates = Dates::Daily.call(vrn: vrn, zone_id: la_id, charge_start_date: @charge_start_date)
     @all_paid = @dates.all? { |date| date[:disabled] }
   end
@@ -196,7 +197,9 @@ class DatesController < ApplicationController
   #
   def select_weekly_date
     @local_authority = la_id
-    @dates = Dates::Weekly.call(vrn: vrn, zone_id: @local_authority)
+    @charge_start_date = FetchSingleCazData.call(zone_id: @local_authority)
+                                           &.active_charge_start_date
+    @dates = Dates::Weekly.call(vrn: vrn, zone_id: la_id, charge_start_date: @charge_start_date)
     @all_paid = @dates.all? { |date| date[:disabled] }
   end
 

@@ -31,7 +31,7 @@ module Dates
     private
 
     # Readers functions
-    attr_reader :today, :vrn, :zone_id, :start_date, :end_date
+    attr_reader :today, :vrn, :zone_id, :start_date, :end_date, :charge_start_date
 
     # Calls PaymentsApi.paid_payments_dates for already paid dates in a given time-frame
     def paid_dates
@@ -41,6 +41,14 @@ module Dates
         start_date: start_date.strftime(VALUE_DATE_FORMAT),
         end_date: end_date.strftime(VALUE_DATE_FORMAT)
       )
+    end
+
+    # Finds the expected start_date considering the zone charge activation date
+    def calculated_start_date
+      return start_date unless charge_start_date
+
+      parsed_charge_start_date = Date.parse(charge_start_date)
+      parsed_charge_start_date > start_date ? parsed_charge_start_date : start_date
     end
   end
 end

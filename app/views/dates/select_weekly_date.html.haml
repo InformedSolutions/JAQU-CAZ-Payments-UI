@@ -21,13 +21,17 @@
           %span.govuk-details__summary-text
             Why can't I see my dates?
         .govuk-details__text
-          %p
-            If the date you want to pay for is not displayed, it may be because:
-            %ul
-              %li
-                The period you had to pay has ended. A weekly charge must begin in the last 6 days.
-              %li
-                The date is too far in the future. You should check back here closer to the date you want.
+          %ul
+            %li
+              %p
+                The Clean Air Zone charge came into operation on
+                = succeed('.') do
+                  = parse_single_date(@charge_start_date)
+            %li
+              %p
+                The date is too far in the future.
+                %br
+                You should check back here closer to the date you want.
 
       = form_tag confirm_date_weekly_dates_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}

@@ -105,9 +105,9 @@ module MockHelper
     allow(PaymentsApi).to receive(:paid_payments_dates).and_return(dates)
   end
 
-  def mock_single_caz_request(date = Date.current.to_s)
+  def mock_single_caz_request_for_charge_start_date(date = Date.current)
     allow(FetchSingleCazData).to receive(:call).and_return(
-      OpenStruct.new(active_charge_start_date: date)
+      OpenStruct.new(active_charge_start_date: date.to_s)
     )
   end
 

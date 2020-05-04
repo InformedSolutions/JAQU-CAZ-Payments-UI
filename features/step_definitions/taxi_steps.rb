@@ -5,6 +5,7 @@ Given('I am on the vehicle details page with taxi vehicle to check') do
   mock_vehicle_details_taxi
   mock_vehicle_compliance_leeds
   mock_non_dvla_response
+  mock_single_caz_request_for_charge_start_date
   visit details_vehicles_path
 end
 
@@ -29,6 +30,7 @@ Given('I have already paid for today') do
 end
 
 Given('I am on the weekly dates page') do
+  mock_single_caz_request_for_charge_start_date(2.days.ago)
   add_weekly_possible_details
   visit select_weekly_date_dates_path
 end
