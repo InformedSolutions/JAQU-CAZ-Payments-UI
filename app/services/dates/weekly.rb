@@ -10,16 +10,17 @@ module Dates
   #
   class Weekly < Base
     # Overrides default by setting start and end dates
-    def initialize(vrn:, zone_id:)
+    def initialize(vrn:, zone_id:, charge_start_date:)
       super(vrn: vrn, zone_id: zone_id)
       @start_date = today - 6.days
       @end_date = today + 12.days
+      @charge_start_date = charge_start_date
     end
 
     # Build the list of dates and return them, e.g.
     # [{value: "2019-10-11", name: "Friday 11 October 2019", today: false},...]
     def call
-      (start_date..(today + 6.days)).map { |date| parse(date) }
+      (calculated_start_date..(today + 6.days)).map { |date| parse(date) }
     end
 
     private

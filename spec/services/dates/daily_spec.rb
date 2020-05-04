@@ -26,7 +26,7 @@ RSpec.describe Dates::Daily do
   end
 
   context 'when #active_charge_start_date is considered' do
-    context 'when #active_charge_start_date = nil' do
+    context 'when #active_charge_start_date is nil' do
       let(:active_charge_start_date) { nil }
 
       it 'returns a whole range - thirteen days' do
@@ -34,7 +34,7 @@ RSpec.describe Dates::Daily do
       end
     end
 
-    context 'when #active_charge_start_date = today' do
+    context 'when #active_charge_start_date is today' do
       let(:active_charge_start_date) { Date.current.to_s }
 
       it 'returns 7 days' do
