@@ -108,7 +108,8 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
     @local_authority = la_id
     @charge_start_date = FetchSingleCazData.call(zone_id: @local_authority)
                                            &.active_charge_start_date
-    @dates = Dates::Daily.call(vrn: vrn, zone_id: la_id, charge_start_date: @charge_start_date)
+    @dates = Dates::Daily.call(vrn: vrn, zone_id: @local_authority,
+                               charge_start_date: @charge_start_date)
     @all_paid = @dates.all? { |date| date[:disabled] }
   end
 
@@ -199,7 +200,8 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
     @local_authority = la_id
     @charge_start_date = FetchSingleCazData.call(zone_id: @local_authority)
                                            &.active_charge_start_date
-    @dates = Dates::Weekly.call(vrn: vrn, zone_id: la_id, charge_start_date: @charge_start_date)
+    @dates = Dates::Weekly.call(vrn: vrn, zone_id: @local_authority,
+                                charge_start_date: @charge_start_date)
     @all_paid = @dates.all? { |date| date[:disabled] }
   end
 
