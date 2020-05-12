@@ -45,10 +45,9 @@ yarn-debug.log*
 coverage
 .scannerwork/
 config/ssl/
-
-# Ignore envs
 .env
 .vagrant
 /sonar-scanner*
 
-/doc
+# Ignore RDoc HTML files
+/doc/app
