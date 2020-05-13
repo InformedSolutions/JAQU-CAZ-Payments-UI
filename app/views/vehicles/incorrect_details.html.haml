@@ -14,6 +14,6 @@
         If your vehicle does meet emission standards,
         you can claim a refund when your registration details are updated.
 
-      = link_to('Continue', local_authority_charges_path, class: 'govuk-button', 'data-module': 'govuk-button')
+      = link_to('Continue', undermined_vehicle? ? not_determined_vehicles_path : local_authority_charges_path, class: 'govuk-button', 'data-module': 'govuk-button')
       %p
         = link_to('Check another vehicle', enter_details_vehicles_path)
