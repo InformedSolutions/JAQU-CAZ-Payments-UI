@@ -15,6 +15,12 @@ module DatesHelper
     value == session.dig(:vehicle_details, 'dates')&.first
   end
 
+  # Checks if vehicle details are undetermined
+  # Returns boolean.
+  def undetermined_vehicle?
+    session.dig(:vehicle_details, 'undetermined').present?
+  end
+
   # Returns the date's name with today and paid marks
   def display_date(date)
     value = today_not_paid(date) ? content_tag(:b, date[:name]) : date[:name]
