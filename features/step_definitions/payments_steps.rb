@@ -19,7 +19,7 @@ Then('I should get redirected to the GOV.UK Pay page') do
 end
 
 Then('I should have payment id in the session') do
-  visit root_path
+  visit cookies_path
   expect(page.driver.request.session[:vehicle_details]['payment_id']).not_to be_nil
 end
 

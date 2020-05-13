@@ -64,6 +64,10 @@ Then("I enter a exempt vehicle's registration and choose UK") do
   choose('UK')
 end
 
+Then('I should see {string} as vrn value') do |string|
+  expect(page).to have_field('vrn', with: string)
+end
+
 Given('I am on the vehicle details page with unrecognized vehicle to check') do
   add_vrn_and_country_to_session
   mock_unrecognized_vehicle

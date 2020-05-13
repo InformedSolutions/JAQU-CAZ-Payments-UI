@@ -7,9 +7,20 @@ module SessionManipulation
   # It keeps keys from steps before selecting LA for the button to return to LA picking
   #
   # ==== Usage
-  #    SessionManipulation::ClearPaymentDetails.call(session: session)
+  #    SessionManipulation::ClearSessionDetails.call(session: session, key: 1)
   #
-  class ClearPaymentDetails < BaseManipulator
+  class ClearSessionDetails < BaseManipulator
+    # Initializer function. Used by the class level method +.call+
+    #
+    # ==== Attributes
+    # * +session+ - the user's session
+    # * +form+ - a valid instance of VrnForm
+    #
+    def initialize(session:, key:)
+      @session = session
+      @key = key
+    end
+
     # It clears keys in the session hash the were set after setting compliance details
     def call
       log_action 'Clearing data from the session'
@@ -21,7 +32,7 @@ module SessionManipulation
 
     # Returns keys from steps before selecting LA
     def keys_to_keep
-      SUBKEYS.select { |key| key < 6 }.values.flatten
+      SUBKEYS.select { |key| key < @key }.values.flatten
     end
   end
 end

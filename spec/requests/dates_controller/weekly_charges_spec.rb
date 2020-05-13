@@ -8,12 +8,14 @@ RSpec.describe 'DatesController - GET #weekly_charge', type: :request do
   let(:vrn) { 'CU57ABC' }
   let(:country) { 'UK' }
   let(:zone_id) { SecureRandom.uuid }
+  let(:url) { 'www.wp.pl' }
   let(:details) do
     instance_double(ComplianceDetails,
                     zone_name: 'Leeds',
                     charge: 50,
-                    exemption_or_discount_url: 'www.wp.pl',
-                    compliance_url: 'www.wp.pl')
+                    exemption_or_discount_url: url,
+                    compliance_url: url,
+                    dynamic_compliance_url: url)
   end
 
   before do
