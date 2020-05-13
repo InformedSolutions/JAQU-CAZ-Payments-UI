@@ -20,6 +20,10 @@ Then('I should be on the incorrect details page') do
   expect_path(incorrect_details_vehicles_path)
 end
 
+Then('I should be on the vehicle details incomplete page') do
+  expect_path(not_determined_vehicles_path)
+end
+
 Then('I should be on the choose type page') do
   expect_path(choose_type_non_dvla_vehicles_path)
 end

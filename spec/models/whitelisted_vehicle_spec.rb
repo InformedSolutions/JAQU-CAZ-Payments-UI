@@ -27,7 +27,7 @@ RSpec.describe WhitelistedVehicle, type: :model do
     context 'when API returns status 404' do
       before do
         allow(ComplianceCheckerApi).to receive(:whitelisted_vehicle)
-          .and_raise(BaseApi:: Error404Exception.new(404, '', {}))
+          .and_raise(BaseApi::Error404Exception.new(404, '', {}))
       end
 
       it 'returns false' do
