@@ -15,7 +15,9 @@ module DatesHelper
     value == session.dig(:vehicle_details, 'dates')&.first
   end
 
-  def undermined_vehicle?
+  # Checks if vehicle details are undetermined
+  # Returns boolean.
+  def undetermined_vehicle?
     session.dig(:vehicle_details, 'undetermined').present?
   end
 
