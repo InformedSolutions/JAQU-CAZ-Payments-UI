@@ -15,9 +15,9 @@ module SessionManipulation
     SUBKEYS = {
       1 => %w[vrn country confirm_vehicle],
       2 => %w[unrecognised leeds_taxi confirm_registration undetermined],
-      3 => %w[confirm_vehicle],
+      3 => %w[confirm_vehicle incorrect],
       4 => %w[type],
-      5 => %w[incorrect la_id],
+      5 => %w[la_id],
       6 => %w[chargeable_zones],
       7 => %w[daily_charge la_name weekly_possible tariff_code],
       8 => %w[charge_period],
@@ -52,7 +52,7 @@ module SessionManipulation
       log_action "Adding #{values} to session"
       values.stringify_keys!
       session[SESSION_KEY] = session[SESSION_KEY].slice(*previous_keys).merge(values)
-      log_action "User's current session: #{session[SESSION_KEY]}"
+      log_action "User's current session keys: #{session[SESSION_KEY]&.keys}"
     end
   end
 end

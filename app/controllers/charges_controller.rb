@@ -100,10 +100,10 @@ class ChargesController < ApplicationController
 
   # Define the back button path on local authority page.
   def local_authority_return_path
-    if vehicle_details('incorrect')
-      incorrect_details_vehicles_path
-    elsif vehicle_details('undetermined')
+    if vehicle_details('undetermined')
       not_determined_vehicles_path
+    elsif vehicle_details('incorrect')
+      incorrect_details_vehicles_path
     elsif vehicle_details('country') == 'UK'
       details_vehicles_path
     else
