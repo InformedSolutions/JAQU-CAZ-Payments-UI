@@ -21,10 +21,10 @@ gem 'turbolinks'
 gem 'webpacker'
 
 group :development, :test do
-  gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'byebug'
   gem 'dotenv-rails'
   gem 'haml-rails'
-  gem 'rspec-rails', '~> 4.0.0.beta'
+  gem 'rspec-rails'
 end
 
 group :development do
@@ -39,7 +39,6 @@ end
 group :test do
   gem 'capybara'
   gem 'cucumber-rails', require: false
-  # Used to set session values in cucumber tests
   gem 'rack_session_access'
   gem 'rails-controller-testing'
   gem 'selenium-webdriver'

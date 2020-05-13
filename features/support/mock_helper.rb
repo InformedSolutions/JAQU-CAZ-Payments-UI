@@ -49,7 +49,7 @@ module MockHelper
   def mock_non_exempt_whitelisted_vehicle
     allow(ComplianceCheckerApi)
       .to receive(:whitelisted_vehicle)
-      .and_raise(BaseApi:: Error404Exception.new(404, '', {}))
+      .and_raise(BaseApi::Error404Exception.new(404, '', {}))
   end
 
   def mock_dvla_response
@@ -64,7 +64,7 @@ module MockHelper
   def mock_unsuccessful_dvla_response
     allow(ChargeableZonesService)
       .to receive(:call)
-      .and_raise(BaseApi:: Error422Exception.new(422, '', {}))
+      .and_raise(BaseApi::Error422Exception.new(422, '', {}))
   end
 
   def mock_non_dvla_response
@@ -86,7 +86,7 @@ module MockHelper
   def mock_unrecognized_vehicle
     allow(ComplianceCheckerApi)
       .to receive(:vehicle_details)
-      .and_raise(BaseApi:: Error404Exception.new(404, '', {}))
+      .and_raise(BaseApi::Error404Exception.new(404, '', {}))
   end
 
   def mock_payment_creation
