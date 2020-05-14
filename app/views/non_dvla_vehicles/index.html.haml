@@ -1,4 +1,4 @@
-= link_to 'Back', enter_details_vehicles_path, class: 'govuk-back-link', id: 'back-link'
+= link_to 'Back', enter_details_vehicles_path + '?back=true', class: 'govuk-back-link', id: 'back-link'
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
     .govuk-grid-column-two-thirds
@@ -42,6 +42,7 @@
                   %input.govuk-checkboxes__input{name: 'confirm-registration',
                                                  type: 'checkbox',
                                                  value: 'yes',
+                                                 checked: session.dig(:vehicle_details, 'confirm_registration'),
                                                  id: 'confirm-registration'}
                   %label.govuk-label.govuk-checkboxes__label{for: 'confirm-registration'}
                     I confirm the number plate is correct.

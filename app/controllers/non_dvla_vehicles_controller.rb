@@ -43,6 +43,7 @@ class NonDvlaVehiclesController < ApplicationController
   def confirm_registration
     form = ConfirmationForm.new(params['confirm-registration'])
     if form.confirmed?
+      SessionManipulation::SetConfirmRegistration.call(session: session)
       redirect_to choose_type_non_dvla_vehicles_path
     else
       redirect_to non_dvla_vehicles_path, alert: true

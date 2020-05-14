@@ -23,7 +23,7 @@
               - @types.each_with_index do |type, index|
                 - id = "vehicle-type-#{index}"
                 .govuk-radios__item
-                  %input.govuk-radios__input{name: 'vehicle-type', id: id, type: 'radio', value: type[:value]}
+                  %input.govuk-radios__input{name: 'vehicle-type', id: id, type: 'radio', checked: (session.dig(:vehicle_details, 'type') == type[:value]), value: type[:value]}
                   %label.govuk-label.govuk-radios__label{for: id}
                     = type[:name]
         = submit_tag 'Confirm', class: 'govuk-button', 'data-module': 'govuk-button'
