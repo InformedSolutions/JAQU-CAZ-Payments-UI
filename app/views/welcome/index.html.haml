@@ -41,6 +41,7 @@
         %nav{'aria-labelledby': 'related-items-label', role: 'navigation'}
           %ul.govuk-list{class: 'govuk-!-font-size-16'}
             %li
-              = external_link_to 'Check if you qualify for an exemption or refund',
-                                 'https://www.gov.uk/guidance/driving-in-a-clean-air-zone',
-                                 id: 'exemption-or-refund-link'
+              = succeed '.' do
+                = link_to('Check if you qualify for an exemption or refund',
+                          'https://www.gov.uk/guidance/driving-in-a-clean-air-zone',
+                          id: 'exemption-or-refund-link')

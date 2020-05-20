@@ -1,6 +1,5 @@
 en:
   hello: "Hello world"
-  external_link: "Opens in new window - External website"
   labels:
     vrn: For example, CU57ABC
     country: Where was the vehicle registered?
