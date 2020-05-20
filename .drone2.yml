@@ -212,31 +212,31 @@ steps:
       event:
         - push
 
-    # Build pa11y-ci image
-  - name: build pa11y-ci image
-    image: docker
-    commands:
-      - cd pa11y
-      - docker build -t pa11y-ci .
-    volumes:
-      - name: docker_sock
-        path: /var/run/docker.sock
-    when:
-      event:
-        - push
-
-   # Trigger accessibility test
-  - name: accessibility tests
-    image: pa11y-ci
-    pull: never
-    environment:
-      BASE_URL: https://PaymentsDevUser1:CleanAir99@dev2.paycleanairzonecharge.co.uk
-    commands:
-      - mkdir screenshots
-      - /usr/local/bin/pa11y-ci -c pa11y/.pa11yci.conf.js
-    when:
-      event:
-        - push
+  #   # Build pa11y-ci image
+  # - name: build pa11y-ci image
+  #   image: docker
+  #   commands:
+  #     - cd pa11y
+  #     - docker build -t pa11y-ci .
+  #   volumes:
+  #     - name: docker_sock
+  #       path: /var/run/docker.sock
+  #   when:
+  #     event:
+  #       - push
+  #
+  #  # Trigger accessibility test
+  # - name: accessibility tests
+  #   image: pa11y-ci
+  #   pull: never
+  #   environment:
+  #     BASE_URL: https://PaymentsDevUser1:CleanAir99@dev2.paycleanairzonecharge.co.uk
+  #   commands:
+  #     - mkdir screenshots
+  #     - /usr/local/bin/pa11y-ci -c pa11y/.pa11yci.conf.js
+  #   when:
+  #     event:
+  #       - push
 
 
   ################################################# End DEV Steps #######################################################
