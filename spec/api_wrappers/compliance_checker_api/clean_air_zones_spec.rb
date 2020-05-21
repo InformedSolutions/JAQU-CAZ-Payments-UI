@@ -22,7 +22,8 @@ RSpec.describe 'ComplianceCheckerApi.clean_air_zones' do
       expect(call.first.keys).to contain_exactly(
         'cleanAirZoneId',
         'name',
-        'boundaryUrl'
+        'boundaryUrl',
+        'activeChargeStartDate'
       )
     end
   end

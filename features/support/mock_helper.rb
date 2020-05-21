@@ -89,6 +89,12 @@ module MockHelper
       .and_raise(BaseApi::Error404Exception.new(404, '', {}))
   end
 
+  # Mocks response from clean-air-zones with in VCCS API with non active zones
+  def mock_non_chargeable_zones
+    caz_list = read_file('unchargeable_caz_list_response.json')
+    allow(ComplianceCheckerApi).to receive(:clean_air_zones).and_return(caz_list['cleanAirZones'])
+  end
+
   def mock_payment_creation
     allow(Payment).to receive(:new).and_return(
       OpenStruct.new(payment_id: SecureRandom.uuid, gov_uk_pay_url: gov_uk_pay_url)
