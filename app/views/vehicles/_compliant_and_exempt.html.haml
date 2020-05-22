@@ -6,10 +6,8 @@
         You do not have to pay to drive this vehicle in any existing Clean Air Zone but this may
         change as more zones are implemented.
       %p
-        Birmingham and Leeds are currently the only Clean Air Zones.
-      %p
-        You can always use the
-        = link_to('Vehicle Checker', Rails.configuration.x.check_air_standard_url)
-        service to find out if you need to pay in any Clean Air Zone.
+        You can always 
+        = link_to("check if you'll need to pay a charge", Rails.configuration.x.check_air_standard_url)
+        before you drive in a Clean Air Zone.
       %p
         = link_to 'Pay for another vehicle', enter_details_vehicles_path, class: 'govuk-link'
