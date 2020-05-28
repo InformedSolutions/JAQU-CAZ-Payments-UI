@@ -105,11 +105,10 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # * +charge+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
   def select_daily_date
-    @local_authority = la_id
-    @charge_start_date = FetchSingleCazData.call(zone_id: @local_authority)
-                                           &.active_charge_start_date
-    @dates = Dates::Daily.call(vrn: vrn, zone_id: @local_authority,
-                               charge_start_date: @charge_start_date)
+    @charge_start_date = FetchSingleCazData.call(zone_id: la_id)&.active_charge_start_date
+    service = Dates::Daily.new(vrn: vrn, zone_id: la_id, charge_start_date: @charge_start_date)
+    @dates = service.chargeable_dates
+    @d_day_notice = service.d_day_notice
     @all_paid = @dates.all? { |date| date[:disabled] }
   end
 
@@ -197,11 +196,10 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # * +charge+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
   def select_weekly_date
-    @local_authority = la_id
-    @charge_start_date = FetchSingleCazData.call(zone_id: @local_authority)
-                                           &.active_charge_start_date
-    @dates = Dates::Weekly.call(vrn: vrn, zone_id: @local_authority,
-                                charge_start_date: @charge_start_date)
+    @charge_start_date = FetchSingleCazData.call(zone_id: la_id)&.active_charge_start_date
+    service = Dates::Weekly.new(vrn: vrn, zone_id: la_id, charge_start_date: @charge_start_date)
+    @dates = service.chargeable_dates
+    @d_day_notice = service.d_day_notice
     @all_paid = @dates.all? { |date| date[:disabled] }
   end
 

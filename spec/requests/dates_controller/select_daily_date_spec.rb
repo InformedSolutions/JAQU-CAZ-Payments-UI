@@ -21,6 +21,10 @@ RSpec.describe 'DatesController - GET #select_daily_date', type: :request do
     it 'calls FetchSingleCazData service' do
       expect(FetchSingleCazData).to have_received(:call)
     end
+
+    it 'assigns the @d_day_notice' do
+      expect(assigns(:d_day_notice)).to eq(false)
+    end
   end
 
   context 'without VRN in the session' do
