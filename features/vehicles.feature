@@ -151,6 +151,17 @@ Feature: Vehicles
         And I press the Confirm
       Then I should see 'Which Clean Air Zone do you need to pay for?'
 
+  Scenario: User wants to pay for non active Clean Air Zone
+    Given I am on the home page
+      Then I press the Start now button
+        And I should be on the enter details page
+    Then I enter a vehicle's registration but the zones are not active
+      And I press the Continue
+      And I should see 'Are these vehicle details correct?'
+    Then I choose that the details are correct
+      And I press the Confirm
+      And I should see 'There is no charge for this vehicle'
+
   Scenario: User wants to pay for undetermined (without type) incorrect vehicle
     Given I am on the home page
       Then I press the Start now button

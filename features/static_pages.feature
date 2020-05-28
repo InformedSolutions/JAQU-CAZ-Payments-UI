@@ -17,8 +17,8 @@ Feature: Static Pages
   Scenario: User sees privacy notice page
     Given I am on the home page
     When I press "Privacy Notice" footer link
-    Then I should see "Privacy Notice"
-      And I should see "To use Pay a Clean Air Zone charge charge"
+    Then I should see "Drive in a Clean Air Zone"
+      And I should see "Check if you’ll be charged to drive in a Clean Air Zone "
 
   Scenario: Testing back button when I am on enter details page
     Given I am on the enter details page

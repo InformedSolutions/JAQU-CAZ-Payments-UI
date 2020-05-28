@@ -100,6 +100,13 @@ Given('I am on the vehicle details page with unrecognized vehicle to check') do
   visit details_vehicles_path
 end
 
+Then("I enter a vehicle's registration but the zones are not active") do
+  mock_non_chargeable_zones
+  mock_vehicle_details
+  fill_in('vrn', with: 'CAS310')
+  choose('UK')
+end
+
 private
 
 def fill_in_non_uk(vrn)

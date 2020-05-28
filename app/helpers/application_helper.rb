@@ -33,20 +33,6 @@ module ApplicationHelper
     weekly_period ? select_weekly_date_dates_path : select_daily_date_dates_path
   end
 
-  # Used for external inline links in the app.
-  # Returns a link with blank target and aria-label.
-  #
-  # Reference: https://www.w3.org/WAI/GL/wiki/Using_aria-label_for_link_purpose
-  def external_link_to(text, url, html_options = {})
-    html_options.symbolize_keys!.reverse_merge!(
-      target: '_blank',
-      class: 'govuk-link',
-      rel: 'noopener'
-    )
-    html_options.merge!('aria-label': html_options[:'aria-label']) if html_options[:'aria-label']
-    link_to "#{text} (opens in a new window)", url, html_options
-  end
-
   # Returns content for title with global app name.
   def page_title(title_text)
     content_for(:title, "#{title_text} | #{service_name}")
