@@ -94,9 +94,8 @@ class PaymentsApi < BaseApi
     # * {500 Exception}[rdoc-ref:BaseApi::Error500Exception] - backend API error
     #
     def payment_status(payment_id:, caz_name:)
-      log_action('Getting payment status')
-      request(:put, "/payments/#{payment_id}",
-              body: payment_status_body(caz_name))
+      log_action("Getting a payment status for id: #{payment_id}")
+      request(:put, "/payments/#{payment_id}", body: payment_status_body(caz_name))
     end
 
     ##
