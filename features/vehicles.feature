@@ -9,7 +9,7 @@ Feature: Vehicles
     Then I should see "Start now"
       And I press the Start now button
     Then I should be on the enter details page
-      And I should see "Pay a Clean Air Zone charge" title
+      And I should see "Enter the number plate of the vehicle | Pay a Clean Air Zone charge" title
       And I should see "Enter the number plate of the vehicle"
     Then I enter a only vehicle's registration
       And I press the Continue

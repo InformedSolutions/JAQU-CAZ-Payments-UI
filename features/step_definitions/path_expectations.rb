@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 def expect_path(path)
-  expect(page).to have_current_path(path)
+  expect(page).to have_current_path(path, ignore_query: true)
 end
 
 Then('I should be on the start page') do

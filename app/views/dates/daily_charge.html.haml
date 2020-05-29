@@ -1,3 +1,4 @@
+- page_title("Pay a daily #{@compliance_details.zone_name} Clean Air Zone charge")
 = link_to 'Back', @return_path, class: 'govuk-back-link', id: 'back-link'
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
@@ -54,6 +55,7 @@
                                       id: 'exemption-link')
         = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
       %p
-        = external_link_to("Get support to upgrade or replace your vehicle in #{@compliance_details.zone_name}",
+        Contact the local authority for support to upgrade or replace your vehicle in
+        = external_link_to(@compliance_details.zone_name,
                            @compliance_details.dynamic_compliance_url,
                            id: 'compliance-link')

@@ -27,6 +27,7 @@
     %link{rel: 'apple-touch-icon', href: asset_pack_url('media/images/govuk-apple-touch-icon.png')}
 
   %body.govuk-template__body
+    = link_to 'Skip to main content', '#main-content', class: 'govuk-skip-link'
     = render 'layouts/header'
     .govuk-width-container
       = render 'layouts/feedback_section'
