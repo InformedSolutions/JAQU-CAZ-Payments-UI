@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'NonDvlaVehiclesController - GET #index', type: :request do
-  subject(:http_request) { get non_dvla_vehicles_path }
+  subject { get non_dvla_vehicles_path }
 
   let(:whitelisted_vehicle_instance) { instance_double 'WhitelistedVehicle', exempt?: exempt }
   let(:exempt) { false }
@@ -16,7 +16,7 @@ RSpec.describe 'NonDvlaVehiclesController - GET #index', type: :request do
     context 'with VRN in the session' do
       before do
         add_vrn_to_session
-        http_request
+        subject
       end
 
       it 'returns a success response' do
@@ -25,7 +25,7 @@ RSpec.describe 'NonDvlaVehiclesController - GET #index', type: :request do
     end
 
     context 'without VRN in the session' do
-      before { http_request }
+      before { subject }
 
       it 'returns a redirect to :enter_details' do
         expect(response).to redirect_to(enter_details_vehicles_path)
@@ -39,7 +39,7 @@ RSpec.describe 'NonDvlaVehiclesController - GET #index', type: :request do
     context 'with VRN in the session' do
       before do
         add_vrn_to_session
-        http_request
+        subject
       end
 
       it 'returns a redirect to :exempt_vehicles' do
@@ -48,7 +48,7 @@ RSpec.describe 'NonDvlaVehiclesController - GET #index', type: :request do
     end
 
     context 'without VRN in the session' do
-      before { http_request }
+      before { subject }
 
       it 'returns a redirect to :enter_details' do
         expect(response).to redirect_to(enter_details_vehicles_path)

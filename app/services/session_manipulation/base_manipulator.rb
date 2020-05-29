@@ -22,7 +22,7 @@ module SessionManipulation
       7 => %w[daily_charge la_name weekly_possible tariff_code],
       8 => %w[charge_period],
       9 => %w[confirm_exempt],
-      10 => %w[dates total_charge weekly],
+      10 => %w[dates total_charge weekly weekly_charge_today],
       11 => %w[payment_id],
       12 => %w[user_email payment_reference external_id]
     }.freeze
@@ -49,10 +49,9 @@ module SessionManipulation
     # Add passed values to the session.
     # It transforms keys to strings and removes keys from next levels.
     def add_fields(values = {})
-      log_action "Adding #{values} to session"
-      values.stringify_keys!
-      session[SESSION_KEY] = session[SESSION_KEY].slice(*previous_keys).merge(values)
-      log_action "User's current session keys: #{session[SESSION_KEY]&.keys}"
+      log_action("Adding keys: #{values.keys} to the session")
+      session[SESSION_KEY] = session[SESSION_KEY].slice(*previous_keys).merge(values.stringify_keys)
+      log_action("Current session keys: #{session[SESSION_KEY].keys}")
     end
   end
 end

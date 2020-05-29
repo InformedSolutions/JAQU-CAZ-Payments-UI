@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'DatesController - POST #confirm_select_period', type: :request do
-  subject(:http_request) do
+  subject do
     post confirm_select_period_dates_path, params: { 'period' => period }
   end
   let(:period) { 'daily-charge' }
@@ -11,7 +11,7 @@ RSpec.describe 'DatesController - POST #confirm_select_period', type: :request d
   context 'when Leeds weekly discount is possible' do
     before do
       add_details_to_session(weekly_possible: true)
-      http_request
+      subject
     end
 
     context 'with selected radio' do
@@ -34,7 +34,7 @@ RSpec.describe 'DatesController - POST #confirm_select_period', type: :request d
       let(:period) { nil }
 
       it 'redirects to :select_period' do
-        expect(http_request).to redirect_to(select_period_dates_path)
+        expect(subject).to redirect_to(select_period_dates_path)
       end
     end
   end

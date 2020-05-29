@@ -96,7 +96,7 @@ class PaymentsController < ApplicationController
     payment_id = vehicle_details('payment_id')
     return unless payment_id
 
-    Rails.logger.warn "Payment with id: #{payment_id} was already created"
+    Rails.logger.warn("Payment with id: #{payment_id} was already created")
     redirect_to payments_path
   end
 

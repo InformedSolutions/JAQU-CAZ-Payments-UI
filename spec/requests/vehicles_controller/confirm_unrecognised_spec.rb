@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'VehiclesController - POST #confirm_unrecognised', type: :request do
-  subject(:http_request) do
+  subject do
     post confirm_unrecognised_vehicles_path,
          params: { 'confirm-registration': confirmation }
   end
@@ -12,7 +12,7 @@ RSpec.describe 'VehiclesController - POST #confirm_unrecognised', type: :request
 
   before do
     add_vrn_to_session
-    http_request
+    subject
   end
 
   context 'when registration confirmed' do

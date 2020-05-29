@@ -5,7 +5,7 @@ Feature: Leeds Taxi
 
   Scenario: User enters a taxi vehicle's registration and choose Pay for 7 days
     Given I am on the vehicle details page with taxi vehicle to check
-      And I have not paid for any day
+      And I have already paid for today
     Then I choose that the details are correct
       And I press the Confirm
     Then I select Leeds
@@ -26,9 +26,9 @@ Feature: Leeds Taxi
       And I should not see 'If the date you want to pay for is not displayed, it may be because'
     Then I press the Continue
       And I should see 'Select a week that you wish to pay for'
-    Then I select Today
+    Then I select any available day
       And I press the Continue
-    Then I should see 'Review your payment'
+    Then I should be on the review your payment page
 
   Scenario: User enters a taxi vehicle's registration and choose Pay for 1 day
     Given I am on the vehicle details page with taxi vehicle to check
@@ -52,14 +52,20 @@ Feature: Leeds Taxi
     Then I should see 'You have already paid for at least one day in the selected week'
 
   Scenario: User selects dates to pay for and d-day is within date range you can pay
-    Given I am on the weekly dates page when d-day was yesterday
+    Given I am on the weekly dates page when d-day was yesterday and today day is paid
     Then I should be on the pick weekly dates page
       And I should see "Why can't I see my dates?"
 
   Scenario: User selects dates to pay for and d-day is within date range you can pay
     Given I am on the weekly dates page when d-day will be tomorrow
-    Then I should see "Why can't I see my dates?"
+    Then I should be on the pick weekly dates page
+      And I should see "Why can't I see my dates?"
 
   Scenario: User selects dates to pay for and d-day already passed and is outside of date range
-    Given I am on the weekly dates page when d-day was 7 days ago
-    Then I should not see "Why can't I see my dates?"
+    Given I am on the weekly dates page when d-day was 7 days ago and today day is paid
+    Then I should be on the pick weekly dates page
+      And I should not see "Why can't I see my dates?"
+
+  Scenario: User selects dates to pay for and d-day already passed and is outside of date range
+    Given I am on the weekly dates page when d-day was 7 days ago and today day is not paid
+    Then I should be on the pick weekly charge period page

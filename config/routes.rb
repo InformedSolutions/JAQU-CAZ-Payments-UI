@@ -51,6 +51,9 @@ Rails.application.routes.draw do
 
       get :select_weekly_date
       post :confirm_date_weekly
+
+      get :select_weekly_period
+      post :confirm_select_weekly_period
     end
   end
 

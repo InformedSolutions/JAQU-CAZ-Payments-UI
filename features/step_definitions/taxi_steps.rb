@@ -25,8 +25,13 @@ Then('I select Today') do
   choose('Today')
 end
 
+Then('I select any available day') do
+  mock_paid_dates(dates: [])
+  first("input:not([disabled])[type='radio']").choose
+end
+
 Given('I have already paid for today') do
-  mock_paid_dates(dates: [Date.current.strftime('%Y-%m-%d')])
+  mock_paid_dates(dates: [today_formatted])
 end
 
 Given('I am on the weekly dates page') do
@@ -35,21 +40,31 @@ Given('I am on the weekly dates page') do
   visit select_weekly_date_dates_path
 end
 
-Given('I am on the weekly dates page when d-day was yesterday') do
+Given('I am on the weekly dates page when d-day was yesterday and today day is paid') do
   mock_single_caz_request_for_charge_start_date(Date.current.yesterday)
-  mock_weekly_dates_data
+  mock_paid_dates(dates: [today_formatted])
+  add_weekly_possible_details
   visit select_weekly_date_dates_path
 end
 
 Given('I am on the weekly dates page when d-day will be tomorrow') do
   mock_single_caz_request_for_charge_start_date(Date.current.tomorrow)
-  mock_weekly_dates_data
+  mock_paid_dates
+  add_weekly_possible_details
   visit select_weekly_date_dates_path
 end
 
-Given('I am on the weekly dates page when d-day was 7 days ago') do
+Given('I am on the weekly dates page when d-day was 7 days ago and today day is paid') do
   mock_single_caz_request_for_charge_start_date(Date.current - 7.days)
-  mock_weekly_dates_data
+  mock_paid_dates(dates: [today_formatted])
+  add_weekly_possible_details
+  visit select_weekly_date_dates_path
+end
+
+Given('I am on the weekly dates page when d-day was 7 days ago and today day is not paid') do
+  mock_single_caz_request_for_charge_start_date(Date.current - 7.days)
+  mock_paid_dates
+  add_weekly_possible_details
   visit select_weekly_date_dates_path
 end
 
@@ -69,20 +84,11 @@ end
 # Mocks taxi response from vehicle details endpoint in VCCS API
 def mock_vehicle_details_taxi
   vehicle_details = read_file('vehicle_details_taxi_response.json')
-  allow(ComplianceCheckerApi)
-    .to receive(:vehicle_details)
-    .and_return(vehicle_details)
+  allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(vehicle_details)
 end
 
 # Mocks response from compliance endpoint in VCCS API
 def mock_vehicle_compliance_leeds
   compliance_data = read_file('vehicle_compliance_leeds_response.json')
-  allow(ComplianceCheckerApi)
-    .to receive(:vehicle_compliance)
-    .and_return(compliance_data)
-end
-
-def mock_weekly_dates_data
-  mock_paid_dates
-  add_weekly_possible_details
+  allow(ComplianceCheckerApi).to receive(:vehicle_compliance).and_return(compliance_data)
 end

@@ -26,12 +26,13 @@ module SessionHelper
     page.set_rack_session(vehicle_details: details)
   end
 
-  def add_weekly_vehicle_details_to_session
+  def add_weekly_vehicle_details_to_session(weekly_charge_today: false)
     details = {
       **compliance_details,
       dates: (Date.current..(Date.current + 6.days)).map(&:to_s),
       total_charge: 50,
       weekly_possible: true,
+      weekly_charge_today: weekly_charge_today,
       weekly: true,
       chargeable_zones: 2
     }

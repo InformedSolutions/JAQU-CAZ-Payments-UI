@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'PaymentsController - POST #create', type: :request do
-  subject(:http_request) { post payments_path }
+  subject { post payments_path }
 
   let(:vrn) { 'CU57ABC' }
   let(:zone_id) { SecureRandom.uuid }
@@ -28,7 +28,7 @@ RSpec.describe 'PaymentsController - POST #create', type: :request do
     end
 
     it 'redirects to the link from Payments API' do
-      http_request
+      subject
       expect(response).to redirect_to(redirect_url)
     end
 
@@ -43,17 +43,17 @@ RSpec.describe 'PaymentsController - POST #create', type: :request do
           'la_name' => anything
         }, payments_url
       )
-      http_request
+      subject
     end
 
     it 'sets payment_id in the session' do
-      http_request
+      subject
       expect(session[:vehicle_details]['payment_id']).to eq(payment_id)
     end
 
     context 'when called twice' do
       let(:repeated_request) { post payments_path }
-      before { http_request }
+      before { subject }
 
       it 'does not call Payment model second time' do
         expect(Payment).not_to receive(:new)

@@ -52,8 +52,16 @@ Then('I should be on the pick weekly dates page') do
   expect_path(select_weekly_date_dates_path)
 end
 
+Then('I should be on the pick weekly charge period page') do
+  expect_path(select_weekly_period_dates_path)
+end
+
 Then('I should be on the select period page') do
   expect_path(select_period_dates_path)
+end
+
+Then('I should be on the review your payment page') do
+  expect_path(review_payment_charges_path)
 end
 
 Then('I should be on the unrecognised page') do

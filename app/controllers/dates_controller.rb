@@ -9,9 +9,13 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # checks if LA is present in the session
   before_action :check_compliance_details
   # checks if weekly Leeds discount is possible for weekly paths
-  before_action :check_weekly, only: %i[select_period confirm_select_period
-                                        weekly_charge confirm_weekly_charge
-                                        select_weekly_date confirm_date_weekly]
+  before_action :check_weekly, only: %i[select_period confirm_select_period weekly_charge
+                                        confirm_weekly_charge select_weekly_date confirm_date_weekly
+                                        select_weekly_period confirm_select_weekly_period]
+  # checks if weekly discount is possible to pay for today
+  before_action :check_weekly_charge_today, only: %i[select_weekly_period confirm_select_weekly_period]
+  # fetching +active_charge_start_date+ and assigns it to the variable
+  before_action :assign_charge_start_date, only: :select_weekly_date
   ##
   # Renders a select period page.
   #
@@ -38,7 +42,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # ==== Validations
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   # * +la_id+ - lack of LA redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
-  # * +period+ - lack of the period redirects back to {select_period}[rdoc-ref:DatesController.select_period]
+  # * +period+ - lack of the period redirects back to {select_period}[rdoc-ref:select_period]
   #
   def confirm_select_period
     if params[:period]
@@ -66,7 +70,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
 
   ##
   # Validates if user confirmed being not exempt for a given LA.
-  # If yes, redirects to the {next step}[rdoc-ref:DatesController.select_daily_date]
+  # If yes, redirects to the {next step}[rdoc-ref:select_daily_date]
   #
   # ==== Path
   #    POST /charges/confirm_daily_charge
@@ -126,7 +130,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # * +la_id+ - lack of LA redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
   # * +la_name+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   # * +charge+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
-  # * +dates+ - lack of the date redirects back to {daily charge}[rdoc-ref:DatesController.select_daily_date]
+  # * +dates+ - lack of the date redirects back to {daily charge}[rdoc-ref:select_daily_date]
   #
   def confirm_daily_date
     dates = params[:dates]
@@ -157,7 +161,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
 
   ##
   # Validates if user confirmed being not exempt for a given LA.
-  # If yes, redirects to the {next step}[rdoc-ref:DatesController.select_daily_date]
+  # If yes, redirects to the {next step}[rdoc-ref:select_daily_date]
   #
   # ==== Path
   #    POST /charges/confirm_daily_charge
@@ -170,7 +174,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # * +la_id+ - lack of LA redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
   # * +la_name+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   # * +charge+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
-  # * +confirm-exempt+ - lack of the confirmation redirects back to {daily charge}[rdoc-ref:DatesController.daily_charge]
+  # * +confirm-exempt+ - lack of the confirmation redirects back to {daily charge}[rdoc-ref:daily_charge]
   #
   def confirm_weekly_charge
     form = ConfirmationForm.new(params['confirm-exempt'])
@@ -196,8 +200,12 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # * +charge+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
   def select_weekly_date
-    @charge_start_date = FetchSingleCazData.call(zone_id: la_id)&.active_charge_start_date
     service = Dates::Weekly.new(vrn: vrn, zone_id: la_id, charge_start_date: @charge_start_date)
+    if service.pay_week_starts_today?
+      SessionManipulation::SetWeeklyChargeToday.call(session: session)
+      return redirect_to select_weekly_period_dates_path
+    end
+
     @dates = service.chargeable_dates
     @d_day_notice = service.d_day_notice
     @all_paid = @dates.all? { |date| date[:disabled] }
@@ -215,7 +223,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # ==== Validations
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   # * +la_id+ - lack of LA redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
-  # * +dates+ - lack of the date redirects back to {select_daily_date}[rdoc-ref:DatesController.select_daily_date]
+  # * +dates+ - lack of the date redirects back to {select_daily_date}[rdoc-ref:select_daily_date]
   # * +la_name+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   # * +charge+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
@@ -230,6 +238,27 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
     end
   end
 
+  ##
+  # Renders the list of weekly dates to pick.
+  #
+  # ==== Path
+  #    GET /dates/select_weekly_period
+  #
+  # ==== Validations
+  # * +weekly_charge_today+ - lack of true value in the session redirects to {weekly_charge}[rdoc-ref:weekly_charge]
+  #
+  def select_weekly_period
+    redirect_to weekly_charge_dates_path unless vehicle_details('weekly_charge_today')
+  end
+
+  ##
+  # Validates if user selects at least one charge period
+  #
+  # ==== Path
+  #    POST /dates/select_weekly_date
+  #
+  def confirm_select_weekly_period; end
+
   private
 
   ##
@@ -237,9 +266,9 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # * +period+ - status for the vehicle type if it is not possible to determine, eg. 'true'
 
   # Verifies which date period was selected.
-  # If date period equals 'daily-charge' redirects to {daily_charge}[rdoc-ref:DatesController.daily_charge]
-  # If date period equals 'weekly-charge' redirects to {weekly_charge}[rdoc-ref:DatesController.weekly_charge]
-  # If not equals 'daily-charge' or 'weekly-charge', redirects to {select_daily_date}[rdoc-ref:DatesController.select_daily_date]
+  # If date period equals 'daily-charge' redirects to {daily_charge}[rdoc-ref:daily_charge]
+  # If date period equals 'weekly-charge' redirects to {weekly_charge}[rdoc-ref:weekly_charge]
+  # If not equals 'daily-charge' or 'weekly-charge', redirects to {select_daily_date}[rdoc-ref:select_daily_date]
   #
   def determinate_next_page
     if params[:period] == 'daily-charge'
@@ -256,11 +285,19 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
     la_name == 'Leeds' && weekly_possible ? select_period_dates_path : local_authority_charges_path
   end
 
-  # Checks if weekly Leeds discount is possible
+  # Checks if weekly discount is possible
   def check_weekly
     return if vehicle_details('weekly_possible')
 
-    Rails.logger.warn "Current vehicle is not allowed for weekly Leeds discount, vehicle_details in session: #{session[:vehicle_details]}#"
+    Rails.logger.warn('Vehicle is not allowed for weekly discount')
+    redirect_to daily_charge_dates_path
+  end
+
+  # Checks if weekly discount is possible to pay for today
+  def check_weekly_charge_today
+    return if vehicle_details('weekly_charge_today')
+
+    Rails.logger.warn('Vehicle is not allowed to pay weekly discount for today')
     redirect_to daily_charge_dates_path
   end
 
@@ -272,5 +309,10 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # Checks if given time-frame were not paid before. Returns boolean
   def check_already_paid_weekly(dates)
     Dates::CheckPaidWeekly.call(vrn: vrn, zone_id: la_id, date: dates.first)
+  end
+
+  # Fetching +active_charge_start_date+ and assigns it to variable
+  def assign_charge_start_date
+    @charge_start_date = FetchSingleCazData.call(zone_id: la_id)&.active_charge_start_date
   end
 end

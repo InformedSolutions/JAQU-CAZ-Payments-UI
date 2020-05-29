@@ -100,7 +100,7 @@ Feature: Charges
     Given I am on the review weekly payment page
       And I should see "Review your payment"
     Then I press the Change Payment for link
-      And I should be on the pick weekly dates page
+      And I should be on the pick weekly charge period page
 
   Scenario: User wants to paid for already paid date
     Given I am on the dates page with paid charge for today
