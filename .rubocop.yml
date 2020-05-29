@@ -38,7 +38,7 @@ Style/ExponentialNotation:
   Enabled: true
 
 Layout/LineLength:
-  Max: 99
+  Max: 110
   IgnoredPatterns: ['(\A|\s)#']
 
 Metrics/BlockLength:

@@ -5,7 +5,6 @@ require 'rails_helper'
 RSpec.describe 'PaymentsApi.create_payment' do
   subject(:call) do
     PaymentsApi.create_payment(
-      vrn: vrn,
       zone_id: zone_id,
       return_url: return_url,
       transactions: transactions

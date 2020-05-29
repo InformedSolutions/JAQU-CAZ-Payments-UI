@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'DatesController - GET #select_date_weekly', type: :request do
+RSpec.describe 'DatesController - GET #select_weekly_date', type: :request do
   subject(:http_request) { get select_weekly_date_dates_path }
 
   context 'with VRN, COUNTRY, LA, LA NAME and CHARGE in the session' do
@@ -17,6 +17,14 @@ RSpec.describe 'DatesController - GET #select_date_weekly', type: :request do
     it 'returns a success response' do
       http_request
       expect(response).to have_http_status(:success)
+    end
+
+    it 'calls FetchSingleCazData service' do
+      expect(FetchSingleCazData).to have_received(:call)
+    end
+
+    it 'assigns the @d_day_notice' do
+      expect(assigns(:d_day_notice)).to eq(false)
     end
   end
 

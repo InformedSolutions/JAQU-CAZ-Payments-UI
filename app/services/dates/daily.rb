@@ -19,7 +19,7 @@ module Dates
 
     # Build the list of dates and return them, e.g.
     # [{value: "2019-10-11", name: "Friday 11 October 2019", today: false, disabled: false},...]
-    def call
+    def chargeable_dates
       (calculated_start_date..end_date).map { |date| parse(date) }
     end
 
