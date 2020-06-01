@@ -1364,15 +1364,15 @@ steps:
       - PATH=$PATH:../../../../bin/
       - chmod +x ../../../../bin/tf
       - tf init
-      - tf workspace select preprod || tf workspace new prod
+      - tf workspace select prod || tf workspace new prod
       - tf apply -auto-approve
       - cd ../02.backends
       - tf init
-      - tf workspace select preprod || tf workspace new prod
+      - tf workspace select prod || tf workspace new prod
       - tf apply -auto-approve
       - cd ../04.web
       - tf init
-      - tf workspace select preprod || tf workspace new prod
+      - tf workspace select prod || tf workspace new prod
       - tf apply -auto-approve
     environment:
       TF_VAR_secret_key_base:
