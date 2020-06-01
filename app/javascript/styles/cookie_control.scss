@@ -6,3 +6,7 @@ $cc-white: #FFFFFF;
   border-color: $cc-black !important;
   background: $cc-black !important;
 }
+
+#ccc .ccc-content--highlight.ccc-content--dark .ccc-link.ccc-tabbable:focus {
+  color: $cc-white !important;
+}
