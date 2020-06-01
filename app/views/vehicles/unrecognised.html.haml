@@ -1,0 +1,67 @@
+- page_title('Vehicle details could not be found')
+= link_to 'Back', enter_details_vehicles_path + '?back=true', class: 'govuk-back-link', id: 'back-link'
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      - if alert
+        = render 'common/error_summary',
+          error_msg_div: '#unrecognised-vehicle-error',
+          error_msg: I18n.t('confirmation_alert')
+
+      %h1.govuk-heading-xl Vehicle details could not be found
+      %p
+        Try
+        = link_to 'entering your details', enter_details_vehicles_path, class: 'govuk-link'
+        again making sure you have not mixed up letters and numbers (for example, the letters
+        %b I
+        and
+        %b O
+        with the numbers
+        %b 1
+        and
+        %b 0
+        ).
+
+      %h1.govuk-heading-m Check your registration details
+      %p
+        If the details still can not be found and you believe your vehicle should be registered in
+        the UK, you can
+        = external_link_to 'update the details',
+                           'https://www.gov.uk/change-vehicle-details-registration-certificate/how-to-tell-dvla'
+        the DVLA holds for your vehicle.
+
+      %h1.govuk-heading-m You still have to pay the Clean Air Zone charge
+      %p
+        If your vehicle
+        %b does
+        meet Clean Air standards, you can claim a refund when your vehicle details are updated.
+      %p
+        Payment must be made a maximum of 7 days after you have driven in the zone or you may
+        receive a penalty charge notice (PCN).
+      %p
+        Confirm the number plate
+        %b
+          = @vrn
+        is correct.
+
+      = form_tag confirm_unrecognised_vehicles_path, method: :post do
+        .govuk-form-group{class: ('govuk-form-group--error' if alert)}
+          %fieldset.govuk-fieldset
+            %legend.govuk-visually-hidden
+              = I18n.t('confirmation_alert')
+
+            - if alert
+              %span#unrecognised-vehicle-error.govuk-error-message
+                %span.govuk-visually-hidden Error:
+                = I18n.t('confirmation_alert')
+
+            .govuk-checkboxes
+              .govuk-checkboxes__item
+                %input.govuk-checkboxes__input{name: 'confirm-registration',
+                                               type: 'checkbox',
+                                               value: 'yes',
+                                               checked: session.dig(:vehicle_details, 'unrecognised'),
+                                               id: 'confirm-registration'}
+                %label.govuk-label.govuk-checkboxes__label{for: 'confirm-registration'}
+                  I confirm the number plate is correct.
+        = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'

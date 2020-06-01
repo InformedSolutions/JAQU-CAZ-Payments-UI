@@ -8,6 +8,6 @@ Then('I press the Start now button') do
   click_link 'Start now'
 end
 
-Then('I should see {string}') do |string|
-  expect(page).to have_content(string)
+Given('I am on the refunds scenarios page') do
+  visit scenarios_refunds_path
 end

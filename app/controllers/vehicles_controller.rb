@@ -1,8 +1,14 @@
 # frozen_string_literal: true
 
+##
+# Controls the first steps of the payment process regarding user's vehicle data.
+#
 class VehiclesController < ApplicationController
+  # 404 HTTP status from API mean vehicle in not found in DLVA database. Redirects to the proper page.
+  rescue_from BaseApi::Error404Exception, with: :vehicle_not_found
+
   # checks if VRN is present in the session
-  before_action :check_vrn, except: %i[enter_details validate_details]
+  before_action :check_vrn, except: %i[enter_details submit_details]
 
   ##
   # Renders the first step of checking the vehicle compliance.
@@ -13,11 +19,12 @@ class VehiclesController < ApplicationController
   #
   def enter_details
     @errors = {}
+    @return_url = request.referer ? determinate_back_path : root_path
   end
 
   ##
   # Validates submitted VRN. If successful, adds submitted VRN to the session and
-  # redirects to {confirm details}[rdoc-ref:VehiclesController.confirm_details].
+  # redirects to {details}[rdoc-ref:VehiclesController.details].
   #
   # Any invalid params values triggers rendering {enter details}[rdoc-ref:VehiclesController.enter_details]
   # with @errors displayed.
@@ -26,7 +33,7 @@ class VehiclesController < ApplicationController
   #
   # ==== Path
   #
-  #    POST /vehicles/validate_details
+  #    POST /vehicles/submit_details
   #
   # GET method redirects to {enter details}[rdoc-ref:VehiclesController.enter_details]
   #
@@ -37,16 +44,12 @@ class VehiclesController < ApplicationController
   # ==== Validations
   # Validations are done by {VrnForm}[rdoc-ref:VrnForm]
   #
-  def validate_details
-    form = VrnForm.new(params_vrn, country)
-    unless form.valid?
-      @errors = form.error_object
-      log_invalid_form 'Rendering :enter_details.'
-      return render enter_details_vehicles_path
-    end
+  def submit_details
+    form = VrnForm.new(params[:vrn], country)
+    return rerender_enter_details(form) unless form.valid?
 
-    session[:vrn] = params_vrn
-    redirect_to non_uk? ? non_uk_vehicles_path : confirm_details_vehicles_path
+    SessionManipulation::AddVrn.call(session: session, form: form)
+    redirect_to non_uk? ? non_dvla_vehicles_path : details_vehicles_path
   end
 
   ##
@@ -54,13 +57,17 @@ class VehiclesController < ApplicationController
   #
   # ==== Path
   #
-  #    GET /vehicles/confirm_details
+  #    GET /vehicles/details
   #
   # ==== Params
   # * +vrn+ - vehicle registration number, required in the session
   #
-  def confirm_details
-    @vehicle_registration = vrn
+  def details
+    @vehicle_details = VehicleDetails.new(vrn)
+    return redirect_to(exempt_vehicles_path) if @vehicle_details.exempt?
+
+    SessionManipulation::SetLeedsTaxi.call(session: session) if @vehicle_details.leeds_taxi?
+    SessionManipulation::SetType.call(session: session, type: @vehicle_details.type)
   end
 
   ##
@@ -69,7 +76,7 @@ class VehiclesController < ApplicationController
   # If no, redirects to {incorrect details}[rdoc-ref:VehiclesController.incorrect_details]
   #
   # ==== Path
-  #    GET /vehicles/validate_confirm_details
+  #    POST /vehicles/confirm_details
   #
   # ==== Params
   # * +vrn+ - vehicle registration number, required in the session
@@ -77,74 +84,15 @@ class VehiclesController < ApplicationController
   #
   # ==== Validations
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
-  # * +confirm-vehicle+ - lack of it redirects to {confirm details}[rdoc-ref:VehiclesController.incorrect_details]
+  # * +confirm-vehicle+ - lack of it redirects to {incorrect details}[rdoc-ref:VehiclesController.incorrect_details]
   #
-  def validate_confirm_details
+  def confirm_details
     form = ConfirmationForm.new(confirmation)
     unless form.valid?
       log_invalid_form 'Redirecting back.'
-      return redirect_to confirm_details_vehicles_path, alert: form.message
+      return redirect_to details_vehicles_path, alert: form.errors.messages[:confirmation].first
     end
-
-    redirect_to form.confirmed? ? local_authority_vehicles_path : incorrect_details_vehicles_path
-  end
-
-  ##
-  # Renders choose vehicle type page.
-  #
-  # ==== Path
-  #
-  #    GET /vehicles/choose_vehicle
-  #
-  # ==== Params
-  # * +vrn+ - vehicle registration number, required in the session
-  #
-  #   # ==== Validations
-  #   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
-  #
-  def choose_vehicle
-    # renders a static page
-  end
-
-  ##
-  # Verifies if user choose a type of vehicle.
-  # If yes, renders {incorrect details}[rdoc-ref:VehiclesController.local_authority]
-  # If no, redirects to {incorrect details}[rdoc-ref:VehiclesController.vehicle_type]
-  #
-  # ==== Path
-  #    POST /vehicles/validate_vehicle_type
-  #
-  # ==== Params
-  # * +vrn+ - vehicle registration number, required in the session
-  # * +vehicle-type+ - user's type of vehicle
-  #
-  # ==== Validations
-  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
-  # * +vehicle-type+ - lack of it redirects to {confirm details}[rdoc-ref:VehiclesController.vehicle_type]
-  #
-  def validate_vehicle_type
-    if params['vehicle-type'].blank?
-      redirect_to choose_vehicle_vehicles_path, alert: true
-    else
-      redirect_to local_authority_vehicles_path
-    end
-  end
-
-  ##
-  # Renders vehicle type page.
-  #
-  # ==== Path
-  #
-  #    GET /vehicles/vehicle_type
-  #
-  # ==== Params
-  # * +vrn+ - vehicle registration number, required in the session
-  #
-  #   # ==== Validations
-  #   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
-  #
-  def local_authority
-    # renders static page
+    redirect_to process_detail_form(form)
   end
 
   ##
@@ -161,32 +109,34 @@ class VehiclesController < ApplicationController
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
   def incorrect_details
-    # to be defined later
+    # Used to determine the previous step in ChargesController#local_authority
+    SessionManipulation::SetIncorrect.call(session: session)
   end
 
   ##
-  # Renders a page for vehicles that are not registered within the UK.
+  # Renders a static page for users who selected that DVLA data is incorrect.
   #
   # ==== Path
   #
-  #    GET /vehicles/non_uk
+  #    GET /vehicles/unrecognised
   #
   # ==== Params
   # * +vrn+ - vehicle registration number, required in the session
   #
   # ==== Validations
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
-  def non_uk
-    @vehicle_registration = vrn
+  #
+  def unrecognised
+    @vrn = vrn
   end
 
   ##
   # Verifies if user confirms that the registration number is correct.
-  # If yes, renders to {incorrect details}[rdoc-ref:VehiclesController.vehicle_type]
-  # If no, redirects to {incorrect details}[rdoc-ref:VehiclesController.non_uk]
+  # If yes, renders to {choose type}[rdoc-ref:NonDvlaVehiclesController.choose_type]
+  # If no, redirects to {non_dvla_vehicles}[rdoc-ref:VehiclesController.unrecognised]
   #
   # ==== Path
-  #    POST /vehicles/validate_non_uk
+  #    POST /vehicles/confirm_unrecognised
   #
   # ==== Params
   # * +vrn+ - vehicle registration number, required in the session
@@ -194,31 +144,37 @@ class VehiclesController < ApplicationController
   #
   # ==== Validations
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
-  # * +confirm-registration+ - lack of it redirects to {confirm details}[rdoc-ref:VehiclesController.non_uk]
+  # * +confirm-registration+ - lack of it redirects to {non_dvla_vehicles}[rdoc-ref:VehiclesController.unrecognised]
   #
-  def validate_non_uk
-    if registration_not_confirmed?
-      redirect_to non_uk_vehicles_path, alert: true
+  def confirm_unrecognised
+    form = ConfirmationForm.new(params['confirm-registration'])
+    if form.confirmed?
+      SessionManipulation::SetUnrecognised.call(session: session)
+      redirect_to choose_type_non_dvla_vehicles_path
     else
-      redirect_to choose_vehicle_vehicles_path
+      log_invalid_form 'Redirecting back.'
+      redirect_to unrecognised_vehicles_path, alert: true
     end
   end
 
+  ##
+  # Renders a static page for users which VRN is recognised as compliant (no charge in all LAs)
+  #
+  # ==== Path
+  #
+  #    GET /vehicles/compliant
+  #
+  # ==== Params
+  # * +vrn+ - vehicle registration number, required in the session
+  #
+  # ==== Validations
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  #
+  def compliant
+    @return_url = request.referer || root_path
+  end
+
   private
-
-  # Checks if VRN is present in session.
-  # If not, redirects to VehiclesController#enter_details
-  def check_vrn
-    return if vrn
-
-    Rails.logger.warn 'VRN is missing in the session. Redirecting to :enter_details'
-    redirect_to enter_details_vehicles_path
-  end
-
-  # Returns uppercased VRN from the query params, eg. 'CU1234'
-  def params_vrn
-    params[:vrn].upcase
-  end
 
   # Returns user's form confirmation from the query params, values: 'yes', 'no', nil
   def confirmation
@@ -230,20 +186,49 @@ class VehiclesController < ApplicationController
     params['registration-country']
   end
 
-  # Gets VRN from session. Returns string, eg 'CU1234'
-  def vrn
-    session[:vrn]
-  end
-
   # Checks if selected registration country equals Non-UK.
   # Returns boolean.
   def non_uk?
     country == 'Non-UK'
   end
 
-  # Checks if confirm registration not equals 'true'.
-  # Returns boolean.
-  def registration_not_confirmed?
-    params['confirm-registration'] != 'true'
+  # Redirects to {vehicle not found}[rdoc-ref:VehiclesController.unrecognised_vehicle]
+  def vehicle_not_found
+    redirect_to unrecognised_vehicles_path
+  end
+
+  # Renders enter_details page and log errors
+  def rerender_enter_details(form)
+    @errors = form.errors.messages
+    log_invalid_form 'Rendering :enter_details.'
+    render enter_details_vehicles_path
+  end
+
+  # Returns path depends on last request
+  def determinate_back_path
+    last_request = request.referer
+    back = request.query_parameters.include?('back')
+    if !back && back_button_paths.any? { |path| last_request.include?(path) }
+      last_request
+    else
+      root_path
+    end
+  end
+
+  # back button paths on enter details page
+  def back_button_paths
+    [
+      non_dvla_vehicles_path,
+      incorrect_details_vehicles_path,
+      unrecognised_vehicles_path,
+      compliant_vehicles_path,
+      exempt_vehicles_path
+    ]
+  end
+
+  # persists whether or not vehicle details are correct into session and returns correct onward path
+  def process_detail_form(form)
+    SessionManipulation::SetConfirmVehicle.call(session: session, confirm_vehicle: form.confirmed?)
+    form.confirmed? ? local_authority_charges_path : incorrect_details_vehicles_path
   end
 end

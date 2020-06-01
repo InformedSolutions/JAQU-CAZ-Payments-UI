@@ -1,0 +1,15 @@
+{
+  "charges":
+  [
+    {
+      "cleanAirZoneId": "7d0c4240-1618-446b-bde2-2f3458c8a520",
+      "name": "Birmingham",
+      "charge": 15
+    },
+    {
+      "cleanAirZoneId": "7d0c4240-1618-446b-bde2-2f3458c8a521",
+      "name": "Leeds",
+      "charge": 20
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "registration_number": "CAS329",
+  "typeApproval": "M1",
+  "type": "car",
+  "make": "Peugeot",
+  "model": "208",
+  "colour": "grey",
+  "fuelType": "diesel",
+  "taxiOrPhv": false,
+  "exempt": true,
+  "licensingAuthoritiesNames": ["Leeds", "Birmingham"]
+}

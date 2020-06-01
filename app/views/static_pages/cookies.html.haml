@@ -1,0 +1,25 @@
+- title_and_header = 'Cookies'
+- page_title(title_and_header)
+
+= link_to 'Back', @back_button_url, class: 'govuk-back-link'
+
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      %h1.govuk-heading-xl
+        = title_and_header
+      %p
+        A cookie is a small piece of data that’s stored on your computer, tablet, or phone when you
+        visit a website. Most websites need cookies to work properly.
+      %p How cookies are used in this service:
+      %ul.govuk-list-govuk-list--bullet
+        %li
+          %p measure how you use the service so it can be improved
+        %li
+          %p temporarily store the answers you give
+      %p
+        Find out more about
+        = external_link_to('how to manage cookies', 'https://www.aboutcookies.org', id: 'manage-cookies-link')
+      = render 'static_pages/cookies/ga'
+      = render 'static_pages/cookies/session'
+      = render 'static_pages/cookies/cookie_control'

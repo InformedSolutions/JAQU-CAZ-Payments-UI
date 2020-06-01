@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'logstash-logger'
-
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -31,7 +29,11 @@ Rails.application.configure do
     'Cache-Control' => 'public, s-maxage=31536000, max-age=15552000',
     'Expires' => 1.year.from_now.to_formatted_s(:rfc822).to_s,
     'X-Content-Type-Options' => 'nosniff',
-    'X-XSS-Protection' => '1; mode=block'
+    'X-XSS-Protection' => '1; mode=block',
+    'Strict-Transport-Security' => 'max-age=31536000',
+    'Pragma' => 'no-cache',
+    'X-UA-Compatible' => 'IE=Edge',
+    'Access-Control-Allow-Origin' => '*'
   }
 
   # Compress CSS using a preprocessor.
@@ -41,11 +43,33 @@ Rails.application.configure do
   config.assets.compile = false
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  # config.action_controller.asset_host = 'http://assets.example.com'
+  config.action_controller.asset_host = ENV['CLOUDFRONT_ENDPOINT'] if ENV['CLOUDFRONT_ENDPOINT']
 
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
+
+  # https://scotthelme.co.uk/a-new-security-header-feature-policy/
+  features = %w[
+    geolocation midi notifications push sync-xhr microphone camera
+    magnetometer gyroscope speaker vibrate fullscreen payment
+  ]
+  # https://edgeguides.rubyonrails.org/configuring.html#configuring-action-dispatch
+  config.action_dispatch.default_headers = {
+    # default
+    'X-Frame-Options' => 'SAMEORIGIN',
+    'X-XSS-Protection' => '1; mode=block',
+    'X-Content-Type-Options' => 'nosniff',
+    'X-Download-Options' => 'noopen',
+    'X-Permitted-Cross-Domain-Policies' => 'none',
+    'Referrer-Policy' => 'strict-origin-when-cross-origin',
+    # custom
+    'Strict-Transport-Security' => 'max-age=31536000',
+    'Pragma' => 'no-cache',
+    'Cache-Control' => 'public, s-maxage=31536000, max-age=15552000',
+    'Expires' => 1.year.from_now.to_formatted_s(:rfc822).to_s,
+    'Feature-Policy' => features.map { |f| "#{f} 'none'" }.join('; ')
+  }
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   # config.active_storage.service = :local
@@ -57,13 +81,6 @@ Rails.application.configure do
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
-
-  # Use the lowest log level to ensure availability of diagnostic information
-  # when problems arise.
-  config.log_level = :debug
-
-  # Prepend all log lines with the following tags.
-  config.log_tags = %i[request_id remote_ip]
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
@@ -78,6 +95,9 @@ Rails.application.configure do
   # Set this to true and configure the email server for immediate delivery to raise delivery errors
   # config.action_mailer.raise_delivery_errors = false
 
+  # Prepend all log lines with the request id tag.
+  config.log_tags = %i[request_id]
+
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
   config.i18n.fallbacks = true
@@ -85,16 +105,11 @@ Rails.application.configure do
   # Send deprecation notices to registered listeners.
   config.active_support.deprecation = :notify
 
-  # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
-
-  # Use a different logger for distributed setups.
-  # require 'syslog/logger'
-  # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
-
-  logger           = LogStashLogger.new(type: :stdout)
-  logger.formatter = config.log_formatter
-  config.logger    = ActiveSupport::TaggedLogging.new(logger)
+  # Use custom logging formatter so that IP any other PII can be removed.
+  config.log_formatter = CustomLogger.new
+  logger               = ActiveSupport::Logger.new(STDOUT)
+  logger.formatter     = config.log_formatter
+  config.logger        = ActiveSupport::TaggedLogging.new(logger)
 
   # Do not dump schema after migrations.
   # config.active_record.dump_schema_after_migration = false

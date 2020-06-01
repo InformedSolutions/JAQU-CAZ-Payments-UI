@@ -7,6 +7,12 @@
 # files.
 
 require 'cucumber/rails'
+# Allows mocking like in RSpec
+require 'cucumber/rspec/doubles'
+# Allows hijacking session values
+require 'rack_session_access/capybara'
+# Checks if all API calls are stubbed
+require 'webmock/cucumber'
 
 # Capybara defaults to CSS3 selectors rather than XPath.
 # If you'd prefer to use XPath, just uncomment this line and adjust any

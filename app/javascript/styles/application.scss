@@ -1,5 +1,24 @@
 $govuk-global-styles: true;
 $govuk-assets-path: '/packs/media/';
 
-@import "~govuk-frontend/govuk/all";
-@import "related_components";
+@import '~govuk-frontend/govuk/all';
+@import 'related_components';
+@import 'cookie_control';
+
+html {
+  background-color: govuk-colour($colour: 'light-grey');
+}
+
+.govuk-panel--failure {
+  background: $govuk-error-colour;
+  color: govuk-colour($colour: 'white');
+}
+
+.draft-tag {
+  margin-bottom: 30px;
+}
+
+.vrn-input {
+  max-width: 20ex + 3ex;
+  text-transform: uppercase;
+}

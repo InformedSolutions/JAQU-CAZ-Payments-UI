@@ -1,0 +1,35 @@
+- page_title('Which Clean Air Zone do you need to pay for?')
+= link_to 'Back', @return_path, class: 'govuk-back-link', id: 'back-link'
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      - if alert
+        = render 'common/error_summary',
+          error_msg_div: '#local-authority-error',
+          error_msg: 'You must choose one Clean Air Zone'
+
+      = form_tag submit_local_authority_charges_path, method: :post do
+        .govuk-form-group{class: ('govuk-form-group--error' if alert)}
+          %fieldset.govuk-fieldset
+            %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
+              %h1.govuk-fieldset__heading
+                Which Clean Air Zone do you need to pay for?
+            %p
+              You need to pay separately for each Clean Air Zone you drive in.
+            - if @zones.size == 1
+              = render 'charges/one_zone'
+            - if alert
+              %span#local-authority-error.govuk-error-message
+                %span.govuk-visually-hidden Error:
+                = alert
+            .govuk-radios
+              - @zones.each do |zone|
+                .govuk-radios__item
+                  %input.govuk-radios__input{name: 'local-authority',
+                                             type: 'radio',
+                                             value: zone.id,
+                                             id: zone.name.downcase,
+                                             checked: zone.id == session.dig(:vehicle_details, 'la_id')}
+                  %label.govuk-label.govuk-radios__label{for: zone.name.downcase}
+                    = zone.name
+        = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'

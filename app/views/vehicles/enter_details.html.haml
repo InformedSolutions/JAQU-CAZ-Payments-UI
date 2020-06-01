@@ -1,33 +1,37 @@
-- content_for(:title, 'Pay a Clean Air Zone charge')
-= link_to 'Back', root_path, class: 'govuk-back-link'
+- title_and_header = 'Enter the number plate of the vehicle'
+- page_title(title_and_header)
+= link_to 'Back', @return_url, class: 'govuk-back-link', id: 'back-link'
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
-  - if @errors.present?
-    .govuk-error-summary{'aria-labelledby': 'error-summary-title',
-                         'data-module': 'govuk-error-summary',
-                         role: 'alert',
-                         tabindex: '-1'}
-      %h2#error-summary-title.govuk-error-summary__title
-        There is a problem
-      .govuk-error-summary__body
-        %ul.govuk-list.govuk-error-summary__list
-          - @errors.each_value do |error|
-            %li
-              = link_to(error[:message], error[:link])
   .govuk-grid-row
     .govuk-grid-column-two-thirds
+      - if @errors.present?
+        .govuk-error-summary{'aria-labelledby': 'error-summary-title',
+                             'data-module': 'govuk-error-summary',
+                             role: 'alert',
+                             tabindex: '-1'}
+          %h2#error-summary-title.govuk-error-summary__title
+            There is a problem
+          .govuk-error-summary__body
+            %ul.govuk-list.govuk-error-summary__list
+              - @errors.reverse_each do |field, messages|
+                %li
+                  = link_to(messages.first, "##{field}-error")
       %h1.govuk-heading-xl
-        Vehicle registration details
-      = form_tag validate_details_vehicles_path, method: :post do
+        = title_and_header
+      = form_tag enter_details_vehicles_path, method: :post do
         %fieldset.govuk-fieldset
-          %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
-          - if @errors[:vrn]
-            = render 'vehicles/vrn_input/errored', message: @errors[:vrn][:message]
+          %legend.govuk-visually-hidden
+            = title_and_header
+
+          - if @errors[:vrn].present?
+            = render 'vehicles/vrn_input/errored', message: @errors[:vrn].first
           - else
             = render 'vehicles/vrn_input/normal'
 
-          - if @errors[:country]
-            = render 'vehicles/country_input/errored', message: @errors[:country][:message]
+          - if @errors[:country].present?
+            = render 'vehicles/country_input/errored', message: @errors[:country].first
           - else
             = render 'vehicles/country_input/normal'
+
           = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'

@@ -9,10 +9,6 @@ RSpec.describe ConfirmationForm, type: :model do
 
   it { is_expected.to be_valid }
 
-  it 'has confirmation set as parameter' do
-    expect(form.confirmation).to eq(confirmation)
-  end
-
   describe '.confirmed?' do
     context 'when confirmation equals yes' do
       it 'returns true' do
@@ -39,7 +35,9 @@ RSpec.describe ConfirmationForm, type: :model do
     end
 
     it 'has a proper error message' do
-      expect(form.message).to eq('You must choose an answer')
+      expect(form.errors.messages[:confirmation]).to include(
+        'Select yes if the details are correct'
+      )
     end
   end
 end

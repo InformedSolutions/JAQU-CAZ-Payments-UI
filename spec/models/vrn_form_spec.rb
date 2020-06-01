@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe VrnForm, type: :model do
+describe VrnForm, type: :model do
   subject(:form) { described_class.new(vrn, country) }
 
   let(:vrn) { 'CU57ABC' }
@@ -12,7 +12,7 @@ RSpec.describe VrnForm, type: :model do
     it { is_expected.to be_valid }
 
     it 'has an empty hash as error_object' do
-      expect(form.error_object).to eq({})
+      expect(form.errors.messages).to eq({})
     end
   end
 
@@ -22,8 +22,6 @@ RSpec.describe VrnForm, type: :model do
     context 'when country and vrn are nil' do
       let(:country) { nil }
       let(:vrn) { nil }
-
-      it { is_expected.not_to be_valid }
 
       it_behaves_like 'an invalid country input'
       it_behaves_like 'an invalid vrn input', I18n.t('vrn_form.vrn_missing')
@@ -36,15 +34,11 @@ RSpec.describe VrnForm, type: :model do
     context 'when country is nil' do
       let(:country) { nil }
 
-      it { is_expected.not_to be_valid }
-
       it_behaves_like 'an invalid country input'
     end
 
     context 'when country is empty' do
       let(:country) { '' }
-
-      it { is_expected.not_to be_valid }
 
       it_behaves_like 'an invalid country input'
     end
@@ -56,15 +50,11 @@ RSpec.describe VrnForm, type: :model do
     context 'when VRN is empty' do
       let(:vrn) { '' }
 
-      it { is_expected.not_to be_valid }
-
       it_behaves_like 'an invalid vrn input', I18n.t('vrn_form.vrn_missing')
     end
 
     context 'when VRN is too long' do
       let(:vrn) { 'ABCDEFGH' }
-
-      it { is_expected.not_to be_valid }
 
       it_behaves_like 'an invalid vrn input', I18n.t('vrn_form.vrn_too_long')
     end
@@ -72,23 +62,17 @@ RSpec.describe VrnForm, type: :model do
     context 'when VRN is too short' do
       let(:vrn) { 'A' }
 
-      it { is_expected.not_to be_valid }
-
       it_behaves_like 'an invalid vrn input', I18n.t('vrn_form.vrn_too_short')
     end
 
     context 'when VRN has special signs' do
       let(:vrn) { 'ABCDE$%' }
 
-      it { is_expected.not_to be_valid }
-
       it_behaves_like 'an invalid vrn input', I18n.t('vrn_form.vrn_invalid')
     end
 
     context 'when VRN has too many numbers' do
       let(:vrn) { 'C111999' }
-
-      it { is_expected.not_to be_valid }
 
       it_behaves_like 'an invalid vrn input', I18n.t('vrn_form.vrn_invalid')
     end
@@ -98,8 +82,6 @@ RSpec.describe VrnForm, type: :model do
 
       context 'when VRN is empty' do
         let(:vrn) { '' }
-
-        it { is_expected.not_to be_valid }
 
         it_behaves_like 'an invalid vrn input', I18n.t('vrn_form.vrn_missing')
       end
@@ -119,7 +101,7 @@ RSpec.describe VrnForm, type: :model do
       context 'when VRN has special signs' do
         let(:vrn) { 'ABCDE$%' }
 
-        it { is_expected.to be_valid }
+        it_behaves_like 'an invalid vrn input', I18n.t('vrn_form.vrn_invalid')
       end
 
       context 'when VRN has too many numbers' do

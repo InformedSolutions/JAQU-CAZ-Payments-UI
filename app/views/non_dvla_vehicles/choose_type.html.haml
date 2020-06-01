@@ -1,0 +1,30 @@
+- page_title('What is your vehicle?')
+= link_to 'Back', @return_path, class: 'govuk-back-link', id: 'back-link'
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      - if alert
+        = render 'common/error_summary',
+          error_msg_div: '#choose-type-error',
+          error_msg: 'Tell us what type of vehicle you want to pay for'
+
+      = form_tag submit_type_non_dvla_vehicles_path, method: :post do
+        .govuk-form-group{class: ('govuk-form-group--error' if alert)}
+          %fieldset.govuk-fieldset
+            %legend.govuk-fieldset__legend.govuk-fieldset__legend--l
+              %h1.govuk-fieldset__heading
+                What is your vehicle?
+            %p
+              As we don't hold data for your vehicle, you need to tell us what type it is.
+            - if alert
+              %span#choose-type-error.govuk-error-message
+                %span.govuk-visually-hidden Error:
+                Tell us what type of vehicle you want to pay for
+            .govuk-radios
+              - @types.each_with_index do |type, index|
+                - id = "vehicle-type-#{index}"
+                .govuk-radios__item
+                  %input.govuk-radios__input{name: 'vehicle-type', id: id, type: 'radio', checked: (session.dig(:vehicle_details, 'type') == type[:value]), value: type[:value]}
+                  %label.govuk-label.govuk-radios__label{for: id}
+                    = type[:name]
+        = submit_tag 'Confirm', class: 'govuk-button', 'data-module': 'govuk-button'

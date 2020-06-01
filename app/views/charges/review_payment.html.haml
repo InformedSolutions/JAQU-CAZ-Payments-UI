@@ -1,0 +1,53 @@
+- title_and_header = 'Review your payment'
+- page_title(title_and_header)
+= link_to 'Back', @return_path, class: 'govuk-back-link', id: 'back-link'
+
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      %h1.govuk-heading-l
+        =title_and_header
+      = form_tag payments_path, method: :post do
+        %table.govuk-table
+          %thead.govuk-table__head
+            %tr.govuk-table__row
+              %th.govuk-table__header.table-without-border{colspan: 3, id: 'table-header'}
+                Payment details
+          %tbody.govuk-table__body
+            %tr.govuk-table__row
+              %td.govuk-table__cell
+                Registration number
+              %td.govuk-table__header{scope: 'row', id: 'vrn'}
+                = @vrn
+              %td.govuk-table__cell
+                = link_to enter_details_vehicles_path, class: 'govuk-link', id: 'change-vrn' do
+                  Change
+                  %span.govuk-visually-hidden registration number
+            %tr.govuk-table__row
+              %td.govuk-table__cell Clean Air Zone
+              %td.govuk-table__header{scope: 'row', id: 'la-name'}
+                = @la_name
+              %td.govuk-table__cell
+                - if @chargeable_zones > 1
+                  = link_to local_authority_charges_path, class: 'govuk-link', id: 'change-la' do
+                    Change
+                    %span.govuk-visually-hidden Clean Air Zone
+            %tr.govuk-table__row
+              %td.govuk-table__cell Payment for
+              %td.govuk-table__header{scope: 'row', id: 'dates'}
+                - parse_dates(@dates).each do |date|
+                  - unless date.eql? parse_dates(@dates).last
+                    = date + ','
+                    %br
+                  - else
+                    = date
+              %td.govuk-table__cell
+                = link_to determinate_payment_for_path(@weekly_period), class: 'govuk-link', id: 'change-dates' do
+                  Change
+                  %span.govuk-visually-hidden payment for
+            %tr.govuk-table__row
+              %td.govuk-table__cell Total charge
+              %td.govuk-table__header{scope: 'row', id: 'total-charge'}
+                = parse_charge(@total_charge)
+              %td.govuk-table__cell
+        = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'

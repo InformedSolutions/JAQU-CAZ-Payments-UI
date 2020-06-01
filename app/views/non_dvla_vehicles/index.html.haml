@@ -1,0 +1,59 @@
+- page_title('Your vehicle is registered outside the UK')
+= link_to 'Back', enter_details_vehicles_path + '?back=true', class: 'govuk-back-link', id: 'back-link'
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      - if alert
+        = render 'common/error_summary',
+          error_msg_div: '#confirmation-error',
+          error_msg: I18n.t('confirmation_alert')
+
+      %h1.govuk-heading-xl Your vehicle is registered outside the UK
+      %p
+        We only hold data on UK-registered vehicles.
+      %p
+        If your vehicle does not meet emissions standards you will need to pay a charge.
+      %p
+        You can find out
+        if your vehicle will be charged in the zone you want to drive in
+        by checking the emission standards
+        against your vehicle registration information.
+      %p
+        Payment must be made a maximum of 7 days after you have driven in the zone
+        or you may receive a penalty charge notice (PCN).
+
+      %p
+        Confirm the number plate
+        %b
+          = @vehicle_registration
+        is correct.
+      %p
+        = form_tag confirm_registration_non_dvla_vehicles_path, method: :post do
+          .govuk-form-group{class: ('govuk-form-group--error' if alert)}
+            %fieldset.govuk-fieldset
+              %legend.govuk-visually-hidden
+                = I18n.t('confirmation_alert')
+
+              - if alert
+                %span#confirmation-error.govuk-error-message
+                  %span.govuk-visually-hidden Error:
+                  = I18n.t('confirmation_alert')
+              .govuk-checkboxes
+                .govuk-checkboxes__item
+                  %input.govuk-checkboxes__input{name: 'confirm-registration',
+                                                 type: 'checkbox',
+                                                 value: 'yes',
+                                                 checked: session.dig(:vehicle_details, 'confirm_registration'),
+                                                 id: 'confirm-registration'}
+                  %label.govuk-label.govuk-checkboxes__label{for: 'confirm-registration'}
+                    I confirm the number plate is correct.
+          = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
+
+    .govuk-grid-column-one-third
+      %aside#related-items-label.app-related-items{role: 'complementary'}
+        %h2.govuk-heading-m
+          Related tasks
+        %nav{'aria-labelledby': 'related-items-label', role: 'navigation'}
+          %ul.govuk-list{class: 'govuk-!-font-size-16'}
+            %li
+              = link_to 'Check another vehicle', enter_details_vehicles_path, id: 'check-another-vrn'

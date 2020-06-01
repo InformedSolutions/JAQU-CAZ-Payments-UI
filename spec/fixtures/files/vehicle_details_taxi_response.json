@@ -1,0 +1,11 @@
+{
+  "registration_number": "CU57ABC",
+  "typeApproval": "M1",
+  "type": "car",
+  "make": "Peugeot",
+  "model": "208",
+  "colour": "grey",
+  "fuelType": "diesel",
+  "taxiOrPhv": true,
+  "licensingAuthoritiesNames": ["Leeds", "Birmingham"]
+}

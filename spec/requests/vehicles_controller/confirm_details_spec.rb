@@ -2,16 +2,37 @@
 
 require 'rails_helper'
 
-RSpec.describe 'VehiclesController - GET #confirm_details', type: :request do
-  subject(:http_request) { get confirm_details_vehicles_path }
+RSpec.describe 'VehicleCheckersController - POST #confirm_details', type: :request do
+  subject(:http_request) do
+    post confirm_details_vehicles_path, params: { 'confirm-vehicle' => confirmation }
+  end
 
-  before { add_vrn_to_session }
+  let(:confirmation) { 'yes' }
 
   before do
+    add_vrn_to_session
     http_request
   end
 
-  it 'returns a success response' do
-    expect(response).to have_http_status(:success)
+  context 'when user confirms details' do
+    it 'redirects to select LA page' do
+      expect(response).to redirect_to(local_authority_charges_path)
+    end
+  end
+
+  context 'when user does not confirm details' do
+    let(:confirmation) { 'no' }
+
+    it 'redirects to incorrect details page' do
+      expect(response).to redirect_to(incorrect_details_vehicles_path)
+    end
+  end
+
+  context 'when confirmation is empty' do
+    let(:confirmation) { '' }
+
+    it 'redirects to confirm details page' do
+      expect(response).to redirect_to(details_vehicles_path)
+    end
   end
 end

@@ -1,0 +1,61 @@
+= link_to 'Back', @return_path, class: 'govuk-back-link', id: 'back-link'
+
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      - if alert
+        = render 'common/error_summary',
+          error_msg_div: '#confirmation-error',
+          error_msg: 'Confirm you have checked if you are eligible for an exemption'
+
+      %h1.govuk-heading-l
+        Pay a weekly
+        = @compliance_details.zone_name
+        Clean Air Zone charge
+      %p
+        The weekly charge for your vehicle is:
+      %h2.govuk-heading-m
+        = parse_charge(@weekly_charge)
+      %p
+        You only need to pay the charge once for the 7 days.
+      .govuk-warning-text
+        %span.govuk-warning-text__icon{'aria-hidden': true } !
+        %strong.govuk-warning-text__text
+          %span.govuk-warning-text__assistive
+            Warning
+          You have up to 7 days to pay the charge after your last day driving in the zone, or you
+          may pay a penalty charge notice (PCN).
+
+      = form_tag confirm_weekly_charge_dates_path, method: :post do
+        .govuk-form-group{class: ('govuk-form-group--error' if alert)}
+          %fieldset.govuk-fieldset
+            %legend.govuk-visually-hidden
+              Confirm weekly charge
+
+            - if alert
+              %span#confirmation-error.govuk-error-message
+                %span.govuk-visually-hidden Error:
+                Confirm you have checked if you are eligible for an exemption
+            .govuk-checkboxes
+              .govuk-checkboxes__item
+                %input.govuk-checkboxes__input{name: 'confirm-exempt',
+                                               type: 'checkbox',
+                                               value: 'yes',
+                                               checked: session.dig(:vehicle_details, 'confirm_exempt'),
+                                               id: 'confirm-exempt'}
+                %label.govuk-label.govuk-checkboxes__label{for: 'confirm-exempt'}
+                  I confirm that I am not exempt from paying the
+                  = @compliance_details.zone_name
+                  Clean Air Zone charge.
+                  (Find out who is exempt from
+                  = succeed ').' do
+                    = external_link_to("paying the charge in #{@compliance_details.zone_name}",
+                                       @compliance_details.exemption_or_discount_url ,
+                                       id: 'exemption-link')
+        = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
+
+        %p
+          Contact the local authority for support to upgrade or replace your vehicle in
+          = external_link_to(@compliance_details.zone_name,
+                   @compliance_details.dynamic_compliance_url,
+                   id: 'support-link')

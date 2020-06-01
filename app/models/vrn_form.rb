@@ -2,13 +2,30 @@
 
 ##
 # This class is used to validate user data filled in +app/views/vehicles/enter_details.html.haml+.
+#
 class VrnForm
-  # Submitted vehicle registration number
-  attr_reader :vrn
-  # Selected country value, possible values: 'UK', 'Non-UK'
-  attr_reader :country
-  # Hash containing validation errors
-  attr_reader :error_object
+  include ActiveModel::Validations
+
+  # VRN and country getters
+  attr_reader :vrn, :country
+
+  # Checks if country is selected and UK or Non-UK
+  validates :country, inclusion: {
+    in: %w[UK Non-UK], message: I18n.t('vrn_form.country_missing')
+  }
+
+  # Check if VRN is present
+  validates :vrn, presence: { message: I18n.t('vrn_form.vrn_missing') }
+  # Checks if VRN has valid length when vehicle is registered in the UK
+  validates :vrn, length: {
+    minimum: 2, too_short: I18n.t('vrn_form.vrn_too_short'),
+    maximum: 7, too_long: I18n.t('vrn_form.vrn_too_long')
+  }, if: -> { uk? }
+  # Checks if VRN is in valid format when vehicle is registered in the UK
+  validate :vrn_uk_format, if: -> { uk? }
+
+  # Checks if VRN contains only alphanumerics when vehicle is not registered in the UK
+  validate :vrn_non_uk_format, unless: -> { uk? }
 
   ##
   # Initializer method
@@ -17,105 +34,41 @@ class VrnForm
   #
   # * +vrn+ - string, eg. 'CU57ABC'
   # * +country+ - string, eg. 'UK'
-  # * +error_object+ - empty hash, default error object
-  def initialize(vrn, country)
-    @vrn = vrn
-    @country = country
-    @error_object = {}
-  end
-
-  ##
-  # Validate user data.
   #
-  # Returns a boolean.
-  def valid?
-    if country == 'Non-UK'
-      filled_vrn?
-    else
-      filled_vrn? && not_to_long? && not_to_short? && valid_format?
-    end
-    filled_country?
-    error_object.empty?
+  def initialize(vrn, country)
+    @vrn = vrn&.delete(' ')&.upcase
+    @country = country
   end
 
   private
 
-  # Checks if at least one +vrn+ was selected.
-  # If not, add error message to +error_object+.
-  #
-  # Returns a boolean.
-  def filled_vrn?
-    return true if vrn.present?
-
-    vrn_error(I18n.t('vrn_form.vrn_missing'))
-    false
+  # Checks if selected country in UK. Returns boolean.
+  def uk?
+    country == 'UK'
   end
 
-  # Checks if at least one +country+ was selected.
-  # If not, add error message to +error_object+.
-  #
-  # Returns a boolean.
-  def filled_country?
-    return true if country.present?
-
-    @error_object[:country] = {
-      message: I18n.t('vrn_form.country_missing'),
-      link: '#country-error'
-    }
-    false
-  end
-
-  # Checks if +vrn+ format is valid.
-  # If not, add error message to +error_object+.
-  #
-  # Returns a boolean.
-  def valid_format?
-    return true if FORMAT_REGEXPS.any? do |reg|
-      reg.match(vrn.gsub(/\s+/, '').upcase).present?
+  # Checks if VRN matches any possible VRN format
+  def vrn_uk_format
+    return if FORMAT_REGEXPS.any? do |reg|
+      reg.match(vrn).present?
     end
 
-    vrn_error(I18n.t('vrn_form.vrn_invalid'))
-    false
+    add_format_error
   end
 
-  # Checks if +vrn+ not to long.
-  # If not, add error message to +error_object+.
-  #
-  # Returns a boolean.
-  def not_to_long?
-    return true if vrn.gsub(/\s+/, '').length <= 7
+  # Checks if VRN contains only alphanumerics
+  def vrn_non_uk_format
+    return if /^[A-Za-z0-9]+$/.match(vrn).present?
 
-    vrn_error(I18n.t('vrn_form.vrn_too_long'))
-    false
+    add_format_error
   end
 
-  # Checks if +vrn+ not to short.
-  #
-  # If not, add error message to +error_object+.
-  #
-  # Returns a boolean.
-  def not_to_short?
-    return true if vrn.gsub(/\s+/, '').length > 1
-
-    vrn_error(I18n.t('vrn_form.vrn_too_short'))
-    false
-  end
-
-  # Add error message to +error_object+.
-  #
-  # ==== Attributes
-  #
-  # * +msg+ - string, eg. 'Enter the registration number of the vehicle'
-
-  # ==== Result
-  #
-  # Returns +error_object+ as hash.
-  def vrn_error(msg)
-    @error_object[:vrn] = { message: msg, link: '#vrn-error' }
+  # Adds format error
+  def add_format_error
+    errors.add(:vrn, I18n.t('vrn_form.vrn_invalid'))
   end
 
   # Regexps formats to validate +vrn+.
-  #
   FORMAT_REGEXPS = [
     /^[A-Z]{3}[0-9]{3}$/, # AAA999
     /^[A-Z][0-9]{3}[A-Z]{3}$/, # A999AAA

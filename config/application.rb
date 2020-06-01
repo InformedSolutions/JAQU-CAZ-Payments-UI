@@ -1,13 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'boot'
-
 require 'rails/all'
-# Pick the frameworks you want:
-require 'active_model/railtie'
-require 'action_controller/railtie'
-require 'action_view/railtie'
-require 'sprockets/railtie'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -18,12 +12,22 @@ module CitizensChargePayment
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0
 
-    feedback_url_default = 'https://www.example.com'
-    config.x.feedback_url = ENV.fetch('FEEDBACK_URL', feedback_url_default)
+    # Load lib folder files
+    config.eager_load_paths << Rails.root.join('lib')
+
+    default_url = 'https://www.example.com'
+    config.x.feedback_url = ENV.fetch('FEEDBACK_URL', default_url)
 
     config.x.service_name = 'Pay a Clean Air Zone charge'
 
-    check_air_standard_url = 'https://www.example.com'
-    config.x.check_air_standard_url = ENV.fetch('CHECK_AIR_STANDARD_URL', check_air_standard_url)
+    config.x.check_air_standard_url = ENV.fetch('COMPLIANCE_CHECKER_UI_URL', default_url)
+    fleets_ui_url = ENV.fetch('FLEETS_UI_URL', default_url)
+    config.x.fleets_ui_url = fleets_ui_url
+    config.x.fleets_ui_accounts_url = "#{fleets_ui_url}/organisations"
+
+    # https://mattbrictson.com/dynamic-rails-error-pages
+    config.exceptions_app = routes
+
+    config.time_zone = 'London'
   end
 end

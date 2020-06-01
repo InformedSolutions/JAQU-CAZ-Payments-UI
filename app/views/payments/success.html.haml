@@ -1,0 +1,79 @@
+- page_title('Payment complete')
+
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      .govuk-panel.govuk-panel--confirmation
+        %h1.govuk-panel__title
+          Payment complete
+        .govuk-panel__body
+          Payment reference
+          %br
+            %strong
+              = @payment_details.reference
+          %br
+          Payment ID
+          %br
+            %strong
+              = @payment_details.external_id
+      %p
+        A receipt will be sent to
+        = succeed '.' do
+          = @payment_details.user_email
+      %p You can use the payment reference above as proof of payment.
+      %h2.govuk-heading-m You have paid for:
+      %table.govuk-table
+        %thead.govuk-table__head
+          %tr.govuk-table__row
+            %th.govuk-table__header.table-without-border{colspan: 2, id: 'table-header'}
+              Payment details
+        %tbody.govuk-table__body
+          %tr.govuk-table__row
+            %td.govuk-table__cell{scope: 'row'} Registration number (number plate)
+            %td.govuk-table__header{id: 'vrn'}= @payment_details.vrn
+          %tr.govuk-table__row
+            %td.govuk-table__cell{scope: 'row'} Clean Air Zone
+            %td.govuk-table__header{id: 'la-name'}= @payment_details.la_name
+          %tr.govuk-table__row
+            %td.govuk-table__cell{scope: 'row'} Payment for
+            %td.govuk-table__header{id: 'dates'}
+              - parse_dates(@payment_details.dates).each do |date|
+                - unless date.eql? parse_dates(@payment_details.dates).last
+                  = date + ','
+                  %br
+                - else
+                  = date
+          %tr.govuk-table__row
+            %td.govuk-table__cell{scope: 'row'} Total charge
+            %td.govuk-table__header{id: 'total-charge'}= parse_charge(@payment_details.total_charge)
+      %p
+        You may be able to claim a refund in certain circumstances.
+        Contact the local authority in the area you're driving in to find out more.
+      %h2.govuk-heading-m
+        Alternatives to paying the charge
+      %ul.govuk-list.govuk-list--bullet
+        %li
+          Contact the local authority for support to upgrade or replace your vehicle in
+          = external_link_to @payment_details.la_name,
+                             @payment_details.compliance_details.dynamic_compliance_url,
+                             id: 'become-compliant-url'
+        %li
+          = external_link_to "Explore cycling and public transport options in #{@payment_details.la_name}",
+                             @payment_details.compliance_details.public_transport_options_url,
+                             id: 'public-transport-options-url'
+      = render 'common/print_link'
+
+
+    .govuk-grid-column-one-third
+      %h2.govuk-heading-m
+        Other tasks
+      %ul.govuk-list.govuk-list--bullet
+        - if @payment_details.chargeable_zones_count > 1
+          %li
+            = link_to 'Pay for another Clean Air Zone',
+              local_authority_charges_path,
+              id: 'check-another-caz'
+        %li
+          = link_to 'Pay for another vehicle',
+            enter_details_vehicles_path,
+            id: 'pay-another-vehicle'

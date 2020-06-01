@@ -1,0 +1,15 @@
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      %h1.govuk-heading-l There is no charge for this vehicle
+      %p
+        You do not have to pay to drive this vehicle in any existing Clean Air Zone but this may
+        change as more zones are implemented.
+      %p
+        Birmingham and Leeds are currently the only Clean Air Zones.
+      %p
+        You can always use the
+        = external_link_to('Vehicle Checker', Rails.configuration.x.check_air_standard_url)
+        service to find out if you need to pay in any Clean Air Zone.
+      %p
+        = link_to 'Pay for another vehicle', enter_details_vehicles_path, class: 'govuk-link'

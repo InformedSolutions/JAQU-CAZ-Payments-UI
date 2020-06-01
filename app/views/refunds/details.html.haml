@@ -1,0 +1,16 @@
+= link_to 'Back', scenarios_refunds_path, class: 'govuk-back-link', id: 'back-link'
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      %h1.govuk-heading-l Claim a refund
+      %p
+        Call the Clean Air Zone you entered to claim your refund
+        %ul.govuk-list-govuk-list--bullet
+          %li
+            %p
+              Birmingham: 0123456789
+          %li
+            %p
+              Leeds: 0987654321
+      %p
+        = link_to 'Return to start page', root_path, class: 'govuk-link'

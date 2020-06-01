@@ -1,0 +1,30 @@
+- page_title('Payment unsuccessful')
+
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      %h1.govuk-heading-xl
+        Payment unsuccessful
+      %p
+        Payment reference:
+        = @payment_details.reference
+        %br
+        Payment ID:
+        = @payment_details.external_id
+      %p
+        You may need these reference numbers if you contact us or your bank about this payment.
+      %p
+        The charge for your journey is not paid. You may receive a penalty charge notice (PCN) if payment is not made within 7 days from driving in the zone.
+      %p
+        If you would like to try the payment again
+        = succeed "." do
+          = link_to 'return to the start page', root_path
+      = render 'common/print_link'
+      %h2.govuk-heading-m
+        Contact us
+      %p
+        0300 457 8915.
+        %br
+        Monday to Friday 08:00 to 19:00. Saturday 08:00 to 14:00.
+        %br
+        Standard rates apply.

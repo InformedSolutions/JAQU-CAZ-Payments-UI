@@ -1,0 +1,34 @@
+= link_to 'Back', root_path, class: 'govuk-back-link', id: 'back-link'
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      %h1.govuk-heading-l Can I claim a refund?
+      %p
+        You can claim a refund:
+        %ul.govuk-list-govuk-list--bullet
+          %li
+            %p
+              if you paid in advance but now need to cancel one or more days (you'll need to apply
+              for this refund by midnight before the first day you paid for)
+          %li
+            %p
+              if you have paid for a vehicle that meets clean air standards
+          %li
+            %p
+              if you have paid for a vehicle that is exempt (you must have registered your exempt
+              vehicle with the local authority or you won't be able to claim a refund)
+          %li
+            %p
+              if you had to pay because the DVLA's records for your vehicle were incorrect
+      %p
+        You can't claim a refund:
+        %ul.govuk-list-govuk-list--bullet
+          %li
+            %p if you paid for a day but didn't drive in the zone on that day
+          %li
+            %p if the day you want to claim a refund for has already started
+      %p
+        If you need to claim a refund, click continue
+      = link_to('Continue', details_refunds_path, class: 'govuk-button', 'data-module': 'govuk-button')
+      %p
+        = link_to 'Return to start page', root_path, class: 'govuk-link'
