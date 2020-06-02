@@ -13,16 +13,3 @@
  *= require_tree .
  *= require_self
  */
-
-#ccc .checkbox-toggle-input:focus~.checkbox-toggle-toggle {
-    -webkit-filter: none !important;
-    filter: none !important;
-    background-color: #fd0 !important;
-}
-  
-#ccc-dismiss-button:focus {
-    -webkit-filter:none !important;
-    filter:none !important;
-    border-color: #fd0 !important;
-    box-shadow: none !important;
-} 
