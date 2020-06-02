@@ -1,15 +1,19 @@
-- page_title('Which days do you want to pay for?')
+- title_and_header = 'Which days do you want to pay for?'
+- page_title(title_and_header)
+
 = link_to 'Back', daily_charge_dates_path, class: 'govuk-back-link', id: 'back-link'
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
     .govuk-grid-column-two-thirds
+
       - if alert
         = render 'common/error_summary',
           error_msg_div: '#select-daily-date-error',
           error_msg: alert
 
-      %h1.govuk-heading-l Which days do you want to pay for?
+      %h1.govuk-heading-l
+        = title_and_header
       %p
         A daily charge period runs from midnight to midnight.
 

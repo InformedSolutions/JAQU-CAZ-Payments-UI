@@ -11,9 +11,22 @@ module SessionManipulation
     # Level used to clearing keys in the session
     LEVEL = 10
 
-    # Sets +weekly_charge_today+ to true in the session. Used by the class level method +.call+
+    # Initializer function
+    #
+    # ==== Attributes
+    # * +session+ - the user's session
+    # * +weekly_charge_today+ - boolean, user can starting paid for a week from today
+    # * +today+ - array, today date e.g. ["2020-06-02"]
+    #
+    def initialize(session:, weekly_charge_today:, today: nil)
+      @session = session
+      @weekly_charge_today = weekly_charge_today
+      @today = today
+    end
+
+    # Sets +weekly_dates+ and +weekly_charge_today+ to the session
     def call
-      add_fields(weekly_charge_today: true)
+      add_fields(weekly_dates: @today, weekly_charge_today: @weekly_charge_today)
     end
   end
 end

@@ -11,7 +11,7 @@ module SessionManipulation
   #
   class CalculateTotalCharge < BaseManipulator
     # Level used to clearing keys in the session
-    LEVEL = 10
+    LEVEL = 12
 
     # Initializer function. Used by the class level method +.call+
     #
@@ -20,7 +20,7 @@ module SessionManipulation
     # * +dates+ - array of strings, selected dates in the proper format, eg. ['2019-11-01', '2019-11-03']
     # * +weekly+ - boolean, determines if Leeds weekly discount is used
     #
-    def initialize(session:, dates:, weekly: false)
+    def initialize(session:, dates: session[SESSION_KEY]['weekly_dates'], weekly: false)
       @session = session
       @dates = dates
       @weekly = weekly

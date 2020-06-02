@@ -25,9 +25,13 @@ module Dates
 
     # Checks if a week starting from today can be paid
     def pay_week_starts_today?
-      return false if charge_start_date > today.strftime(VALUE_DATE_FORMAT)
+      return false if charge_start_date > today_date
 
-      paid_dates.exclude?(today.strftime(VALUE_DATE_FORMAT))
+      paid_dates.exclude?(today_date)
+    end
+
+    def today_date
+      today.strftime(VALUE_DATE_FORMAT)
     end
 
     private

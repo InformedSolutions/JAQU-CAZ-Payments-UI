@@ -26,15 +26,10 @@ module SessionHelper
     page.set_rack_session(vehicle_details: details)
   end
 
-  def add_weekly_vehicle_details_to_session(weekly_charge_today: false)
+  def add_weekly_vehicle_details_to_session(weekly_charge_today: false, weekly_dates: [])
     details = {
       **compliance_details,
-      dates: (Date.current..(Date.current + 6.days)).map(&:to_s),
-      total_charge: 50,
-      weekly_possible: true,
-      weekly_charge_today: weekly_charge_today,
-      weekly: true,
-      chargeable_zones: 2
+      **weekly_charge_details(weekly_charge_today, weekly_dates)
     }
 
     page.set_rack_session(vehicle_details: details)
@@ -56,6 +51,18 @@ module SessionHelper
 
   def compliance_details
     { vrn: vrn, country: 'UK', la_id: random_la_uuid, la_name: 'Leeds', daily_charge: 9 }
+  end
+
+  def weekly_charge_details(weekly_charge_today, weekly_dates)
+    {
+      dates: (Date.current..(Date.current + 6.days)).map(&:to_s),
+      total_charge: 50,
+      weekly_possible: true,
+      weekly_charge_today: weekly_charge_today,
+      weekly_dates: weekly_dates,
+      weekly: true,
+      chargeable_zones: 2
+    }
   end
 end
 

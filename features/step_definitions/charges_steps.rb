@@ -91,7 +91,14 @@ Then('I am on the review payment page') do
 end
 
 Then('I am on the review weekly payment page') do
-  add_weekly_vehicle_details_to_session(weekly_charge_today: true)
+  add_weekly_vehicle_details_to_session(weekly_charge_today: false)
+  mock_payment_creation
+
+  visit review_payment_charges_path
+end
+
+Then('I am on the review weekly payment page when a week charge starting from today') do
+  add_weekly_vehicle_details_to_session(weekly_charge_today: true, weekly_dates: [today_formatted])
   mock_payment_creation
 
   visit review_payment_charges_path

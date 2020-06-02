@@ -20,21 +20,19 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # Renders a select period page.
   #
   # ==== Path
-  #    GET /charges/select_period
+  #    GET /dates/select_period
   #
   # ==== Validations
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   # * +la_id+ - lack of LA redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
   #
-  def select_period
-    # renders static page
-  end
+  def select_period; end
 
   ##
   # Validates if user selects at least one period.
   #
   # ==== Path
-  #    POST /charges/confirm_select_period
+  #    POST /dates/confirm_select_period
   #
   # ==== Params
   # * +period+ - selected period
@@ -57,7 +55,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # Renders the charge value for a given LA and type of vehicle.
   #
   # ==== Path
-  #    GET /charges/daily_charge
+  #    GET /dates/daily_charge
   #
   # ==== Validations
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
@@ -73,7 +71,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # If yes, redirects to the {next step}[rdoc-ref:select_daily_date]
   #
   # ==== Path
-  #    POST /charges/confirm_daily_charge
+  #    POST /dates/confirm_daily_charge
   #
   # ==== Params
   # * +confirm-exempt+ - user confirmation of not being exempt, required in params
@@ -100,7 +98,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # Renders the list of dates to pick. Already paid dates are marked as disabled.
   #
   # ==== Path
-  #    GET /charges/select_daily_date
+  #    GET /dates/select_daily_date
   #
   # ==== Validations
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
@@ -147,7 +145,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # Renders the weekly charge value for a given LA and type of vehicle.
   #
   # ==== Path
-  #    GET /charges/weekly_charge
+  #    GET /dates/weekly_charge
   #
   # ==== Validations
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
@@ -164,7 +162,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # If yes, redirects to the {next step}[rdoc-ref:select_daily_date]
   #
   # ==== Path
-  #    POST /charges/confirm_daily_charge
+  #    POST /dates/confirm_daily_charge
   #
   # ==== Params
   # * +confirm-exempt+ - user confirmation of not being exempt, required in params
@@ -201,8 +199,8 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   #
   def select_weekly_date
     service = Dates::Weekly.new(vrn: vrn, zone_id: la_id, charge_start_date: @charge_start_date)
-    if service.pay_week_starts_today?
-      SessionManipulation::SetWeeklyChargeToday.call(session: session)
+    if service.pay_week_starts_today? && vehicle_details('weekly_charge_today') != false
+      add_weekly_charge_today_to_session(service.today_date)
       return redirect_to select_weekly_period_dates_path
     end
 
@@ -215,7 +213,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # Validates if user selects at least one date and there was no payment for any date in the given time-frame.
   #
   # ==== Path
-  #    POST /charges/confirm_date_weekly
+  #    POST /dates/confirm_date_weekly
   #
   # ==== Params
   # * +dates+ - selected dates
@@ -245,10 +243,12 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   #    GET /dates/select_weekly_period
   #
   # ==== Validations
-  # * +weekly_charge_today+ - lack of true value in the session redirects to {weekly_charge}[rdoc-ref:weekly_charge]
+  # * +weekly_charge_today+ and +weekly_dates+ - lack of values in the session redirects to {weekly_charge}[rdoc-ref:weekly_charge]
   #
   def select_weekly_period
-    redirect_to weekly_charge_dates_path unless vehicle_details('weekly_charge_today')
+    unless vehicle_details('weekly_charge_today') && vehicle_details('weekly_dates')
+      redirect_to weekly_charge_dates_path
+    end
   end
 
   ##
@@ -257,7 +257,14 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # ==== Path
   #    POST /dates/select_weekly_date
   #
-  def confirm_select_weekly_period; end
+  def confirm_select_weekly_period
+    if params[:confirm_weekly_charge_today]
+      determinate_next_weekly_page
+    else
+      flash.now[:alert] = true
+      render :select_weekly_period
+    end
+  end
 
   private
 
@@ -314,5 +321,36 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # Fetching +active_charge_start_date+ and assigns it to variable
   def assign_charge_start_date
     @charge_start_date = FetchSingleCazData.call(zone_id: la_id)&.active_charge_start_date
+  end
+
+  # Sets +weekly_dates+ and +weekly_charge_today+ to the session
+  def add_weekly_charge_today_to_session(today_date)
+    SessionManipulation::SetWeeklyChargeToday.call(
+      session: session,
+      weekly_charge_today: true,
+      today: [today_date]
+    )
+  end
+
+  # Verifies which weekly charge period was selected, adding calculated the total charge for the payment
+  # based on selected period or adding +weekly_charge_today+ to the session and redirects to the proper page
+  #
+  def determinate_next_weekly_page
+    add_confirm_charge_today_to_session
+    if params[:confirm_weekly_charge_today] == 'true'
+      SessionManipulation::CalculateTotalCharge.call(session: session, weekly: true)
+      redirect_to review_payment_charges_path
+    else
+      SessionManipulation::SetWeeklyChargeToday.call(session: session, weekly_charge_today: false)
+      redirect_to select_weekly_date_dates_path
+    end
+  end
+
+  # Sets +confirm_weekly_charge_today+ to the session
+  def add_confirm_charge_today_to_session
+    SessionManipulation::SetConfirmWeeklyChargeToday.call(
+      session: session,
+      confirm_weekly_charge_today: params[:confirm_weekly_charge_today]
+    )
   end
 end
