@@ -145,11 +145,10 @@
         traffic via this service. We will only retain IP addresses for a period of 30 days.
       %p
         You can raise any queries about the information provided by the Drive in a 
-        Clean Air Zone service by using the web form at
-        - link = 'https://contact.dvla.gov.uk/caz/'
+        Clean Air Zone service by using the 
         = succeed '.' do
-          = link_to(link,
-                    link,
+          = link_to('web form',
+                    'https://contact.dvla.gov.uk/caz/',
                     id: 'contact-form-link')
       %p
         Along with your query, you will need to give your name and email address, 
@@ -207,28 +206,16 @@
       %p
         If you want to know about the Privacy Notice specific to DVLA or the CAZ and Local Authority you are using, please use these links: 
       %p
-        DVLA
+        = link_to('DVLA',
+                  'https://www.gov.uk/government/publications/dvla-privacy-policy/dvla-privacy-policy',
+                  id: 'dvla-link')
       %p
-        - dvla_link = 'https://www.gov.uk/government/publications/dvla-privacy-policy/dvla-privacy-policy'
-        = succeed '.' do
-          = link_to(dvla_link,
-                    dvla_link,
-                    id: 'dvla-link')
+        = link_to('Birmingham',
+                  'https://www.birmingham.gov.uk/info/20076/pollution/1763/a_clean_air_zone_for_birmingham',
+                  id: 'birmingham-link')
       %p
-        Birmingham
-      %p
-        - birmingham_link = 'https://www.birmingham.gov.uk/info/20076/pollution/1763/a_clean_air_zone_for_birmingham'
-        = succeed '.' do
-          = link_to(birmingham_link,
-                    birmingham_link,
-                    id: 'birmingham-link')
-      %p
-        Leeds
-      %p
-        - leeds_link = 'https://www.leeds.gov.uk/business/environmental-health-for-business/air-quality'
-        = succeed '.' do
-          = link_to(leeds_link,
-                    leeds_link,
-                    id: 'leeds-link')
+        = link_to('Leeds',
+                  'https://www.leeds.gov.uk/business/environmental-health-for-business/air-quality',
+                  id: 'leeds-link')
 
 
