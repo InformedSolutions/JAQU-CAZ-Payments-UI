@@ -54,6 +54,10 @@ Feature: Leeds Taxi
     Then I should be on the pick weekly charge period page
       And I press the Continue
     Then I should be on the review your payment page
+      And I press 'Back' link
+    Then I select 'Another'
+      And I press the Continue
+    Then I should be on the pick weekly dates page
 
   Scenario: User enters a taxi vehicle's registration and choose Pay for 1 day
     Given I am on the vehicle details page with taxi vehicle to check

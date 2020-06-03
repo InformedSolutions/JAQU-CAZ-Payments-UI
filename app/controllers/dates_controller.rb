@@ -197,9 +197,9 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # * +la_name+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   # * +charge+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
-  def select_weekly_date
+  def select_weekly_date # rubocop:disable Metrics/AbcSize
     service = Dates::Weekly.new(vrn: vrn, zone_id: la_id, charge_start_date: @charge_start_date)
-    if service.pay_week_starts_today? && vehicle_details('weekly_charge_today') != false
+    if service.pay_week_starts_today? && vehicle_details('confirm_weekly_charge_today') != false
       add_weekly_charge_today_to_session(service.today_date)
       return redirect_to select_weekly_period_dates_path
     end
@@ -207,6 +207,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
     @dates = service.chargeable_dates
     @d_day_notice = service.d_day_notice
     @all_paid = @dates.all? { |date| date[:disabled] }
+    @return_path = select_weekly_date_return_path
   end
 
   ##
@@ -243,13 +244,9 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   #    GET /dates/select_weekly_period
   #
   # ==== Validations
-  # * +weekly_charge_today+ and +weekly_dates+ - lack of values in the session redirects to {weekly_charge}[rdoc-ref:weekly_charge]
+  # * +weekly_charge_today+ - lack of value in the session redirects to {weekly_charge}[rdoc-ref:weekly_charge]
   #
-  def select_weekly_period
-    unless vehicle_details('weekly_charge_today') && vehicle_details('weekly_dates')
-      redirect_to weekly_charge_dates_path
-    end
-  end
+  def select_weekly_period; end
 
   ##
   # Validates if user selects at least one charge period
@@ -302,7 +299,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
 
   # Checks if weekly discount is possible to pay for today
   def check_weekly_charge_today
-    return if vehicle_details('weekly_charge_today')
+    return unless vehicle_details('weekly_charge_today').nil?
 
     Rails.logger.warn('Vehicle is not allowed to pay weekly discount for today')
     redirect_to daily_charge_dates_path
@@ -341,7 +338,6 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
       SessionManipulation::CalculateTotalCharge.call(session: session, weekly: true)
       redirect_to review_payment_charges_path
     else
-      SessionManipulation::SetWeeklyChargeToday.call(session: session, weekly_charge_today: false)
       redirect_to select_weekly_date_dates_path
     end
   end
@@ -350,7 +346,12 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   def add_confirm_charge_today_to_session
     SessionManipulation::SetConfirmWeeklyChargeToday.call(
       session: session,
-      confirm_weekly_charge_today: params[:confirm_weekly_charge_today]
+      confirm_weekly_charge_today: (params[:confirm_weekly_charge_today] == 'true')
     )
+  end
+
+  # Determinate back path on select weekly date page
+  def select_weekly_date_return_path
+    vehicle_details('weekly_charge_today') ? select_weekly_period_dates_path : weekly_charge_dates_path
   end
 end

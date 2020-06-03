@@ -114,7 +114,7 @@ end
 
 Then('I press the Change Payment for link') do
   mock_vehicle_compliance
-  mock_paid_dates
+  mock_paid_dates(dates: [today_formatted])
   mock_single_caz_request_for_charge_start_date
   find('#change-dates').click
 end

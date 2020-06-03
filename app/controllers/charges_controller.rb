@@ -113,7 +113,7 @@ class ChargesController < ApplicationController
 
   # Define the back button path on review payment page.
   def review_payment_return_path
-    if vehicle_details('weekly') && !vehicle_details('confirm_weekly_charge_today')
+    if vehicle_details('weekly')
       select_weekly_date_dates_path
     elsif vehicle_details('weekly') && vehicle_details('confirm_weekly_charge_today')
       select_weekly_period_dates_path
@@ -143,7 +143,6 @@ class ChargesController < ApplicationController
   # Redirects to 'Unable to determine compliance' page
   def unable_to_determine_compliance
     SessionManipulation::SetUndetermined.call(session: session)
-
     redirect_to not_determined_vehicles_path
   end
 end

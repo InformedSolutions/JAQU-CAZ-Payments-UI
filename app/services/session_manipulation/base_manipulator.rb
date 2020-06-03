@@ -22,8 +22,8 @@ module SessionManipulation
       7 => %w[daily_charge la_name weekly_possible tariff_code],
       8 => %w[charge_period],
       9 => %w[confirm_exempt],
-      10 => %w[weekly_dates weekly_charge_today],
-      11 => %w[confirm_weekly_charge_today],
+      10 => %w[confirm_weekly_charge_today weekly_dates weekly_charge_today],
+      11 => %w[confirm_weekly_charge_today weekly_dates weekly_charge_today],
       12 => %w[dates total_charge weekly],
       13 => %w[payment_id],
       14 => %w[user_email payment_reference external_id]
