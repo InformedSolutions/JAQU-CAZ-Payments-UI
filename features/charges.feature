@@ -120,3 +120,16 @@ Feature: Charges
     Given I am on the pick weekly dates page with no passes available to buy
       And I should see "you have paid for a date in those 7 consecutive days"
     Then I should not see the continue button
+
+  Scenario: User selects dates to pay for and d-day is within date range you can pay
+    Given I am on the dates page when d-day was yesterday
+    Then I should be on the pick daily dates page
+      And I should see "Why can't I see my date?"
+
+  Scenario: User selects dates to pay for and d-day is within date range you can pay
+    Given I am on the dates page when d-day will be tomorrow
+    Then I should see "Why can't I see my date?"
+
+  Scenario: User selects dates to pay for and d-day already passed and is outside of date range
+    Given I am on the dates page when d-day was 7 days ago
+    Then I should not see "Why can't I see my date?"

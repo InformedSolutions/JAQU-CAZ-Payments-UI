@@ -35,6 +35,24 @@ Given('I am on the weekly dates page') do
   visit select_weekly_date_dates_path
 end
 
+Given('I am on the weekly dates page when d-day was yesterday') do
+  mock_single_caz_request_for_charge_start_date(Date.current.yesterday)
+  mock_weekly_dates_data
+  visit select_weekly_date_dates_path
+end
+
+Given('I am on the weekly dates page when d-day will be tomorrow') do
+  mock_single_caz_request_for_charge_start_date(Date.current.tomorrow)
+  mock_weekly_dates_data
+  visit select_weekly_date_dates_path
+end
+
+Given('I am on the weekly dates page when d-day was 7 days ago') do
+  mock_single_caz_request_for_charge_start_date(Date.current - 7.days)
+  mock_weekly_dates_data
+  visit select_weekly_date_dates_path
+end
+
 Then('I should see a disabled {string} radio') do |date|
   expect(find("input[value='#{Date.public_send(date).strftime('%Y-%m-%d')}']")).to be_disabled
 end
@@ -62,4 +80,9 @@ def mock_vehicle_compliance_leeds
   allow(ComplianceCheckerApi)
     .to receive(:vehicle_compliance)
     .and_return(compliance_data)
+end
+
+def mock_weekly_dates_data
+  mock_paid_dates
+  add_weekly_possible_details
 end

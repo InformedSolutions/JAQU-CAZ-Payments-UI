@@ -51,8 +51,25 @@ end
 
 Then('I am on the dates page') do
   mock_single_caz_request_for_charge_start_date
-  add_vehicle_details_to_session
-  mock_paid_dates
+  mock_daily_dates_data
+  visit select_daily_date_dates_path
+end
+
+Then('I am on the dates page when d-day was yesterday') do
+  mock_single_caz_request_for_charge_start_date(Date.current.yesterday)
+  mock_daily_dates_data
+  visit select_daily_date_dates_path
+end
+
+Then('I am on the dates page when d-day was 7 days ago') do
+  mock_single_caz_request_for_charge_start_date(Date.current - 7.days)
+  mock_daily_dates_data
+  visit select_daily_date_dates_path
+end
+
+Then('I am on the dates page when d-day will be tomorrow') do
+  mock_single_caz_request_for_charge_start_date(Date.current.tomorrow)
+  mock_daily_dates_data
   visit select_daily_date_dates_path
 end
 
@@ -152,4 +169,9 @@ def paid_period
   {
     dates: ((Date.current - 6.days)..(Date.current + 6.days)).map(&:to_s)
   }
+end
+
+def mock_daily_dates_data
+  add_vehicle_details_to_session
+  mock_paid_dates
 end

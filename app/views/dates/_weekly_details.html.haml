@@ -1,0 +1,16 @@
+%details.govuk-details{'data-module': 'govuk-details'}
+  %summary.govuk-details__summary
+    %span.govuk-details__summary-text
+      Why can't I see my dates?
+  .govuk-details__text
+    %ul
+      %li
+        %p
+          The Clean Air Zone charge came into operation on
+          = succeed('.') do
+            = parse_single_date(@charge_start_date)
+      %li
+        %p
+          The date is too far in the future.
+          %br
+          You should check back here closer to the date you want.

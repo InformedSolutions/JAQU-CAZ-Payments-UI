@@ -14,7 +14,7 @@ class FetchSingleCazData < BaseService
     @zone_id = zone_id
   end
 
-  # Retruns Caz object
+  # Returns Caz object
   def call
     Caz.new(selected_clean_air_zone)
   end
