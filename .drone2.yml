@@ -165,6 +165,7 @@ steps:
       AWS_SECRET_ACCESS_KEY:
         from_secret: jaqu_lower_aws_secret_access_key
       AWS_DEFAULT_REGION: eu-west-2
+      AWS_ACCOUNT_NAME: jaqu-lower
       GIT_PRIVATE_SSH:
         from_secret: jaqu_lower_github_private_key
       TF_VAR_enable_https_redirect: false
@@ -188,7 +189,6 @@ steps:
         from_secret: jaqu_lower_aws_secret_access_key
       AWS_ACCOUNT_ROLE: arn:aws:iam::311075478274:role/jaqu-lowerServiceRole
       AWS_DEFAULT_REGION: eu-west-2
-      AWS_ACCOUNT_NAME: jaqu-lower
       APPLICATION_NAME: payments-codedeploy-service-dev
       DEPLOYMENT_GROUP: payments-codedeploy-service-dev
       PROJECT: payments
