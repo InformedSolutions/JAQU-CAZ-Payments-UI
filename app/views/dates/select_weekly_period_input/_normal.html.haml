@@ -1,0 +1,18 @@
+.govuk-form-group
+  .govuk-radios
+    .govuk-radios__item
+      %input#confirm_weekly_charge_today-1.govuk-radios__input{name: 'confirm_weekly_charge_today',
+                                          type: 'radio',
+                                          checked: session.dig(:vehicle_details, 'confirm_weekly_charge_today') == true,
+                                          value: 'true'}
+      %label.govuk-label.govuk-radios__label{for: 'confirm_weekly_charge_today-1'}
+        Today
+      %span#today-hint.govuk-hint.govuk-radios__hint
+        = today_hint
+    .govuk-radios__item
+      %input#confirm_weekly_charge_today-2.govuk-radios__input{name: 'confirm_weekly_charge_today',
+                                          type: 'radio',
+                                          checked: session.dig(:vehicle_details, 'confirm_weekly_charge_today') == false,
+                                          value: 'false'}
+      %label.govuk-label.govuk-radios__label{for: 'confirm_weekly_charge_today-2'}
+        Another day

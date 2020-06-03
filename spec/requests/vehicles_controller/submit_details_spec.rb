@@ -3,14 +3,14 @@
 require 'rails_helper'
 
 RSpec.describe 'VehiclesController - POST #submit_details', type: :request do
-  subject(:http_request) do
+  subject do
     post enter_details_vehicles_path, params: { vrn: vrn, 'registration-country': country }
   end
 
   let(:vrn) { 'CU57ABC' }
   let(:country) { 'UK' }
 
-  before { http_request }
+  before { subject }
 
   context 'when VRN is valid' do
     it 'returns a found response' do

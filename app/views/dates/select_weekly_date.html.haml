@@ -1,5 +1,7 @@
-- page_title('Choose your dates')
-= link_to 'Back', weekly_charge_dates_path, class: 'govuk-back-link', id: 'back-link'
+- title_and_header = 'Choose your dates'
+- page_title(title_and_header)
+
+= link_to 'Back', @return_path, class: 'govuk-back-link', id: 'back-link'
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
@@ -9,9 +11,9 @@
           error_msg_div: '#select-weekly-date-error',
           error_msg: alert
 
-      %h1.govuk-heading-l Choose your dates
-      %p
-        A weekly charge allows you to drive in Leeds for 7 consecutive days.
+      %h1.govuk-heading-l
+        = title_and_header
+      %p A weekly charge allows you to drive in Leeds for 7 consecutive days.
       - if @all_paid
         .govuk-inset-text
           If the weekly charge you want to pay for is not available,

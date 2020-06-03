@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'VehiclesController - POST #submit_type', type: :request do
-  subject(:http_request) do
+  subject do
     post not_determined_vehicles_path, params: { 'vehicle-type': vehicle_type }
   end
 
@@ -11,7 +11,7 @@ RSpec.describe 'VehiclesController - POST #submit_type', type: :request do
 
   before do
     add_vrn_to_session
-    http_request
+    subject
   end
 
   context 'when user chooses the vehicle type' do
