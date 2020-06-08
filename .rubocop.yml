@@ -37,6 +37,9 @@ Style/SlicingWithRange:
 Style/ExponentialNotation:
   Enabled: true
 
+Lint/DeprecatedOpenSSLConstant:
+  Enabled: true
+
 Layout/LineLength:
   Max: 110
   IgnoredPatterns: ['(\A|\s)#']

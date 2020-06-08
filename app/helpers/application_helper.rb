@@ -29,8 +29,14 @@ module ApplicationHelper
   end
 
   # Returns url path depends on which period was selected
-  def determinate_payment_for_path(weekly_period)
-    weekly_period ? select_weekly_date_dates_path : select_daily_date_dates_path
+  def determinate_payment_for_path(weekly_period, weekly_charge_today)
+    if weekly_period && weekly_charge_today
+      select_weekly_period_dates_path
+    elsif weekly_period && !weekly_charge_today
+      select_weekly_date_dates_path
+    else
+      select_daily_date_dates_path
+    end
   end
 
   # Returns content for title with global app name.

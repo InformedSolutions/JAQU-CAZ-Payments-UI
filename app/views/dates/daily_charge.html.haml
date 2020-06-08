@@ -1,18 +1,19 @@
-- page_title("Pay a daily #{@compliance_details.zone_name} Clean Air Zone charge")
+- title_and_header = "Pay a daily #{@compliance_details.zone_name} Clean Air Zone charge"
+- page_title(title_and_header)
+
 = link_to 'Back', @return_path, class: 'govuk-back-link', id: 'back-link'
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
     .govuk-grid-column-two-thirds
+
       - if alert
         = render 'common/error_summary',
           error_msg_div: '#confirmation-error',
           error_msg: alert
 
       %h1.govuk-heading-l
-        Pay a daily
-        = @compliance_details.zone_name
-        Clean Air Zone charge
+        = title_and_header
       %p
         The daily charge for your vehicle is:
       %h2.govuk-heading-m

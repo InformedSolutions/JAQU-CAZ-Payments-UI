@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'PaymentsController - GET #index', type: :request do
-  subject(:http_request) { get payments_path }
+  subject { get payments_path }
 
   let(:payment_id) { 'XYZ123ABC' }
   let(:success) { true }
@@ -21,7 +21,7 @@ RSpec.describe 'PaymentsController - GET #index', type: :request do
                         payment_reference: payment_reference,
                         external_id: external_id)
       )
-      http_request
+      subject
     end
 
     context 'when payment status is SUCCESS' do
@@ -65,7 +65,7 @@ RSpec.describe 'PaymentsController - GET #index', type: :request do
 
   context 'when payment id is missing' do
     it 'redirects to the :enter_details' do
-      http_request
+      subject
       expect(response).to redirect_to(enter_details_vehicles_path)
     end
   end

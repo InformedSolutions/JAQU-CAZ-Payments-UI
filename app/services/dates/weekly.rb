@@ -20,7 +20,18 @@ module Dates
     # Build the list of dates and return them, e.g.
     # [{value: "2019-10-11", name: "Friday 11 October 2019", today: false},...]
     def chargeable_dates
-      (calculated_start_date..(today + 6.days)).map { |date| parse(date) }
+      @chargeable_dates ||= (calculated_start_date..(today + 6.days)).map { |date| parse(date) }
+    end
+
+    # Checks if a week starting from today can be paid
+    def pay_week_starts_today?
+      return false if charge_start_date > today_date
+
+      paid_dates.exclude?(today_date)
+    end
+
+    def today_date
+      today.strftime(VALUE_DATE_FORMAT)
     end
 
     private

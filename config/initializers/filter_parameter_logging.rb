@@ -7,4 +7,5 @@ Rails.application.config.filter_parameters += %i[
   local-authority
   password
   vrn
+  authenticity_token
 ]

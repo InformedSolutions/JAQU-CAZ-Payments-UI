@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
-  subject(:http_request) do
+  subject do
     post confirm_date_weekly_dates_path, params: dates
   end
 
@@ -26,19 +26,19 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
     end
 
     it 'redirects to :review_payment' do
-      http_request
-      expect(http_request).to redirect_to(review_payment_charges_path)
+      subject
+      expect(subject).to redirect_to(review_payment_charges_path)
     end
 
     it 'calls Dates::CheckPaidWeekly with right params' do
       expect(Dates::CheckPaidWeekly).to receive(:call).with(
         vrn: vrn, zone_id: la_id, date: dates['dates'].first
       )
-      http_request
+      subject
     end
 
     describe 'setting session' do
-      before { http_request }
+      before { subject }
 
       it 'sets total_charge to Leeds discounted value of 50' do
         expect(session[:vehicle_details]['total_charge']).to eq(50)
@@ -58,24 +58,24 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
       let(:dates) { nil }
 
       it 'redirects to :dates_charges' do
-        expect(http_request).to redirect_to(select_weekly_date_dates_path)
+        expect(subject).to redirect_to(select_weekly_date_dates_path)
       end
 
       it 'sets proper alert' do
-        http_request
+        subject
         expect(flash[:alert]).to eq(I18n.t('dates.weekly.empty'))
       end
 
       it 'does not call Dates::CheckPaidWeekly' do
         expect(Dates::CheckPaidWeekly).not_to receive(:call)
-        http_request
+        subject
       end
     end
 
     context 'when dates are already paid' do
       before do
         allow(Dates::CheckPaidWeekly).to receive(:call).and_return(false)
-        http_request
+        subject
       end
 
       it 'redirects to :dates_charges' do

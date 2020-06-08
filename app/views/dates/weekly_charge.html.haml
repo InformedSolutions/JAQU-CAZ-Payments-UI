@@ -1,19 +1,20 @@
+- title_and_header = "Pay a weekly #{@compliance_details.zone_name} Clean Air Zone charge"
+- page_title(title_and_header)
+
 = link_to 'Back', @return_path, class: 'govuk-back-link', id: 'back-link'
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
     .govuk-grid-column-two-thirds
+
       - if alert
         = render 'common/error_summary',
           error_msg_div: '#confirmation-error',
           error_msg: 'Confirm you have checked if you are eligible for an exemption'
 
       %h1.govuk-heading-l
-        Pay a weekly
-        = @compliance_details.zone_name
-        Clean Air Zone charge
-      %p
-        The weekly charge for your vehicle is:
+        = title_and_header
+      %p The weekly charge for your vehicle is:
       %h2.govuk-heading-m
         = parse_charge(@weekly_charge)
       %p

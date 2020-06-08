@@ -102,6 +102,12 @@ Feature: Charges
     Then I press the Change Payment for link
       And I should be on the pick weekly dates page
 
+  Scenario: User wants review weekly payment and press the change payment for link when a week charge starting from today
+    Given I am on the review weekly payment page when a week charge starting from today
+      And I should see "Review your payment"
+    Then I press the Change Payment for link
+      And I should be on the pick weekly charge period page
+
   Scenario: User wants to paid for already paid date
     Given I am on the dates page with paid charge for today
     Then I should see a disabled today checkbox

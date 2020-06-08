@@ -23,9 +23,9 @@ module SessionManipulation
 
     # It clears keys in the session hash the were set after setting compliance details
     def call
-      log_action 'Clearing data from the session'
+      log_action('Clearing data from the session')
       session[SESSION_KEY] = session[SESSION_KEY].slice(*keys_to_keep)
-      log_action "User's current session: #{session[SESSION_KEY]}"
+      log_action("User's current session: #{session[SESSION_KEY].keys}")
     end
 
     private
