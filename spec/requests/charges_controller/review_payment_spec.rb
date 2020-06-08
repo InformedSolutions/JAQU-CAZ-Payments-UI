@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'ChargesController - GET #review_payment', type: :request do
-  subject(:http_request) { get review_payment_charges_path }
+  subject { get review_payment_charges_path }
 
   let(:vrn) { 'CU57ABC' }
   let(:country) { 'UK' }
@@ -16,7 +16,7 @@ RSpec.describe 'ChargesController - GET #review_payment', type: :request do
     context 'with normal charge flow' do
       before do
         add_full_payment_details(details: details)
-        http_request
+        subject
       end
 
       it 'returns a success response' do
@@ -48,7 +48,7 @@ RSpec.describe 'ChargesController - GET #review_payment', type: :request do
     context 'with Leeds charge flow' do
       before do
         add_full_payment_details(weekly: true)
-        http_request
+        subject
       end
 
       it 'assigns DatesController#select_weekly_date as return path' do

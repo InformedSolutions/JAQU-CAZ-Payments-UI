@@ -30,8 +30,9 @@ module SessionManipulation
 
     # Adds +VRN+ and +country+ to the session. Used by the class level method +.call+
     def call
-      log_action "Adding #{starting_values}"
+      log_action("Adding keys: #{starting_values.keys} to the session")
       session[SESSION_KEY] = starting_values
+      log_action("Current session keys: #{session[SESSION_KEY].keys}")
     end
 
     private

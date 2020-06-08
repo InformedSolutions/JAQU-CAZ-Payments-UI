@@ -3,11 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe 'VehiclesController - GET #not_determined', type: :request do
-  subject(:http_request) { get not_determined_vehicles_path }
+  subject { get not_determined_vehicles_path }
 
   before do
     add_vrn_to_session(vrn: 'CU57ABC')
-    http_request
+    subject
   end
 
   it 'returns a success response' do

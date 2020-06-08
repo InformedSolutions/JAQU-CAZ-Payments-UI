@@ -29,8 +29,16 @@ module DatesHelper
     value
   end
 
+  # Returns today hint, e.g. 'Your weekly charge will expire on Tue 09 June 2020'
+  # Renders on app/views/dates/select_weekly_period.html.haml view
+  def today_hint
+    end_date = (Date.current + 6.days).strftime('%a %d %B %Y')
+    "Your weekly charge will expire on #{end_date}"
+  end
+
   private
 
+  # Checks if today day is not paid
   def today_not_paid(date)
     date[:today] & !date[:disabled]
   end

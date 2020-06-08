@@ -25,7 +25,7 @@ Feature: Vehicles
     Then I enter a vehicle's registration and choose UK
       And I press the Continue
       And I should see 'Are these vehicle details correct?'
-    Then I press the Back link
+    Then I press 'Back' link
       Then I should see 'CU57ABC' as vrn value
       And I press the Continue
     Then I press the Confirm
@@ -49,7 +49,7 @@ Feature: Vehicles
       And I should be on the non UK page
     Then I press 'Check another vehicle' link
       And I should be on the enter details page
-    Then I press the Back link
+    Then I press 'Back' link
       And I should be on the non UK page
     Then I choose I confirm registration
       And I press the Continue
@@ -127,13 +127,13 @@ Feature: Vehicles
         And I press the Confirm
         And I should see 'Vehicle details are incomplete'
         And I should see 'What is your vehicle?'
-      Then I press the Back link
+      Then I press 'Back' link
         And I should be on the vehicle details page
       Then I press the Confirm
         And I choose Car type
         And I press the Confirm
         And I should see 'Which Clean Air Zone do you need to pay for?'
-      Then I press the Back link
+      Then I press 'Back' link
         And I should be on the vehicle details incomplete page
 
   Scenario: User wants to pay for undetermined (without type) correct vehicle
@@ -172,13 +172,13 @@ Feature: Vehicles
       Then I choose that the details are incorrect
         And I press the Confirm
         And I should see 'Incorrect vehicle details'
-      Then I press the Back link
+      Then I press 'Back' link
         And I should be on the vehicle details page
         And I press the Confirm
       Then I press the Continue
         And I should see 'Vehicle details are incomplete'
         And I should see 'What is your vehicle?'
-      Then I press the Back link
+      Then I press 'Back' link
         And I should be on the incorrect details page
         And I press the Continue
       Then I choose Car type

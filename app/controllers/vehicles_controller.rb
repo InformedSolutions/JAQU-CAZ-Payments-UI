@@ -3,7 +3,7 @@
 ##
 # Controls the first steps of the payment process regarding user's vehicle data.
 #
-class VehiclesController < ApplicationController # rubocop:disable Metrics/ClassLength
+class VehiclesController < ApplicationController
   # 404 HTTP status from API mean vehicle in not found in DLVA database. Redirects to the proper page.
   rescue_from BaseApi::Error404Exception, with: :vehicle_not_found
 
@@ -153,7 +153,6 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
       SessionManipulation::SetUnrecognised.call(session: session)
       redirect_to choose_type_non_dvla_vehicles_path
     else
-      log_invalid_form 'Redirecting back.'
       redirect_to unrecognised_vehicles_path, alert: true
     end
   end
@@ -250,7 +249,6 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   # Renders enter_details page and log errors
   def rerender_enter_details(form)
     @errors = form.errors.messages
-    log_invalid_form 'Rendering :enter_details.'
     render enter_details_vehicles_path
   end
 

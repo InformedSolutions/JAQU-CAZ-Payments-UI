@@ -4,10 +4,10 @@ require 'rails_helper'
 
 RSpec.describe ApplicationController, type: :request do
   describe 'GET #build_id' do
-    subject(:http_request) { get build_id_path }
+    subject { get build_id_path }
 
     context 'when BUILD_ID is not defined' do
-      before { http_request }
+      before { subject }
 
       it 'returns a ok response' do
         expect(response).to be_successful
@@ -23,7 +23,7 @@ RSpec.describe ApplicationController, type: :request do
 
       before do
         allow(ENV).to receive(:fetch).with('BUILD_ID', 'undefined').and_return(build_id)
-        http_request
+        subject
       end
 
       it 'returns BUILD_ID' do

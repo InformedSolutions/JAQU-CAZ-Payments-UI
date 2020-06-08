@@ -51,7 +51,8 @@ end
 
 Then('I am on the dates page') do
   mock_single_caz_request_for_charge_start_date
-  mock_daily_dates_data
+  add_vehicle_details_to_session
+  mock_paid_dates
   visit select_daily_date_dates_path
 end
 
@@ -78,8 +79,7 @@ Then('I choose today date') do
 end
 
 Then('I have selected dates in the session') do
-  expect(page.driver.request.session[:vehicle_details]['dates'])
-    .to eq([Date.current.strftime('%Y-%m-%d')])
+  expect(page.driver.request.session[:vehicle_details]['dates']).to eq([today_formatted])
 end
 
 Then('I am on the review payment page') do
@@ -91,7 +91,14 @@ Then('I am on the review payment page') do
 end
 
 Then('I am on the review weekly payment page') do
-  add_weekly_vehicle_details_to_session
+  add_weekly_vehicle_details_to_session(weekly_charge_today: false)
+  mock_payment_creation
+
+  visit review_payment_charges_path
+end
+
+Then('I am on the review weekly payment page when a week charge starting from today') do
+  add_weekly_vehicle_details_to_session(weekly_charge_today: true, weekly_dates: [today_formatted])
   mock_payment_creation
 
   visit review_payment_charges_path
@@ -107,7 +114,7 @@ end
 
 Then('I press the Change Payment for link') do
   mock_vehicle_compliance
-  mock_paid_dates
+  mock_paid_dates(dates: [today_formatted])
   mock_single_caz_request_for_charge_start_date
   find('#change-dates').click
 end
@@ -128,7 +135,7 @@ end
 Given('I am on the dates page with paid charge for today') do
   mock_single_caz_request_for_charge_start_date(10.days.ago)
   add_vehicle_details_to_session
-  mock_paid_dates(dates: [Date.current.strftime('%Y-%m-%d')])
+  mock_paid_dates(dates: [today_formatted])
   visit select_daily_date_dates_path
 end
 
@@ -140,7 +147,7 @@ Given('I am on the dates page with all charges paid') do
 end
 
 Then('I should see a disabled today checkbox') do
-  expect(find("input[value='#{Date.current.strftime('%Y-%m-%d')}']")).to be_disabled
+  expect(find("input[value='#{today_formatted}']")).to be_disabled
 end
 
 Then('I choose a date that was already paid') do
@@ -173,5 +180,9 @@ end
 
 def mock_daily_dates_data
   add_vehicle_details_to_session
-  mock_paid_dates
+  mock_paid_dates(dates: [today_formatted])
+end
+
+def today_formatted
+  Date.current.strftime('%Y-%m-%d')
 end

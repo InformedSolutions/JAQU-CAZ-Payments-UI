@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'DatesController - POST #confirm_daily_date', type: :request do
-  subject(:http_request) do
+  subject do
     post confirm_daily_date_dates_path, params: params
   end
 
@@ -20,18 +20,18 @@ RSpec.describe 'DatesController - POST #confirm_daily_date', type: :request do
 
     context 'with checked dates' do
       it 'redirects to :review_payment' do
-        expect(http_request).to redirect_to(review_payment_charges_path)
+        expect(subject).to redirect_to(review_payment_charges_path)
       end
 
       it 'calls Dates::CheckPaidDaily with proper params' do
         expect(Dates::CheckPaidDaily)
           .to receive(:call)
           .with(vrn: vrn, zone_id: la_id, dates: params['dates'])
-        http_request
+        subject
       end
 
       describe 'setting session' do
-        before { http_request }
+        before { subject }
 
         it 'sets total_charge' do
           expect(session[:vehicle_details]['total_charge']).to eq(25)
@@ -52,7 +52,7 @@ RSpec.describe 'DatesController - POST #confirm_daily_date', type: :request do
         end
 
         it 'redirects to :dates_charges' do
-          expect(http_request).to redirect_to(select_daily_date_dates_path)
+          expect(subject).to redirect_to(select_daily_date_dates_path)
         end
       end
     end
@@ -61,7 +61,7 @@ RSpec.describe 'DatesController - POST #confirm_daily_date', type: :request do
       let(:params) { nil }
 
       it 'redirects to :dates_charges' do
-        expect(http_request).to redirect_to(select_daily_date_dates_path)
+        expect(subject).to redirect_to(select_daily_date_dates_path)
       end
     end
   end

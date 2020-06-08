@@ -3,13 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe 'VehiclesController - GET #unrecognised', type: :request do
-  subject(:http_request) { get unrecognised_vehicles_path }
+  subject { get unrecognised_vehicles_path }
 
   let(:vrn) { 'CU57ABC' }
 
   before do
     add_vrn_to_session(vrn: vrn)
-    http_request
+    subject
   end
 
   it 'returns a success response' do
