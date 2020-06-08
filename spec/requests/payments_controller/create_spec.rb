@@ -16,7 +16,7 @@ RSpec.describe 'PaymentsController - POST #create', type: :request do
     add_to_session(
       vrn: vrn, country: 'UK',
       la_id: zone_id, la_name: 'Leeds',
-      dates: dates, charge: charge
+      dates: dates, total_charge: charge
     )
   end
 
@@ -37,7 +37,7 @@ RSpec.describe 'PaymentsController - POST #create', type: :request do
         {
           'vrn' => vrn,
           'la_id' => zone_id,
-          'charge' => charge,
+          'total_charge' => charge,
           'dates' => dates,
           'country' => anything,
           'la_name' => anything
@@ -53,16 +53,31 @@ RSpec.describe 'PaymentsController - POST #create', type: :request do
 
     context 'when called twice' do
       let(:repeated_request) { post payments_path }
-      before { subject }
+      let(:second_payment_id) { 'LOREM01234IPSUM' }
+      before do
+        subject
+        allow(Payment).to receive(:new).and_return(
+          OpenStruct.new(payment_id: second_payment_id, gov_uk_pay_url: redirect_url)
+        )
+      end
 
-      it 'does not call Payment model second time' do
-        expect(Payment).not_to receive(:new)
+      it 'calls the Payment model a second time' do
+        expect(Payment).to receive(:new).with(
+          {
+            'vrn' => vrn,
+            'la_id' => zone_id,
+            'total_charge' => charge,
+            'dates' => dates,
+            'country' => anything,
+            'la_name' => anything
+          }, payments_url
+        )
         repeated_request
       end
 
-      it 'redirects to :index' do
+      it 'sets payment_id in the session' do
         repeated_request
-        expect(response).to redirect_to(payments_path)
+        expect(session[:vehicle_details]['payment_id']).to eq(second_payment_id)
       end
     end
   end

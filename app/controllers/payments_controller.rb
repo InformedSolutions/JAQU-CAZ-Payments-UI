@@ -4,7 +4,7 @@
 # Controls the flow for calling Payments API.
 #
 class PaymentsController < ApplicationController
-  before_action :check_payment_creation, only: :create
+  before_action :clear_payment_in_session, only: :create
   before_action :check_payment_details, except: :create
 
   ##
@@ -90,19 +90,6 @@ class PaymentsController < ApplicationController
   ##
   # Checks if payment id is present in the session
   #
-  # If it is, redirects to payments index view
-  #
-  def check_payment_creation
-    payment_id = vehicle_details('payment_id')
-    return unless payment_id
-
-    Rails.logger.warn("Payment with id: #{payment_id} was already created")
-    redirect_to payments_path
-  end
-
-  ##
-  # Checks if payment id is present in the session
-  #
   # If it is not, redirects to beginning of the payment process
   #
   def check_payment_details
@@ -114,7 +101,7 @@ class PaymentsController < ApplicationController
 
   # Clears details of the payment in the session
   def clear_payment_in_session
-    SessionManipulation::ClearSessionDetails.call(session: session, key: 7)
+    SessionManipulation::ClearSessionDetails.call(session: session, key: 13)
   end
 
   # Save payment details using SessionManipulation::SetPaymentDetails
