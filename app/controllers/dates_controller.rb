@@ -238,7 +238,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   end
 
   ##
-  # Renders the list of weekly dates to pick.
+  # Renders today or another day selection page
   #
   # ==== Path
   #    GET /dates/select_weekly_period
