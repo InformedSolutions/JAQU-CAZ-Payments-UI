@@ -27,7 +27,11 @@ module Dates
     def pay_week_starts_today?
       return false if charge_start_date > today_date
 
-      paid_dates.exclude?(today_date)
+      week_range_from_today = (today..(today + 7.days))
+      paid_dates.each do |paid_day|
+        parsed_paid_day = Date.parse(paid_day)
+        return false if week_range_from_today.include?(parsed_paid_day)
+      end
     end
 
     def today_date

@@ -59,6 +59,19 @@ Feature: Leeds Taxi
       And I press the Continue
     Then I should be on the pick weekly dates page
 
+  Scenario: User enters a taxi vehicle's registration when he already paid for tomorrow
+    Given I am on the vehicle details page with taxi vehicle to check
+      And I have already paid for tomorrow
+    When I choose that the details are correct
+      And I press the Confirm
+    Then I select Leeds
+      And I press the Continue
+    Then I select Pay for 7 days
+      And I press the Continue
+    Then I choose I confirm that I am not exempt
+      And I press the Continue
+    Then I should be on the pick weekly dates page
+
   Scenario: User enters a taxi vehicle's registration and choose Pay for 1 day
     Given I am on the vehicle details page with taxi vehicle to check
     Then I choose that the details are correct

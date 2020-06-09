@@ -38,6 +38,10 @@ Given('I am not paid for today') do
   mock_paid_dates(dates: [])
 end
 
+Given('I have already paid for tomorrow') do
+  mock_paid_dates(dates: [Date.current.tomorrow.strftime('%Y-%m-%d')])
+end
+
 Given('I am on the weekly dates page') do
   mock_single_caz_request_for_charge_start_date(2.days.ago)
   add_weekly_possible_details
