@@ -470,7 +470,7 @@ steps:
       - pip install awscli
       - mkdir ~/.aws
       - echo -e "[profile target_acc]\nrole_arn = $AWS_ACCOUNT_ROLE\ncredential_source = Environment\nrole_session_name = AWSACCOUNT" > ~/.aws/config
-      - aws deploy create-deployment --application-name $APPLICATION_NAME --deployment-config-name CodeDeployDefault.ECSAllAtOnce --deployment-group-name $DEPLOYMENT_GROUP --description "Deployment ECS" --s3-location bucket=$LAMBDA_BUCKET,bundleType=yaml,key=$PROJECT/dev/appspec.yaml --profile target_acc
+      - aws deploy create-deployment --application-name $APPLICATION_NAME --deployment-config-name CodeDeployDefault.ECSAllAtOnce --deployment-group-name $DEPLOYMENT_GROUP --description "Deployment ECS" --s3-location bucket=$LAMBDA_BUCKET,bundleType=yaml,key=$PROJECT/st/appspec.yaml --profile target_acc
     environment:
       AWS_ACCESS_KEY_ID:
         from_secret: jaqu_controlled_aws_access_key_id
