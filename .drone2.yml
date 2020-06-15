@@ -736,7 +736,7 @@ steps:
           - push
 
     - name: codedeploy ui sit
-      image: golang:alpine
+      image: alpine:3.11.6
       commands:
         - apk add --update bash python python-dev py-pip build-base jq
         - pip install awscli
