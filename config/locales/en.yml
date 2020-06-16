@@ -22,3 +22,4 @@ en:
       empty: Select a week that you wish to pay for
       paid: You have already paid for at least one day in the selected week
   confirmation_alert: Confirm the number plate is correct
+  select_weekly_period: State if you would like your weekly charge to start today or another day
