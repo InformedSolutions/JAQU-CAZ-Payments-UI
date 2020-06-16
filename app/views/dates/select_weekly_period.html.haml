@@ -10,7 +10,7 @@
       - if alert
         = render 'common/error_summary',
           error_msg_div: '#confirm_weekly_charge_today-error',
-          error_msg: 'No start date selected'
+          error_msg: alert
 
       %h1.govuk-heading-l
         = title_and_header

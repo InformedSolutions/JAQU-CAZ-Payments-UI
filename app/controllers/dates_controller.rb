@@ -258,7 +258,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
     if params[:confirm_weekly_charge_today]
       determinate_next_weekly_page
     else
-      flash.now[:alert] = true
+      flash.now[:alert] = I18n.t('select_weekly_period')
       render :select_weekly_period
     end
   end
