@@ -17,7 +17,7 @@
       %p
         A daily charge period runs from midnight to midnight.
 
-      = render 'dates/daily/details' if @d_day_notice
+      = render 'dates/details'
       = render 'dates/daily/inset' if @dates.any? { |date| date[:disabled] }  && !@all_paid
       = render 'dates/daily/all_paid' if @all_paid
 

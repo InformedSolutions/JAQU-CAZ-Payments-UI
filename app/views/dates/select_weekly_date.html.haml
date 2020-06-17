@@ -19,7 +19,7 @@
           If the weekly charge you want to pay for is not available,
           it is because you have paid for a date in those 7 consecutive days.
 
-      = render 'dates/weekly_details' if @d_day_notice
+      = render 'dates/details'
 
       = form_tag confirm_date_weekly_dates_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
