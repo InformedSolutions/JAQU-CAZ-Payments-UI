@@ -18,7 +18,6 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
   let(:vrn) { 'CU123AB' }
   let(:la_id) { SecureRandom.uuid }
   let(:date_partials) { { 'date_year' => '2019', 'date_month' => '11', 'date_day' => '01' } }
-  let(:dates) { { 'date_year' => ['2019-11-01'] } }
 
   before do
     details = instance_double(Dates::ValidateSelectedWeeklyDate,
@@ -75,8 +74,6 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
                                   valid?: false)
         allow(Dates::ValidateSelectedWeeklyDate).to receive(:new).and_return(details)
       end
-
-      let(:dates) { nil }
 
       it 'redirects to :dates_charges' do
         expect(subject).to redirect_to(select_weekly_date_dates_path)
