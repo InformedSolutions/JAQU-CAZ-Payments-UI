@@ -87,11 +87,11 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   #
   def confirm_details
     form = ConfirmationForm.new(confirmation)
-    unless form.valid?
-      return redirect_to details_vehicles_path, alert: form.errors.messages[:confirmation].first
+    if form.valid?
+      redirect_to process_detail_form(form)
+    else
+      redirect_to details_vehicles_path, alert: form.error_message
     end
-
-    redirect_to process_detail_form(form)
   end
 
   ##
@@ -99,7 +99,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   #
   # ==== Path
   #
-  #    GET /vehicles/uk_registerd
+  #    GET /vehicles/uk_registered_details
   #
   # ==== Params
   # * +vrn+ - vehicle registration number, required in the session
@@ -110,11 +110,11 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
 
   ##
   # Verifies if user confirms the vehicle's details.
-  # If yes, renders to {incorrect details}[rdoc-ref:VehiclesController.local_authority]
-  # If no, redirects to {incorrect details}[rdoc-ref:VehiclesController.incorrect_details]
+  # If yes, redirects to {local authority}[rdoc-ref:local_authority]
+  # If no, redirects to {incorrect details}[rdoc-ref:incorrect_details]
   #
   # ==== Path
-  #    POST /vehicles/confirm_details
+  #    POST /vehicles/confirm_uk_registered_details
   #
   # ==== Params
   # * +vrn+ - vehicle registration number, required in the session
@@ -126,11 +126,11 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   #
   def confirm_uk_registered_details
     form = ConfirmationForm.new(confirmation)
-    unless form.valid?
-      return redirect_to uk_registered_details_vehicles_path, alert: form.errors.messages[:confirmation].first
+    if form.valid?
+      redirect_to process_detail_form(form)
+    else
+      redirect_to uk_registered_details_vehicles_path, alert: form.error_message
     end
-
-    redirect_to process_detail_form(form)
   end
 
   ##
@@ -279,6 +279,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
     params['registration-country']
   end
 
+  # Process action which is done on submit details and uk registered details
   def process_details_action
     @vehicle_details = VehicleDetails.new(vrn)
     return redirect_to(exempt_vehicles_path) if @vehicle_details.exempt?

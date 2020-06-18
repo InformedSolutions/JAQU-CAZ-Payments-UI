@@ -42,6 +42,14 @@ Then("I enter a not-exempted non-UK vehicle's registration") do
   fill_in_non_uk(vrn)
 end
 
+Then("I enter an UK vehicle's registration and choose Non-UK country") do
+  mock_vehicle_details
+  mock_dvla_response
+
+  fill_in('vrn', with: vrn)
+  choose('Non-UK')
+end
+
 And('I choose I confirm registration') do
   check('I confirm the number plate is correct.')
 end

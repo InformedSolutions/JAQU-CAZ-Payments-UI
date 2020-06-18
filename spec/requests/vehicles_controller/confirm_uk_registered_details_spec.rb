@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'VehicleCheckersController - POST #confirm_uk_registered_details', type: :request do
   subject do
-    post confirm_uk_registered_details_vehicles_path, params: { 'confirm-vehicle' => confirmation }
+    post confirm_uk_registered_details_vehicles_path, params: { 'confirm-vehicle': confirmation }
   end
 
   let(:confirmation) { 'yes' }
