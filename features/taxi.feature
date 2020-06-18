@@ -23,7 +23,7 @@ Feature: Leeds Taxi
     Then I press the Continue
       And I should be on the pick weekly dates page
       And I should see 'Choose your dates'
-      And I should not see 'If the date you want to pay for is not displayed, it may be because'
+      And I should see 'The Clean Air Zone charge came into operation on'
     Then I press the Continue
       And I should see 'Select a week that you wish to pay for'
     Then I select any available day
@@ -106,7 +106,7 @@ Feature: Leeds Taxi
   Scenario: User selects dates to pay for and d-day already passed and is outside of date range
     Given I am on the weekly dates page when d-day was 7 days ago and today day is paid
     Then I should be on the pick weekly dates page
-      And I should not see "Why can't I see my dates?"
+      And I should not see 'The Clean Air Zone charge came into operation on'
 
   Scenario: User selects dates to pay for and d-day already passed and is outside of date range
     Given I am on the weekly dates page when d-day was 7 days ago and today day is not paid
