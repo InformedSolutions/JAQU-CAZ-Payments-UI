@@ -23,7 +23,7 @@ $highlight-start-date-color: #2196f3;
     &.is-start-date {
       &:focus,
       &:active {
-        color: white !important;
+        color: govuk-colour($colour: "white") !important;
         background-color: $highlight-start-date-color !important;
         box-shadow: none;
         outline: none;
