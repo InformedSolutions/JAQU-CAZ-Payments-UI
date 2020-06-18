@@ -52,6 +52,4 @@
 
       = javascript_pack_tag 'datePicker'
       
-      = render 'dates/weekly_details' if @d_day_notice
-
       %p= link_to 'Pay for 1 day instead', select_period_dates_path, id: 'pay_instead'

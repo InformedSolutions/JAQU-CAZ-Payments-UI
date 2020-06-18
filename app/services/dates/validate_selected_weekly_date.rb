@@ -57,8 +57,10 @@ module Dates
     ##
     # Sets correct error message
     def error
-      if date_in_range?
-        I18n.t(@start_date ? 'paid' : 'empty', scope: 'dates.weekly')
+      if @start_date && date_in_range?
+        I18n.t('paid', scope: 'dates.weekly')
+      elsif !@start_date && !date_in_range?
+        I18n.t('empty', scope: 'dates.weekly')
       else
         out_of_range_error
       end

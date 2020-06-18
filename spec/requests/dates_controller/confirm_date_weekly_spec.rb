@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
   subject do
-    post confirm_date_weekly_dates_path, params: dates
+    post confirm_date_weekly_dates_path, params: date_partials
   end
 
   let(:charge) { 12.5 }
@@ -17,7 +17,18 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
   end
   let(:vrn) { 'CU123AB' }
   let(:la_id) { SecureRandom.uuid }
-  let(:dates) { { 'dates' => ['2019-11-01'] } }
+  let(:date_partials) { { 'date_year' => '2019', 'date_month' => '11', 'date_day' => '01' } }
+  let(:dates) { { 'date_year' => ['2019-11-01'] } }
+
+  before do
+    details = instance_double(Dates::ValidateSelectedWeeklyDate,
+                              start_date: '2019-11-1',
+                              parse_date: '2019-11-1',
+                              date_in_range?: true,
+                              error: '',
+                              valid?: true)
+    allow(Dates::ValidateSelectedWeeklyDate).to receive(:new).and_return(details)
+  end
 
   context 'with details in the session' do
     before do
@@ -32,7 +43,7 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
 
     it 'calls Dates::CheckPaidWeekly with right params' do
       expect(Dates::CheckPaidWeekly).to receive(:call).with(
-        vrn: vrn, zone_id: la_id, date: dates['dates'].first
+        vrn: vrn, zone_id: la_id, date: '2019-11-1'
       )
       subject
     end
@@ -55,6 +66,16 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
     end
 
     context 'without checked dates' do
+      before do
+        details = instance_double(Dates::ValidateSelectedWeeklyDate,
+                                  start_date: false,
+                                  parse_date: false,
+                                  date_in_range?: false,
+                                  error: I18n.t('dates.weekly.empty'),
+                                  valid?: false)
+        allow(Dates::ValidateSelectedWeeklyDate).to receive(:new).and_return(details)
+      end
+
       let(:dates) { nil }
 
       it 'redirects to :dates_charges' do
@@ -74,6 +95,14 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
 
     context 'when dates are already paid' do
       before do
+        details = instance_double(Dates::ValidateSelectedWeeklyDate,
+                                  start_date: '2019-11-1',
+                                  parse_date: '2019-11-1',
+                                  date_in_range?: true,
+                                  error: I18n.t('dates.weekly.paid'),
+                                  valid?: true)
+        allow(Dates::ValidateSelectedWeeklyDate).to receive(:new).and_return(details)
+
         allow(Dates::CheckPaidWeekly).to receive(:call).and_return(false)
         subject
       end
