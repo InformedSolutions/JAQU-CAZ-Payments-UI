@@ -27,6 +27,11 @@ class ConfirmationForm
     confirmation == 'yes'
   end
 
+  # Returns error message, e.g. 'Select yes if the details are correct'
+  def error_message
+    errors.messages[:confirmation].first
+  end
+
   private
 
   # form confirmation from the query params, values: 'yes', 'no', nil
