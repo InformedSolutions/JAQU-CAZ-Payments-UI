@@ -5,6 +5,10 @@ module AddToSession
     add_to_session(vrn: vrn, country: country)
   end
 
+  def add_possible_fraud_vrn_to_session(vrn: 'CU57ABC', country: 'Non-UK')
+    add_to_session(vrn: vrn, country: country)
+  end
+
   def add_details_to_session(details: {}, weekly_possible: false)
     add_to_session(
       **compliance_details(details),
