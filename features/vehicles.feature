@@ -71,6 +71,42 @@ Feature: Vehicles
       And I press 'Back' link
     Then I should be on the enter details page
 
+  Scenario: User enters a correct UK vehicle's registration, choose Non-UK country (fraud detection) and choose that vehicle's details are correct
+    Given I am on the home page
+    Then I press the Start now button
+      And I should be on the enter details page
+    Then I enter an UK vehicle's registration and choose Non-UK country
+      And I press the Continue
+    Then I should see 'Your vehicle is UK registered'
+      And I press 'Back' link
+    Then I should be on the enter details page
+      And I should see 'CU57ABC' as vrn value
+      And I press the Continue
+    Then I press the Confirm
+      And I should see 'Select yes if the details are correct'
+    Then I choose that the details are correct
+      And I press the Confirm
+    Then I should see 'Which Clean Air Zone do you need to pay for?'
+
+  Scenario: User enters a correct UK vehicle's registration, choose Non-UK country (fraud detection) and choose that vehicle's details are incorrect
+    Given I am on the home page
+    Then I press the Start now button
+      And I should be on the enter details page
+    Then I enter an UK vehicle's registration and choose Non-UK country
+      And I press the Continue
+    Then I should see 'Your vehicle is UK registered'
+      And I press 'Back' link
+    Then I should be on the enter details page
+      And I should see 'CU57ABC' as vrn value
+      And I press the Continue
+    Then I press the Confirm
+      And I should see 'Select yes if the details are correct'
+    Then I choose that the details are incorrect
+      And I press the Confirm
+      And I should see 'Incorrect vehicle details'
+    Then I press the Continue
+      And I should see 'Which Clean Air Zone do you need to pay for?'
+
   Scenario: User enters a vehicle's registration which cannot be recognised
     Given I am on the home page
     Then I press the Start now button

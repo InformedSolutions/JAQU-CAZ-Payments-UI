@@ -99,11 +99,13 @@ class ChargesController < ApplicationController
   end
 
   # Define the back button path on local authority page.
-  def local_authority_return_path
+  def local_authority_return_path # rubocop:disable Metrics/MethodLength
     if vehicle_details('undetermined')
       not_determined_vehicles_path
     elsif vehicle_details('incorrect')
       incorrect_details_vehicles_path
+    elsif vehicle_details('possible_fraud')
+      uk_registered_details_vehicles_path
     elsif vehicle_details('country') == 'UK'
       details_vehicles_path
     else

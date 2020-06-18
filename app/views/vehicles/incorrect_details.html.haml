@@ -1,9 +1,12 @@
-- page_title('Incorrect vehicle details')
-= link_to 'Back', details_vehicles_path, class: 'govuk-back-link', id: 'back-link'
+- title_and_header = 'Incorrect vehicle details'
+- page_title(title_and_header)
+
+= link_to 'Back', @return_path, class: 'govuk-back-link', id: 'back-link'
+
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
     .govuk-grid-column-two-thirds
-      %h1.govuk-heading-l Incorrect vehicle details
+      %h1.govuk-heading-l= title_and_header
       %p
         If your vehicle details are incorrect, you can
         = succeed '.' do
