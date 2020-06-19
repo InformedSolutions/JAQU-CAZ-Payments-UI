@@ -1,0 +1,19 @@
+%details.govuk-details{'data-module': 'govuk-details'}
+  %summary.govuk-details__summary
+    %span.govuk-details__summary-text
+      Why can't I see my dates?
+  .govuk-details__text
+    %p If the date you want to pay for is not displayed, it may be because:
+    - if @d_day_notice
+      %ul
+        %li
+          The Clean Air Zone charge came into operation on #{parse_single_date(@charge_start_date)}.
+    - else
+      %ul
+        %li
+          The 7 day period you had to pay has ended.
+          %p You may be subject to a penalty charge notice (PCN).
+    %ul
+      %li
+        The date is too far in the future.
+        %p You should check back here closer to the date you want
