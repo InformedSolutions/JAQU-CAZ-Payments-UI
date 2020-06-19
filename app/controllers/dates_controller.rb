@@ -217,7 +217,9 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   #    POST /dates/confirm_date_weekly
   #
   # ==== Params
-  # * +dates+ - selected dates
+  # * +date-day+ - selected day
+  # * +date-month+ - selected month
+  # * +date-year+ - selected year
   #
   # ==== Validations
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
@@ -227,18 +229,20 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # * +charge+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
   def confirm_date_weekly
-    dates = params[:dates]
-    if dates && check_already_paid_weekly(dates)
-      SessionManipulation::CalculateTotalCharge.call(session: session, dates: dates, weekly: true)
+    service = Dates::ValidateSelectedWeeklyDate.new(params: params)
+
+    if service.valid? && check_already_paid_weekly([service.start_date])
+      SessionManipulation::CalculateTotalCharge.call(session: session,
+                                                     dates: [service.start_date],
+                                                     weekly: true)
       redirect_to review_payment_charges_path
     else
-      alert = I18n.t(dates ? 'paid' : 'empty', scope: 'dates.weekly')
-      redirect_back_to(select_weekly_date_dates_path, alert, :dates)
+      redirect_back_to(select_weekly_date_dates_path, service.error, :dates)
     end
   end
 
   ##
-  # Renders the list of weekly dates to pick.
+  # Renders today or another day selection page
   #
   # ==== Path
   #    GET /dates/select_weekly_period
@@ -258,7 +262,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
     if params[:confirm_weekly_charge_today]
       determinate_next_weekly_page
     else
-      flash.now[:alert] = true
+      flash.now[:alert] = I18n.t('select_weekly_period')
       render :select_weekly_period
     end
   end
