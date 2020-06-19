@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
   subject do
-    post confirm_date_weekly_dates_path, params: date_partials
+    post confirm_date_weekly_dates_path, params: params
   end
 
   let(:charge) { 12.5 }
@@ -17,7 +17,7 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
   end
   let(:vrn) { 'CU123AB' }
   let(:la_id) { SecureRandom.uuid }
-  let(:date_partials) { { 'date_year' => '2019', 'date_month' => '11', 'date_day' => '01' } }
+  let(:params) { { 'date_year' => '2019', 'date_month' => '11', 'date_day' => '01' } }
 
   before do
     details = instance_double(Dates::ValidateSelectedWeeklyDate,

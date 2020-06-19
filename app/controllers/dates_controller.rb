@@ -231,9 +231,10 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   def confirm_date_weekly
     service = Dates::ValidateSelectedWeeklyDate.new(params: params)
 
-    dates = [service.start_date]
-    if service.valid? && check_already_paid_weekly(dates)
-      SessionManipulation::CalculateTotalCharge.call(session: session, dates: dates, weekly: true)
+    if service.valid? && check_already_paid_weekly([service.start_date])
+      SessionManipulation::CalculateTotalCharge.call(session: session,
+                                                     dates: [service.start_date],
+                                                     weekly: true)
       redirect_to review_payment_charges_path
     else
       redirect_back_to(select_weekly_date_dates_path, service.error, :dates)
