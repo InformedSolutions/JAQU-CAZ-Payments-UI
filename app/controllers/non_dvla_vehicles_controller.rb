@@ -101,6 +101,8 @@ class NonDvlaVehiclesController < ApplicationController
   def choose_type_return_path
     if vehicle_details('unrecognised')
       unrecognised_vehicles_path
+    elsif vehicle_details('possible_fraud')
+      uk_registered_details_vehicles_path
     else
       non_dvla_vehicles_path
     end

@@ -17,13 +17,13 @@
           %tbody.govuk-table__body
             %tr.govuk-table__row
               %td.govuk-table__cell
-                Registration number
+                Number Plate
               %td.govuk-table__header{scope: 'row', id: 'vrn'}
                 = @vrn
               %td.govuk-table__cell
                 = link_to enter_details_vehicles_path, class: 'govuk-link', id: 'change-vrn' do
                   Change
-                  %span.govuk-visually-hidden registration number
+                  %span.govuk-visually-hidden number plate
             %tr.govuk-table__row
               %td.govuk-table__cell Clean Air Zone
               %td.govuk-table__header{scope: 'row', id: 'la-name'}

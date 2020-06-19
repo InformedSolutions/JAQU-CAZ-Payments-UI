@@ -4,7 +4,7 @@
 # Base module for helpers, generated automatically during new application creation.
 #
 module ApplicationHelper
-  # Returns name of service, eg. 'Pay a Clean Air Zone charge'.
+  # Returns name of service, eg. 'Drive in a Clean Air Zone'.
   def service_name
     Rails.configuration.x.service_name
   end

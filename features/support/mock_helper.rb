@@ -83,7 +83,7 @@ module MockHelper
   end
 
   # Mock response from vehicle details endpoint in VCCS API for not found in DVLA vehicle
-  def mock_unrecognized_vehicle
+  def mock_vehicle_not_found_in_dvla
     allow(ComplianceCheckerApi)
       .to receive(:vehicle_details)
       .and_raise(BaseApi::Error404Exception.new(404, '', {}))
