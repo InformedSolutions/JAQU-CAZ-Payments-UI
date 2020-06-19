@@ -1,5 +1,6 @@
 $fa-calendar-alt-content: "\f073";
 $highlight-start-date-color: #2196f3;
+$today-color: #f44336;
 
 .far {
   &.fa-calendar-alt {
@@ -38,6 +39,10 @@ $highlight-start-date-color: #2196f3;
         background-color: govuk-colour($colour: "light-grey") !important;
         box-shadow: none !important;
         outline: none !important;
+      }
+
+      &.is-today {
+        color: $today-color !important;
       }
     }
 

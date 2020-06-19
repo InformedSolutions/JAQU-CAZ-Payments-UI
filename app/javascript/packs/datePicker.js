@@ -14,13 +14,13 @@ import {
  *
  * IE11 does not support single digit month/day
  *   eg new Date("2020-6-1") - double digit should be used
- * 
- * 86400 - day in seconds
  */
 
 const isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
 
 isIE11 && loadAllPolyfills();
+
+const DAY_IN_MS = 86400 * 1000;
 
 const isStartDateClass = "is-start-date";
 const isInRangeClass = "is-in-range";
@@ -38,8 +38,6 @@ const classes = [
  *
  * @typedef {Object} DateData
  * @property {string} value
- * @property {string} name
- * @property {string} hint
  * @property {boolean} disabled
  * @property {boolean} today
  */
@@ -75,8 +73,9 @@ const dateToString = (date) => {
 
 const today = new Date().setHours(0, 0, 0, 0);
 
-const startDateMS = today - 6 * 86400 * 1000;
-const endDateMS = today + 6 * 86400 * 1000;
+// Define payment window
+const startDateMS = today - 6 * DAY_IN_MS;
+const endDateMS = today + 6 * DAY_IN_MS;
 
 /**
  * Dates of paid days in YYYY-MM-DD format without
@@ -119,7 +118,7 @@ const highlightWeek = (firstDay) => {
   if (!firstDay.getTime()) return;
 
   for (let i = 0; i < 7; i++) {
-    const timestamp = firstDay.getTime() + i * 86400 * 1000;
+    const timestamp = firstDay.getTime() + i * DAY_IN_MS;
 
     const isPaidDate = paidDaysMS.includes(timestamp);
     const isInRange = isDateInRange(timestamp);
@@ -200,6 +199,7 @@ const pickerInstance = new Litepicker({
   moveByOneMonth: true,
   onSelect: onSelectAction,
   onShow: () => {
+    goToPreviousMonthIfAvailable();
     selectedDate !== new Date(0) && getValuesFromInputs();
   },
   onDayHover: onDayHoverAction,
@@ -266,12 +266,25 @@ const handleEndDayNotice = (date) => {
     return;
   }
 
-  const endDay = new Date(date.getTime() + 6 * 86400 * 1000);
+  const endDay = new Date(date.getTime() + 6 * DAY_IN_MS);
   const day = addPrecedingZero(endDay.getDate());
   const month = addPrecedingZero(endDay.getMonth() + 1);
   const year = endDay.getFullYear();
 
   el.innerText = `Your weekly charge will end on ${day} ${month} ${year}`;
+};
+
+/**
+ * Changes the displayed month to show whole payment
+ * window if it falls into previous month
+ */
+const goToPreviousMonthIfAvailable = () => {
+  const currentMonth = new Date().getMonth() + 1;
+  const startDateMonth = new Date(startDateMS).getMonth() + 1;
+
+  if (startDateMonth < currentMonth) {
+    pickerInstance.gotoDate(startDateMS);
+  }
 };
 
 const initializeListeners = () => {
