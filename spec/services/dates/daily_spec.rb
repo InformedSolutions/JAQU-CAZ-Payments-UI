@@ -112,10 +112,10 @@ RSpec.describe Dates::Daily do
       end
 
       context 'and #active_charge_start_date is more than a week in the future' do
-        let(:active_charge_start_date) { 10.days.from_now.to_s }
+        let(:active_charge_start_date) { 6.days.from_now.to_s }
 
-        it 'returns true' do
-          expect(service.d_day_notice).to be_truthy
+        it 'returns false' do
+          expect(service.d_day_notice).to be_falsey
         end
       end
 

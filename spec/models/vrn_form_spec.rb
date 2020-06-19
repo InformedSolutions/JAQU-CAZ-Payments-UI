@@ -3,8 +3,9 @@
 require 'rails_helper'
 
 describe VrnForm, type: :model do
-  subject(:form) { described_class.new(vrn, country) }
+  subject(:form) { described_class.new(session, vrn, country) }
 
+  let(:session) { {} }
   let(:vrn) { 'CU57ABC' }
   let(:country) { 'UK' }
 
