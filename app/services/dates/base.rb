@@ -32,7 +32,7 @@ module Dates
     def d_day_notice
       return unless charge_start_date
 
-      Date.parse(charge_start_date).between?(Time.zone.today, Time.zone.today + 5.days)
+      Date.parse(charge_start_date).between?(Time.zone.today - 5.days, Time.zone.today)
     end
 
     private
