@@ -130,8 +130,8 @@ Feature: Charges
   Scenario: User selects dates to pay for and d-day is within date range you can pay
     Given I am on the dates page when d-day was yesterday
     Then I should be on the pick daily dates page
-      And I should not see 'The Clean Air Zone charge came into operation on'
+      And I should see 'The Clean Air Zone charge came into operation on'
 
   Scenario: User selects dates to pay for and d-day is within date range you can pay
     Given I am on the dates page when d-day will be tomorrow
-    And I should see 'The Clean Air Zone charge came into operation on'
+    And I should not see 'The Clean Air Zone charge came into operation on'
