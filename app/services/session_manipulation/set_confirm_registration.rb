@@ -9,7 +9,7 @@ module SessionManipulation
   #
   class SetConfirmRegistration < BaseManipulator
     # Level used to clearing keys in the session
-    LEVEL = 2
+    LEVEL = 3
 
     # Sets +confirm_registration+ to true in the session. Used by the class level method +.call+
     def call
