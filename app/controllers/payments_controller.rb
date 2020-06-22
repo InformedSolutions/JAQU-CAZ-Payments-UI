@@ -101,7 +101,7 @@ class PaymentsController < ApplicationController
 
   # Clears details of the payment in the session
   def clear_payment_in_session
-    SessionManipulation::ClearSessionDetails.call(session: session, key: 13)
+    SessionManipulation::ClearSessionDetails.call(session: session, key: 14)
   end
 
   # Save payment details using SessionManipulation::SetPaymentDetails
