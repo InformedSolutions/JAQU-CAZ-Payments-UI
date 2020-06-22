@@ -9,7 +9,7 @@ module SessionManipulation
   #
   class SetConfirmExempt < BaseManipulator
     # Level used to clearing keys in the session
-    LEVEL = 9
+    LEVEL = 10
 
     # Sets +confirm_exempt+ to true in the session. Used by the class level method +.call+
     def call

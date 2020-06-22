@@ -11,7 +11,7 @@ module SessionManipulation
   #
   class CalculateTotalCharge < BaseManipulator
     # Level used to clearing keys in the session
-    LEVEL = 12
+    LEVEL = 13
 
     # Initializer function. Used by the class level method +.call+
     #
