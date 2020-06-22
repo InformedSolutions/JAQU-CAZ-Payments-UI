@@ -32,13 +32,13 @@ end
 
 Then("I enter an exempted non-UK vehicle's registration") do
   mock_vehicle_not_found_in_dvla
-  mock_exempt_whitelisted_vehicle
+  mock_exempted_register_details
   fill_in_non_uk(vrn)
 end
 
 Then("I enter a not-exempted non-UK vehicle's registration") do
   mock_vehicle_not_found_in_dvla
-  mock_non_exempt_whitelisted_vehicle
+  mock_unregistered_non_uk_vehicle_details
   fill_in_non_uk(vrn)
 end
 
