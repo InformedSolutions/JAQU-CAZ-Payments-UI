@@ -9,7 +9,7 @@ module SessionManipulation
   #
   class SetConfirmVehicle < BaseManipulator
     # Level used to clearing keys in the session
-    LEVEL = 3
+    LEVEL = 4
 
     # Initializer function. Used by the class level method +.call+
     #
