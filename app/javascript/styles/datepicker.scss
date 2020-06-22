@@ -12,6 +12,7 @@ body:not(.js-enabled) .litepicker-input-container {
     top: 5px;
     position: relative;
     cursor: pointer;
+
     &:before {
       content: $fa-calendar-alt-content;
       font-style: normal;
@@ -26,6 +27,7 @@ body:not(.js-enabled) .litepicker-input-container {
 
     &.is-start-date {
       cursor: pointer;
+
       &:focus,
       &:active {
         color: govuk-colour($colour: "white") !important;
