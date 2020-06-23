@@ -4,7 +4,9 @@ import {
   loadAllPolyfills,
   addPrecedingZero,
   convertUTCToLocal,
-} from "../src/ie11Helpers";
+  isIE11,
+  addZero,
+} from "../src/compatibilityHelpers";
 
 /**
  * All times in local timezone unless specified otherwise
@@ -12,11 +14,10 @@ import {
  * new Date("2020-6-1") returns date in local timezone
  * new Date("2020-06-01") returns date in UTC
  *
- * IE11 does not support single digit month/day
- *   eg new Date("2020-6-1") - double digit should be used
+ * IE11 and Safari do not support single digit month/day
+ *   not supported: new Date("2020-6-1")
+ *   supported:     new Date("2020-06-01")
  */
-
-const isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
 
 isIE11 && loadAllPolyfills();
 
@@ -53,9 +54,9 @@ const datesData = JSON.parse(
 
 /**
  * Formats the date to YYYY-MM-DD without the preceding zero
- * unless the browser is IE11
- *   eg !IE11 2020-6-1, 2019-11-30
- *   eg IE11 2020-06-01, 2019-11-30
+ * unless the browser is IE11 or Safari
+ *   eg !IE11 && !Safari  2020-6-1, 2019-11-30
+ *   eg IE11 || Safari    2020-06-01, 2019-11-30
  *
  * @param {Date} date
  *
@@ -63,10 +64,10 @@ const datesData = JSON.parse(
  */
 const dateToString = (date) => {
   const year = date.getFullYear();
-  const month = !isIE11
+  const month = !addZero
     ? date.getMonth() + 1
     : addPrecedingZero(date.getMonth() + 1);
-  const day = !isIE11 ? date.getDate() : addPrecedingZero(date.getDate());
+  const day = !addZero ? date.getDate() : addPrecedingZero(date.getDate());
 
   return `${year}-${month}-${day}`;
 };
@@ -78,10 +79,10 @@ const startDateMS = today - 6 * DAY_IN_MS;
 const endDateMS = today + 6 * DAY_IN_MS;
 
 /**
- * Dates of paid days in YYYY-MM-DD format without
- * the preceding zero unless the browser is IE11
- *   eg !IE11 2020-6-1, 2019-11-30
- *   eg IE11 2020-06-01, 2019-11-30
+ * Dates of paid days in YYYY-MM-DD format without the
+ * preceding zero unless the browser is IE11 or Safari
+ *   eg !IE11 && !Safari  2020-6-1, 2019-11-30
+ *   eg IE11 || Safari    2020-06-01, 2019-11-30
  */
 const paidDates = datesData
   .filter((date) => date.disabled)
@@ -208,10 +209,10 @@ const pickerInstance = new Litepicker({
 /**
  * Gets the date from inputs with a simple validation.
  *
- * inputDateString will always have date without preceding zero
- * even if value input is with zeros unless the browser is IE11
- *   eg !IE11 2020-6-1, 2019-11-30
- *   eg IE11 2020-06-01, 2019-11-30
+ * inputDateString will always have date without preceding zero even
+ * if value input is with zeros unless the browser is IE11 or Safari
+ *   eg !IE11 && !Safari  2020-6-1, 2019-11-30
+ *   eg IE11 || Safari    2020-06-01, 2019-11-30
  */
 const getValuesFromInputs = () => {
   const today = new Date();
@@ -226,12 +227,11 @@ const getValuesFromInputs = () => {
   const monthRaw = partials[1] ? Number(partials[1]) : today.getMonth() + 1;
   const year = partials[2] ? Number(partials[2]) : today.getFullYear();
 
-  // IE11 does not accept date containing single digits
-  const day = !isIE11 ? dayRaw : addPrecedingZero(dayRaw);
-  const month = !isIE11 ? monthRaw : addPrecedingZero(monthRaw);
+  const day = !addZero ? dayRaw : addPrecedingZero(dayRaw);
+  const month = !addZero ? monthRaw : addPrecedingZero(monthRaw);
 
   const inputDateString = `${year}-${month}-${day}`;
-  const inputDate = !isIE11
+  const inputDate = !addZero
     ? new Date(inputDateString)
     : convertUTCToLocal(new Date(inputDateString));
 
