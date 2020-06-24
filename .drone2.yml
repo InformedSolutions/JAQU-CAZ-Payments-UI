@@ -176,7 +176,7 @@ steps:
         - push
 
   - name: codedeploy ui dev
-    image: golang:alpine
+    image: alpine:3.11.6
     commands:
       - apk add --update bash python python-dev py-pip build-base jq
       - pip install awscli
@@ -200,7 +200,7 @@ steps:
 
   # Build docker image
   - name: await ecs rollout
-    image: docker:19.03.11-git
+    image: alpine:3.11.6
     environment:
       build_id_url: https://dev2.paycleanairzonecharge.co.uk/build_id
       build_id: ${DRONE_BUILD_NUMBER}
@@ -470,7 +470,7 @@ steps:
         - push
 
   - name: codedeploy ui st
-    image: golang:alpine
+    image: alpine:3.11.6
     commands:
       - apk add --update bash python python-dev py-pip build-base jq
       - pip install awscli
@@ -494,7 +494,7 @@ steps:
 
   # Build docker image
   - name: await ecs rollout
-    image: docker:19.03.11-git
+    image: alpine:3.11.6
     environment:
       build_id_url: https://st2.paycleanairzonecharge.co.uk/build_id
       build_id: ${DRONE_BUILD_NUMBER}
@@ -759,7 +759,7 @@ steps:
 
     # Build docker image
     - name: await ecs rollout
-      image: docker:19.03.11-git
+      image: alpine:3.11.6
       environment:
         build_id_url: https://sit2.paycleanairzonecharge.co.uk/build_id
         build_id: ${DRONE_BUILD_NUMBER}
@@ -947,9 +947,9 @@ steps:
         build_id_url: https://preprod2.paycleanairzonecharge.co.uk/build_id
         SRC_AWS_ACCOUNT_ROLE: arn:aws:iam::072187228077:role/jaqu-controlledServiceRole
         AWS_ACCESS_KEY_ID:
-          from_secret: jaqu_staging_aws_access_key_id
+          from_secret: jaqu_controlled_aws_access_key_id
         AWS_SECRET_ACCESS_KEY:
-          from_secret: jaqu_staging_aws_secret_access_key
+          from_secret: jaqu_controlled_aws_secret_access_key
         AWS_DEFAULT_REGION: eu-west-2
       commands:
         - apk add --update bash python python-dev py-pip build-base jq
@@ -957,7 +957,7 @@ steps:
         - mkdir ~/.aws
         - echo -e "[profile target_acc]\nrole_arn = $SRC_AWS_ACCOUNT_ROLE\ncredential_source = Environment\nrole_session_name = AWSACCOUNT" > ~/.aws/config
         - TASKDEF=`aws ecs describe-services --profile target_acc --cluster payments-cluster-sit --services payments-sit-ecs-service | jq --raw-output '.services[0].taskDefinition'`
-        - export build_id=`aws ecs describe-task-definition --task-definition $TASKDEF | jq --raw-output '.taskDefinition.containerDefinitions[0].image' | cut -f 2 -d ':'`
+        - export build_id=`aws ecs describe-task-definition  --profile target_acc --task-definition $TASKDEF | jq --raw-output '.taskDefinition.containerDefinitions[0].image' | cut -f 2 -d ':'`
         - apk add curl
         - sh build_utils/check_build_number.sh
       volumes:
@@ -1136,14 +1136,14 @@ steps:
 
     # Build docker image
     - name: await ecs rollout
-      image: docker:19.03.11-git
+      image: alpine:3.11.6
       environment:
         build_id_url: https://prod2.paycleanairzonecharge.co.uk/build_id
         SRC_AWS_ACCOUNT_ROLE: arn:aws:iam::360470905865:role/jaqu-stagingServiceRole
         AWS_ACCESS_KEY_ID:
-          from_secret: jaqu_prod_aws_access_key_id
+          from_secret: jaqu_staging_aws_access_key_id
         AWS_SECRET_ACCESS_KEY:
-          from_secret: jaqu_prod_aws_secret_access_key
+          from_secret: jaqu_staging_aws_secret_access_key
         AWS_DEFAULT_REGION: eu-west-2
       commands:
         - apk add --update bash python python-dev py-pip build-base jq
@@ -1151,7 +1151,7 @@ steps:
         - mkdir ~/.aws
         - echo -e "[profile target_acc]\nrole_arn = $SRC_AWS_ACCOUNT_ROLE\ncredential_source = Environment\nrole_session_name = AWSACCOUNT" > ~/.aws/config
         - TASKDEF=`aws ecs describe-services --profile target_acc --cluster payments-cluster-preprod --services payments-preprod-ecs-service | jq --raw-output '.services[0].taskDefinition'`
-        - export build_id=`aws ecs describe-task-definition --task-definition $TASKDEF | jq --raw-output '.taskDefinition.containerDefinitions[0].image' | cut -f 2 -d ':'`
+        - export build_id=`aws ecs describe-task-definition  --profile target_acc --task-definition $TASKDEF | jq --raw-output '.taskDefinition.containerDefinitions[0].image' | cut -f 2 -d ':'`
         - apk add curl
         - sh build_utils/check_build_number.sh
       volumes:
