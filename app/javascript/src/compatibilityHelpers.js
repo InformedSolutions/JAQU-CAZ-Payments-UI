@@ -96,3 +96,19 @@ export const addPrecedingZero = (value) => ("0" + value).slice(-2);
  * @return {Date} = date in local timezone
  */
 export const convertUTCToLocal = (date) => new Date(date.setHours(0, 0, 0, 0));
+
+const isSafari =
+  /constructor/i.test(window.HTMLElement) ||
+  (function (p) {
+    return p.toString() === "[object SafariRemoteNotification]";
+  })(
+    !window["safari"] ||
+      (typeof safari !== "undefined" && safari.pushNotification)
+  );
+
+export const isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
+
+/**
+ * Always add preceding zero if browser is unsupported
+ */
+export const addZero = isIE11 || isSafari;
