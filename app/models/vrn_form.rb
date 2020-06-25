@@ -3,7 +3,7 @@
 ##
 # This class is used to validate user data filled in +app/views/vehicles/enter_details.html.haml+.
 #
-class VrnForm
+class VrnForm # rubocop:disable Metrics/ClassLength
   include ActiveModel::Validations
   include Rails.application.routes.url_helpers
 
@@ -22,6 +22,7 @@ class VrnForm
     minimum: 2, too_short: I18n.t('vrn_form.vrn_too_short'),
     maximum: 7, too_long: I18n.t('vrn_form.vrn_too_long')
   }, if: -> { uk? }
+
   # Checks if VRN is in valid format when vehicle is registered in the UK
   validate :vrn_uk_format, if: -> { uk? }
 
@@ -72,7 +73,12 @@ class VrnForm
   def match_uk_format?
     FORMAT_REGEXPS.any? do |reg|
       reg.match(vrn).present?
-    end
+    end && no_leading_zeros?
+  end
+
+  # Checks if VRN starts with '0'
+  def no_leading_zeros?
+    !vrn.starts_with?('0')
   end
 
   # Check if VRN is DVLA registered
@@ -145,6 +151,10 @@ class VrnForm
     /^[A-Z]{3}[0-9]{2}[A-Z]$/, # AAA99A
     /^[0-9]{3}[A-Z]{3}$/, # 999AAA
     /^[A-Z]{2}[0-9]{4}$/, # AA9999
-    /^[0-9]{4}[A-Z]{2}$/ # 9999AA
+    /^[0-9]{4}[A-Z]{2}$/, # 9999AA
+
+    # The following regex is technically not valid, but is considered as valid
+    # due to the requirement which forces users not to include leading zeros.
+    /^[A-Z]{2,3}$/ # AA, AAA
   ].freeze
 end
