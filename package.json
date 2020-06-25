@@ -10,7 +10,7 @@
     "expose-loader": "^0.7.5",
     "govuk-frontend": "^3.6.0",
     "jquery": "^3.5.1",
-    "litepicker": "^1.4.6",
+    "litepicker": "^1.4.6",	
     "improved-yarn-audit": "^2.2.1",
     "rails-erb-loader": "^5.5.2",
     "turbolinks": "^5.2.0"
