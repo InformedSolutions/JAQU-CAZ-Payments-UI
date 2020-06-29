@@ -1240,22 +1240,6 @@ get:
   path: /build-tools/drone
   name: awsStagingSecretAccessKey
 
-
----
-kind: secret
-name: jaqu_staging_service_aws_access_key_id
-get:
-  path: /build-tools/drone
-  name: awsStagingServiceAccessKeyId
-
----
-kind: secret
-name: jaqu_staging_service_aws_secret_access_key
-get:
-  path: /build-tools/drone
-  name: awsStagingServiceSecretAccessKey
-
-
 ---
 kind: secret
 name: jaqu_prod_aws_access_key_id
@@ -1269,20 +1253,6 @@ name: jaqu_prod_aws_secret_access_key
 get:
   path: /build-tools/drone
   name: awsProdSecretAccessKey
-
----
-kind: secret
-name: jaqu_prod_service_aws_access_key_id
-get:
-  path: /build-tools/drone
-  name: awsProdServiceAccessKeyId
-
----
-kind: secret
-name: jaqu_prod_service_aws_secret_access_key
-get:
-  path: /build-tools/drone
-  name: awsProdServiceSecretAccessKey
 
 ---
 kind: secret
