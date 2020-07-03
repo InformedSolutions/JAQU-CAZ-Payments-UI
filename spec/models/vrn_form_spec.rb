@@ -78,6 +78,14 @@ describe VrnForm, type: :model do
       it_behaves_like 'an invalid vrn input', I18n.t('vrn_form.vrn_invalid')
     end
 
+    context 'when VRN starts with 0' do
+      let(:vrn) { '00SGL6' }
+
+      it { is_expected.not_to be_valid }
+
+      it_behaves_like 'an invalid vrn input', I18n.t('vrn_form.vrn_invalid')
+    end
+
     context 'when country in Non-UK' do
       let(:country) { 'Non-UK' }
 
@@ -110,25 +118,19 @@ describe VrnForm, type: :model do
 
         it { is_expected.to be_valid }
       end
+
+      context 'when vrn starts with 0' do
+        let(:vrn) { '00SGL6' }
+
+        it { is_expected.to be_valid }
+      end
     end
   end
 
   describe 'VRN formats' do
     describe 'invalid formats' do
-      context 'when VRN is in format AA' do
-        let(:vrn) { 'AB' }
-
-        it { is_expected.not_to be_valid }
-      end
-
       context 'when VRN is in format 99' do
         let(:vrn) { '45' }
-
-        it { is_expected.not_to be_valid }
-      end
-
-      context 'when VRN is in format AAA' do
-        let(:vrn) { 'ABG' }
 
         it { is_expected.not_to be_valid }
       end
