@@ -6,6 +6,7 @@ module Dates
   #
   # ==== Params
   # * +params+ - request parameters
+  # * +charge_start_date+ - d-day date
   #
   class ValidateSelectedWeeklyDate < Base
     ##
@@ -13,8 +14,9 @@ module Dates
     # eg 2020-6-1
     attr_reader :start_date
 
-    def initialize(params:)
+    def initialize(params:, charge_start_date:)
       @start_date = parse_date(params)
+      @charge_start_date = charge_start_date
     end
 
     ##
@@ -48,28 +50,43 @@ module Dates
     end
 
     ##
-    # Validates the date.
-    # Returns boolean.
-    def valid?
-      @start_date && date_in_range?
+    # Checks if date is after the d-day
+    # Returns boolean
+    def date_chargeable?
+      return unless @start_date
+
+      Time.zone.parse(@start_date) >= Time.zone.parse(@charge_start_date)
     end
 
     ##
-    # Sets correct error message
+    # Validates the date.
+    # Returns boolean.
+    def valid?
+      @start_date && date_in_range? && date_chargeable?
+    end
+
+    ##
+    # Sets correct error message.
+    # Returns string.
     def error
-      if @start_date && date_in_range?
+      if valid?
         I18n.t('paid', scope: 'dates.weekly')
       elsif !@start_date && !date_in_range?
         I18n.t('empty', scope: 'dates.weekly')
-      else
+      elsif @start_date && !date_in_range?
         out_of_range_error
+      else
+        I18n.t('not_available', scope: 'dates.weekly')
       end
     end
 
     ##
     # Generates error message for out of range error
     def out_of_range_error
-      start_day = (Date.current - 6.days).strftime('%d %m %Y')
+      start = Date.current - 6.days
+      d_day = Date.parse(@charge_start_date)
+
+      start_day = start > d_day ? start.strftime('%d %m %Y') : d_day.strftime('%d %m %Y')
       end_day = (Date.current + 6.days).strftime('%d %m %Y')
 
       "Select a start date between #{start_day} and #{end_day}"

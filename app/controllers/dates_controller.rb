@@ -15,7 +15,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # checks if weekly discount is possible to pay for today
   before_action :check_weekly_charge_today, only: %i[select_weekly_period confirm_select_weekly_period]
   # fetching +active_charge_start_date+ and assigns it to the variable
-  before_action :assign_charge_start_date, only: :select_weekly_date
+  before_action :assign_charge_start_date, only: %i[select_weekly_date confirm_date_weekly]
   ##
   # Renders a select period page.
   #
@@ -229,7 +229,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # * +charge+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
   def confirm_date_weekly
-    service = Dates::ValidateSelectedWeeklyDate.new(params: params)
+    service = Dates::ValidateSelectedWeeklyDate.new(params: params, charge_start_date: @charge_start_date)
 
     if service.valid? && check_already_paid_weekly([service.start_date])
       SessionManipulation::CalculateTotalCharge.call(session: session,

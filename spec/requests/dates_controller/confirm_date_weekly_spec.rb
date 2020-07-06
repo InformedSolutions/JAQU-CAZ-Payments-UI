@@ -27,6 +27,8 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
                               error: '',
                               valid?: true)
     allow(Dates::ValidateSelectedWeeklyDate).to receive(:new).and_return(details)
+    stubbed_caz = instance_double('Caz', active_charge_start_date: parse_date(7.days.ago))
+    allow(FetchSingleCazData).to receive(:call).and_return(stubbed_caz)
   end
 
   context 'with details in the session' do

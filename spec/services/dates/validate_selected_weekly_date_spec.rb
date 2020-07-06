@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Dates::ValidateSelectedWeeklyDate do
-  subject(:service) { described_class.new(params: params) }
+  subject(:service) { described_class.new(params: params, charge_start_date: charge_start_date) }
 
   let(:params) do
     {
@@ -17,6 +17,8 @@ RSpec.describe Dates::ValidateSelectedWeeklyDate do
   let(:month) { Time.current.month }
   let(:day) { Time.current.day }
 
+  let(:charge_start_date) { '2020-01-01' }
+
   context 'when date is in correct format and is in range' do
     it 'assigns correct value to @start_date variable' do
       expect(service.start_date).to eq("#{year}-#{month}-#{day}")
@@ -26,12 +28,42 @@ RSpec.describe Dates::ValidateSelectedWeeklyDate do
       expect(service.date_in_range?).to eq(true)
     end
 
+    it 'returns true for .date_chargeable?' do
+      expect(service.date_chargeable?).to eq(true)
+    end
+
     it 'returns true for .valid?' do
       expect(service.valid?).to eq(true)
     end
 
     it 'returns correct error if the date is already paid for' do
       expect(service.error).to eq(I18n.t('paid', scope: 'dates.weekly'))
+    end
+  end
+
+  context 'when date is in correct format and in default range, but d-day is in two days' do
+    charge_start = Time.current + 2.days
+
+    year = charge_start.year
+    month = charge_start.month
+    day = charge_start.day
+
+    let(:charge_start_date) { "#{year}-#{month}-#{day}" }
+
+    it 'returns true for .date_in_range?' do
+      expect(service.date_in_range?).to eq(true)
+    end
+
+    it 'returns false for .date_chargeable?' do
+      expect(service.date_chargeable?).to eq(false)
+    end
+
+    it 'returns false for .valid?' do
+      expect(service.valid?).to eq(false)
+    end
+
+    it 'returns correct error if the date is already paid for' do
+      expect(service.error).to eq(I18n.t('not_available', scope: 'dates.weekly'))
     end
   end
 
@@ -46,6 +78,10 @@ RSpec.describe Dates::ValidateSelectedWeeklyDate do
 
     it 'returns false for .date_in_range?' do
       expect(service.date_in_range?).to eq(false)
+    end
+
+    it 'returns false for .date_chargeable?' do
+      expect(service.date_chargeable?).to eq(false)
     end
 
     it 'returns false for .valid?' do

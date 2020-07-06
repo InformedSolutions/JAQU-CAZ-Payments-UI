@@ -21,5 +21,6 @@ en:
     weekly:
       empty: Select a start date for the week that you wish to pay for
       paid: You have already paid for days in this week, choose an alternative start date
+      not_available: Select an available start date
   confirmation_alert: Confirm the number plate is correct
   select_weekly_period: State if you would like your weekly charge to start today or another day

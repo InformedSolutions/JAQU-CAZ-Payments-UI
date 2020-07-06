@@ -12,6 +12,7 @@
 = link_to 'Back', @return_path, class: 'govuk-back-link', id: 'back-link'
 
 #dates_data{data: @dates.to_json}
+#d-day_data{data: @charge_start_date}
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
@@ -25,11 +26,15 @@
         = title_and_header
       %p A weekly charge allows you to drive in Leeds for 7 consecutive days.
       %p A daily charge period runs from midnight to midnight.
+
       - if @all_paid
         .govuk-inset-text
           You have paid for everything, come back on a different day.
           To start another journey click the link at the top of the page.
 
+      - if @d_day_notice
+        .govuk-inset-text
+          The Clean Air Zone charge came into operation on #{parse_single_date(@charge_start_date)}.
 
       = form_tag confirm_date_weekly_dates_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
