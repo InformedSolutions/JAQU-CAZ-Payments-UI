@@ -82,12 +82,12 @@ Feature: Leeds Taxi
   Scenario: User selects dates to pay for and d-day is within date range you can pay
     Given I am on the weekly dates page when d-day was yesterday and today day is paid
     Then I should be on the pick weekly dates page
-      And I should see "Why can't I see my dates?"
+      And I should see "Why can’t I select certain dates?"
 
   Scenario: User selects dates to pay for and d-day is within date range you can pay
     Given I am on the weekly dates page when d-day will be tomorrow
     Then I should be on the pick weekly dates page
-      And I should see "Why can't I see my dates?"
+      And I should see "Why can’t I select certain dates?"
 
   Scenario: User selects dates to pay for and d-day already passed and is outside of date range
     Given I am on the weekly dates page when d-day was 7 days ago and today day is paid

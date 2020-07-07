@@ -69,27 +69,11 @@ module Dates
     # Sets correct error message.
     # Returns string.
     def error
-      if valid?
-        I18n.t('paid', scope: 'dates.weekly')
-      elsif !@start_date && !date_in_range?
+      if !@start_date
         I18n.t('empty', scope: 'dates.weekly')
-      elsif @start_date && !date_in_range?
-        out_of_range_error
       else
         I18n.t('not_available', scope: 'dates.weekly')
       end
-    end
-
-    ##
-    # Generates error message for out of range error
-    def out_of_range_error
-      start = Date.current - 6.days
-      d_day = Date.parse(@charge_start_date)
-
-      start_day = start > d_day ? start.strftime('%d %m %Y') : d_day.strftime('%d %m %Y')
-      end_day = (Date.current + 6.days).strftime('%d %m %Y')
-
-      "Select a start date between #{start_day} and #{end_day}"
     end
   end
 end

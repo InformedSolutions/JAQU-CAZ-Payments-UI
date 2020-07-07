@@ -29,8 +29,8 @@
 
       - if @all_paid
         .govuk-inset-text
-          You have paid for everything, come back on a different day.
-          To start another journey click the link at the top of the page.
+          If the weekly charge you want to pay for is not available, 
+          it is because you have paid for a date in those 7 consecutive days.
 
       - if @d_day_notice
         .govuk-inset-text
@@ -51,7 +51,20 @@
 
         %p#week-last-day-notice
 
-        = render 'dates/details'
+        %details.govuk-details{'data-module': 'govuk-details'}
+          %summary.govuk-details__summary
+            %span.govuk-details__summary-text
+              Why can’t I select certain dates?
+          .govuk-details__text
+            %p If you can't select the date you want to pay for, it may be because:
+            %ul
+              %li
+                You have paid a charge for that date
+              %li
+                You have paid for part of those consecutive 7 days
+              %li
+                It is outside the 13 days you can pay a charge for
+            %p If the date you want to pay for is more than 7 days ago you may be sent a Penalty Charge Notice (PCN)
 
         = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button' if !@all_paid
 
