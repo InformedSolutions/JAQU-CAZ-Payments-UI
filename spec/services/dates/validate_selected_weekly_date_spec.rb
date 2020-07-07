@@ -86,7 +86,7 @@ RSpec.describe Dates::ValidateSelectedWeeklyDate do
     end
 
     it 'returns correct error message' do
-      expect(service.error).to eq("Select an available start date")
+      expect(service.error).to eq('Select an available start date')
     end
   end
 
