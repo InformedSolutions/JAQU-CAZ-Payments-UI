@@ -44,12 +44,29 @@ const classes = [
  */
 
 /**
+ * setPaymentWindow() type definition
+ *
+ * @typedef {Object} PaymentWindow
+ * @property {number} startDateMS - payment window start date in MS
+ * @property {number} endDateMS - payment window end date in MS
+ */
+
+/**
  * Data from dates_controller - @dates
  *
  * @type {DateData[]}
  */
 const datesData = JSON.parse(
   document.getElementById("dates_data").getAttribute("data")
+);
+
+/**
+ * Data from dates_controller - @charge_start_date
+ *
+ * @type {Date} D-Day date
+ */
+const chargeStartDate = convertUTCToLocal(
+  new Date(document.getElementById("d-day_data").getAttribute("data"))
 );
 
 /**
@@ -74,9 +91,39 @@ const dateToString = (date) => {
 
 const today = new Date().setHours(0, 0, 0, 0);
 
+/**
+ * Defines the payment window.
+ *
+ * @returns {PaymentWindow} payment window
+ */
+const setPaymentWindow = () => {
+  const startDateMS = today - 6 * DAY_IN_MS;
+  const endDateMS = today + 6 * DAY_IN_MS;
+  const dDayDate = chargeStartDate.getTime();
+
+  const isDDayInWindow = startDateMS <= dDayDate && dDayDate <= endDateMS;
+  const isInOperation = dDayDate <= today;
+
+  if (isDDayInWindow && isInOperation) {
+    return {
+      startDateMS: dDayDate,
+      endDateMS,
+    };
+  } else if (!isInOperation) {
+    return {
+      startDateMS: dDayDate,
+      endDateMS: dDayDate - 1 * DAY_IN_MS,
+    };
+  } else {
+    return {
+      startDateMS,
+      endDateMS,
+    };
+  }
+};
+
 // Define payment window
-const startDateMS = today - 6 * DAY_IN_MS;
-const endDateMS = today + 6 * DAY_IN_MS;
+const { startDateMS, endDateMS } = setPaymentWindow();
 
 /**
  * Dates of paid days in YYYY-MM-DD format without the
