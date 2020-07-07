@@ -13,7 +13,7 @@ Feature: Vehicles
       And I should see 'Enter the number plate of the vehicle'
     Then I enter a only vehicle's registration
       And I press the Continue
-      And I should see 'Tell us if your vehicle is UK or non-UK registered'
+      And I should see 'Choose UK or Non-UK'
     Then I choose only UK country
       And I press the Continue
       And I should see 'Enter the number plate of the vehicle'
