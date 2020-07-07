@@ -42,13 +42,10 @@ RSpec.describe Dates::ValidateSelectedWeeklyDate do
   end
 
   context 'when date is in correct format and in default range, but d-day is in two days' do
-    charge_start = Time.current + 2.days
-
-    year = charge_start.year
-    month = charge_start.month
-    day = charge_start.day
-
-    let(:charge_start_date) { "#{year}-#{month}-#{day}" }
+    let(:charge_start_date) do
+      charge_start = Time.current + 2.days
+      "#{charge_start.year}-#{charge_start.month}-#{charge_start.day}"
+    end
 
     it 'returns true for .date_in_range?' do
       expect(service.date_in_range?).to eq(true)
