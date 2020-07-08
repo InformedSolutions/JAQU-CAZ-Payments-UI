@@ -20,7 +20,6 @@ en:
       paid: You have already paid for at least one of the selected dates
     weekly:
       empty: Select a start date for the week that you wish to pay for
-      paid: You have already paid for days in this week, choose an alternative start date
       not_available: Select an available start date
   confirmation_alert: Confirm the number plate is correct
   select_weekly_period: Select a start day

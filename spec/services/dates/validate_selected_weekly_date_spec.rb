@@ -37,7 +37,7 @@ RSpec.describe Dates::ValidateSelectedWeeklyDate do
     end
 
     it 'returns correct error if the date is already paid for' do
-      expect(service.error).to eq(I18n.t('paid', scope: 'dates.weekly'))
+      expect(service.error).to eq(I18n.t('not_available', scope: 'dates.weekly'))
     end
   end
 
@@ -86,10 +86,7 @@ RSpec.describe Dates::ValidateSelectedWeeklyDate do
     end
 
     it 'returns correct error message' do
-      start_day = (Date.current - 6.days).strftime('%d %m %Y')
-      end_day = (Date.current + 6.days).strftime('%d %m %Y')
-
-      expect(service.error).to eq("Select a start date between #{start_day} and #{end_day}")
+      expect(service.error).to eq('Select an available start date')
     end
   end
 
