@@ -21,7 +21,7 @@ class PaymentsController < ApplicationController
   # * +payment_id+ - vehicle registration number, required in the session
   #
   def index
-    payment = PaymentStatus.new(vehicle_details('payment_id'), vehicle_details('la_name'))
+    payment = PaymentStatus.new(vehicle_details('payment_id'))
     save_payment_details(payment)
     if payment.success?
       redirect_to success_payments_path

@@ -68,12 +68,10 @@ class PaymentsApi < BaseApi
     # ==== Attributes
     #
     # * +payment_id+ - Payment ID returned by backend API during the payment creation
-    # * +caz_name+ - the name of the Clean Air Zone for which the payment is being made
     #
     # ==== Example
     #
-    #    PaymentsApi.payment_status(payment_id: '86b64512-154c-4033-a64d-92e8ed19275f',
-    #                               caz_name: 'Leeds')
+    #    PaymentsApi.payment_status(payment_id: '86b64512-154c-4033-a64d-92e8ed19275f')
     #
     # ==== Result
     #
@@ -93,9 +91,9 @@ class PaymentsApi < BaseApi
     # * {404 Exception}[rdoc-ref:BaseApi::Error404Exception] - payment not found
     # * {500 Exception}[rdoc-ref:BaseApi::Error500Exception] - backend API error
     #
-    def payment_status(payment_id:, caz_name:)
+    def payment_status(payment_id:)
       log_action("Getting a payment status for id: #{payment_id}")
-      request(:put, "/payments/#{payment_id}", body: payment_status_body(caz_name))
+      request(:put, "/payments/#{payment_id}")
     end
 
     ##
@@ -134,13 +132,6 @@ class PaymentsApi < BaseApi
         transactions: transactions,
         telephonePayment: false
       }
-    end
-
-    # Returns parsed to JSON hash of the payment status reconciliation parameters with proper keys
-    def payment_status_body(caz_name)
-      {
-        cleanAirZoneName: caz_name
-      }.to_json
     end
   end
 end
