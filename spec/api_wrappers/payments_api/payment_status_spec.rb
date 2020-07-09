@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'PaymentsApi.payment_status' do
-  subject(:call) { PaymentsApi.payment_status(payment_id: id, caz_name: 'leeds') }
+  subject(:call) { PaymentsApi.payment_status(payment_id: id) }
 
   let(:id) { SecureRandom.uuid }
   let(:status) { 'success' }
