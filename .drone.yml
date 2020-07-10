@@ -293,7 +293,7 @@ steps:
 
   # Build docker image
   - name: await ecs rollout
-    image: docker
+    image: alpine:3.11.6
     environment:
       build_id_url: https://dev.paycleanairzonecharge.co.uk/build_id
       build_id: ${DRONE_BUILD_NUMBER}
@@ -569,7 +569,7 @@ steps:
 
   # Build docker image
   - name: await ecs rollout
-    image: docker
+    image: alpine:3.11.6
     environment:
       build_id_url: https://st.paycleanairzonecharge.co.uk/build_id
       build_id: ${DRONE_BUILD_NUMBER}
@@ -812,7 +812,7 @@ steps:
 
   # Build docker image
   - name: await ecs rollout
-    image: docker
+    image: alpine:3.11.6
     environment:
       build_id_url: https://sit.paycleanairzonecharge.co.uk/build_id
       build_id: ${DRONE_BUILD_NUMBER}
@@ -1061,7 +1061,7 @@ steps:
 
   # Build docker image
   - name: await ecs rollout
-    image: docker
+    image: alpine:3.11.6
     environment:
       build_id_url: https://uat.paycleanairzonecharge.co.uk/build_id
       build_id: ${DRONE_BUILD_NUMBER}
@@ -1240,7 +1240,7 @@ steps:
 
   # Build docker image
   - name: await ecs rollout
-    image: docker
+    image: alpine:3.11.6
     environment:
       build_id_url: https://preprod.paycleanairzonecharge.co.uk/build_id
       AWS_ACCESS_KEY_ID:
@@ -1418,7 +1418,7 @@ steps:
 
   # Build docker image
   - name: await ecs rollout
-    image: docker
+    image: alpine:3.11.6
     environment:
       build_id_url: https://pay.cleanairzone.defra.gov.uk/build_id
       AWS_ACCESS_KEY_ID:
