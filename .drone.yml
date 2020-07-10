@@ -428,6 +428,7 @@ steps:
     commands:
        - bundle audit check --update
        - yarn run improved-yarn-audit --exclude '1486' --retry-on-network-failure
+
        - brakeman --except Redirect,LinkToHref
     volumes:
       - name: docker_sock
