@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'DatesController - GET #weekly_charge', type: :request do
-  subject(:http_request) { get weekly_charge_dates_path }
+  subject { get weekly_charge_dates_path }
 
   let(:vrn) { 'CU57ABC' }
   let(:country) { 'UK' }
@@ -50,11 +50,11 @@ RSpec.describe 'DatesController - GET #weekly_charge', type: :request do
           'la_name' => kind_of(String),
           'weekly_possible' => true
         )
-      http_request
+      subject
     end
 
     it 'returns a success response' do
-      http_request
+      subject
       expect(response).to have_http_status(:success)
     end
   end

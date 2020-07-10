@@ -29,7 +29,6 @@ class PaymentsApi < BaseApi
     # ==== Example
     #
     #    PaymentsApi.create_payment(
-    #      vrn: 'CU57ABC',
     #      zone_id: '86b64512-154c-4033-a64d-92e8ed19275f',
     #      transactions: [
     #         {
@@ -58,12 +57,9 @@ class PaymentsApi < BaseApi
     # * {422 Exception}[rdoc-ref:BaseApi::Error422Exception] - invalid data
     # * {500 Exception}[rdoc-ref:BaseApi::Error500Exception] - backend API error
     #
-    def create_payment(vrn:, zone_id:, transactions:, return_url:)
-      log_action(
-        "Creating a payment for vrn: #{vrn}, zone id: #{zone_id}, days count: #{transactions.size}"
-      )
+    def create_payment(zone_id:, transactions:, return_url:)
+      log_action('Creating payment')
       body = payment_creation_body(transactions, zone_id, return_url)
-      log_action("Request body: #{body}")
       request(:post, '/payments', body: body.to_json)
     end
 
@@ -98,9 +94,8 @@ class PaymentsApi < BaseApi
     # * {500 Exception}[rdoc-ref:BaseApi::Error500Exception] - backend API error
     #
     def payment_status(payment_id:, caz_name:)
-      log_action "Getting a payment status for id: #{payment_id}, in CAZ: #{caz_name}"
-      request(:put, "/payments/#{payment_id}",
-              body: payment_status_body(caz_name))
+      log_action("Getting a payment status for id: #{payment_id}")
+      request(:put, "/payments/#{payment_id}", body: payment_status_body(caz_name))
     end
 
     ##
@@ -120,7 +115,7 @@ class PaymentsApi < BaseApi
     # Empty array means there was no paid payment in the given time-frame.
     #
     def paid_payments_dates(vrn:, zone_id:, start_date:, end_date:)
-      log_action("Getting paid payments for vrn: #{vrn} in #{zone_id} (#{start_date} - #{end_date})")
+      log_action('Getting paid payments')
       request(:post, '/payments/paid', body: {
         vrns: [vrn],
         cleanAirZoneId: zone_id,
@@ -136,7 +131,8 @@ class PaymentsApi < BaseApi
       {
         cleanAirZoneId: zone_id,
         returnUrl: return_url,
-        transactions: transactions
+        transactions: transactions,
+        telephonePayment: false
       }
     end
 

@@ -59,11 +59,6 @@ class ApplicationController < ActionController::Base
     render template: 'errors/service_unavailable', status: :service_unavailable
   end
 
-  # Logs invalid form on +warn+ level
-  def log_invalid_form(msg)
-    Rails.logger.warn("The form is invalid. #{msg}")
-  end
-
   # Gets VRN from vehicle_details hash in the session. Returns string, eg 'CU1234'
   def vrn
     vehicle_details('vrn')
@@ -89,7 +84,7 @@ class ApplicationController < ActionController::Base
 
   # Logs warning and redirects enter_details page
   def redirect_to_enter_details(value)
-    Rails.logger.warn "#{value} is missing in the session. Redirecting to :enter_details"
+    Rails.logger.warn("#{value} is missing in the session. Redirecting to :enter_details")
     redirect_to enter_details_vehicles_path
   end
 
@@ -121,7 +116,7 @@ class ApplicationController < ActionController::Base
 
   # Logs and redirects to +path+
   def redirect_back_to(path, alert, template)
-    log_invalid_form "Redirecting back to :#{template}"
+    Rails.logger.warn("The form is invalid. Redirecting back to :#{template}")
     redirect_to path, alert: alert
   end
 

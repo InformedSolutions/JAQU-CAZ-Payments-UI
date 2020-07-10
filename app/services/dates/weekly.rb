@@ -10,16 +10,32 @@ module Dates
   #
   class Weekly < Base
     # Overrides default by setting start and end dates
-    def initialize(vrn:, zone_id:)
+    def initialize(vrn:, zone_id:, charge_start_date:)
       super(vrn: vrn, zone_id: zone_id)
       @start_date = today - 6.days
       @end_date = today + 12.days
+      @charge_start_date = charge_start_date
     end
 
     # Build the list of dates and return them, e.g.
     # [{value: "2019-10-11", name: "Friday 11 October 2019", today: false},...]
-    def call
-      (start_date..(today + 6.days)).map { |date| parse(date) }
+    def chargeable_dates
+      @chargeable_dates ||= (calculated_start_date..(today + 6.days)).map { |date| parse(date) }
+    end
+
+    # Checks if a week starting from today can be paid
+    def pay_week_starts_today?
+      return false if charge_start_date > today_date
+
+      week_range_from_today = (today..(today + 7.days))
+      paid_dates.each do |paid_day|
+        parsed_paid_day = Date.parse(paid_day)
+        return false if week_range_from_today.include?(parsed_paid_day)
+      end
+    end
+
+    def today_date
+      today.strftime(VALUE_DATE_FORMAT)
     end
 
     private

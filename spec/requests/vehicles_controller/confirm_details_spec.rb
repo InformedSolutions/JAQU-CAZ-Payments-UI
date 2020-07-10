@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'VehicleCheckersController - POST #confirm_details', type: :request do
-  subject(:http_request) do
+  subject do
     post confirm_details_vehicles_path, params: { 'confirm-vehicle' => confirmation }
   end
 
@@ -11,7 +11,7 @@ RSpec.describe 'VehicleCheckersController - POST #confirm_details', type: :reque
 
   before do
     add_vrn_to_session
-    http_request
+    subject
   end
 
   context 'when user confirms details' do

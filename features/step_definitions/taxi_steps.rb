@@ -5,6 +5,7 @@ Given('I am on the vehicle details page with taxi vehicle to check') do
   mock_vehicle_details_taxi
   mock_vehicle_compliance_leeds
   mock_non_dvla_response
+  mock_single_caz_request_for_charge_start_date
   visit details_vehicles_path
 end
 
@@ -24,11 +25,53 @@ Then('I select Today') do
   choose('Today')
 end
 
+Then('I select any available day') do
+  mock_paid_dates(dates: [])
+  first("input:not([disabled])[type='radio']").choose
+end
+
 Given('I have already paid for today') do
-  mock_paid_dates(dates: [Date.current.strftime('%Y-%m-%d')])
+  mock_paid_dates(dates: [today_formatted])
+end
+
+Given('I am not paid for today') do
+  mock_paid_dates(dates: [])
+end
+
+Given('I have already paid for tomorrow') do
+  mock_paid_dates(dates: [Date.current.tomorrow.strftime('%Y-%m-%d')])
 end
 
 Given('I am on the weekly dates page') do
+  mock_single_caz_request_for_charge_start_date(2.days.ago)
+  add_weekly_possible_details
+  visit select_weekly_date_dates_path
+end
+
+Given('I am on the weekly dates page when d-day was yesterday and today day is paid') do
+  mock_single_caz_request_for_charge_start_date(Date.current.yesterday)
+  mock_paid_dates(dates: [today_formatted])
+  add_weekly_possible_details
+  visit select_weekly_date_dates_path
+end
+
+Given('I am on the weekly dates page when d-day will be tomorrow') do
+  mock_single_caz_request_for_charge_start_date(Date.current.tomorrow)
+  mock_paid_dates
+  add_weekly_possible_details
+  visit select_weekly_date_dates_path
+end
+
+Given('I am on the weekly dates page when d-day was 7 days ago and today day is paid') do
+  mock_single_caz_request_for_charge_start_date(Date.current - 7.days)
+  mock_paid_dates(dates: [today_formatted])
+  add_weekly_possible_details
+  visit select_weekly_date_dates_path
+end
+
+Given('I am on the weekly dates page when d-day was 7 days ago and today day is not paid') do
+  mock_single_caz_request_for_charge_start_date(Date.current - 7.days)
+  mock_paid_dates
   add_weekly_possible_details
   visit select_weekly_date_dates_path
 end
@@ -49,15 +92,11 @@ end
 # Mocks taxi response from vehicle details endpoint in VCCS API
 def mock_vehicle_details_taxi
   vehicle_details = read_file('vehicle_details_taxi_response.json')
-  allow(ComplianceCheckerApi)
-    .to receive(:vehicle_details)
-    .and_return(vehicle_details)
+  allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(vehicle_details)
 end
 
 # Mocks response from compliance endpoint in VCCS API
 def mock_vehicle_compliance_leeds
   compliance_data = read_file('vehicle_compliance_leeds_response.json')
-  allow(ComplianceCheckerApi)
-    .to receive(:vehicle_compliance)
-    .and_return(compliance_data)
+  allow(ComplianceCheckerApi).to receive(:vehicle_compliance).and_return(compliance_data)
 end

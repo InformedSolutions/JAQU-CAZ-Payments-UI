@@ -15,9 +15,29 @@ Then("I enter a vehicle's registration and choose UK") do
   choose('UK')
 end
 
-Then("I enter a vehicle's registration and choose Non-UK") do
+Then("I enter an incomplete vehicle's registration and choose UK") do
+  mock_vehicle_details
+  mock_unsuccessful_dvla_response
+
   fill_in('vrn', with: vrn)
-  choose('Non-UK')
+  choose('UK')
+end
+
+Then("I enter an undetermined vehicle's registration and choose UK") do
+  mock_undetermined_vehicle_details
+
+  fill_in('vrn', with: vrn)
+  choose('UK')
+end
+
+Then("I enter an exempted non-UK vehicle's registration") do
+  mock_exempt_whitelisted_vehicle
+  fill_in_non_uk(vrn)
+end
+
+Then("I enter a not-exempted non-UK vehicle's registration") do
+  mock_non_exempt_whitelisted_vehicle
+  fill_in_non_uk(vrn)
 end
 
 And('I choose I confirm registration') do
@@ -64,6 +84,11 @@ Then("I enter a exempt vehicle's registration and choose UK") do
   choose('UK')
 end
 
+Then("I enter a exempt vehicle's registration and choose non UK") do
+  mock_exempt_vehicle_details
+  fill_in_non_uk('CAS329')
+end
+
 Then('I should see {string} as vrn value') do |string|
   expect(page).to have_field('vrn', with: string)
 end
@@ -73,4 +98,18 @@ Given('I am on the vehicle details page with unrecognized vehicle to check') do
   mock_unrecognized_vehicle
 
   visit details_vehicles_path
+end
+
+Then("I enter a vehicle's registration but the zones are not active") do
+  mock_non_chargeable_zones
+  mock_vehicle_details
+  fill_in('vrn', with: 'CAS310')
+  choose('UK')
+end
+
+private
+
+def fill_in_non_uk(vrn)
+  fill_in('vrn', with: vrn)
+  choose('Non-UK')
 end

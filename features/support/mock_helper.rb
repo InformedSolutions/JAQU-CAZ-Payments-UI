@@ -25,10 +25,31 @@ module MockHelper
       .and_return(vehicle_details)
   end
 
+  # Mocks response from vehicle details endpoint in VCCS API
+  def mock_undetermined_vehicle_details
+    vehicle_details = read_file('undetermined_vehicle_details_response.json')
+    allow(ComplianceCheckerApi)
+      .to receive(:vehicle_details)
+      .and_return(vehicle_details)
+  end
+
   # Mocks exempt vehicle details endpoint in VCCS API
   def mock_exempt_vehicle_details
     vehicle_details = read_file('vehicle_details_exempt_response.json')
     allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(vehicle_details)
+  end
+
+  # Mocks exempt vehicle - non UK vehicle existing on Whitelist
+  def mock_exempt_whitelisted_vehicle
+    whitelisted_vehicle = read_file('whitelisted_vehicle_response.json')
+    allow(ComplianceCheckerApi).to receive(:whitelisted_vehicle).and_return(whitelisted_vehicle)
+  end
+
+  # Mocks exempt vehicle - non UK vehicle existing on Whitelist
+  def mock_non_exempt_whitelisted_vehicle
+    allow(ComplianceCheckerApi)
+      .to receive(:whitelisted_vehicle)
+      .and_raise(BaseApi::Error404Exception.new(404, '', {}))
   end
 
   def mock_dvla_response
@@ -38,6 +59,12 @@ module MockHelper
     allow(ChargeableZonesService)
       .to receive(:call)
       .and_return(dvla_response)
+  end
+
+  def mock_unsuccessful_dvla_response
+    allow(ChargeableZonesService)
+      .to receive(:call)
+      .and_raise(BaseApi::Error422Exception.new(422, '', {}))
   end
 
   def mock_non_dvla_response
@@ -59,7 +86,13 @@ module MockHelper
   def mock_unrecognized_vehicle
     allow(ComplianceCheckerApi)
       .to receive(:vehicle_details)
-      .and_raise(BaseApi:: Error404Exception.new(404, '', {}))
+      .and_raise(BaseApi::Error404Exception.new(404, '', {}))
+  end
+
+  # Mocks response from clean-air-zones with in VCCS API with non active zones
+  def mock_non_chargeable_zones
+    caz_list = read_file('unchargeable_caz_list_response.json')
+    allow(ComplianceCheckerApi).to receive(:clean_air_zones).and_return(caz_list['cleanAirZones'])
   end
 
   def mock_payment_creation
@@ -76,6 +109,12 @@ module MockHelper
 
   def mock_paid_dates(dates: [])
     allow(PaymentsApi).to receive(:paid_payments_dates).and_return(dates)
+  end
+
+  def mock_single_caz_request_for_charge_start_date(date = Date.current)
+    allow(FetchSingleCazData).to receive(:call).and_return(
+      OpenStruct.new(active_charge_start_date: date.to_s)
+    )
   end
 
   private

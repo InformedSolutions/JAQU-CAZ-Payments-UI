@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'VehiclesController - GET #details', type: :request do
-  subject(:http_request) { get details_vehicles_path }
+  subject { get details_vehicles_path }
 
   context 'with VRN in session' do
     before do
@@ -12,22 +12,23 @@ RSpec.describe 'VehiclesController - GET #details', type: :request do
     end
 
     it 'returns http success' do
-      http_request
+      subject
       expect(response).to be_successful
     end
 
     it 'sets type in the session' do
-      http_request
+      subject
       expect(session[:vehicle_details]['type']).not_to be_nil
     end
 
     context 'when vehicle is exempted' do
-      let(:vehicle_details_stub) { instance_double('VehicleDetails', exempt?: true) }
-
-      before { allow(VehicleDetails).to receive(:new).and_return(vehicle_details_stub) }
+      before do
+        vehicle_details_stub = instance_double('VehicleDetails', exempt?: true)
+        allow(VehicleDetails).to receive(:new).and_return(vehicle_details_stub)
+      end
 
       it 'redirects to exempt path' do
-        http_request
+        subject
         expect(response).to redirect_to(exempt_vehicles_path)
       end
     end
@@ -35,7 +36,7 @@ RSpec.describe 'VehiclesController - GET #details', type: :request do
     context 'when vehicle is a taxi' do
       before do
         mock_vehicle_details_taxi
-        http_request
+        subject
       end
 
       it 'sets taxi in the session' do
@@ -46,7 +47,7 @@ RSpec.describe 'VehiclesController - GET #details', type: :request do
 
   context 'without VRN in session' do
     it 'redirects to enter details page' do
-      http_request
+      subject
       expect(response).to redirect_to(enter_details_vehicles_path)
     end
   end
@@ -71,7 +72,7 @@ RSpec.describe 'VehiclesController - GET #details', type: :request do
     end
 
     it 'redirects to :unrecognized' do
-      http_request
+      subject
       expect(response).to redirect_to(unrecognised_vehicles_path)
     end
   end

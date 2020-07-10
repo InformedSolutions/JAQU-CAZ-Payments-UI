@@ -14,17 +14,19 @@ module SessionManipulation
     # Subkeys of vehicle values in order of setting
     SUBKEYS = {
       1 => %w[vrn country confirm_vehicle],
-      2 => %w[unrecognised leeds_taxi confirm_registration],
-      3 => %w[confirm_vehicle],
+      2 => %w[unrecognised leeds_taxi confirm_registration undetermined],
+      3 => %w[confirm_vehicle incorrect],
       4 => %w[type],
-      5 => %w[incorrect la_id],
+      5 => %w[la_id],
       6 => %w[chargeable_zones],
       7 => %w[daily_charge la_name weekly_possible tariff_code],
       8 => %w[charge_period],
       9 => %w[confirm_exempt],
-      10 => %w[dates total_charge weekly],
-      11 => %w[payment_id],
-      12 => %w[user_email payment_reference external_id]
+      10 => %w[confirm_weekly_charge_today weekly_dates weekly_charge_today],
+      11 => %w[confirm_weekly_charge_today weekly_dates weekly_charge_today],
+      12 => %w[dates total_charge weekly],
+      13 => %w[payment_id],
+      14 => %w[user_email payment_reference external_id]
     }.freeze
 
     # Base initializer for the service
@@ -49,10 +51,9 @@ module SessionManipulation
     # Add passed values to the session.
     # It transforms keys to strings and removes keys from next levels.
     def add_fields(values = {})
-      log_action "Adding #{values} to session"
-      values.stringify_keys!
-      session[SESSION_KEY] = session[SESSION_KEY].slice(*previous_keys).merge(values)
-      log_action "User's current session: #{session[SESSION_KEY]}"
+      log_action("Adding keys: #{values.keys} to the session")
+      session[SESSION_KEY] = session[SESSION_KEY].slice(*previous_keys).merge(values.stringify_keys)
+      log_action("Current session keys: #{session[SESSION_KEY].keys}")
     end
   end
 end

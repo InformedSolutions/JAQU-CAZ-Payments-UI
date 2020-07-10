@@ -164,8 +164,7 @@ steps:
     pull: never
     commands:
        - bundle audit check --update
-       # to exclude id's from audit(e.g. '1488, 1179') just add `--exclude '1488, 1179'`
-       - yarn run improved-yarn-audit --exclude 1486 --retry-on-network-failure
+       - yarn run improved-yarn-audit --exclude '1486' --retry-on-network-failure
        - brakeman --except Redirect,LinkToHref
     volumes:
       - name: docker_sock
@@ -428,8 +427,8 @@ steps:
     pull: never
     commands:
        - bundle audit check --update
-       # to exclude id's from audit(e.g. '1488, 1179') just add `--exclude '1488, 1179'`
-       - yarn run improved-yarn-audit --exclude 1486 --retry-on-network-failure
+       - yarn run improved-yarn-audit --exclude '1486' --retry-on-network-failure
+
        - brakeman --except Redirect,LinkToHref
     volumes:
       - name: docker_sock
@@ -672,8 +671,7 @@ steps:
     pull: never
     commands:
        - bundle audit check --update
-       # to exclude id's from audit(e.g. '1488, 1179') just add `--exclude '1488, 1179'`
-       - yarn run improved-yarn-audit --exclude 1486 --retry-on-network-failure
+       - yarn run improved-yarn-audit --exclude '1486' --retry-on-network-failure
        - brakeman --except Redirect,LinkToHref
     volumes:
       - name: docker_sock
@@ -922,8 +920,7 @@ steps:
     pull: never
     commands:
        - bundle audit check --update
-       # to exclude id's from audit(e.g. '1488, 1179') just add `--exclude '1488, 1179'`
-       - yarn run improved-yarn-audit --exclude 1486 --retry-on-network-failure
+       - yarn run improved-yarn-audit --exclude '1486' --retry-on-network-failure
        - brakeman --except Redirect,LinkToHref
     volumes:
       - name: docker_sock
@@ -1364,15 +1361,15 @@ steps:
       - PATH=$PATH:../../../../bin/
       - chmod +x ../../../../bin/tf
       - tf init
-      - tf workspace select preprod || tf workspace new prod
+      - tf workspace select prod || tf workspace new prod
       - tf apply -auto-approve
       - cd ../02.backends
       - tf init
-      - tf workspace select preprod || tf workspace new prod
+      - tf workspace select prod || tf workspace new prod
       - tf apply -auto-approve
       - cd ../04.web
       - tf init
-      - tf workspace select preprod || tf workspace new prod
+      - tf workspace select prod || tf workspace new prod
       - tf apply -auto-approve
     environment:
       TF_VAR_secret_key_base:

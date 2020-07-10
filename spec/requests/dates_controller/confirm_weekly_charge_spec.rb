@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'DatesController - POST #confirm_weekly_charge', type: :request do
-  subject(:http_request) do
+  subject do
     post confirm_weekly_charge_dates_path, params: { 'confirm-exempt' => confirmation }
   end
 
@@ -12,12 +12,12 @@ RSpec.describe 'DatesController - POST #confirm_weekly_charge', type: :request d
   context 'with details in the session' do
     before do
       add_details_to_session(weekly_possible: true)
-      http_request
+      subject
     end
 
     context 'with checked checkbox' do
       it 'redirects to :dates' do
-        expect(http_request).to redirect_to(select_weekly_date_dates_path)
+        expect(subject).to redirect_to(select_weekly_date_dates_path)
       end
     end
 
@@ -25,7 +25,7 @@ RSpec.describe 'DatesController - POST #confirm_weekly_charge', type: :request d
       let(:confirmation) { nil }
 
       it 'redirects to :weekly_charge' do
-        expect(http_request).to redirect_to(weekly_charge_dates_path)
+        expect(subject).to redirect_to(weekly_charge_dates_path)
       end
     end
   end

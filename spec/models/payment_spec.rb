@@ -83,7 +83,6 @@ RSpec.describe Payment, type: :model do
         expect(PaymentsApi)
           .to receive(:create_payment)
           .with(
-            vrn: vrn,
             zone_id: zone_id,
             return_url: url,
             transactions: expected_transactions
@@ -119,7 +118,6 @@ RSpec.describe Payment, type: :model do
           expect(PaymentsApi)
             .to receive(:create_payment)
             .with(
-              vrn: vrn,
               zone_id: zone_id,
               return_url: url,
               transactions: expected_transactions

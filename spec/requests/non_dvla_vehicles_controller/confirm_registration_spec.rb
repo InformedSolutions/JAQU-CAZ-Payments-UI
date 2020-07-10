@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'NonDvlaVehiclesController - POST #confirm_registration', type: :request do
-  subject(:http_request) do
+  subject do
     post confirm_registration_non_dvla_vehicles_path, params: { 'confirm-registration': confirm }
   end
 
@@ -11,7 +11,7 @@ RSpec.describe 'NonDvlaVehiclesController - POST #confirm_registration', type: :
 
   before do
     add_vrn_to_session
-    http_request
+    subject
   end
 
   context 'when user confirms the registration' do

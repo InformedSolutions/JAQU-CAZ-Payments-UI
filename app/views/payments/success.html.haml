@@ -54,13 +54,14 @@
       %ul.govuk-list.govuk-list--bullet
         %li
           Contact the local authority for support to upgrade or replace your vehicle in
-          = external_link_to @payment_details.la_name,
-                             @payment_details.compliance_details.dynamic_compliance_url,
-                             id: 'become-compliant-url'
+          = succeed '.' do
+            = link_to(@payment_details.la_name,
+                      @payment_details.compliance_details.dynamic_compliance_url,
+                      id: 'become-compliant-url')
         %li
-          = external_link_to "Explore cycling and public transport options in #{@payment_details.la_name}",
-                             @payment_details.compliance_details.public_transport_options_url,
-                             id: 'public-transport-options-url'
+          = link_to("Explore cycling and public transport options in #{@payment_details.la_name}.",
+                    @payment_details.compliance_details.public_transport_options_url,
+                    id: 'public-transport-options-url')
       = render 'common/print_link'
 
 
