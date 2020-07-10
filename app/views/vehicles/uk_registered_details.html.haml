@@ -18,9 +18,7 @@
         %br
         If your vehicle is registered outside the UK, contact
         = succeed '.' do
-          = link_to('DVLA',
-                    'https://www.gov.uk/contact-the-dvla',
-                    id: 'dvla-link')
+          = link_to_dvla_contact_form
         %br
         If the details displayed are correct, confirm to continue.
 
