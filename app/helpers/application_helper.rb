@@ -43,4 +43,9 @@ module ApplicationHelper
   def page_title(title_text)
     content_for(:title, "#{title_text} | #{service_name}")
   end
+
+  # Return link to proper DVLA contact form from env variables
+  def link_to_dvla_contact_form
+    link_to 'DVLA', ENV.fetch('DVLA_CONTACT_URL', 'https://contact-preprod.dvla.gov.uk/'), id: 'dvla-link'
+  end
 end
