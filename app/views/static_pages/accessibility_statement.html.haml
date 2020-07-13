@@ -1,5 +1,5 @@
 - title_and_header = 'Accessibility statement for Drive in a Clean Air Zone'
-- page_title(title_and_header)
+- content_for(:title, title_and_header)
 
 = link_to 'Back', @back_button_url, class: 'govuk-back-link'
 
@@ -9,21 +9,49 @@
       %h1.govuk-heading-xl
         = title_and_header
       %p
-        This website is run by the Joint Air Quality Unit (JAQU) supported by the Department of
-        Transport and Department for Environment, Food and Rural Affairs. We want as many people as
-        possible to be able to use this website.
+        This accessibility statement explains how accessible this service is, 
+        what to do if you have difficulty using it, and how to report accessibility problems with the service.
       %p
-        For example, that means you should be able to:
+        This service is part of the wider GOV.UK website. There is a separate 
+        = link_to('accessibility statement',
+                  'https://www.gov.uk/help/accessibility-statement',
+                  id: 'gov-uk accessibility link')
+        for the main GOV.UK website.
+      
+      %p
+        This page only contains information about the Drive in a Clean Air Zone service.
+      
+      %h2.govuk-heading-m Using this service
+
+      %p
+        The Drive in a Clean Air Zone service allows users to check if 
+        their vehicle meets emissions standards and if not pay the charge 
+        liable in each Clean Air Zone. Payment is made through GOV Pay, 
+        which has a separate 
+        = succeed '.' do
+          = link_to('accessibility statement',
+                    'https://www.gov.uk/help/accessibility-statement',
+                    id: 'gov-uk accessibility link') 
+      %p
+        This service is managed by the Joint Air Quality Unit (JAQU) supported 
+        by the Department of Transport and Department for Environment, Food and 
+        Rural Affairs. We want as many people as possible to be able to use this service.
+
+      %p 
+        This means you should be able to:
         %ul.govuk-list-govuk-list--bullet
           %li
             %p
-              zoom in up to 300% without the text spilling off the screen.
+              change colours, contrast levels and fonts
           %li
             %p
-              navigate most of the website using just a keyboard.
+              zoom in up to 300% without the text spilling off the screen
           %li
             %p
-              navigate most of the website using speech recognition software.
+              get from the start of the service to the end using just a keyboard
+          %li
+            %p
+              get from the start of the service to the end using speech recognition software
           %li
             %p
               listen to most of the website using a screen reader (including the most recent
@@ -35,6 +63,67 @@
                   id: 'ability-net-link')
         has advice on making your device easier to use if you have a disability.
 
+      %h2.govuk-heading-m How accessible is this service?
+      %p
+        This service has been tested by the Digital Accessibility Centre (DAC) 
+        and is fully compliant with the Web Content Accessibility Guidelines version 2.1 AA standard. 
+      
+      %h2.govuk-heading-m Technical information about this website's accessibility
+      %p
+        JAQU is committed to making its website accessible, in accordance with 
+        the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018.
+      
+      %p
+        This website is fully compliant with the 
+        = succeed '.' do
+          = link_to('Web Content Accessibility Guidelines version 2.1 AA standard',
+                    'https://www.w3.org/TR/WCAG21/',
+                    id: 'wcag21-guidelines-link')
+      %h2.govuk-heading-m How we tested this service
+      %p
+        This service is tested at least monthly by the team that maintains it, and periodically by external bodies.  
+        At the time of publishing, it was last tested externally by 
+        = link_to('Digital Accessibility Centre Limited',
+                  'https://www.digitalaccessibilitycentre.org/',
+                  id: 'digital-accessibility-centre-link') 
+        on the dates listed below.
+
+      %table.govuk-table
+        %thead.govuk-table__head
+          %tr
+            %th.govuk-table__header{scope: 'col'} Service
+            %th.govuk-table__header{scope: 'col'} Date tested
+        %tbody.govuk-table__body
+          %tr.govuk-table__row
+            %td.govuk-table__cell{scope: 'row'}
+              Check if you will be charged
+            %td.govuk-table__cell{scope: 'row'}
+              26th November 2019
+          %tr.govuk-table__row
+            %td.govuk-table__cell{scope: 'row'}
+              Pay a charge for a single vehicle
+            %td.govuk-table__cell{scope: 'row'}
+              25th March 2020
+          %tr.govuk-table__row
+            %td.govuk-table__cell{scope: 'row'}
+              Business account for multiple vehicles
+            %td.govuk-table__cell{scope: 'row'}
+              30th March 2020
+
+      %h2.govuk-heading-m What to do if you have difficulty using this service 
+      %p
+        If you have difficulty using this service, contact us by:
+      %p
+        Telephone: 0300 029 8888
+        %br
+        Monday to Friday, 10am to 4pm
+        %br
+        Find out about call charges
+        %br
+        = link_to('Online contact form',
+                  'https://contact.dvla.gov.uk/caz',
+                  id: 'contact-form-link')
+
       %h2.govuk-heading-m Reporting accessibility problems with this website
       %p
         We're always looking to improve the accessibility of this website. If you find any problems
@@ -42,7 +131,7 @@
         let us know using our
         = succeed '.' do
           = link_to('feedback form',
-                    'http://vehiclecheck.drive-clean-air-zone.service.gov.uk/',
+                    'https://contact.dvla.gov.uk/caz',
                     id: 'feedback-form-link')
 
       %h2.govuk-heading-m Enforcement procedure
@@ -52,27 +141,10 @@
         (the 'accessibility regulations'). If you're not happy with how we respond to your
         complaint,
         = succeed '.' do
-          = link_to('contact the Equality Advisory and Support Service (EASS).',
+          = link_to('contact the Equality Advisory and Support Service (EASS)',
                     'https://www.equalityadvisoryservice.com/',
                     id: 'eass-link')
 
-      %h2.govuk-heading-m Technical information about this website's accessibility
       %p
-        JAQU is committed to making its website accessible, in accordance with the Public Sector
-        Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018.
-      %p
-        This website is fully compliant with the
-        = link_to('Web Content Accessibility Guidelines version 2.1',
-                  'https://www.w3.org/TR/WCAG21/',
-                  id: 'guidelines-link')
-        AA standard.
-
-      %h2.govuk-heading-m How we tested this website
-      %p
-        This website is tested regularly with
-        = link_to('https://pa11y.org/',
-                  'https://pa11y.org/',
-                  id: 'tool-link')
-        tools by the team that maintains it and periodically by external bodies.
-      %p We test all routes through the service.
-      %p This statement was prepared on 28 January 2020.
+        This statement was prepared on 8 July 2020.
+        
