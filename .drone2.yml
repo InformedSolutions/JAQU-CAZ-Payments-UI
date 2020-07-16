@@ -49,7 +49,7 @@ steps:
     environment:
       ZAP: true
       ZAP_PROXY_URL: 'zap'
-      BASEURL_PAYMENTS: 'https://PaymentsDevUser1:CleanAir99@dev2.paycleanairzonecharge.co.uk'
+      BASEURL_PAYMENTS: 'https://PaymentsDevUser1:CleanAir99@dev.paycleanairzonecharge.co.uk'
       SCREENSHOT_TYPE: 'base'
       LOCATION: local
     commands:
@@ -73,7 +73,7 @@ steps:
         from_secret: browserstack_username
       BS_AUTHKEY:
         from_secret: browserstack_auth_key
-      BASEURL_PAYMENTS: 'https://PaymentsDevUser1:CleanAir99@dev2.paycleanairzonecharge.co.uk/'
+      BASEURL_PAYMENTS: 'https://PaymentsDevUser1:CleanAir99@dev.paycleanairzonecharge.co.uk/'
       BROWSER_SET: 'basic_auth'
       BUILD: PAYMENTS-UI-${DRONE_BUILD_NUMBER}
       LOCATION: browserstack
@@ -289,7 +289,7 @@ steps:
   - name: await ecs rollout
     image: alpine:3.11.6
     environment:
-      build_id_url: https://dev2.paycleanairzonecharge.co.uk/build_id
+      build_id_url: https://dev.paycleanairzonecharge.co.uk/build_id
       build_id: ${DRONE_BUILD_NUMBER}
     commands:
       - apk add curl
@@ -319,7 +319,7 @@ steps:
     image: pa11y-ci
     pull: never
     environment:
-      BASE_URL: https://PaymentsDevUser1:CleanAir99@dev2.paycleanairzonecharge.co.uk
+      BASE_URL: https://PaymentsDevUser1:CleanAir99@dev.paycleanairzonecharge.co.uk
     commands:
       - mkdir screenshots
       - /usr/local/bin/pa11y-ci -c pa11y/.pa11yci.conf.js
