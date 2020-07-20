@@ -832,7 +832,7 @@ steps:
           from_secret: jaqu_controlled_aws_access_key_id
         AWS_SECRET_ACCESS_KEY:
           from_secret: jaqu_controlled_aws_secret_access_key
-        AWS_ACCOUNT_Rcontrolled_st8077:role/jaqu-controlledServiceRole
+        AWS_ACCOUNT_ROLE: arn:aws:iam::072187228077:role/jaqu-controlledServiceRole
         AWS_DEFAULT_REGION: eu-west-2
         APPLICATION_NAME: payments-codedeploy-service-sit
         DEPLOYMENT_GROUP: payments-codedeploy-service-sit
