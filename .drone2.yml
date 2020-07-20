@@ -220,7 +220,7 @@ steps:
       - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
       - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
       - cd JAQU-CAZ-IAC
-      - git checkout iac_restructure_baseline
+      - git checkout jaqu_lower
       - cd terraform-iac/projects/payments/layers/01.networking
       - PATH=$PATH:../../../../bin/
       - chmod +x ../../../../bin/tf
@@ -450,7 +450,7 @@ steps:
       - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
       - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
       - cd JAQU-CAZ-IAC
-      - git checkout iac_restructure_controlled
+      - git checkout controlled_st
       - cd terraform-iac/projects/payments/layers/01.networking
       - PATH=$PATH:../../../../bin/
       - chmod +x ../../../../bin/tf
@@ -512,7 +512,7 @@ steps:
       - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
       - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
       - cd JAQU-CAZ-IAC
-      - git checkout iac_restructure_controlled
+      - git checkout controlled_st
       - cd terraform-iac/projects/payments/layers/01.networking
       - PATH=$PATH:../../../../bin/
       - chmod +x ../../../../bin/tf
@@ -715,7 +715,7 @@ steps:
         - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
         - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
         - cd JAQU-CAZ-IAC
-        - git checkout iac_restructure_controlled
+        - git checkout controlled_sit
         - cd terraform-iac/projects/payments/layers/01.networking
         - PATH=$PATH:../../../../bin/
         - chmod +x ../../../../bin/tf
@@ -777,7 +777,7 @@ steps:
         - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
         - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
         - cd JAQU-CAZ-IAC
-        - git checkout iac_restructure_controlled
+        - git checkout controlled_sit
         - cd terraform-iac/projects/payments/layers/01.networking
         - PATH=$PATH:../../../../bin/
         - chmod +x ../../../../bin/tf
@@ -832,7 +832,7 @@ steps:
           from_secret: jaqu_controlled_aws_access_key_id
         AWS_SECRET_ACCESS_KEY:
           from_secret: jaqu_controlled_aws_secret_access_key
-        AWS_ACCOUNT_ROLE: arn:aws:iam::072187228077:role/jaqu-controlledServiceRole
+        AWS_ACCOUNT_Rcontrolled_st8077:role/jaqu-controlledServiceRole
         AWS_DEFAULT_REGION: eu-west-2
         APPLICATION_NAME: payments-codedeploy-service-sit
         DEPLOYMENT_GROUP: payments-codedeploy-service-sit
@@ -893,7 +893,7 @@ steps:
         - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
         - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
         - cd JAQU-CAZ-IAC
-        - git checkout iac_restructure_staging
+        - git checkout staging_preprod
         - cd terraform-iac/projects/payments/layers/01.networking
         - PATH=$PATH:../../../../bin/
         - chmod +x ../../../../bin/tf
@@ -960,7 +960,7 @@ steps:
         - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
         - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
         - cd JAQU-CAZ-IAC
-        - git checkout iac_restructure_staging
+        - git checkout staging_preprod
         - cd terraform-iac/projects/payments/layers/01.networking
         - PATH=$PATH:../../../../bin/
         - chmod +x ../../../../bin/tf
@@ -1176,7 +1176,7 @@ steps:
       - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
       - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
       - cd JAQU-CAZ-IAC
-      - git checkout iac_restructure_staging
+      - git checkout staging_uat
       - cd terraform-iac/projects/payments/layers/01.networking
       - PATH=$PATH:../../../../bin/
       - chmod +x ../../../../bin/tf
@@ -1238,7 +1238,7 @@ steps:
       - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
       - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
       - cd JAQU-CAZ-IAC
-      - git checkout iac_restructure_staging
+      - git checkout staging_uat
       - cd terraform-iac/projects/payments/layers/01.networking
       - PATH=$PATH:../../../../bin/
       - chmod +x ../../../../bin/tf
@@ -1354,7 +1354,7 @@ steps:
         - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
         - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
         - cd JAQU-CAZ-IAC
-        - git checkout iac_restructure_prod
+        - git checkout live_prod
         - cd terraform-iac/projects/payments/layers/01.networking
         - PATH=$PATH:../../../../bin/
         - chmod +x ../../../../bin/tf
@@ -1421,7 +1421,7 @@ steps:
         - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
         - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
         - cd JAQU-CAZ-IAC
-        - git checkout iac_restructure_prod
+        - git checkout live_prod
         - cd terraform-iac/projects/payments/layers/01.networking
         - PATH=$PATH:../../../../bin/
         - chmod +x ../../../../bin/tf
