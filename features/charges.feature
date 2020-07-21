@@ -34,6 +34,14 @@ Feature: Charges
     Then I press "Back" link
       And I should be on the vehicle details page
 
+  Scenario: User wants to return to type selection when his vehicle is UK and not recognised
+    Given I am on the choose type page for UK vehicle
+    Then I choose Car type
+      And I press the Confirm
+      And I should be on the local authorities page
+    Then I press "Back" link
+      And I should be on the choose type page
+
   Scenario: User selects LA to pay for
     Given My vehicle is not compliant
       And I am on the select local authority page

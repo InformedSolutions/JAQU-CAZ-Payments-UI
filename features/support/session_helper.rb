@@ -9,6 +9,10 @@ module SessionHelper
     page.set_rack_session(vehicle_details: { vrn: vrn, country: 'Non-UK' })
   end
 
+  def add_unrecognised_uk_vehicle_to_session
+    page.set_rack_session(vehicle_details: { vrn: vrn, country: 'UK', unrecognised: true })
+  end
+
   def add_vrn_country_la_to_session
     page.set_rack_session(vehicle_details: compliance_details)
   end
