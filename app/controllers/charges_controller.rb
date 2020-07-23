@@ -102,6 +102,8 @@ class ChargesController < ApplicationController
   def local_authority_return_path # rubocop:disable Metrics/MethodLength
     if vehicle_details('undetermined')
       not_determined_vehicles_path
+    elsif vehicle_details('unrecognised') # when vehicle is non-dvla UK vehicle
+      choose_type_non_dvla_vehicles_path
     elsif vehicle_details('incorrect')
       incorrect_details_vehicles_path
     elsif vehicle_details('possible_fraud')
@@ -109,7 +111,7 @@ class ChargesController < ApplicationController
     elsif vehicle_details('country') == 'UK'
       details_vehicles_path
     else
-      choose_type_non_dvla_vehicles_path
+      choose_type_non_dvla_vehicles_path # when vehicle is non-UK vehicle
     end
   end
 
