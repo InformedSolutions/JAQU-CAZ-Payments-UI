@@ -3,20 +3,20 @@
 require 'rails_helper'
 
 RSpec.describe SessionManipulation::SetSelectedWeek do
-  subject(:service) { described_class.call(session: session, week_selected: week_selected) }
+  subject(:service) { described_class.call(session: session, second_week_selected: second_week_selected) }
 
   let(:session) { {} }
-  let(:week_selected) { 'first' }
+  let(:second_week_selected) { false }
 
   context 'when first week is selected' do
     it 'sets correct value to session' do
       service
-      expect(session[:first_week_dates_selected]).to eq(true)
+      expect(session[:second_week_selected]).to eq(false)
     end
   end
 
   context 'when second week is selected' do
-    let(:week_selected) { 'second' }
+    let(:second_week_selected) { true }
 
     it 'sets correct value to session' do
       service
@@ -25,12 +25,11 @@ RSpec.describe SessionManipulation::SetSelectedWeek do
   end
 
   context 'when clearing both weeks' do
-    let(:week_selected) { '' }
+    let(:second_week_selected) { nil }
 
     it 'clears both values' do
       service
-      expect(session[:first_week_dates_selected]).to eq(false)
-      expect(session[:second_week_selected]).to eq(false)
+      expect(session[:second_week_selected]).to eq(nil)
     end
   end
 end

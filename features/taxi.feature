@@ -97,3 +97,10 @@ Feature: Leeds Taxi
   Scenario: User selects dates to pay for and d-day already passed and is outside of date range
     Given I am on the weekly dates page when d-day was 7 days ago and today day is not paid
     Then I should be on the pick weekly charge period page
+
+  Scenario: User wants to select two weeks
+    Given I am on the weekly dates page when d-day was 7 days ago and today day is paid
+      And I fill in an available week start date
+      And I press the Continue
+    Then I should be on the review your payment page
+      And I should see 'Add another week'

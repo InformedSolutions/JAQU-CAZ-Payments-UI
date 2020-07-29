@@ -25,7 +25,6 @@ module SessionManipulation
     # Adds the +second_week_selected+ to the session. Used by the class level method +.call+
     def call
       session[:second_week_selected] = @second_week_selected
-
       session[:second_week_start_date] = nil if @second_week_selected == false
     end
   end

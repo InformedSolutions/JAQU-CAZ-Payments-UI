@@ -89,6 +89,13 @@ Then('I choose a time-frame that was already paid') do
   allow(Dates::CheckPaidDaily).to receive(:call).and_return(false)
 end
 
+And('I fill in an available week start date') do
+  fill_in('date_day', with: '1')
+  fill_in('date_month', with: '5')
+  fill_in('date_year', with: '2020')
+  mock_validate_selected_weekly_date
+end
+
 # Mocks taxi response from vehicle details endpoint in VCCS API
 def mock_vehicle_details_taxi
   vehicle_details = read_file('vehicle_details_taxi_response.json')
@@ -99,4 +106,18 @@ end
 def mock_vehicle_compliance_leeds
   compliance_data = read_file('vehicle_compliance_leeds_response.json')
   allow(ComplianceCheckerApi).to receive(:vehicle_compliance).and_return(compliance_data)
+end
+
+def mock_validate_selected_weekly_date
+  details = instance_double(Dates::ValidateSelectedWeeklyDate,
+                            start_date: '2019-11-1',
+                            parse_date: '2019-11-1',
+                            date_in_range?: true,
+                            error: '',
+                            valid?: true,
+                            add_dates_to_session: true)
+  allow(Dates::ValidateSelectedWeeklyDate).to receive(:new).and_return(details)
+  allow(Dates::CheckPaidWeekly).to receive(:call).and_return(true)
+  add_weekly_vehicle_details_to_session
+  # save_and_open_page
 end

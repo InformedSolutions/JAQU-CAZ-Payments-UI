@@ -7,6 +7,7 @@ module Dates
   # ==== Params
   # * +params+ - request parameters
   # * +charge_start_date+ - d-day date
+  # * +session+ - session
   #
   class ValidateSelectedWeeklyDate < Base
     ##

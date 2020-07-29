@@ -8,7 +8,7 @@ RSpec.describe Dates::Weekly do
       vrn: vrn,
       zone_id: zone_id,
       charge_start_date: active_charge_start_date,
-      is_second_week: is_second_week,
+      second_week_selected: second_week_selected,
       week_start_days: week_start_days
     )
   end
@@ -18,7 +18,7 @@ RSpec.describe Dates::Weekly do
   let(:paid_dates) { [] }
   let(:value_format) { '%Y-%m-%d' }
   let(:active_charge_start_date) { 10.days.ago.to_s }
-  let(:is_second_week) { false }
+  let(:second_week_selected) { false }
   let(:week_start_days) { [] }
 
   before { allow(PaymentsApi).to receive(:paid_payments_dates).and_return(paid_dates) }
@@ -144,7 +144,7 @@ RSpec.describe Dates::Weekly do
   end
 
   context 'when second week is being selected' do
-    let(:is_second_week) { true }
+    let(:second_week_selected) { true }
     first_week_start = Time.zone.now.strftime(Dates::Base::VALUE_DATE_FORMAT)
     second_week_start = 8.days.from_now.strftime(Dates::Base::VALUE_DATE_FORMAT)
     let(:week_start_days) { [first_week_start, second_week_start] }
