@@ -14,9 +14,11 @@ module Dates
     # eg 2020-6-1
     attr_reader :start_date
 
-    def initialize(params:, charge_start_date:)
+    def initialize(params:, charge_start_date:, session:)
+      @params = params
       @start_date = parse_date(params)
       @charge_start_date = charge_start_date
+      @session = session
     end
 
     ##
@@ -62,7 +64,17 @@ module Dates
     # Validates the date.
     # Returns boolean.
     def valid?
-      @start_date && date_in_range? && date_chargeable?
+      @start_date && date_in_range? && date_chargeable? && !already_selected?
+    end
+
+    ##
+    # Checks if date was already selected in previous week selection
+    # Returns boolean
+    def already_selected?
+      return if @session[:second_week_selected] == false
+
+      formatted_date = Time.zone.parse(@start_date).strftime(VALUE_DATE_FORMAT)
+      @session.dig(:vehicle_details, 'dates')&.include?(formatted_date)
     end
 
     ##
@@ -71,9 +83,17 @@ module Dates
     def error
       if !@start_date
         I18n.t('empty', scope: 'dates.weekly')
+      elsif already_selected?
+        I18n.t('already_selected', scope: 'dates.weekly')
       else
         I18n.t('not_available', scope: 'dates.weekly')
       end
+    end
+
+    def add_dates_to_session
+      SessionManipulation::CalculateTotalCharge.call(session: @session,
+                                                     dates: [@start_date],
+                                                     weekly: true)
     end
   end
 end

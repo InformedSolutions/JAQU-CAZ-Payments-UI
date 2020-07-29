@@ -3,7 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe Dates::ValidateSelectedWeeklyDate do
-  subject(:service) { described_class.new(params: params, charge_start_date: charge_start_date) }
+  subject(:service) do
+    described_class.new(params: params,
+                        charge_start_date: charge_start_date,
+                        session: session,
+                        is_second_week: is_second_week)
+  end
 
   let(:params) do
     {
@@ -19,6 +24,11 @@ RSpec.describe Dates::ValidateSelectedWeeklyDate do
 
   let(:charge_start_date) { '2020-01-01' }
 
+  let(:session) { { vehicle_details: { dates: dates } } }
+  let(:dates) { nil }
+
+  let(:is_second_week) { false }
+
   context 'when date is in correct format and is in range' do
     it 'assigns correct value to @start_date variable' do
       expect(service.start_date).to eq("#{year}-#{month}-#{day}")
@@ -32,6 +42,10 @@ RSpec.describe Dates::ValidateSelectedWeeklyDate do
       expect(service.date_chargeable?).to eq(true)
     end
 
+    it 'returns nil for .already_selected?' do
+      expect(service.already_selected?).to be_falsey
+    end
+
     it 'returns true for .valid?' do
       expect(service.valid?).to eq(true)
     end
@@ -40,6 +54,35 @@ RSpec.describe Dates::ValidateSelectedWeeklyDate do
       expect(service.error).to eq(I18n.t('not_available', scope: 'dates.weekly'))
     end
   end
+
+  # context 'when date is in correct format but was selected in previous week' do
+  #   let(:dates) { Date.current.upto(Date.current + 6.days).map { |d| d.strftime('%Y-%m-%d') } }
+
+  #   it 'parses the date' do
+  #     byebug
+  #     expect(service.start_date).to eq("#{year}-#{month}-#{day}")
+  #   end
+
+  #   it 'returns true for .date_in_range?' do
+  #     expect(service.date_in_range?).to eq(true)
+  #   end
+
+  #   it 'returns true for .date_chargeable?' do
+  #     expect(service.date_chargeable?).to eq(true)
+  #   end
+
+  #   it 'returns true for .already_selected?' do
+  #     expect(service.already_selected?).to eq(true)
+  #   end
+
+  #   it 'returns false for .valid?' do
+  #     expect(service.valid?).to eq(false)
+  #   end
+
+  #   it 'returns correct error message' do
+  #     expect(service.error).to eq('Select an available start date')
+  #   end
+  # end
 
   context 'when date is in correct format and in default range, but d-day is in two days' do
     let(:charge_start_date) do
@@ -53,6 +96,10 @@ RSpec.describe Dates::ValidateSelectedWeeklyDate do
 
     it 'returns false for .date_chargeable?' do
       expect(service.date_chargeable?).to eq(false)
+    end
+
+    it 'returns nil for .already_selected?' do
+      expect(service.already_selected?).to be_falsey
     end
 
     it 'returns false for .valid?' do
@@ -79,6 +126,10 @@ RSpec.describe Dates::ValidateSelectedWeeklyDate do
 
     it 'returns false for .date_chargeable?' do
       expect(service.date_chargeable?).to eq(false)
+    end
+
+    it 'returns nil for .already_selected?' do
+      expect(service.already_selected?).to be_falsey
     end
 
     it 'returns false for .valid?' do

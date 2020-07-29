@@ -26,8 +26,8 @@ RSpec.describe 'DatesController - GET #select_weekly_date', type: :request do
         expect(FetchSingleCazData).to have_received(:call)
       end
 
-      it 'not assigns the @d_day_notice variable' do
-        expect(assigns(:d_day_notice)).to be_nil
+      it 'assigns the @d_day_notice variable' do
+        expect(assigns(:d_day_notice)).to eq(false)
       end
     end
 

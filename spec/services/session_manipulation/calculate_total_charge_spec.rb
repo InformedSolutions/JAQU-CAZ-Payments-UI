@@ -4,10 +4,10 @@ require 'rails_helper'
 
 RSpec.describe SessionManipulation::CalculateTotalCharge do
   subject(:service) do
-    described_class.call(session: session, dates: dates, weekly: weekly)
+    described_class.call(session: session, dates: dates, weekly: weekly, is_second_week: is_second_week)
   end
 
-  let(:session) { { vehicle_details: details } }
+  let(:session) { { vehicle_details: details, first_week_start_date: first_week_start_date } }
   let(:details) do
     {
       'vrn' => 'CU123AB',
@@ -17,6 +17,8 @@ RSpec.describe SessionManipulation::CalculateTotalCharge do
       'daily_charge' => 20
     }
   end
+  let(:is_second_week) { false }
+  let(:first_week_start_date) { nil }
 
   context 'when normal path is selected' do
     let(:weekly) { false }
@@ -42,6 +44,8 @@ RSpec.describe SessionManipulation::CalculateTotalCharge do
     let(:weekly) { true }
     let(:dates) { ['2019-11-01'] }
     let(:expected_dates) { (1..7).map { |day| "2019-11-0#{day}" } }
+    let(:first_week_start_date) { '2019-11-01' }
+    let(:week_dates) { ['2019-11-01'] }
 
     it 'sets total_charge' do
       service
