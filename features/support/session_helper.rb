@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 module SessionHelper
+  def add_to_session(data = {})
+    page.set_rack_session(data)
+  end
+
   def add_vrn_and_country_to_session
     page.set_rack_session(vehicle_details: { vrn: vrn, country: 'UK' })
   end

@@ -52,6 +52,11 @@ RSpec.describe Dates::ValidateSelectedWeeklyDate do
     it 'returns correct error if the date is already paid for' do
       expect(service.error).to eq(I18n.t('not_available', scope: 'dates.weekly'))
     end
+
+    it 'calls CalculateTotalCharge session manipulator' do
+      expect(SessionManipulation::CalculateTotalCharge).to receive(:call)
+      service.add_dates_to_session
+    end
   end
 
   context 'when date is in correct format but was selected in previous week' do

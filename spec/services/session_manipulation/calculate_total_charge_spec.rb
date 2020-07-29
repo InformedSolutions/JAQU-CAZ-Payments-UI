@@ -30,18 +30,17 @@ RSpec.describe SessionManipulation::CalculateTotalCharge do
     let(:weekly) { false }
     let(:dates) { %w[2019-11-01 2019-11-02 2019-11-03] }
 
+    before { service }
+
     it 'sets total_charge' do
-      service
       expect(session[:vehicle_details]['total_charge']).to eq(60)
     end
 
     it 'sets dates' do
-      service
       expect(session[:vehicle_details]['dates']).to eq(dates)
     end
 
     it 'sets weekly to false' do
-      service
       expect(session[:vehicle_details]['weekly']).to be_falsey
     end
   end
@@ -50,22 +49,43 @@ RSpec.describe SessionManipulation::CalculateTotalCharge do
     let(:weekly) { true }
     let(:dates) { ['2019-11-01'] }
     let(:expected_dates) { (1..7).map { |day| "2019-11-0#{day}" } }
-    let(:first_week_start_date) { '2019-11-01' }
-    let(:week_dates) { ['2019-11-01'] }
+
+    before { service }
 
     it 'sets total_charge' do
-      service
       expect(session[:vehicle_details]['total_charge']).to eq(50)
     end
 
     it 'sets dates' do
-      service
       expect(session[:vehicle_details]['dates']).to eq(expected_dates)
     end
 
     it 'sets weekly to true' do
-      service
       expect(session[:vehicle_details]['weekly']).to be_truthy
+    end
+
+    context 'when second week is selected' do
+      let(:second_week_selected) { true }
+      let(:first_week_start_date) { '2019-11-01' }
+      let(:dates) { ['2019-11-08'] }
+      let(:expected_dates) do
+        first_date = Date.parse(first_week_start_date)
+        first_date.upto(first_date + 13.days).map { |d| d.strftime('%Y-%m-%d') }
+      end
+
+      before { service }
+
+      it 'sets total_charge' do
+        expect(session[:vehicle_details]['total_charge']).to eq(100)
+      end
+
+      it 'sets dates' do
+        expect(session[:vehicle_details]['dates']).to eq(expected_dates)
+      end
+
+      it 'sets weekly to true' do
+        expect(session[:vehicle_details]['weekly']).to be_truthy
+      end
     end
   end
 end

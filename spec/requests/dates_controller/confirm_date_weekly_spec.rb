@@ -30,7 +30,10 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
                               valid?: true,
                               add_dates_to_session: true)
     allow(Dates::ValidateSelectedWeeklyDate).to receive(:new).and_return(details)
-    stubbed_caz = instance_double('Caz', active_charge_start_date: parse_date(7.days.ago))
+    stubbed_caz = instance_double(
+      'Caz',
+      active_charge_start_date: 7.days.ago.strftime(Dates::Weekly::VALUE_DATE_FORMAT)
+    )
     allow(FetchSingleCazData).to receive(:call).and_return(stubbed_caz)
   end
 
@@ -51,23 +54,6 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
       )
       subject
     end
-
-    # describe 'setting session' do
-    #   before { subject }
-
-    #   it 'sets total_charge to Leeds discounted value of 50' do
-    #     expect(session[:vehicle_details]['total_charge']).to eq(50)
-    #   end
-
-    #   it 'sets dates to next 7 day starting from selected date' do
-    #     expected_dates = (1..7).map { |day| "2019-11-0#{day}" }
-    #     expect(session[:vehicle_details]['dates']).to eq(expected_dates)
-    #   end
-
-    #   it 'sets weekly to true' do
-    #     expect(session[:vehicle_details]['weekly']).to be_truthy
-    #   end
-    # end
 
     context 'without checked dates' do
       before do
@@ -95,13 +81,35 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
       end
     end
 
+    context 'without checked dates when second week is being selected' do
+      before do
+        assign_second_week_selected
+        details = instance_double(Dates::ValidateSelectedWeeklyDate,
+                                  start_date: false,
+                                  parse_date: false,
+                                  date_in_range?: false,
+                                  error: I18n.t('dates.weekly.empty'),
+                                  valid?: false)
+        allow(Dates::ValidateSelectedWeeklyDate).to receive(:new).and_return(details)
+      end
+
+      it 'redirects to :dates_charges' do
+        expect(subject).to redirect_to(select_second_weekly_date_dates_path)
+      end
+
+      it 'sets proper alert' do
+        subject
+        expect(flash[:alert]).to eq(I18n.t('dates.weekly.empty'))
+      end
+    end
+
     context 'when dates are already paid' do
       before do
         details = instance_double(Dates::ValidateSelectedWeeklyDate,
                                   start_date: '2019-11-1',
                                   parse_date: '2019-11-1',
                                   date_in_range?: true,
-                                  error: I18n.t('dates.weekly.paid'),
+                                  error: I18n.t('dates.weekly.not_available'),
                                   valid?: true)
         allow(Dates::ValidateSelectedWeeklyDate).to receive(:new).and_return(details)
 
@@ -114,7 +122,7 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
       end
 
       it 'sets proper alert' do
-        expect(flash[:alert]).to eq(I18n.t('dates.weekly.paid'))
+        expect(flash[:alert]).to eq(I18n.t('dates.weekly.not_available'))
       end
 
       it 'does not set total_charge' do
@@ -132,36 +140,37 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
 
     context 'when the date was already selected in the first week' do
       before do
+        assign_second_week_selected
         details = instance_double(Dates::ValidateSelectedWeeklyDate,
-                                  start_date: '2019-11-1',
-                                  parse_date: '2019-11-1',
+                                  start_date: '2019-11-5',
+                                  parse_date: '2019-11-5',
                                   date_in_range?: true,
-                                  error: I18n.t('dates.weekly.paid'),
-                                  valid?: true)
+                                  error: I18n.t('dates.weekly.already_selected'),
+                                  valid?: false)
         allow(Dates::ValidateSelectedWeeklyDate).to receive(:new).and_return(details)
-
         allow(Dates::CheckPaidWeekly).to receive(:call).and_return(false)
+        add_full_payment_details(weekly: true)
         subject
       end
 
-      it 'redirects to :dates_charges' do
-        expect(response).to redirect_to(select_weekly_date_dates_path)
+      it 'redirects to :select_weekly_date' do
+        expect(response).to redirect_to(select_second_weekly_date_dates_path)
       end
 
       it 'sets proper alert' do
-        expect(flash[:alert]).to eq(I18n.t('dates.weekly.paid'))
+        expect(flash[:alert]).to eq(I18n.t('dates.weekly.already_selected'))
       end
 
-      it 'does not set total_charge' do
-        expect(session[:vehicle_details]['total_charge']).to be_nil
+      it 'does not change total_charge' do
+        expect(session[:vehicle_details]['total_charge']).to eq(50)
       end
 
-      it 'does not set dates' do
-        expect(session[:vehicle_details]['dates']).to be_nil
+      it 'does not change dates' do
+        expect(session[:vehicle_details]['dates']).to eq(payment_dates({}, true))
       end
 
-      it 'does not set weekly' do
-        expect(session[:vehicle_details]['weekly']).to be_nil
+      it 'does not change weekly' do
+        expect(session[:vehicle_details]['weekly']).to eq(true)
       end
     end
   end
