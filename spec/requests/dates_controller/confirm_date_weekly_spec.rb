@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
   subject do
-    post confirm_date_weekly_dates_path, params: params, headers: { 'HTTP_REFERER': referer }
+    post confirm_date_weekly_dates_path, params: params
   end
 
   let(:charge) { 12.5 }
@@ -18,8 +18,6 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
   let(:vrn) { 'CU123AB' }
   let(:la_id) { SecureRandom.uuid }
   let(:params) { { 'date_year' => '2019', 'date_month' => '11', 'date_day' => '01', 'week' => 'first' } }
-
-  let(:referer) { 'http://www.example.com/dates/select_weekly_date' }
 
   before do
     details = instance_double(Dates::ValidateSelectedWeeklyDate,

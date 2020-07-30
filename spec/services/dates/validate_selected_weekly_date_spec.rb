@@ -33,18 +33,6 @@ RSpec.describe Dates::ValidateSelectedWeeklyDate do
       expect(service.start_date).to eq("#{year}-#{month}-#{day}")
     end
 
-    it 'returns true for .date_in_range?' do
-      expect(service.date_in_range?).to eq(true)
-    end
-
-    it 'returns true for .date_chargeable?' do
-      expect(service.date_chargeable?).to eq(true)
-    end
-
-    it 'returns nil for .already_selected?' do
-      expect(service.already_selected?).to be_falsey
-    end
-
     it 'returns true for .valid?' do
       expect(service.valid?).to eq(true)
     end
@@ -67,18 +55,6 @@ RSpec.describe Dates::ValidateSelectedWeeklyDate do
       expect(service.start_date).to eq("#{year}-#{month}-#{day}")
     end
 
-    it 'returns true for .date_in_range?' do
-      expect(service.date_in_range?).to eq(true)
-    end
-
-    it 'returns true for .date_chargeable?' do
-      expect(service.date_chargeable?).to eq(true)
-    end
-
-    it 'returns true for .already_selected?' do
-      expect(service.already_selected?).to eq(true)
-    end
-
     it 'returns false for .valid?' do
       expect(service.valid?).to eq(false)
     end
@@ -92,18 +68,6 @@ RSpec.describe Dates::ValidateSelectedWeeklyDate do
     let(:charge_start_date) do
       charge_start = Time.current + 2.days
       "#{charge_start.year}-#{charge_start.month}-#{charge_start.day}"
-    end
-
-    it 'returns true for .date_in_range?' do
-      expect(service.date_in_range?).to eq(true)
-    end
-
-    it 'returns false for .date_chargeable?' do
-      expect(service.date_chargeable?).to eq(false)
-    end
-
-    it 'returns nil for .already_selected?' do
-      expect(service.already_selected?).to be_falsey
     end
 
     it 'returns false for .valid?' do
@@ -121,19 +85,7 @@ RSpec.describe Dates::ValidateSelectedWeeklyDate do
     let(:day) { '14' }
 
     it 'parses the date' do
-      expect(service.parse_date(params)).to eq('1842-5-14')
-    end
-
-    it 'returns false for .date_in_range?' do
-      expect(service.date_in_range?).to eq(false)
-    end
-
-    it 'returns false for .date_chargeable?' do
-      expect(service.date_chargeable?).to eq(false)
-    end
-
-    it 'returns nil for .already_selected?' do
-      expect(service.already_selected?).to be_falsey
+      expect(service.start_date).to eq("#{year}-#{month}-#{day}")
     end
 
     it 'returns false for .valid?' do

@@ -23,6 +23,36 @@ module Dates
     end
 
     ##
+    # Validates the date
+    # Returns boolean
+    def valid?
+      @start_date && date_in_range? && date_chargeable? && !already_selected?
+    end
+
+    ##
+    # Sets correct error message
+    # Returns string
+    def error
+      if !@start_date
+        I18n.t('empty', scope: 'dates.weekly')
+      elsif already_selected?
+        I18n.t('already_selected', scope: 'dates.weekly')
+      else
+        I18n.t('not_available', scope: 'dates.weekly')
+      end
+    end
+
+    ##
+    # Calculates charge and adds the dates to session
+    def add_dates_to_session
+      SessionManipulation::CalculateTotalCharge.call(session: @session,
+                                                     dates: [@start_date],
+                                                     weekly: true)
+    end
+
+    private
+
+    ##
     # Validates and parses the date
     #
     # Returns date in YYYY-MM-DD format without the preceding zero
@@ -62,13 +92,6 @@ module Dates
     end
 
     ##
-    # Validates the date.
-    # Returns boolean.
-    def valid?
-      @start_date && date_in_range? && date_chargeable? && !already_selected?
-    end
-
-    ##
     # Checks if date was already selected in previous week selection
     # Returns boolean
     def already_selected?
@@ -76,25 +99,6 @@ module Dates
 
       formatted_date = Time.zone.parse(@start_date).strftime(VALUE_DATE_FORMAT)
       @session.dig(:vehicle_details, 'dates')&.include?(formatted_date)
-    end
-
-    ##
-    # Sets correct error message.
-    # Returns string.
-    def error
-      if !@start_date
-        I18n.t('empty', scope: 'dates.weekly')
-      elsif already_selected?
-        I18n.t('already_selected', scope: 'dates.weekly')
-      else
-        I18n.t('not_available', scope: 'dates.weekly')
-      end
-    end
-
-    def add_dates_to_session
-      SessionManipulation::CalculateTotalCharge.call(session: @session,
-                                                     dates: [@start_date],
-                                                     weekly: true)
     end
   end
 end
