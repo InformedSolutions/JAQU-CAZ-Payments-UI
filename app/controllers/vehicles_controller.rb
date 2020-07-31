@@ -20,6 +20,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   def enter_details
     @errors = {}
     @return_url = request.referer ? determinate_back_path : root_path
+    clear_inputs_if_coming_from_successful_payment
   end
 
   ##
@@ -328,5 +329,11 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   # check if user confirmed details for undetermined vehicle
   def confirmed_undetermined?
     session['vehicle_details']['undetermined'].present?
+  end
+
+  def clear_inputs_if_coming_from_successful_payment
+    return unless request.referer&.include?(success_payments_path)
+
+    SessionManipulation::ClearSessionDetails.call(session: session, key: 1)
   end
 end
