@@ -331,6 +331,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
     session['vehicle_details']['undetermined'].present?
   end
 
+  # Clear VRN and country when paying for another vehicle from the success payment page
   def clear_inputs_if_coming_from_successful_payment
     return unless request.referer&.include?(success_payments_path)
 
