@@ -52,3 +52,6 @@
                 = parse_charge(@total_charge)
               %td.govuk-table__cell
         = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
+
+        - if @weekly_period && !@another_week_dates_chosen
+          %p= link_to 'Add another week', select_second_weekly_date_dates_path, id: 'add-another-week-link'

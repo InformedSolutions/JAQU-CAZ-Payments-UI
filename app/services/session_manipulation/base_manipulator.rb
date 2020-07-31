@@ -25,7 +25,7 @@ module SessionManipulation
       10 => %w[confirm_exempt],
       11 => %w[confirm_weekly_charge_today weekly_dates weekly_charge_today],
       12 => %w[confirm_weekly_charge_today weekly_dates weekly_charge_today],
-      13 => %w[dates total_charge weekly],
+      13 => %w[dates total_charge weekly second_week_selected],
       14 => %w[payment_id],
       15 => %w[user_email payment_reference external_id]
     }.freeze

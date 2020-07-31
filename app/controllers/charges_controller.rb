@@ -77,10 +77,11 @@ class ChargesController < ApplicationController
     @la_name = la_name
     @weekly_period = vehicle_details('weekly')
     @weekly_charge_today = vehicle_details('weekly_charge_today')
-    @dates = vehicle_details('dates')
+    @dates = vehicle_details('dates').sort
     @total_charge = vehicle_details('total_charge')
     @return_path = review_payment_return_path
     @chargeable_zones = vehicle_details('chargeable_zones')
+    @another_week_dates_chosen = session[:second_week_start_date]
   end
 
   private
