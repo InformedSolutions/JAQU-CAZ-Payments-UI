@@ -92,11 +92,13 @@ Then('I choose a time-frame that was already paid') do
 end
 
 And('I fill in an available week start date') do
+  add_to_session(first_week_start_date: '2020-05-01')
+  visit select_weekly_date_dates_path
   weekly_fill_in_date
 end
 
 And('I fill in an available second week start date') do
-  add_to_session(second_week_start_date: '2020-05-01')
+  add_to_session(second_week_start_date: '2020-05-08')
   visit select_second_weekly_date_dates_path
   weekly_fill_in_date
 end

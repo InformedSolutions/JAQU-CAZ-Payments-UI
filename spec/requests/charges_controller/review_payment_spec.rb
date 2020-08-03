@@ -42,12 +42,20 @@ RSpec.describe 'ChargesController - GET #review_payment', type: :request do
         it 'assigns weekly_period to false' do
           expect(assigns(:weekly_period)).to be_falsey
         end
+
+        it 'assigns second_week_available' do
+          expect(assigns(:second_week_available)).to be_falsey
+        end
       end
     end
 
     context 'with Leeds charge flow' do
       before do
+        caz_double = instance_double(Caz, active_charge_start_date: '2020-03-01')
+        allow(FetchSingleCazData).to receive(:call).and_return(caz_double)
+        allow(PaymentsApi).to receive(:paid_payments_dates).and_return([])
         add_full_payment_details(weekly: true)
+        mock_chargeable_zones
         subject
       end
 
@@ -57,6 +65,10 @@ RSpec.describe 'ChargesController - GET #review_payment', type: :request do
 
       it 'assigns weekly_period to true' do
         expect(assigns(:weekly_period)).to be_truthy
+      end
+
+      it 'assigns second_week_available' do
+        expect(assigns(:second_week_available)).to be_truthy
       end
     end
   end
