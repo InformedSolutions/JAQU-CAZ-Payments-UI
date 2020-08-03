@@ -17,7 +17,7 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
   end
   let(:vrn) { 'CU123AB' }
   let(:la_id) { SecureRandom.uuid }
-  let(:params) { { 'date_year' => '2019', 'date_month' => '11', 'date_day' => '01', 'week' => 'first' } }
+  let(:params) { { 'date_year' => '2019', 'date_month' => '11', 'date_day' => '01' } }
 
   before do
     details = instance_double(Dates::ValidateSelectedWeeklyDate,

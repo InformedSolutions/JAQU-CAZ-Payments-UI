@@ -93,6 +93,8 @@ end
 Then('I am on the review weekly payment page') do
   add_weekly_vehicle_details_to_session(weekly_charge_today: false)
   mock_payment_creation
+  mock_single_caz_request_for_charge_start_date
+  mock_paid_dates
 
   visit review_payment_charges_path
 end
@@ -100,6 +102,8 @@ end
 Then('I am on the review weekly payment page when a week charge starting from today') do
   add_weekly_vehicle_details_to_session(weekly_charge_today: true, weekly_dates: [today_formatted])
   mock_payment_creation
+  mock_single_caz_request_for_charge_start_date
+  mock_paid_dates
 
   visit review_payment_charges_path
 end
