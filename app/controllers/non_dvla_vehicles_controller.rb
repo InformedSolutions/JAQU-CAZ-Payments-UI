@@ -22,6 +22,9 @@ class NonDvlaVehiclesController < ApplicationController
   #
   def index
     @vehicle_registration = vrn
+    vehicle_exempted = WhitelistedVehicle.new(vrn).exempt?
+
+    redirect_to(exempt_vehicles_path) if vehicle_exempted
   end
 
   ##

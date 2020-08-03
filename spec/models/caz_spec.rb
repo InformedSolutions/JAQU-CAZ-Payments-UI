@@ -5,10 +5,18 @@ require 'rails_helper'
 RSpec.describe Caz, type: :model do
   subject(:caz) { described_class.new(data) }
 
-  let(:data) { { 'name' => name, 'cleanAirZoneId' => id, 'boundaryUrl' => url } }
+  let(:data) do
+    {
+      'name' => name,
+      'cleanAirZoneId' => id,
+      'boundaryUrl' => url,
+      'activeChargeStartDate' => active_charge_start_date
+    }
+  end
   let(:name) { 'Birmingham' }
   let(:id) { SecureRandom.uuid }
   let(:url) { 'www.example.com' }
+  let(:active_charge_start_date) { '2020-05-01' }
 
   describe '.id' do
     it 'returns a proper id' do
@@ -25,6 +33,12 @@ RSpec.describe Caz, type: :model do
   describe '.boundary_url' do
     it 'returns a proper url' do
       expect(caz.boundary_url).to eq(url)
+    end
+  end
+
+  describe '.active_charge_start_date' do
+    it 'returns a proper date' do
+      expect(caz.active_charge_start_date).to eq(active_charge_start_date)
     end
   end
 end

@@ -1,0 +1,5 @@
+.govuk-form-group{class: 'govuk-form-group--error'}
+  %span#confirm_weekly_charge_today-error.govuk-error-message
+    %span.govuk-visually-hidden Error:
+    State if you would like your weekly charge to start today or another day
+  = render 'dates/select_weekly_period_input/normal'

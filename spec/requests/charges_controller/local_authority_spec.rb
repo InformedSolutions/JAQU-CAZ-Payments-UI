@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'ChargesController - GET #local_authority', type: :request do
-  subject(:http_request) { get local_authority_charges_path }
+  subject { get local_authority_charges_path }
 
   let(:vrn) { 'CU57ABC' }
 
@@ -22,7 +22,7 @@ RSpec.describe 'ChargesController - GET #local_authority', type: :request do
 
       context 'when the vehicle has correct data' do
         context 'when the vehicle in registered in the UK' do
-          before { http_request }
+          before { subject }
 
           it 'returns a success response' do
             expect(response).to have_http_status(:success)
@@ -36,7 +36,7 @@ RSpec.describe 'ChargesController - GET #local_authority', type: :request do
         context 'when the vehicle in registered in the UK' do
           before do
             add_vrn_to_session(vrn: vrn, country: 'Non-UK')
-            http_request
+            subject
           end
 
           it 'assigns NonDvlaVehicleController#choose_type as return path' do
@@ -48,7 +48,7 @@ RSpec.describe 'ChargesController - GET #local_authority', type: :request do
       context 'when the vehicle has incorrect data' do
         before do
           add_to_session(vrn: vrn, country: 'UK', incorrect: true)
-          http_request
+          subject
         end
 
         it 'assigns VehicleController#incorrect_details as return path' do
@@ -60,7 +60,7 @@ RSpec.describe 'ChargesController - GET #local_authority', type: :request do
     context 'without any chargeable CAZ' do
       before do
         allow(ChargeableZonesService).to receive(:call).and_return([])
-        http_request
+        subject
       end
 
       it 'returns a compliant page' do
@@ -70,7 +70,7 @@ RSpec.describe 'ChargesController - GET #local_authority', type: :request do
   end
 
   context 'without VRN in the session' do
-    before { http_request }
+    before { subject }
 
     it_behaves_like 'vrn is missing'
   end

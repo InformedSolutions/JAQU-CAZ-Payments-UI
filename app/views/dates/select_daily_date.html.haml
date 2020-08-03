@@ -1,20 +1,26 @@
-- page_title('Which days do you want to pay for?')
+- title_and_header = 'Which days do you want to pay for?'
+- page_title(title_and_header)
+
 = link_to 'Back', daily_charge_dates_path, class: 'govuk-back-link', id: 'back-link'
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
     .govuk-grid-column-two-thirds
+
       - if alert
         = render 'common/error_summary',
           error_msg_div: '#select-daily-date-error',
           error_msg: alert
 
-      %h1.govuk-heading-l Which days do you want to pay for?
+      %h1.govuk-heading-l
+        = title_and_header
       %p
         A daily charge period runs from midnight to midnight.
-      = render 'dates/daily/details'
-      = render 'dates/daily/inset' if @dates.any? { |date| date[:disabled] }  && ! @all_paid
+
+      = render 'dates/daily/details' if @d_day_notice
+      = render 'dates/daily/inset' if @dates.any? { |date| date[:disabled] }  && !@all_paid
       = render 'dates/daily/all_paid' if @all_paid
+
       = form_tag confirm_daily_date_dates_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
           %fieldset.govuk-fieldset
@@ -37,4 +43,4 @@
                                                  disabled: date[:disabled]}
                   %label.govuk-label.govuk-checkboxes__label{for: "date-#{index}"}
                     = display_date(date)
-        = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button' if ! @all_paid
+        = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button' if !@all_paid

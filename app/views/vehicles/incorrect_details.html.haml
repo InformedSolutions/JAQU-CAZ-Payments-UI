@@ -6,14 +6,16 @@
       %h1.govuk-heading-l Incorrect vehicle details
       %p
         If your vehicle details are incorrect, you can
-        = external_link_to 'update them with the DVLA',
-                           'https://www.gov.uk/change-vehicle-details-registration-certificate/how-to-tell-dvla'
+        = succeed '.' do
+          = link_to('update them with the DVLA',
+                    'https://www.gov.uk/change-vehicle-details-registration-certificate/how-to-tell-dvla',
+                    id: 'dvla-link')
       %p
         You still need to pay a charge if you have driven, or are planning to drive, in the zone.
       %p
         If your vehicle does meet emission standards,
         you can claim a refund when your registration details are updated.
 
-      = link_to('Continue', local_authority_charges_path, class: 'govuk-button', 'data-module': 'govuk-button')
+      = link_to('Continue', undetermined_vehicle? ? not_determined_vehicles_path : local_authority_charges_path, class: 'govuk-button', 'data-module': 'govuk-button')
       %p
         = link_to('Check another vehicle', enter_details_vehicles_path)

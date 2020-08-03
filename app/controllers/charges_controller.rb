@@ -4,6 +4,8 @@
 # Controls selecting LAs where the user wants to pay for.
 #
 class ChargesController < ApplicationController
+  # 422 HTTP status from API means vehicle data incomplete so the compliance calculation is not possible.
+  rescue_from BaseApi::Error422Exception, with: :unable_to_determine_compliance
   # checks if VRN is present in the session
   before_action :check_vrn
   # checks if LA is present in the session
@@ -55,7 +57,6 @@ class ChargesController < ApplicationController
       store_compliance_details
       determinate_next_page
     else
-      log_invalid_form 'Redirecting to :local_authority.'
       redirect_to local_authority_charges_path, alert: la_alert(form)
     end
   end
@@ -74,8 +75,9 @@ class ChargesController < ApplicationController
   def review_payment
     @vrn = vrn
     @la_name = la_name
-    @dates = vehicle_details('dates')
     @weekly_period = vehicle_details('weekly')
+    @weekly_charge_today = vehicle_details('weekly_charge_today')
+    @dates = vehicle_details('dates')
     @total_charge = vehicle_details('total_charge')
     @return_path = review_payment_return_path
     @chargeable_zones = vehicle_details('chargeable_zones')
@@ -98,7 +100,9 @@ class ChargesController < ApplicationController
 
   # Define the back button path on local authority page.
   def local_authority_return_path
-    if vehicle_details('incorrect')
+    if vehicle_details('undetermined')
+      not_determined_vehicles_path
+    elsif vehicle_details('incorrect')
       incorrect_details_vehicles_path
     elsif vehicle_details('country') == 'UK'
       details_vehicles_path
@@ -111,6 +115,8 @@ class ChargesController < ApplicationController
   def review_payment_return_path
     if vehicle_details('weekly')
       select_weekly_date_dates_path
+    elsif vehicle_details('weekly') && vehicle_details('confirm_weekly_charge_today')
+      select_weekly_period_dates_path
     else
       select_daily_date_dates_path
     end
@@ -130,7 +136,13 @@ class ChargesController < ApplicationController
   def check_vehicle_details
     return if la_id && la_name && vehicle_details('total_charge') && vehicle_details('dates')
 
-    Rails.logger.warn "Current vehicle_details in session: #{session[:vehicle_details]}"
+    Rails.logger.warn("Compliance details are missing. Current keys in session: #{session[:vehicle_details].keys}")
     redirect_to_enter_details('Vehicle details')
+  end
+
+  # Redirects to 'Unable to determine compliance' page
+  def unable_to_determine_compliance
+    SessionManipulation::SetUndetermined.call(session: session)
+    redirect_to not_determined_vehicles_path
   end
 end

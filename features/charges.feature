@@ -102,6 +102,12 @@ Feature: Charges
     Then I press the Change Payment for link
       And I should be on the pick weekly dates page
 
+  Scenario: User wants review weekly payment and press the change payment for link when a week charge starting from today
+    Given I am on the review weekly payment page when a week charge starting from today
+      And I should see "Review your payment"
+    Then I press the Change Payment for link
+      And I should be on the pick weekly charge period page
+
   Scenario: User wants to paid for already paid date
     Given I am on the dates page with paid charge for today
     Then I should see a disabled today checkbox
@@ -120,3 +126,16 @@ Feature: Charges
     Given I am on the pick weekly dates page with no passes available to buy
       And I should see "you have paid for a date in those 7 consecutive days"
     Then I should not see the continue button
+
+  Scenario: User selects dates to pay for and d-day is within date range you can pay
+    Given I am on the dates page when d-day was yesterday
+    Then I should be on the pick daily dates page
+      And I should see "Why can't I see my date?"
+
+  Scenario: User selects dates to pay for and d-day is within date range you can pay
+    Given I am on the dates page when d-day will be tomorrow
+    Then I should see "Why can't I see my date?"
+
+  Scenario: User selects dates to pay for and d-day already passed and is outside of date range
+    Given I am on the dates page when d-day was 7 days ago
+    Then I should not see "Why can't I see my date?"

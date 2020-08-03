@@ -49,7 +49,6 @@ class Payment
   # Calls PaymentsApi.create_payment with right data
   def payment_details
     @payment_details ||= PaymentsApi.create_payment(
-      vrn: charge_details['vrn'],
       zone_id: charge_details['la_id'],
       transactions: charge_details['weekly'] ? weekly_transactions : daily_transactions,
       return_url: return_url

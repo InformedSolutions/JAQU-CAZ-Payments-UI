@@ -5,7 +5,6 @@ require 'rails_helper'
 RSpec.describe 'PaymentsApi.create_payment' do
   subject(:call) do
     PaymentsApi.create_payment(
-      vrn: vrn,
       zone_id: zone_id,
       return_url: return_url,
       transactions: transactions
@@ -53,7 +52,8 @@ RSpec.describe 'PaymentsApi.create_payment' do
         .with(body: {
                 'transactions' => transactions,
                 'cleanAirZoneId' => zone_id,
-                'returnUrl' => return_url
+                'returnUrl' => return_url,
+                'telephonePayment' => false
               })
     end
   end

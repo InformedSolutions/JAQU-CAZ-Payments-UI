@@ -16,30 +16,27 @@ module ApplicationHelper
     "£#{format('%<pay>.2f', pay: value.to_f)}"
   end
 
-  # Returns parsed date format, eg. 'Friday 11 October 2019'
+  # Returns collection of parsed dates, eg. ['Friday 11 October 2019']
   def parse_dates(dates)
     dates.map do |date_string|
-      date_string.to_date.strftime('%A %d %B %Y')
+      parse_single_date(date_string)
     end
   end
 
-  # Returns url path depends on which period was selected
-  def determinate_payment_for_path(weekly_period)
-    weekly_period ? select_weekly_date_dates_path : select_daily_date_dates_path
+  # Returns parsed date format, eg. 'Friday 11 October 2019'
+  def parse_single_date(date_string)
+    date_string.to_date.strftime('%A %d %B %Y')
   end
 
-  # Used for external inline links in the app.
-  # Returns a link with blank target and aria-label.
-  #
-  # Reference: https://www.w3.org/WAI/GL/wiki/Using_aria-label_for_link_purpose
-  def external_link_to(text, url, html_options = {})
-    html_options.symbolize_keys!.reverse_merge!(
-      target: '_blank',
-      class: 'govuk-link',
-      rel: 'noopener',
-      'aria-label': "#{html_options[:'aria-label'] || text} - #{I18n.t('external_link')}"
-    )
-    link_to "#{text} (opens in a new window)", url, html_options
+  # Returns url path depends on which period was selected
+  def determinate_payment_for_path(weekly_period, weekly_charge_today)
+    if weekly_period && weekly_charge_today
+      select_weekly_period_dates_path
+    elsif weekly_period && !weekly_charge_today
+      select_weekly_date_dates_path
+    else
+      select_daily_date_dates_path
+    end
   end
 
   # Returns content for title with global app name.

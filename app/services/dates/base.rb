@@ -4,10 +4,13 @@
 # This is an abstract class used as a base for dates service classes.
 module Dates
   ##
-  # Class is used to build the list of available weekly dates
-  # and display them on +app/views/dates/select_date_weekly.html.haml+
+  # Class is used to build the list of available dates and display them
+  # on the +select_weekly_date.html.haml+ and +select_daily_date.html.haml+ pages
   #
   class Base < BaseService
+    # Attribute accessor used in DatesController
+    attr_accessor :d_day_notice
+
     # date format used to display on the UI, eg. 'Friday 11 October 2019'
     DISPLAY_DATE_FORMAT = '%A %d %B %Y'
     # date format used to communicate with backend API, eg. '2019-05-14'
@@ -31,7 +34,7 @@ module Dates
     private
 
     # Readers functions
-    attr_reader :today, :vrn, :zone_id, :start_date, :end_date
+    attr_reader :today, :vrn, :zone_id, :start_date, :end_date, :charge_start_date
 
     # Calls PaymentsApi.paid_payments_dates for already paid dates in a given time-frame
     def paid_dates
@@ -41,6 +44,20 @@ module Dates
         start_date: start_date.strftime(VALUE_DATE_FORMAT),
         end_date: end_date.strftime(VALUE_DATE_FORMAT)
       )
+    end
+
+    # Finds the expected start_date considering the zone charge activation date
+    def calculated_start_date
+      return start_date unless charge_start_date
+
+      parsed_charge_start_date = Date.parse(charge_start_date)
+      if parsed_charge_start_date > start_date
+        @d_day_notice = true
+        parsed_charge_start_date
+      else
+        @d_day_notice = false
+        start_date
+      end
     end
   end
 end
