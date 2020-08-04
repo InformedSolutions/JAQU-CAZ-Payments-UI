@@ -54,6 +54,8 @@ Feature: Leeds Taxi
     Then I select 'Another'
       And I press the Continue
     Then I should be on the pick weekly dates page
+      And I press the Continue
+    Then I should see 'Select a start date for the week that you wish to pay for'
 
   Scenario: User enters a taxi vehicle's registration when he already paid for tomorrow
     Given I am on the vehicle details page with taxi vehicle to check
@@ -97,3 +99,35 @@ Feature: Leeds Taxi
   Scenario: User selects dates to pay for and d-day already passed and is outside of date range
     Given I am on the weekly dates page when d-day was 7 days ago and today day is not paid
     Then I should be on the pick weekly charge period page
+
+  Scenario: User wants to select two weeks
+    Given I am on the weekly dates page
+      And I fill in an available week start date
+      And I press the Continue
+    Then I should be on the review your payment page
+      And I should see '01/05/2020 - 07/05/2020'
+      And I should see 'Add another week'
+      And I press 'Add another week' link
+    Then I should be on the pick second weekly dates page
+      And I press 'Back' link
+      And I press 'Add another week' link
+    Then I fill in an available second week start date
+      And I press the Continue
+      And I should see '01/05/2020 - 07/05/2020'
+      And I should see '08/05/2020 - 14/05/2020'
+      And I should not see 'Add another week'
+
+  Scenario: User wants to select two weeks but enters invalid second date
+    Given I am on the weekly dates page
+      And I fill in an available week start date
+      And I press the Continue
+    Then I should be on the review your payment page
+      And I should see 'Add another week'
+      And I press 'Add another week' link
+    Then I should be on the pick second weekly dates page
+      And I press 'Back' link
+      And I press 'Add another week' link
+    Then I fill in an invalid second week start date
+      And I press the Continue
+    Then I should be on the pick second weekly dates page
+      And I should see "Choose a start date for your second week that doesn't include dates"

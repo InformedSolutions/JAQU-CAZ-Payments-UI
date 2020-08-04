@@ -23,16 +23,26 @@ module AddToSession
       dates: payment_dates(details, weekly),
       weekly: weekly,
       total_charge: payment_total_charge(details, weekly),
-      chargeable_zones: 2
+      chargeable_zones: 2,
+      second_week_selected: true
     )
   end
 
   def add_to_session(data = {})
     encoded_data = RackSessionAccess.encode(vehicle_details: data.stringify_keys)
-    put RackSessionAccess.path, params: { data: encoded_data }
+    put_encoded_data_to_session(encoded_data)
+  end
+
+  def assign_second_week_selected(second_week_selected: true)
+    encoded_data = RackSessionAccess.encode(second_week_selected: second_week_selected)
+    put_encoded_data_to_session(encoded_data)
   end
 
   private
+
+  def put_encoded_data_to_session(encoded_data)
+    put RackSessionAccess.path, params: { data: encoded_data }
+  end
 
   def payment_dates(details, weekly)
     return details[:dates] if details[:dates]

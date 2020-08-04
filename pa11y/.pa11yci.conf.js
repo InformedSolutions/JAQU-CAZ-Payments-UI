@@ -26,7 +26,7 @@ var config = {
         {
             "url": '${BASE_URL}/vehicles/enter_details?caz-selection',
             "actions": [
-                "set field #vrn to CAS310",
+                "set field #vrn to CAS300",
                 "click element #registration-country-1",
                 "click element input[type=submit]",
                 "wait for element #confirm-vehicle-1 to be visible",
@@ -38,7 +38,7 @@ var config = {
         {
             "url": '${BASE_URL}/vehicles/enter_details?confirm-terms-agreement',
             "actions": [
-                "set field #vrn to CAS310",
+                "set field #vrn to CAS300",
                 "click element #registration-country-1",
                 "click element input[type=submit]",
                 "wait for element #confirm-vehicle-1 to be visible",
@@ -53,7 +53,7 @@ var config = {
         {
             "url": '${BASE_URL}/vehicles/enter_details?select-date',
             "actions": [
-                "set field #vrn to CAS310",
+                "set field #vrn to CAS300",
                 "click element #registration-country-1",
                 "click element input[type=submit]",
                 "wait for element #confirm-vehicle-1 to be visible",
@@ -72,7 +72,7 @@ var config = {
         {
             "url": '${BASE_URL}/vehicles/enter_details?payment_summary',
             "actions": [
-                "set field #vrn to CAS310",
+                "set field #vrn to CAS300",
                 "click element #registration-country-1",
                 "click element input[type=submit]",
                 "wait for element #confirm-vehicle-1 to be visible",
@@ -103,7 +103,7 @@ var config = {
         {
             "url": '${BASE_URL}/vehicles/enter_details?dvla_vehicles',
             "actions": [
-                "set field #vrn to CAS310",
+                "set field #vrn to CAS300",
                 "click element #registration-country-2",
                 "click element input[type=submit]",
                 "wait for element #confirm-vehicle-1 to be visible",
@@ -122,7 +122,7 @@ var config = {
         {
             "url": '${BASE_URL}/vehicles/enter_details?incorrect_details',
             "actions": [
-                "set field #vrn to CAS310",
+                "set field #vrn to CAS300",
                 "click element #registration-country-1",
                 "click element input[type=submit]",
                 "wait for element #confirm-vehicle-2 to be visible",

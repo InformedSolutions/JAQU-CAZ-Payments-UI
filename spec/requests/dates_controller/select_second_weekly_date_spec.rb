@@ -2,11 +2,12 @@
 
 require 'rails_helper'
 
-RSpec.describe 'DatesController - GET #select_weekly_date', type: :request do
-  subject { get select_weekly_date_dates_path }
+RSpec.describe 'DatesController - GET #select_second_weekly_date', type: :request do
+  subject { get select_second_weekly_date_dates_path }
 
   context 'with VRN, COUNTRY, LA, LA NAME and CHARGE in the session' do
     before do
+      assign_second_week_selected
       add_details_to_session(weekly_possible: true)
       allow(PaymentsApi).to receive(:paid_payments_dates).and_return(paid_dates)
       stubbed_caz = instance_double(
@@ -20,9 +21,10 @@ RSpec.describe 'DatesController - GET #select_weekly_date', type: :request do
     let(:paid_dates) { [] }
 
     context 'a week starting from today can be paid' do
-      it 'returns a found response' do
-        subject
-        expect(response).to have_http_status(:found)
+      before { subject }
+
+      it 'returns an ok response' do
+        expect(response).to have_http_status(:ok)
       end
 
       it 'calls FetchSingleCazData service' do
@@ -32,17 +34,14 @@ RSpec.describe 'DatesController - GET #select_weekly_date', type: :request do
       it 'assigns the @d_day_notice variable' do
         expect(assigns(:d_day_notice)).to eq(false)
       end
-
-      it 'assigns the @return_path variable' do
-        expect(assigns(:return_path)).to eq(select_weekly_period_dates_path)
-      end
     end
 
     context "a week starting from today can't be paid" do
       let(:paid_dates) { [Date.current.strftime(Dates::Weekly::VALUE_DATE_FORMAT)] }
 
+      before { subject }
+
       it 'returns a success response' do
-        subject
         expect(response).to have_http_status(:success)
       end
 

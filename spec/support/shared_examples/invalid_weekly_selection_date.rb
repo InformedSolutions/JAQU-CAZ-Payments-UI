@@ -5,14 +5,6 @@ RSpec.shared_examples 'an invalid weekly selection date' do
     expect(service.start_date).to be_falsey
   end
 
-  it 'returns nil for .date_in_range?' do
-    expect(service.date_in_range?).to be_falsey
-  end
-
-  it 'returns nil for .date_chargeable?' do
-    expect(service.date_chargeable?).to be_falsey
-  end
-
   it 'returns nil for .valid?' do
     expect(service.valid?).to be_falsey
   end

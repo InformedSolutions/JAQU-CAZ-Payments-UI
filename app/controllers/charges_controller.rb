@@ -77,10 +77,11 @@ class ChargesController < ApplicationController
     @la_name = la_name
     @weekly_period = vehicle_details('weekly')
     @weekly_charge_today = vehicle_details('weekly_charge_today')
-    @dates = vehicle_details('dates')
+    @dates = vehicle_details('dates').sort
     @total_charge = vehicle_details('total_charge')
     @return_path = review_payment_return_path
     @chargeable_zones = vehicle_details('chargeable_zones')
+    handle_second_week_selection
   end
 
   private
@@ -148,5 +149,16 @@ class ChargesController < ApplicationController
   def unable_to_determine_compliance
     SessionManipulation::SetUndetermined.call(session: session)
     redirect_to not_determined_vehicles_path
+  end
+
+  # Checks if second week is available to be selected
+  # If yes, sets the @second_week_available variable and overwrites the dates to display in a correct format
+  def handle_second_week_selection
+    return unless @weekly_period
+
+    service = Dates::ReviewWeeklySelection.new(vrn: vrn, zone_id: la_id, session: session)
+
+    @dates = service.format_week_selection
+    @second_week_available = service.second_week_available?
   end
 end

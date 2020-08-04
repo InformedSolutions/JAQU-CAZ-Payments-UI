@@ -7,7 +7,9 @@ RSpec.describe Dates::Weekly do
     described_class.new(
       vrn: vrn,
       zone_id: zone_id,
-      charge_start_date: active_charge_start_date
+      charge_start_date: active_charge_start_date,
+      second_week_selected: second_week_selected,
+      week_start_days: week_start_days
     )
   end
 
@@ -16,6 +18,8 @@ RSpec.describe Dates::Weekly do
   let(:paid_dates) { [] }
   let(:value_format) { '%Y-%m-%d' }
   let(:active_charge_start_date) { 10.days.ago.to_s }
+  let(:second_week_selected) { false }
+  let(:week_start_days) { [] }
 
   before { allow(PaymentsApi).to receive(:paid_payments_dates).and_return(paid_dates) }
 
@@ -135,6 +139,33 @@ RSpec.describe Dates::Weekly do
             expect(service.d_day_notice).to be_falsey
           end
         end
+      end
+    end
+  end
+
+  context 'when second week is being selected' do
+    let(:second_week_selected) { true }
+    first_week_start = Time.zone.now.strftime(Dates::Base::VALUE_DATE_FORMAT)
+    second_week_start = 8.days.from_now.strftime(Dates::Base::VALUE_DATE_FORMAT)
+    let(:week_start_days) { [first_week_start, second_week_start] }
+
+    describe '.chargeable_dates' do
+      it 'returns 13 dates' do
+        expect(service.chargeable_dates.count).to eq(13)
+      end
+
+      it 'disables whole payment window' do
+        disabled_dates = service.chargeable_dates.map { |date| date[:disabled] }.select(&:present?)
+
+        expect(disabled_dates.count).to eq(13)
+      end
+
+      it 'sets correct dates' do
+        first_day = 6.days.ago.strftime(Dates::Base::VALUE_DATE_FORMAT)
+        last_day = 6.days.from_now.strftime(Dates::Base::VALUE_DATE_FORMAT)
+
+        expect(service.chargeable_dates.first[:value]).to eq(first_day)
+        expect(service.chargeable_dates.last[:value]).to eq(last_day)
       end
     end
   end

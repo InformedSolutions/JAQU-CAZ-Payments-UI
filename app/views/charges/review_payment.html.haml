@@ -36,12 +36,17 @@
             %tr.govuk-table__row
               %td.govuk-table__cell Payment for
               %td.govuk-table__header{scope: 'row', id: 'dates'}
-                - parse_dates(@dates).each do |date|
-                  - unless date.eql? parse_dates(@dates).last
-                    = date + ','
+                - if @weekly_period
+                  - @dates.each do |date|
+                    = "#{date.first} - #{date.second}"
                     %br
-                  - else
-                    = date
+                - else 
+                  - parse_dates(@dates).each do |date|
+                    - unless date.eql? parse_dates(@dates).last
+                      = date + ','
+                      %br
+                    - else
+                      = date
               %td.govuk-table__cell
                 = link_to determinate_payment_for_path(@weekly_period, @weekly_charge_today), class: 'govuk-link', id: 'change-dates' do
                   Change
@@ -52,3 +57,10 @@
                 = parse_charge(@total_charge)
               %td.govuk-table__cell
         = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
+
+        - if @second_week_available
+          %p= link_to 'Add another week',
+              select_second_weekly_date_dates_path,
+              class: 'govuk-button govuk-button--secondary',
+              id: 'add-another-week-link',
+              'data-module': 'govuk-button'

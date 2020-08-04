@@ -21,5 +21,6 @@ en:
     weekly:
       empty: Select a start date for the week that you wish to pay for
       not_available: Select an available start date
+      already_selected: Choose a start date for your second week that doesn't include dates you've already chosen
   confirmation_alert: Confirm the number plate is correct
   select_weekly_period: Select a start day
