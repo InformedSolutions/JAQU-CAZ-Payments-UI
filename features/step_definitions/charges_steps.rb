@@ -46,7 +46,7 @@ Then('I confirm exemption') do
 end
 
 Then('I choose I confirm that I am not exempt') do
-  check 'I confirm that I am not exempt'
+  check 'confirm-exempt'
 end
 
 Then('I am on the dates page') do

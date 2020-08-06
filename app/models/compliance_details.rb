@@ -77,6 +77,11 @@ class ComplianceDetails
     zone_links['fleet']
   end
 
+  # Returns "get support" link based on conditions
+  def global_exemption_guidance_url
+    additional_urls_file['global']['exemption_guidance']
+  end
+
   private
 
   # Attributes used to perform the backend call
