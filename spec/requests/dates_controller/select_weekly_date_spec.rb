@@ -90,7 +90,7 @@ RSpec.describe 'DatesController - GET #select_weekly_date', type: :request do
 
     context 'user chooses date after coming back to the page not from Review Payment' do
       let(:referer) { '' }
-      
+
       it 'assigns @input_date' do
         subject
         expect(assigns(:input_date)).to eq(Date.parse('2020-05-01'))
