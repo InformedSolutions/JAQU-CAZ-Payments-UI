@@ -845,7 +845,7 @@
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
-"@fortawesome/fontawesome-free@^5.13.0":
+"@fortawesome/fontawesome-free@^5.14.0":
   version "5.14.0"
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.14.0.tgz#a371e91029ebf265015e64f81bfbf7d228c9681f"
   integrity sha512-OfdMsF+ZQgdKHP9jUbmDcRrP0eX90XXrsXIdyjLbkmSBzmMXPABB8eobUJtivaupucYaByz6WNe1PI1JuYm3qA==
@@ -2806,10 +2806,13 @@ expand-tilde@^2.0.0, expand-tilde@^2.0.2:
   dependencies:
     homedir-polyfill "^1.0.1"
 
-expose-loader@^0.7.5:
-  version "0.7.5"
-  resolved "https://registry.yarnpkg.com/expose-loader/-/expose-loader-0.7.5.tgz#e29ea2d9aeeed3254a3faa1b35f502db9f9c3f6f"
-  integrity sha512-iPowgKUZkTPX5PznYsmifVj9Bob0w2wTHVkt/eYNPSzyebkUgIedmskf/kcfEIWpiWjg3JRjnW+a17XypySMuw==
+expose-loader@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/expose-loader/-/expose-loader-1.0.0.tgz#1676dde8fce6662584e17f8531e24d2afe8dae11"
+  integrity sha512-xgt47+pEQrlCyCoO09cMKWf5qiurK6qMtvjUPm8+Uso5WwkNHeD47P0Zb3R9Kvk5zUcJWLax95xaaXDJCmoNjw==
+  dependencies:
+    loader-utils "^2.0.0"
+    schema-utils "^2.6.6"
 
 express@^4.17.1:
   version "4.17.1"
@@ -3274,7 +3277,7 @@ globule@^1.0.0:
     lodash "~4.17.10"
     minimatch "~3.0.2"
 
-govuk-frontend@^3.6.0:
+govuk-frontend@^3.8.0:
   version "3.8.0"
   resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-3.8.0.tgz#939a0846ead90022b4b56506b098cdce28808c9a"
   integrity sha512-+vgXzFsh7wpLRGjFSDvDcA2zNA2wOxT6gGs/KUpkTjF1Uop9BerW/1W/YB1BMpeTEJoPlmrkA19+DS1fqJtL9Q==
@@ -4117,7 +4120,7 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
   integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
 
-litepicker@^1.4.6:
+litepicker@^1.5.7:
   version "1.5.7"
   resolved "https://registry.yarnpkg.com/litepicker/-/litepicker-1.5.7.tgz#ba4fe3686f67ec620855caa454921ce6d553ade5"
   integrity sha512-4L2ZcF8iqCE4A/qGWS3PbdFplZR1g751x5SsZ87zCRZ4LQN1Fgezarnvqi0eHk/kDWK7Qx0HZ9Y4bNznJMF1xA==
