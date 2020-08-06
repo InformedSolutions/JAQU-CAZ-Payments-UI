@@ -36,6 +36,16 @@ module DatesHelper
     "Your weekly charge will expire on #{end_date}"
   end
 
+  # Lists disabled dates for selected week start date
+  # Disables 6 days before (to prevent payment overlapping) and 6 days after week_start_date
+  # Returns array of dates in string YYYY-MM-DD format
+  def disable_week(week_start_date)
+    selected_date = Date.strptime(week_start_date, Dates::Base::VALUE_DATE_FORMAT)
+    (selected_date - 6.days)
+      .upto(selected_date + 6.days)
+      .map { |date| date.strftime(Dates::Base::VALUE_DATE_FORMAT) }
+  end
+
   private
 
   # Checks if today day is not paid

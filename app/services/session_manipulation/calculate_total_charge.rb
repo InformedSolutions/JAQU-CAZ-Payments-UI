@@ -61,7 +61,7 @@ module SessionManipulation
     end
 
     # Returns array of dates in string format
-    # .first is firs week start date, .second is second week start date
+    # .first is first week start date, .second is second week start date
     def week_dates
       if !@session[:second_week_selected]
         [dates.first]

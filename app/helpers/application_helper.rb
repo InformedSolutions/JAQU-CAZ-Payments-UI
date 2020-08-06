@@ -33,7 +33,7 @@ module ApplicationHelper
     if weekly_period && weekly_charge_today
       select_weekly_period_dates_path
     elsif weekly_period && !weekly_charge_today
-      select_weekly_date_dates_path
+      select_weekly_date_dates_path(change: true)
     else
       select_daily_date_dates_path
     end
