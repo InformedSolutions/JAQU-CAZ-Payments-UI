@@ -9,6 +9,8 @@ module Dates
   # and display them on +app/views/dates/select_date_weekly.html.haml+
   #
   class Weekly < Base
+    include DatesHelper
+
     # Overrides default by setting start and end dates
     def initialize(vrn:, zone_id:, charge_start_date:, second_week_selected:, week_start_days:)
       super(vrn: vrn, zone_id: zone_id)
@@ -75,7 +77,7 @@ module Dates
     # Disables dates chosen in first week during weekly payment
     # Returns array of parsed dates
     def disable_already_chosen_dates(payment_window_dates)
-      session_dates = @week_start_days.map { |day| dates_to_disable(day) }.flatten
+      session_dates = @week_start_days.map { |day| disable_week(day) }.flatten
       return payment_window_dates if session_dates.empty?
 
       payment_window_dates.inject([]) do |all_dates, date|
@@ -83,16 +85,6 @@ module Dates
 
         all_dates << date
       end
-    end
-
-    # Lists disabled dates for selected week start date
-    # Disables 6 days before (to prevent payment overlapping) and 6 days after week_start_dates
-    # Returns array of dates in string YYYY-MM-DD format
-    def dates_to_disable(week_start_date)
-      selected_date = Date.strptime(week_start_date, Dates::Base::VALUE_DATE_FORMAT)
-      (selected_date - 6.days)
-        .upto(selected_date + 6.days)
-        .map { |date| date.strftime(Dates::Base::VALUE_DATE_FORMAT) }
     end
   end
 end

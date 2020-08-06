@@ -9,10 +9,11 @@ module AddToSession
     add_to_session(vrn: vrn, country: country)
   end
 
-  def add_details_to_session(details: {}, weekly_possible: false)
+  def add_details_to_session(details: {}, weekly_possible: false, weekly_charge_today: false)
     add_to_session(
       **compliance_details(details),
-      weekly_possible: weekly_possible
+      weekly_possible: weekly_possible,
+      weekly_charge_today: weekly_charge_today
     )
   end
 
@@ -35,6 +36,11 @@ module AddToSession
 
   def assign_second_week_selected(second_week_selected: true)
     encoded_data = RackSessionAccess.encode(second_week_selected: second_week_selected)
+    put_encoded_data_to_session(encoded_data)
+  end
+
+  def add_weekly_selection_dates(dates)
+    encoded_data = RackSessionAccess.encode(dates)
     put_encoded_data_to_session(encoded_data)
   end
 
