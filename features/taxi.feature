@@ -106,16 +106,24 @@ Feature: Leeds Taxi
       And I press the Continue
     Then I should be on the review your payment page
       And I should see '01/05/2020 - 07/05/2020'
-      And I should see 'Add another week'
+      And I press 'Back' link
+    Then I fill in an available week start date
+      And I press the Continue
       And I press 'Add another week' link
     Then I should be on the pick second weekly dates page
       And I press 'Back' link
       And I press 'Add another week' link
+      And I press 'Pay for 1 day instead' link
+      And I press 'Back' link
     Then I fill in an available second week start date
       And I press the Continue
+      And I should not see 'Add another week'
+      And I press 'Cookies' link
+      And I press 'Back' link
+    Then I want to change selected dates
+      And I press 'Back' link
       And I should see '01/05/2020 - 07/05/2020'
       And I should see '08/05/2020 - 14/05/2020'
-      And I should not see 'Add another week'
 
   Scenario: User wants to select two weeks but enters invalid second date
     Given I am on the weekly dates page

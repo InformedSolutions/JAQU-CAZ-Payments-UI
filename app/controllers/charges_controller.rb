@@ -81,7 +81,7 @@ class ChargesController < ApplicationController
     @total_charge = vehicle_details('total_charge')
     @return_path = review_payment_return_path
     @chargeable_zones = vehicle_details('chargeable_zones')
-    handle_second_week_selection
+    check_second_week_availability
   end
 
   private
@@ -118,7 +118,9 @@ class ChargesController < ApplicationController
 
   # Define the back button path on review payment page.
   def review_payment_return_path
-    if vehicle_details('weekly')
+    if return_to_second_week_selection
+      select_second_weekly_date_dates_path
+    elsif vehicle_details('weekly')
       select_weekly_date_dates_path
     elsif vehicle_details('weekly') && vehicle_details('confirm_weekly_charge_today')
       select_weekly_period_dates_path
@@ -153,12 +155,19 @@ class ChargesController < ApplicationController
 
   # Checks if second week is available to be selected
   # If yes, sets the @second_week_available variable and overwrites the dates to display in a correct format
-  def handle_second_week_selection
+  def check_second_week_availability
     return unless @weekly_period
+
+    Dates::AssignBackButtonDate.call(session: session)
 
     service = Dates::ReviewWeeklySelection.new(vrn: vrn, zone_id: la_id, session: session)
 
     @dates = service.format_week_selection
     @second_week_available = service.second_week_available?
+  end
+
+  # Specifies if back button should lead to second week selection page
+  def return_to_second_week_selection
+    vehicle_details('weekly') && session[:second_week_start_date] || params['cancel_second_week'] == 'true'
   end
 end
