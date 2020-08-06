@@ -59,9 +59,8 @@
                                 id: 'exemption-link')
         = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'
 
-        %p
-          Contact the local authority for support to upgrade or replace your vehicle in
-          = succeed ').' do
-            = link_to(@compliance_details.zone_name,
-                      @compliance_details.dynamic_compliance_url,
-                      id: 'support-link')
+      %p
+        = succeed '.' do
+          = link_to("Contact the local authority for support to upgrade or replace your vehicle in #{@compliance_details.zone_name}",
+                    @compliance_details.dynamic_compliance_url,
+                    id: 'compliance-link')
