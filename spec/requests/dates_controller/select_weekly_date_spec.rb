@@ -10,7 +10,7 @@ RSpec.describe 'DatesController - GET #select_weekly_date', type: :request do
   context 'with VRN, COUNTRY, LA, LA NAME and CHARGE in the session' do
     before do
       add_details_to_session(weekly_possible: true)
-      add_weekly_selection_dates({ first_week_start_date: '2020-05-01', first_week_back_button: '2020-05-01' })
+      add_weekly_selection_dates(first_week_start_date: '2020-05-01', first_week_back_button: '2020-05-01')
       allow(PaymentsApi).to receive(:paid_payments_dates).and_return(paid_dates)
       stubbed_caz = instance_double(
         'Caz',

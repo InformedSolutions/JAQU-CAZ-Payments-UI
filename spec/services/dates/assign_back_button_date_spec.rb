@@ -5,12 +5,7 @@ require 'rails_helper'
 RSpec.describe Dates::AssignBackButtonDate do
   include DatesHelper
 
-  subject(:service) do
-    described_class.call(
-      session: session,
-      second_week_selected: second_week_selected
-    )
-  end
+  subject(:service) { described_class.call(session: session, second_week_selected: second_week_selected) }
 
   let(:session) do
     {

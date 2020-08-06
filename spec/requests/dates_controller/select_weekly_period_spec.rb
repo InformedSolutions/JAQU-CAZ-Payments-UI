@@ -7,9 +7,7 @@ RSpec.describe 'DatesController - GET #select_weekly_period', type: :request do
 
   context 'with VRN and LA in the session' do
     context 'when Leeds weekly discount is possible' do
-      before do
-        add_details_to_session(weekly_possible: true, weekly_charge_today: true)
-      end
+      before { add_details_to_session(weekly_possible: true, weekly_charge_today: true) }
 
       it 'returns an ok response' do
         subject
