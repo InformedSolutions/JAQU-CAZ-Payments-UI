@@ -17,6 +17,7 @@ import '../src/GovUKAssets';
 import { initAll } from 'govuk-frontend/govuk/all.js';
 import initPrintLink from '../src/printLink/init';
 import cookieControl from "../src/cookieControl";
+import backButton from "../src/backButton";
 import '@fortawesome/fontawesome-free/css/regular.min.css';
 
 document.body.classList.add('js-enabled');
