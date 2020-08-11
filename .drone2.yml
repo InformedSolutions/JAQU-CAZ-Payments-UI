@@ -1379,7 +1379,7 @@ steps:
         GIT_PRIVATE_SSH:
           from_secret: jaqu_lower_github_private_key
         TF_VAR_enable_https_redirect: false
-        TF_VAR_feedback_url: https://www.surveymonkey.co.uk/r/TK6F8N6
+        TF_VAR_feedback_url: https://defragroup.eu.qualtrics.com/jfe/form/SV_eLoFG7Lxyn9V6oB
       when:
         event:
           - pull_request
@@ -1446,7 +1446,7 @@ steps:
         GIT_PRIVATE_SSH:
           from_secret: jaqu_lower_github_private_key
         TF_VAR_enable_https_redirect: false
-        TF_VAR_feedback_url: https://www.surveymonkey.co.uk/r/TK6F8N6
+        TF_VAR_feedback_url: https://defragroup.eu.qualtrics.com/jfe/form/SV_eLoFG7Lxyn9V6oB
       when:
         event:
           - push
