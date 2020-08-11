@@ -1320,7 +1320,7 @@ steps:
         from_secret: aws_secret_access_key
       GIT_PRIVATE_SSH:
         from_secret: github_private_key
-      TF_VAR_feedback_url: https://www.surveymonkey.co.uk/r/TK6F8N6
+      TF_VAR_feedback_url: https://defragroup.eu.qualtrics.com/jfe/form/SV_eLoFG7Lxyn9V6oB
       TF_VAR_enable_https_redirect: false
       AWS_ACCESS_KEY_ID:
         from_secret: aws_access_key_id
@@ -1380,7 +1380,7 @@ steps:
         from_secret: aws_secret_access_key
       GIT_PRIVATE_SSH:
         from_secret: github_private_key
-      TF_VAR_feedback_url: https://www.surveymonkey.co.uk/r/TK6F8N6
+      TF_VAR_feedback_url: https://defragroup.eu.qualtrics.com/jfe/form/SV_eLoFG7Lxyn9V6oB
       TF_VAR_enable_https_redirect: false
       AWS_ACCESS_KEY_ID:
         from_secret: aws_access_key_id
