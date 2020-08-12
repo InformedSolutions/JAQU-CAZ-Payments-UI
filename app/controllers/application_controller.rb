@@ -124,4 +124,14 @@ class ApplicationController < ActionController::Base
   def assign_back_button_url
     @back_button_url = request.referer || root_path
   end
+
+  # Get query parameter from request
+  def get_query_parameter(parameter)
+    last_request = request.referer
+    parameter_exists = request.query_parameters.include?(parameter)
+    if parameter_exists
+      request.query_parameters[parameter]
+    end
+  end
 end
+

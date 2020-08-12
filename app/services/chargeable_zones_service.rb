@@ -46,6 +46,7 @@ class ChargeableZonesService < BaseService
   # Calls +ComplianceCheckerApi.clean_air_zones+ and then calls
   # +ComplianceCheckerApi.vehicle_compliance+ to check if any of zones has charge price
   def dvla_data
+    puts vrn
     vehicle_compliance_response = ComplianceCheckerApi.vehicle_compliance(vrn, zone_ids)
     select_chargeable(vehicle_compliance_response['complianceOutcomes'])
   end

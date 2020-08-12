@@ -49,7 +49,7 @@ class VrnForm # rubocop:disable Metrics/ClassLength
     SessionManipulation::AddVrn.call(session: session, vrn: vrn, country: country)
 
     if uk?
-      @redirection_path = details_vehicles_path
+      @redirection_path = details_vehicles_path(:vrn => vrn)
     elsif non_uk?
       process_non_uk
     end

@@ -87,6 +87,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   # * +confirm-vehicle+ - lack of it redirects to {incorrect details}[rdoc-ref:VehiclesController.incorrect_details]
   #
   def confirm_details
+    puts vrn
     form = ConfirmationForm.new(confirmation)
     if form.valid?
       redirect_to process_detail_form(form)
@@ -282,6 +283,8 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
 
   # Process action which is done on submit details and uk registered details
   def process_details_action
+    session[:vehicle_details][:vrn] = get_query_parameter('vrn')
+    puts vrn
     @vehicle_details = VehicleDetails.new(vrn)
     return redirect_to(exempt_vehicles_path) if @vehicle_details.exempt?
 
