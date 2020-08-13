@@ -19,7 +19,6 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   #
   def enter_details
     @errors = {}
-    @return_url = request.referer ? determinate_back_path : root_path
     clear_inputs_if_coming_from_successful_payment
   end
 
@@ -283,8 +282,6 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
 
   # Process action which is done on submit details and uk registered details
   def process_details_action
-    session[:vehicle_details][:vrn] = get_query_parameter('vrn')
-    puts vrn
     @vehicle_details = VehicleDetails.new(vrn)
     return redirect_to(exempt_vehicles_path) if @vehicle_details.exempt?
 

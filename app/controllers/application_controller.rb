@@ -109,6 +109,7 @@ class ApplicationController < ActionController::Base
     session.dig(:vehicle_details, field)
   end
 
+
   # Gets charge from vehicle_details hash in the session. Returns integer, eg 50
   def charge
     vehicle_details('daily_charge')
@@ -132,6 +133,51 @@ class ApplicationController < ActionController::Base
     if parameter_exists
       request.query_parameters[parameter]
     end
+  end
+
+    # Handle history of the flow through the process - used by back links
+  def handle_history # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    # We make a copy of session data here as we want to know
+    # its state from very beginning of the request
+    session_deep_copy = Marshal.load(Marshal.dump(session[:vehicles_details]))
+    history_record = { url: request.url, data: session_deep_copy }
+    session[:history] ||= [{ url: root_path, data: {} }]
+
+    # We need to restore session data if this is page after navigating "back"
+    # before any other actions run
+    if restore_history_entry?
+      session[:vehicles_details] = session[:history].last[:data]
+      session[:history].pop
+    elsif store_history_entry?
+      store_history_entry(history_record)
+    end
+
+    @back_button_url = back_button_destination
+
+    yield
+  ensure
+    # Make sure we ignore empty redirects even on rescue blocks
+    # History storing happens here as we don't want to store in history
+    # pages that returned empty body (we need access to "response" object)
+    remove_empty_responses_from_history
+  end
+
+  # Checks if history should be restored
+  def restore_history_entry?
+    params['b']
+  end
+
+  # Checks if history should be stored
+  def store_history_entry?
+    request.method == 'GET' && # save only on repleyable requests
+      session[:history]&.last&.dig(:url) != request.url # don't save when using refresh button
+  end
+
+  # Store history entry
+  def store_history_entry(history_record)
+    # check maximum size of history
+    session[:history].shift if session[:history].size >= Rails.configuration.x.max_history_steps
+    session[:history].push(history_record)
   end
 end
 
