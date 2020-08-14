@@ -135,6 +135,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def session_id
+    session['session_id']
+  end
+
+  def url_id
+    get_query_parameter('id')
+  end
+
     # Handle history of the flow through the process - used by back links
   def handle_history # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     # We make a copy of session data here as we want to know
@@ -145,7 +153,7 @@ class ApplicationController < ActionController::Base
 
     # We need to restore session data if this is page after navigating "back"
     # before any other actions run
-    if restore_history_entry?
+    if !session_id.eq(url_id)
       session[:vehicles_details] = session[:history].last[:data]
       session[:history].pop
     elsif store_history_entry?
@@ -160,11 +168,6 @@ class ApplicationController < ActionController::Base
     # History storing happens here as we don't want to store in history
     # pages that returned empty body (we need access to "response" object)
     remove_empty_responses_from_history
-  end
-
-  # Checks if history should be restored
-  def restore_history_entry?
-    params['b']
   end
 
   # Checks if history should be stored

@@ -91,7 +91,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
     if form.valid?
       redirect_to process_detail_form(form)
     else
-      redirect_to details_vehicles_path, alert: form.error_message
+      redirect_to details_vehicles_path(id: session['session_id']), alert: form.error_message
     end
   end
 
@@ -283,7 +283,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   # Process action which is done on submit details and uk registered details
   def process_details_action
     @vehicle_details = VehicleDetails.new(vrn)
-    return redirect_to(exempt_vehicles_path) if @vehicle_details.exempt?
+    return redirect_to(exempt_vehicles_path(id: session['session_id'])) if @vehicle_details.exempt?
 
     SessionManipulation::SetLeedsTaxi.call(session: session) if @vehicle_details.leeds_taxi?
     SessionManipulation::SetType.call(session: session, type: @vehicle_details.type)
@@ -321,9 +321,9 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   # persists whether or not vehicle details are correct into session and returns correct onward path
   def process_detail_form(form)
     SessionManipulation::SetConfirmVehicle.call(session: session, confirm_vehicle: form.confirmed?)
-    return incorrect_details_vehicles_path unless form.confirmed?
+    return incorrect_details_vehicles_path(id: session['session_id']) unless form.confirmed?
 
-    confirmed_undetermined? ? not_determined_vehicles_path : local_authority_charges_path
+    confirmed_undetermined? ? not_determined_vehicles_path(id: session['session_id']) : local_authority_charges_path(id: session['session_id'])
   end
 
   # check if user confirmed details for undetermined vehicle
