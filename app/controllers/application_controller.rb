@@ -21,6 +21,8 @@ class ApplicationController < ActionController::Base
                                if: lambda {
                                      Rails.env.production? && ENV['HTTP_BASIC_PASSWORD'].present?
                                    }
+  before_action :check_for_new_id
+  around_action :handle_history                                 
 
   ##
   # Health endpoint
@@ -135,12 +137,23 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def session_id
-    session['session_id']
+  def transaction_id
+    session[:transaction_id]
   end
 
   def url_id
     get_query_parameter('id')
+  end
+
+  def check_for_new_id
+    puts "checking for new id"
+    puts "new is #{get_query_parameter('new')}"
+    puts "url_id is #{url_id}"
+    puts "old transaction_id is #{transaction_id}"
+    puts "condition is #{get_query_parameter('new') == 'true'}"
+    session[:transaction_id] ||= SecureRandom.uuid
+    session[:transaction_id] = url_id if get_query_parameter('new') == 'true'
+    puts "new transaction_id is #{transaction_id}"
   end
 
     # Handle history of the flow through the process - used by back links
@@ -153,27 +166,28 @@ class ApplicationController < ActionController::Base
 
     # We need to restore session data if this is page after navigating "back"
     # before any other actions run
-    if !session_id.eq(url_id)
+    if restore_history_entry?
       session[:vehicles_details] = session[:history].last[:data]
       session[:history].pop
+      puts "successful restore of #{url_id or 'unknown'}"
     elsif store_history_entry?
       store_history_entry(history_record)
+      puts "successful backup of #{url_id or 'unknown'}"
     end
 
-    @back_button_url = back_button_destination
-
     yield
-  ensure
-    # Make sure we ignore empty redirects even on rescue blocks
-    # History storing happens here as we don't want to store in history
-    # pages that returned empty body (we need access to "response" object)
-    remove_empty_responses_from_history
   end
 
   # Checks if history should be stored
   def store_history_entry?
     request.method == 'GET' && # save only on repleyable requests
       session[:history]&.last&.dig(:url) != request.url # don't save when using refresh button
+  end
+
+  # Checks if history should be restored
+  def restore_history_entry?
+    request.method == 'GET' &&
+    !transaction_id.eql?(url_id)
   end
 
   # Store history entry

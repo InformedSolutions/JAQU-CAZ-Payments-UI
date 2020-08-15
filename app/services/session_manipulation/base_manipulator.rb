@@ -37,7 +37,6 @@ module SessionManipulation
     #
     def initialize(session:)
       @session = session
-      session['session_id'] = secureRandom.uuid
     end
 
     private

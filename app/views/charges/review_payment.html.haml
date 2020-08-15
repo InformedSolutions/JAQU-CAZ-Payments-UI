@@ -21,7 +21,7 @@
               %td.govuk-table__header{scope: 'row', id: 'vrn'}
                 = @vrn
               %td.govuk-table__cell
-                = link_to enter_details_vehicles_path, class: 'govuk-link', id: 'change-vrn' do
+                = link_to enter_details_vehicles_path(id: @new_id, new: true), class: 'govuk-link', id: 'change-vrn' do
                   Change
                   %span.govuk-visually-hidden number plate
             %tr.govuk-table__row
@@ -30,7 +30,7 @@
                 = @la_name
               %td.govuk-table__cell
                 - if @chargeable_zones > 1
-                  = link_to local_authority_charges_path, class: 'govuk-link', id: 'change-la' do
+                  = link_to local_authority_charges_path(id: @new_id, new: true), class: 'govuk-link', id: 'change-la' do
                     Change
                     %span.govuk-visually-hidden Clean Air Zone
             %tr.govuk-table__row
@@ -48,7 +48,7 @@
                     - else
                       = date
               %td.govuk-table__cell
-                = link_to determinate_payment_for_path(@weekly_period, @weekly_charge_today), class: 'govuk-link', id: 'change-dates' do
+                = link_to determinate_payment_for_path(@weekly_period, @weekly_charge_today, @new_id), class: 'govuk-link', id: 'change-dates' do
                   Change
                   %span.govuk-visually-hidden payment for
             %tr.govuk-table__row

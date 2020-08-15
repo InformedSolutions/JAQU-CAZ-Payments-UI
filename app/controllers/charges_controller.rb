@@ -31,7 +31,7 @@ class ChargesController < ApplicationController
       session: session,
       chargeable_zones: @zones.length
     )
-    return redirect_to compliant_vehicles_path if @zones.empty?
+    return redirect_to compliant_vehicles_path(id: transaction_id) if @zones.empty?
 
     @return_path = local_authority_return_path
   end
@@ -57,7 +57,7 @@ class ChargesController < ApplicationController
       store_compliance_details
       determinate_next_page
     else
-      redirect_to local_authority_charges_path, alert: la_alert(form)
+      redirect_to local_authority_charges_path(id: transaction_id), alert: la_alert(form)
     end
   end
 
@@ -81,6 +81,7 @@ class ChargesController < ApplicationController
     @total_charge = vehicle_details('total_charge')
     @return_path = review_payment_return_path
     @chargeable_zones = vehicle_details('chargeable_zones')
+    @new_id = SecureRandom.uuid
     check_second_week_availability
   end
 
@@ -133,9 +134,9 @@ class ChargesController < ApplicationController
   # Else, returns redirect to daily charge
   def determinate_next_page
     if vehicle_details('weekly_possible')
-      redirect_to select_period_dates_path
+      redirect_to select_period_dates_path(id: transaction_id)
     else
-      redirect_to daily_charge_dates_path
+      redirect_to daily_charge_dates_path(id: transaction_id)
     end
   end
 
@@ -150,7 +151,7 @@ class ChargesController < ApplicationController
   # Redirects to 'Unable to determine compliance' page
   def unable_to_determine_compliance
     SessionManipulation::SetUndetermined.call(session: session)
-    redirect_to not_determined_vehicles_path
+    redirect_to not_determined_vehicles_path(id: transaction_id)
   end
 
   # Checks if second week is available to be selected
