@@ -7,10 +7,12 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   # 404 HTTP status from API mean vehicle in not found in DLVA database. Redirects to the proper page.
   rescue_from BaseApi::Error404Exception, with: :vehicle_not_found
 
-  skip_around_action :handle_history, only: [:enter_details, :submit_details]
-
   # checks if VRN is present in the session
   before_action :check_vrn, except: %i[enter_details submit_details not_determined]
+  skip_around_action :handle_history, only: [:enter_details, :submit_details]
+
+  # does not cache page
+  before_action :set_cache_headers, only: %i[compliant unrecognised]
 
   ##
   # Renders the first step of checking the vehicle compliance.
@@ -88,7 +90,6 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   # * +confirm-vehicle+ - lack of it redirects to {incorrect details}[rdoc-ref:VehiclesController.incorrect_details]
   #
   def confirm_details
-    puts vrn
     form = ConfirmationForm.new(confirmation)
     if form.valid?
       redirect_to process_detail_form(form)
@@ -207,23 +208,6 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   #
   # ==== Path
   #
-  #    GET /vehicles/compliant
-  #
-  # ==== Params
-  # * +vrn+ - vehicle registration number, required in the session
-  #
-  # ==== Validations
-  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
-  #
-  def compliant
-    @return_url = request.referer || root_path
-  end
-
-  ##
-  # Renders a static page for users which VRN is recognised as compliant (no charge in all LAs)
-  #
-  # ==== Path
-  #
   #    GET /vehicles/not_determined
   #
   # ==== Params
@@ -234,13 +218,6 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   #
   def not_determined
     @types = VehicleTypes.call
-    @return_path = if vehicle_details('incorrect')
-                     incorrect_details_vehicles_path
-                   elsif vehicle_details('possible_fraud')
-                     uk_registered_details_vehicles_path
-                   else
-                     details_vehicles_path
-                   end
   end
 
   ##
@@ -294,7 +271,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
 
   # Redirects to {vehicle not found}[rdoc-ref:VehiclesController.unrecognised_vehicle]
   def vehicle_not_found
-    redirect_to unrecognised_vehicles_path
+    redirect_to unrecognised_vehicles_path(id: transaction_id)
   end
 
   # Renders enter_details page and log errors

@@ -12,6 +12,8 @@ class ChargesController < ApplicationController
   before_action :check_compliance_details, except: %i[local_authority submit_local_authority]
   # checks if vehicle_details is present in the session
   before_action :check_vehicle_details, only: %i[review_payment]
+  # does not cache page
+  before_action :set_cache_headers, only: %i[review_payment]
 
   ##
   # Renders the list of available local authorities.
@@ -83,6 +85,7 @@ class ChargesController < ApplicationController
     @chargeable_zones = vehicle_details('chargeable_zones')
     @new_id = SecureRandom.uuid
     check_second_week_availability
+    expires_now
   end
 
   private

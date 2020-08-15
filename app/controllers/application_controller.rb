@@ -21,8 +21,8 @@ class ApplicationController < ActionController::Base
                                if: lambda {
                                      Rails.env.production? && ENV['HTTP_BASIC_PASSWORD'].present?
                                    }
-  before_action :check_for_new_id
-  around_action :handle_history                                 
+  before_action :check_for_new_id, except: [:health, :build_id]
+  around_action :handle_history, except: [:health, :build_id]
 
   ##
   # Health endpoint
@@ -34,6 +34,7 @@ class ApplicationController < ActionController::Base
   #    GET /health.json
   #
   def health
+    puts "hello world"
     render json: 'OK', status: :ok
   end
 
@@ -146,55 +147,39 @@ class ApplicationController < ActionController::Base
   end
 
   def check_for_new_id
-    puts "checking for new id"
-    puts "new is #{get_query_parameter('new')}"
-    puts "url_id is #{url_id}"
-    puts "old transaction_id is #{transaction_id}"
-    puts "condition is #{get_query_parameter('new') == 'true'}"
     session[:transaction_id] ||= SecureRandom.uuid
     session[:transaction_id] = url_id if get_query_parameter('new') == 'true'
-    puts "new transaction_id is #{transaction_id}"
   end
 
     # Handle history of the flow through the process - used by back links
   def handle_history # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     # We make a copy of session data here as we want to know
     # its state from very beginning of the request
-    session_deep_copy = Marshal.load(Marshal.dump(session[:vehicles_details]))
-    history_record = { url: request.url, data: session_deep_copy }
-    session[:history] ||= [{ url: root_path, data: {} }]
+    session[:history] ||= {}
 
     # We need to restore session data if this is page after navigating "back"
     # before any other actions run
-    if restore_history_entry?
-      session[:vehicles_details] = session[:history].last[:data]
-      session[:history].pop
-      puts "successful restore of #{url_id or 'unknown'}"
-    elsif store_history_entry?
-      store_history_entry(history_record)
-      puts "successful backup of #{url_id or 'unknown'}"
+    if request.method == 'GET'
+      if restore_history_entry?
+        session[:vehicle_details] = session[:history][url_id]
+      else
+        session[:history][transaction_id] = Marshal.load(Marshal.dump(session[:vehicle_details]))
+      end
     end
 
     yield
   end
 
-  # Checks if history should be stored
-  def store_history_entry?
-    request.method == 'GET' && # save only on repleyable requests
-      session[:history]&.last&.dig(:url) != request.url # don't save when using refresh button
-  end
-
   # Checks if history should be restored
   def restore_history_entry?
-    request.method == 'GET' &&
-    !transaction_id.eql?(url_id)
+      url_id &&
+        !transaction_id.eql?(url_id)
   end
 
-  # Store history entry
-  def store_history_entry(history_record)
-    # check maximum size of history
-    session[:history].shift if session[:history].size >= Rails.configuration.x.max_history_steps
-    session[:history].push(history_record)
+  # set headers for pages that should be refreshed every time
+  def set_cache_headers
+    response.headers["Cache-Control"] = "no-cache, no-store"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "Mon, 01 Jan 1990 00:00:00 GMT"
   end
 end
-

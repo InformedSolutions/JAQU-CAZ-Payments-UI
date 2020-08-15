@@ -7,6 +7,9 @@ class NonDvlaVehiclesController < ApplicationController
   # checks if VRN is present in the session
   before_action :check_vrn
 
+  # does not cache page
+  before_action :set_cache_headers, only: %i[non_dvla_vehicles]
+
   ##
   # Renders a page for vehicles that are not registered within the UK.
   #
