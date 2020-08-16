@@ -60,7 +60,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
       SessionManipulation::SetChargePeriod.call(session: session, charge_period: params[:period])
       determinate_next_page
     else
-      redirect_back_to(select_period_dates_path, true, :select_period)
+      redirect_back_to(select_period_dates_path(id: transaction_id), true, :select_period)
     end
   end
 
@@ -269,7 +269,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
       service.add_dates_to_session
       redirect_to review_payment_charges_path(id: transaction_id)
     else
-      redirect_back_to(determinate_week_select_redirect_path(id: transaction_id), service.error, :dates)
+      redirect_back_to(determinate_week_select_redirect_path, service.error, :dates)
     end
   end
 
@@ -333,9 +333,9 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # Determinates redirect path after invalid date selected
   def determinate_week_select_redirect_path
     if !second_week_selected?
-      select_weekly_date_dates_path
+      select_weekly_date_dates_path(id: transaction_id)
     else
-      select_second_weekly_date_dates_path
+      select_second_weekly_date_dates_path(id: transaction_id)
     end
   end
 

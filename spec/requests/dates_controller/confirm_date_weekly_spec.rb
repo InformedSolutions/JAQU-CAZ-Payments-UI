@@ -7,6 +7,7 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
     post confirm_date_weekly_dates_path, params: params
   end
 
+  let(:transaction_id) { SecureRandom.uuid }
   let(:charge) { 12.5 }
   let(:session_details) do
     {
@@ -37,13 +38,14 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
 
   context 'with details in the session' do
     before do
+      add_transaction_id_to_session(transaction_id)
       add_details_to_session(details: session_details, weekly_possible: true)
       allow(Dates::CheckPaidWeekly).to receive(:call).and_return(true)
     end
 
     it 'redirects to :review_payment' do
       subject
-      expect(subject).to redirect_to(review_payment_charges_path)
+      expect(subject).to redirect_to(review_payment_charges_path(id: transaction_id))
     end
 
     it 'calls Dates::CheckPaidWeekly with right params' do
@@ -65,7 +67,7 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
       end
 
       it 'redirects to :dates_charges' do
-        expect(subject).to redirect_to(select_weekly_date_dates_path)
+        expect(subject).to redirect_to(select_weekly_date_dates_path(id: transaction_id))
       end
 
       it 'sets proper alert' do
@@ -92,7 +94,7 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
       end
 
       it 'redirects to :dates_charges' do
-        expect(subject).to redirect_to(select_second_weekly_date_dates_path)
+        expect(subject).to redirect_to(select_second_weekly_date_dates_path(id: transaction_id))
       end
 
       it 'sets proper alert' do
@@ -116,7 +118,7 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
       end
 
       it 'redirects to :dates_charges' do
-        expect(response).to redirect_to(select_weekly_date_dates_path)
+        expect(response).to redirect_to(select_weekly_date_dates_path(id: transaction_id))
       end
 
       it 'sets proper alert' do
@@ -152,7 +154,7 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
       end
 
       it 'redirects to :select_weekly_date' do
-        expect(response).to redirect_to(select_second_weekly_date_dates_path)
+        expect(response).to redirect_to(select_second_weekly_date_dates_path(id: transaction_id))
       end
 
       it 'sets proper alert' do
@@ -178,7 +180,10 @@ RSpec.describe 'DatesController - POST #confirm_date_weekly', type: :request do
   end
 
   context 'without details in the session' do
-    before { add_vrn_to_session }
+    before do
+      add_transaction_id_to_session(transaction_id)
+      add_vrn_to_session
+    end
 
     it_behaves_like 'la is missing'
   end

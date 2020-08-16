@@ -6,7 +6,7 @@
 class WelcomeController < ApplicationController
   skip_before_action :check_for_new_id
   skip_around_action :handle_history
-  
+
   ##
   # Renders the home page.
   # Clears anything already in the session should the user wish to start from scratch.

@@ -31,11 +31,11 @@ module ApplicationHelper
   # Returns url path depends on which period was selected
   def determinate_payment_for_path(weekly_period, weekly_charge_today, new_id)
     if weekly_period && weekly_charge_today
-      select_weekly_period_dates_path(new_id: @new_id, new: true)
+      select_weekly_period_dates_path(id: new_id, new: true)
     elsif weekly_period && !weekly_charge_today
-      select_weekly_date_dates_path(new_id:@new_id, change: true, new: true)
+      select_weekly_date_dates_path(id: new_id, change: true, new: true)
     else
-      select_daily_date_dates_path(new_id: @new_id, new:true)
+      select_daily_date_dates_path(id: new_id, new: true)
     end
   end
 

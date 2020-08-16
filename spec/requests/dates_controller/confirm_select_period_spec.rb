@@ -6,10 +6,13 @@ RSpec.describe 'DatesController - POST #confirm_select_period', type: :request d
   subject do
     post confirm_select_period_dates_path, params: { 'period' => period }
   end
+
+  let(:transaction_id) { SecureRandom.uuid }
   let(:period) { 'daily-charge' }
 
   context 'when Leeds weekly discount is possible' do
     before do
+      add_transaction_id_to_session(transaction_id)
       add_details_to_session(weekly_possible: true)
       subject
     end
@@ -17,7 +20,7 @@ RSpec.describe 'DatesController - POST #confirm_select_period', type: :request d
     context 'with selected radio' do
       context 'when selected daily charge' do
         it 'redirects to daily charge page' do
-          expect(response).to redirect_to(daily_charge_dates_path)
+          expect(response).to redirect_to(daily_charge_dates_path(id: transaction_id))
         end
       end
 
@@ -25,7 +28,7 @@ RSpec.describe 'DatesController - POST #confirm_select_period', type: :request d
         let(:period) { 'weekly-charge' }
 
         it 'redirects to weekly charge page' do
-          expect(response).to redirect_to(weekly_charge_dates_path)
+          expect(response).to redirect_to(weekly_charge_dates_path(id: transaction_id))
         end
       end
     end
@@ -34,7 +37,7 @@ RSpec.describe 'DatesController - POST #confirm_select_period', type: :request d
       let(:period) { nil }
 
       it 'redirects to :select_period' do
-        expect(subject).to redirect_to(select_period_dates_path)
+        expect(subject).to redirect_to(select_period_dates_path(id: transaction_id))
       end
     end
   end
@@ -44,7 +47,10 @@ RSpec.describe 'DatesController - POST #confirm_select_period', type: :request d
   end
 
   context 'without LA in the session' do
-    before { add_vrn_to_session }
+    before do
+      add_transaction_id_to_session(transaction_id)
+      add_vrn_to_session
+    end
 
     it_behaves_like 'la is missing'
   end

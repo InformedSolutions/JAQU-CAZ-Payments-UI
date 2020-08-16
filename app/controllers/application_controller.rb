@@ -5,7 +5,7 @@
 #
 # Also, contains some basic endpoints used for build purposes.
 #
-class ApplicationController < ActionController::Base
+class ApplicationController < ActionController::Base # rubocop:disable Metrics/ClassLength
   # Escapes all API related error with rendering 503 page
   rescue_from Errno::ECONNREFUSED,
               SocketError,
@@ -21,8 +21,8 @@ class ApplicationController < ActionController::Base
                                if: lambda {
                                      Rails.env.production? && ENV['HTTP_BASIC_PASSWORD'].present?
                                    }
-  before_action :check_for_new_id, except: [:health, :build_id]
-  around_action :handle_history, except: [:health, :build_id]
+  before_action :check_for_new_id, except: %i[health build_id]
+  around_action :handle_history, except: %i[health build_id]
 
   ##
   # Health endpoint
@@ -34,7 +34,6 @@ class ApplicationController < ActionController::Base
   #    GET /health.json
   #
   def health
-    puts "hello world"
     render json: 'OK', status: :ok
   end
 
@@ -99,7 +98,7 @@ class ApplicationController < ActionController::Base
     Rails.logger.warn(
       'Compliance details are missing in the session. Redirecting to :local_authority'
     )
-    redirect_to local_authority_charges_path
+    redirect_to local_authority_charges_path(id: transaction_id)
   end
 
   # Gets LA from vehicle_details hash in the session. Returns string, eg '39e54ed8-3ed2-441d-be3f-38fc9b70c8d3'
@@ -112,7 +111,6 @@ class ApplicationController < ActionController::Base
     session.dig(:vehicle_details, field)
   end
 
-
   # Gets charge from vehicle_details hash in the session. Returns integer, eg 50
   def charge
     vehicle_details('daily_charge')
@@ -124,18 +122,9 @@ class ApplicationController < ActionController::Base
     redirect_to path, alert: alert
   end
 
-  # Assign back button url
-  def assign_back_button_url
-    @back_button_url = request.referer || root_path
-  end
-
   # Get query parameter from request
   def get_query_parameter(parameter)
-    last_request = request.referer
-    parameter_exists = request.query_parameters.include?(parameter)
-    if parameter_exists
-      request.query_parameters[parameter]
-    end
+    request.query_parameters[parameter] if request.query_parameters.include?(parameter)
   end
 
   def transaction_id
@@ -151,35 +140,50 @@ class ApplicationController < ActionController::Base
     session[:transaction_id] = url_id if get_query_parameter('new') == 'true'
   end
 
-    # Handle history of the flow through the process - used by back links
-  def handle_history # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    # We make a copy of session data here as we want to know
-    # its state from very beginning of the request
+  # Handle history of the flow through the process - used by back links
+  def handle_history
     session[:history] ||= {}
 
-    # We need to restore session data if this is page after navigating "back"
-    # before any other actions run
     if request.method == 'GET'
-      if restore_history_entry?
-        session[:vehicle_details] = session[:history][url_id]
+      if url_id && !transaction_id.eql?(url_id)
+        restore_session
       else
-        session[:history][transaction_id] = Marshal.load(Marshal.dump(session[:vehicle_details]))
+        backup_session
       end
     end
 
     yield
   end
 
-  # Checks if history should be restored
-  def restore_history_entry?
-      url_id &&
-        !transaction_id.eql?(url_id)
+  # backs up the session
+  def backup_session
+    vehicle_details_record = Marshal.load(Marshal.dump(session[:vehicle_details]))
+    session[:history][transaction_id] = { vehicle_details: vehicle_details_record }
+    backup_leeds_taxi
+  end
+
+  def backup_leeds_taxi
+    session[:history][transaction_id][:first_week_start_date] = session[:first_week_start_date] || nil
+    session[:history][transaction_id][:second_week_start_date] = session[:second_week_start_date] || nil
+  end
+
+  # backs up the session
+  def restore_session
+    # restore main session
+    session[:vehicle_details] = session[:history][url_id][:vehicle_details]
+    restore_leeds_taxi
+  end
+
+  # restores leeds taxi data if exists
+  def restore_leeds_taxi
+    session[:first_week_start_date] = session[:history][url_id][:first_week_start_date] || nil
+    session[:second_week_start_date] = session[:history][url_id][:second_week_start_date] || nil
   end
 
   # set headers for pages that should be refreshed every time
   def set_cache_headers
-    response.headers["Cache-Control"] = "no-cache, no-store"
-    response.headers["Pragma"] = "no-cache"
-    response.headers["Expires"] = "Mon, 01 Jan 1990 00:00:00 GMT"
+    response.headers['Cache-Control'] = 'no-cache, no-store'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = 'Mon, 01 Jan 1990 00:00:00 GMT'
   end
 end

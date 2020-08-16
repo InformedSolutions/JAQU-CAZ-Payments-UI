@@ -9,10 +9,10 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
 
   # checks if VRN is present in the session
   before_action :check_vrn, except: %i[enter_details submit_details not_determined]
-  skip_around_action :handle_history, only: [:enter_details, :submit_details]
+  skip_around_action :handle_history, only: %i[enter_details submit_details]
 
   # does not cache page
-  before_action :set_cache_headers, only: %i[compliant unrecognised]
+  before_action :set_cache_headers, only: %i[not_determined unrecognised]
 
   ##
   # Renders the first step of checking the vehicle compliance.
@@ -133,7 +133,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
     if form.valid?
       redirect_to process_detail_form(form)
     else
-      redirect_to uk_registered_details_vehicles_path, alert: form.error_message
+      redirect_to uk_registered_details_vehicles_path(id: transaction_id), alert: form.error_message
     end
   end
 
@@ -302,7 +302,11 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
     SessionManipulation::SetConfirmVehicle.call(session: session, confirm_vehicle: form.confirmed?)
     return incorrect_details_vehicles_path(id: transaction_id) unless form.confirmed?
 
-    confirmed_undetermined? ? not_determined_vehicles_path(id: transaction_id) : local_authority_charges_path(id: transaction_id)
+    if confirmed_undetermined?
+      not_determined_vehicles_path(id: transaction_id)
+    else
+      local_authority_charges_path(id: transaction_id)
+    end
   end
 
   # check if user confirmed details for undetermined vehicle

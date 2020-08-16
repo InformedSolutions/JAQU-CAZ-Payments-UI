@@ -83,9 +83,8 @@ class ChargesController < ApplicationController
     @total_charge = vehicle_details('total_charge')
     @return_path = review_payment_return_path
     @chargeable_zones = vehicle_details('chargeable_zones')
-    @new_id = SecureRandom.uuid
+    @transaction_id = transaction_id
     check_second_week_availability
-    expires_now
   end
 
   private
