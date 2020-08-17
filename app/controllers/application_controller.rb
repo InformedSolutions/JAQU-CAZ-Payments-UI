@@ -143,6 +143,7 @@ class ApplicationController < ActionController::Base # rubocop:disable Metrics/C
   # Handle history of the flow through the process - used by back links
   def handle_history
     session[:history] ||= {}
+    failsafe
 
     if request.method == 'GET'
       if url_id && !transaction_id.eql?(url_id)
@@ -153,6 +154,14 @@ class ApplicationController < ActionController::Base # rubocop:disable Metrics/C
     end
 
     yield
+  end
+
+  # failsafe mechanism to control session size
+  def failsafe
+    if session[:history].size > Rails.configuration.x.max_history_size
+      Rails.logger.error 'Session history size exceeded'
+      render template: 'errors/internal_server_error', status: :internal_server_error
+    end
   end
 
   # backs up the session
