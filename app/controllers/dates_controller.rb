@@ -259,7 +259,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # * +la_name+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   # * +charge+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
-  def confirm_date_weekly
+  def confirm_date_weekly # rubocop:disable Metrics/AbcSize
     service = Dates::ValidateSelectedWeeklyDate.new(params: params,
                                                     charge_start_date: @charge_start_date,
                                                     session: session)

@@ -260,7 +260,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   end
 
   # Process action which is done on submit details and uk registered details
-  def process_details_action
+  def process_details_action # rubocop:disable Metrics/AbcSize
     @vehicle_details = VehicleDetails.new(vrn)
     return redirect_to(exempt_vehicles_path(id: transaction_id)) if @vehicle_details.exempt?
 
