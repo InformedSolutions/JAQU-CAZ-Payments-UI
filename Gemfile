@@ -42,7 +42,7 @@ group :test do
   gem 'rubocop-rails'
   gem 'scss_lint-govuk', require: false
   gem 'selenium-webdriver'
-  gem 'simplecov', '~> 0.17.1', require: false
+  gem 'simplecov', '~> 0.19.0', require: false
   gem 'webdrivers'
   gem 'webmock'
 end
