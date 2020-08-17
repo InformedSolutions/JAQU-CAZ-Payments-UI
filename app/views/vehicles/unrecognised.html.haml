@@ -11,7 +11,7 @@
       %h1.govuk-heading-xl Vehicle details could not be found
       %p
         Try
-        = link_to 'entering your details', enter_details_vehicles_path, class: 'govuk-link'
+        = link_to 'entering your details', enter_details_vehicles_path(id: SecureRandom.uuid, new: true), class: 'govuk-link'
         again making sure you have not mixed up letters and numbers (for example, the letters
         %b I
         and

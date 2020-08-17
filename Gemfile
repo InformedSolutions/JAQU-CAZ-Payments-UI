@@ -11,6 +11,7 @@ gem 'bootsnap', require: false
 gem 'haml'
 gem 'httparty'
 gem 'puma'
+gem 'redis'
 gem 'sdoc', require: false
 gem 'sqlite3'
 gem 'turbolinks'
