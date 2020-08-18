@@ -238,6 +238,7 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     rdoc (6.2.1)
+    redis (4.2.1)
     regexp_parser (1.7.1)
     rexml (3.2.4)
     rspec-core (3.9.2)
@@ -368,6 +369,7 @@ DEPENDENCIES
   rack_session_access
   rails (~> 6.0.3.2)
   rails-controller-testing
+  redis
   rspec-rails
   rubocop-rails
   scss_lint-govuk

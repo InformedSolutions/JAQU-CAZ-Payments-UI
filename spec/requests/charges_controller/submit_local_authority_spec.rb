@@ -7,12 +7,14 @@ RSpec.describe 'ChargesController - POST #submit_local_authority', type: :reques
     post submit_local_authority_charges_path, params: { 'local-authority': zone_id }
   end
 
+  let(:transaction_id) { SecureRandom.uuid }
   let(:zone_id) { SecureRandom.uuid }
   let(:zone_name) { 'Leeds' }
   let(:charge) { 50 }
   let(:tariff) { 'BCC01-private_car' }
 
   context 'with VRN set' do
+    before { add_transaction_id_to_session(transaction_id) }
     before do
       add_vrn_to_session
       details = instance_double(ComplianceDetails,
@@ -24,7 +26,7 @@ RSpec.describe 'ChargesController - POST #submit_local_authority', type: :reques
 
     context 'with selected zone' do
       it 'returns redirect to #daily_charge' do
-        expect(subject).to redirect_to(daily_charge_dates_path)
+        expect(subject).to redirect_to(daily_charge_dates_path(id: transaction_id))
       end
 
       it 'sets la_id in the session' do
@@ -53,7 +55,7 @@ RSpec.describe 'ChargesController - POST #submit_local_authority', type: :reques
         end
 
         it 'returns redirect to DatesController#select_period' do
-          expect(subject).to redirect_to(select_period_dates_path)
+          expect(subject).to redirect_to(select_period_dates_path(id: transaction_id))
         end
 
         it 'sets weekly_possible to true' do
@@ -67,7 +69,7 @@ RSpec.describe 'ChargesController - POST #submit_local_authority', type: :reques
       let(:zone_id) { nil }
 
       it 'returns redirect to #local_authority' do
-        expect(subject).to redirect_to(local_authority_charges_path)
+        expect(subject).to redirect_to(local_authority_charges_path(id: transaction_id))
       end
     end
   end

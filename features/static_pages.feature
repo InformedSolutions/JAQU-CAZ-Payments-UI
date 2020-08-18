@@ -20,17 +20,3 @@ Feature: Static Pages
     Then I should see "Drive in a Clean Air Zone"
       And I should see "Check if you’ll be charged to drive in a Clean Air Zone "
 
-  Scenario: Testing back button when I am on enter details page
-    Given I am on the enter details page
-    When I press "Accessibility statement" footer link
-      And I should be on the accessibility statement page
-      And I press "Back" link
-    Then I should be on the enter details page
-    When I press "Cookies" footer link
-      And I should be on the cookies page
-      And I press "Back" link
-    Then I should be on the enter details page
-    When I press "Privacy Notice" footer link
-      And I should be on the privacy notice page
-      And I press "Back" link
-    Then I should be on the enter details page

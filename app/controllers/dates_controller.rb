@@ -60,7 +60,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
       SessionManipulation::SetChargePeriod.call(session: session, charge_period: params[:period])
       determinate_next_page
     else
-      redirect_back_to(select_period_dates_path, true, :select_period)
+      redirect_back_to(select_period_dates_path(id: transaction_id), true, :select_period)
     end
   end
 
@@ -100,10 +100,10 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
     form = ConfirmationForm.new(params['confirm-exempt'])
     if form.valid?
       SessionManipulation::SetConfirmExempt.call(session: session)
-      redirect_to select_daily_date_dates_path
+      redirect_to select_daily_date_dates_path(id: transaction_id)
     else
       alert = I18n.t('confirmation_form.exemption')
-      redirect_back_to(daily_charge_dates_path, alert, :daily_charge)
+      redirect_back_to(daily_charge_dates_path(id: transaction_id), alert, :daily_charge)
     end
   end
 
@@ -147,10 +147,10 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
     dates = params[:dates]
     if dates && check_already_paid(dates)
       SessionManipulation::CalculateTotalCharge.call(session: session, dates: dates)
-      redirect_to review_payment_charges_path
+      redirect_to review_payment_charges_path(id: transaction_id)
     else
       alert = I18n.t(dates ? 'paid' : 'empty', scope: 'dates.daily')
-      redirect_back_to(select_daily_date_dates_path, alert, :dates)
+      redirect_back_to(select_daily_date_dates_path(id: transaction_id), alert, :dates)
     end
   end
 
@@ -192,10 +192,10 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
     form = ConfirmationForm.new(params['confirm-exempt'])
     if form.confirmed?
       SessionManipulation::SetConfirmExempt.call(session: session)
-      redirect_to select_weekly_date_dates_path
+      redirect_to select_weekly_date_dates_path(id: transaction_id)
     else
       alert = I18n.t('confirmation_form.exemption')
-      redirect_back_to(weekly_charge_dates_path, alert, :weekly_charge)
+      redirect_back_to(weekly_charge_dates_path(id: transaction_id), alert, :weekly_charge)
     end
   end
 
@@ -259,7 +259,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # * +la_name+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   # * +charge+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
-  def confirm_date_weekly
+  def confirm_date_weekly # rubocop:disable Metrics/AbcSize
     service = Dates::ValidateSelectedWeeklyDate.new(params: params,
                                                     charge_start_date: @charge_start_date,
                                                     session: session)
@@ -267,7 +267,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
     if service.valid? && check_already_paid_weekly([service.start_date])
       Dates::AssignBackButtonDate.call(session: session)
       service.add_dates_to_session
-      redirect_to review_payment_charges_path
+      redirect_to review_payment_charges_path(id: transaction_id)
     else
       redirect_back_to(determinate_week_select_redirect_path, service.error, :dates)
     end
@@ -326,16 +326,16 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   def check_if_pay_week_starts_today(service)
     if service.pay_week_starts_today? && vehicle_details('confirm_weekly_charge_today') != false
       add_weekly_charge_today_to_session(service.today_date)
-      redirect_to select_weekly_period_dates_path
+      redirect_to select_weekly_period_dates_path(id: transaction_id)
     end
   end
 
   # Determinates redirect path after invalid date selected
   def determinate_week_select_redirect_path
     if !second_week_selected?
-      select_weekly_date_dates_path
+      select_weekly_date_dates_path(id: transaction_id)
     else
-      select_second_weekly_date_dates_path
+      select_second_weekly_date_dates_path(id: transaction_id)
     end
   end
 
@@ -350,9 +350,9 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   #
   def determinate_next_page
     if params[:period] == 'daily-charge'
-      redirect_to daily_charge_dates_path
+      redirect_to daily_charge_dates_path(id: transaction_id)
     elsif params[:period] == 'weekly-charge'
-      redirect_to weekly_charge_dates_path
+      redirect_to weekly_charge_dates_path(id: transaction_id)
     else
       redirect_back_to(select_daily_date_dates_path, true, :dates)
     end
@@ -368,7 +368,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
     return if vehicle_details('weekly_possible')
 
     Rails.logger.warn('Vehicle is not allowed for weekly discount')
-    redirect_to daily_charge_dates_path
+    redirect_to daily_charge_dates_path(id: transaction_id)
   end
 
   # Checks if weekly discount is possible to pay for today
@@ -376,7 +376,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
     return unless vehicle_details('weekly_charge_today').nil?
 
     Rails.logger.warn('Vehicle is not allowed to pay weekly discount for today')
-    redirect_to daily_charge_dates_path
+    redirect_to daily_charge_dates_path(id: transaction_id)
   end
 
   # Checks if given dates were not paid before. Returns boolean
@@ -411,9 +411,9 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
     if params[:confirm_weekly_charge_today] == 'true'
       SessionManipulation::SetSelectedWeek.call(session: session, second_week_selected: false)
       SessionManipulation::CalculateTotalCharge.call(session: session, weekly: true)
-      redirect_to review_payment_charges_path
+      redirect_to review_payment_charges_path(id: transaction_id)
     else
-      redirect_to select_weekly_date_dates_path
+      redirect_to select_weekly_date_dates_path(id: transaction_id)
     end
   end
 

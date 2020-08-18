@@ -7,16 +7,18 @@ RSpec.describe 'VehicleCheckersController - POST #confirm_details', type: :reque
     post confirm_details_vehicles_path, params: { 'confirm-vehicle' => confirmation }
   end
 
+  let(:transaction_id) { SecureRandom.uuid }
   let(:confirmation) { 'yes' }
 
   before do
+    add_transaction_id_to_session(transaction_id)
     add_vrn_to_session
     subject
   end
 
   context 'when user confirms details' do
     it 'redirects to select LA page' do
-      expect(response).to redirect_to(local_authority_charges_path)
+      expect(response).to redirect_to(local_authority_charges_path(id: transaction_id))
     end
   end
 
@@ -24,7 +26,7 @@ RSpec.describe 'VehicleCheckersController - POST #confirm_details', type: :reque
     let(:confirmation) { 'no' }
 
     it 'redirects to incorrect details page' do
-      expect(response).to redirect_to(incorrect_details_vehicles_path)
+      expect(response).to redirect_to(incorrect_details_vehicles_path(id: transaction_id))
     end
   end
 
@@ -32,7 +34,7 @@ RSpec.describe 'VehicleCheckersController - POST #confirm_details', type: :reque
     let(:confirmation) { '' }
 
     it 'redirects to confirm details page' do
-      expect(response).to redirect_to(details_vehicles_path)
+      expect(response).to redirect_to(details_vehicles_path(id: transaction_id))
     end
   end
 end
