@@ -16,6 +16,7 @@ RSpec.describe 'DatesController - GET #weekly_charge', type: :request do
                     charge: 50,
                     exemption_or_discount_url: url,
                     compliance_url: url,
+                    additional_compliance_url: url,
                     dynamic_compliance_url: url,
                     global_exemption_guidance_url: url)
   end
