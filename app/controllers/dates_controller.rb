@@ -216,6 +216,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
                        session_date: week_start_days.first,
                        back_button_date: back_button_week_dates.first)
 
+    SessionManipulation::SetSelectedWeek.call(session: session, second_week_selected: false)
     @return_path = select_weekly_date_return_path
     handle_select_weekly_date
   end
@@ -263,7 +264,6 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
     service = Dates::ValidateSelectedWeeklyDate.new(params: params,
                                                     charge_start_date: @charge_start_date,
                                                     session: session)
-
     if service.valid? && check_already_paid_weekly([service.start_date])
       Dates::AssignBackButtonDate.call(session: session)
       service.add_dates_to_session
