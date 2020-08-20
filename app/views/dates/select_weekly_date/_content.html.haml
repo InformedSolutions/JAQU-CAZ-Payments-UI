@@ -23,7 +23,7 @@
         .govuk-inset-text
           The Clean Air Zone charge came into operation on #{parse_single_date(@charge_start_date)}.
 
-      = form_tag confirm_date_weekly_dates_path, method: :post do
+      = form_tag submit_url, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
           %fieldset.govuk-fieldset
             %h2.govuk-heading-m
