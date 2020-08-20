@@ -125,6 +125,7 @@ def mock_vehicle_compliance_leeds
   allow(ComplianceCheckerApi).to receive(:vehicle_compliance).and_return(compliance_data)
 end
 
+# Mocks Dates::ValidateSelectedWeeklyDate to pass validation and save dates to session
 def mock_validate_selected_weekly_date(second_week_selected: false)
   allow_any_instance_of(Dates::ValidateSelectedWeeklyDate).to receive(:already_selected?).and_return(false)
 
@@ -133,6 +134,7 @@ def mock_validate_selected_weekly_date(second_week_selected: false)
   end
 end
 
+# Mocks Dates::ValidateSelectedWeeklyDate.already_selected? to pass validation
 def mock_already_selected_weekly_date
   details = instance_double(Dates::ValidateSelectedWeeklyDate,
                             start_date: '2019-11-1',
@@ -141,11 +143,13 @@ def mock_already_selected_weekly_date
   allow(Dates::ValidateSelectedWeeklyDate).to receive(:new).and_return(details)
 end
 
+# Mocks paid dates
 def mock_weekly_details
   allow(Dates::CheckPaidWeekly).to receive(:call).and_return(true)
   add_weekly_vehicle_details_to_session
 end
 
+# Mock implementation for Dates::ValidateSelectedWeeklyDate.add_dates_to_session
 def mock_add_dates_to_session(second_week_selected)
   if !second_week_selected
     add_to_session(first_week_start_date: "#{Time.now.year}-#{Time.now.month}-#{Time.now.day}")
@@ -155,6 +159,7 @@ def mock_add_dates_to_session(second_week_selected)
   end
 end
 
+# Fills in the 3 date inputs
 def weekly_fill_in_date(day: Time.now.day, month: Time.now.month, year: Time.now.year)
   fill_in('date_day', with: day)
   fill_in('date_month', with: month)
