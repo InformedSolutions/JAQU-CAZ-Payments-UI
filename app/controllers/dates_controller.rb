@@ -261,7 +261,8 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # * +la_name+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   # * +charge+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
-  def confirm_date_weekly # rubocop:disable Metrics/AbcSize
+  def confirm_date_weekly
+    session[:first_week_start_date] = nil
     SessionManipulation::SetSelectedWeek.call(session: session)
     handle_confirm_weekly_date
   end
@@ -284,7 +285,8 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # * +la_name+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   # * +charge+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
-  def confirm_second_date_weekly # rubocop:disable Metrics/AbcSize
+  def confirm_second_date_weekly
+    session[:second_week_start_date] = nil
     SessionManipulation::SetSelectedWeek.call(session: session, second_week_selected: true)
     handle_confirm_weekly_date
   end

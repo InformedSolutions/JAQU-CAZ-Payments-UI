@@ -169,17 +169,16 @@ class ChargesController < ApplicationController
 
     @dates = service.format_week_selection
     @second_week_available = service.second_week_available?
-
-    # @dates.length == 2 && session[:second_week_selected] = true
   end
 
   # Specifies if back button should lead to second week selection page
   def return_to_second_week_selection
-    vehicle_details('weekly') && session[:second_week_start_date] || cancel_second_week
+    vehicle_details('weekly') && session[:second_week_start_date] || cancel_second_week?
   end
 
+  # Handles cancelling the second weekly selection
   def handle_second_week_cancel
-    return unless cancel_second_week
+    return unless cancel_second_week?
 
     session[:second_week_selected] = false
     SessionManipulation::CalculateTotalCharge.call(session: session,
@@ -187,7 +186,8 @@ class ChargesController < ApplicationController
                                                    weekly: true)
   end
 
-  def cancel_second_week
+  # Indicates if adding a second week was just cancelled
+  def cancel_second_week?
     params['cancel_second_week'] == 'true'
   end
 end
