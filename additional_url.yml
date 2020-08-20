@@ -6,6 +6,3 @@ leeds:
 birmingham:
   fleet: 'https://businessbreathes.co.uk/fleet-operator'
   non_fleet: 'https://www.brumbreathes.co.uk/info/6/upgrading-car/5/upgrading-car-1'
-bath:
-  fleet: 'https://www.bathnes.gov.uk/bath-breathes-2021-overview/support'
-  non_fleet: 'https://www.bathnes.gov.uk/bath-breathes-2021-overview/support'
