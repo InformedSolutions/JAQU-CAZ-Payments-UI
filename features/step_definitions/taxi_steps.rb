@@ -47,6 +47,7 @@ Given('I am on the weekly dates page') do
   mock_paid_dates(dates: [today_formatted])
   add_weekly_possible_details
   mock_validate_selected_weekly_date
+  mock_weekly_details
   visit select_weekly_date_dates_path
 end
 
@@ -100,12 +101,12 @@ end
 And('I fill in an available second week start date') do
   add_to_session(second_week_start_date: '2020-05-08')
   visit select_second_weekly_date_dates_path
-  weekly_fill_in_date
+  weekly_fill_in_date(day: (Time.now + 9.days).day)
 end
 
 And('I fill in an invalid second week start date') do
   mock_already_selected_weekly_date
-  weekly_fill_in_date
+  weekly_fill_in_date(year: 1820)
 end
 
 Then('I want to change selected dates') do
@@ -124,14 +125,12 @@ def mock_vehicle_compliance_leeds
   allow(ComplianceCheckerApi).to receive(:vehicle_compliance).and_return(compliance_data)
 end
 
-def mock_validate_selected_weekly_date
-  details = instance_double(Dates::ValidateSelectedWeeklyDate,
-                            start_date: '2019-11-1',
-                            valid?: true,
-                            add_dates_to_session: true)
-  allow(Dates::ValidateSelectedWeeklyDate).to receive(:new).and_return(details)
-  allow(Dates::CheckPaidWeekly).to receive(:call).and_return(true)
-  add_weekly_vehicle_details_to_session
+def mock_validate_selected_weekly_date(second_week_selected: false)
+  allow_any_instance_of(Dates::ValidateSelectedWeeklyDate).to receive(:already_selected?).and_return(false)
+
+  allow_any_instance_of(Dates::ValidateSelectedWeeklyDate).to receive(:add_dates_to_session) do
+    mock_add_dates_to_session(second_week_selected)
+  end
 end
 
 def mock_already_selected_weekly_date
@@ -142,8 +141,22 @@ def mock_already_selected_weekly_date
   allow(Dates::ValidateSelectedWeeklyDate).to receive(:new).and_return(details)
 end
 
-def weekly_fill_in_date
-  fill_in('date_day', with: '1')
-  fill_in('date_month', with: '5')
-  fill_in('date_year', with: '2020')
+def mock_weekly_details
+  allow(Dates::CheckPaidWeekly).to receive(:call).and_return(true)
+  add_weekly_vehicle_details_to_session
+end
+
+def mock_add_dates_to_session(second_week_selected)
+  if !second_week_selected
+    add_to_session(first_week_start_date: "#{Time.now.year}-#{Time.now.month}-#{Time.now.day}")
+  else
+    future_date = Time.now + 9.days
+    add_to_session(second_week_start_date: "#{future_date.year}-#{future_date.month}-#{future_date.day}")
+  end
+end
+
+def weekly_fill_in_date(day: Time.now.day, month: Time.now.month, year: Time.now.year)
+  fill_in('date_day', with: day)
+  fill_in('date_month', with: month)
+  fill_in('date_year', with: year)
 end
