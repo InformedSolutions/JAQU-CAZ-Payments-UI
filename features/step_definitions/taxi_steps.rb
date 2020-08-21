@@ -101,7 +101,7 @@ end
 And('I fill in an available second week start date') do
   add_to_session(second_week_start_date: '2020-05-08')
   visit select_second_weekly_date_dates_path
-  weekly_fill_in_date(day: (Time.now + 9.days).day)
+  weekly_fill_in_date(day: (Time.current + 9.days).day)
 end
 
 And('I fill in an invalid second week start date') do
@@ -150,17 +150,17 @@ def mock_weekly_details
 end
 
 # Mock implementation for Dates::ValidateSelectedWeeklyDate.add_dates_to_session
-def mock_add_dates_to_session(second_week_selected)
+def mock_add_dates_to_session(second_week_selected) # rubocop:disable Metrics/AbcSize
   if !second_week_selected
-    add_to_session(first_week_start_date: "#{Time.now.year}-#{Time.now.month}-#{Time.now.day}")
+    add_to_session(first_week_start_date: "#{Time.current.year}-#{Time.current.month}-#{Time.current.day}")
   else
-    future_date = Time.now + 9.days
+    future_date = Time.current + 9.days
     add_to_session(second_week_start_date: "#{future_date.year}-#{future_date.month}-#{future_date.day}")
   end
 end
 
 # Fills in the 3 date inputs
-def weekly_fill_in_date(day: Time.now.day, month: Time.now.month, year: Time.now.year)
+def weekly_fill_in_date(day: Time.current.day, month: Time.current.month, year: Time.current.year)
   fill_in('date_day', with: day)
   fill_in('date_month', with: month)
   fill_in('date_year', with: year)

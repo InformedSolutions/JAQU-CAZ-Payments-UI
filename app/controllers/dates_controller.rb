@@ -342,7 +342,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   ##
   # Validates selected dates and if valid, saves them to session
   # If invalid, user is redirected to respective week page and presented with error
-  def handle_confirm_weekly_date
+  def handle_confirm_weekly_date # rubocop:disable Metrics/AbcSize
     service = Dates::ValidateSelectedWeeklyDate.new(params: params,
                                                     charge_start_date: @charge_start_date,
                                                     session: session)

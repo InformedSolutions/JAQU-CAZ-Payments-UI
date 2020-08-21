@@ -3,7 +3,7 @@
 ##
 # Controls selecting LAs where the user wants to pay for.
 #
-class ChargesController < ApplicationController
+class ChargesController < ApplicationController # rubocop:disable Metrics/ClassLength
   # 422 HTTP status from API means vehicle data incomplete so the compliance calculation is not possible.
   rescue_from BaseApi::Error422Exception, with: :unable_to_determine_compliance
   # checks if VRN is present in the session

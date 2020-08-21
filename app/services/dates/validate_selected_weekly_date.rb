@@ -11,7 +11,7 @@ module Dates
   #
   class ValidateSelectedWeeklyDate < Base
     include DatesHelper
-    
+
     ##
     # Start date of selected week in YYYY-MM-DD format
     # eg 2020-6-1
