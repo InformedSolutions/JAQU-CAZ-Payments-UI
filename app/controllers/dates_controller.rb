@@ -21,7 +21,6 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # resets which weeks was selected
   before_action :reset_week_selection, only: %i[select_weekly_date determinate_next_weekly_page]
 
-  before_action :set_cache_headers, only: %i[select_second_weekly_date]
   ##
   # Renders a select period page.
   #
