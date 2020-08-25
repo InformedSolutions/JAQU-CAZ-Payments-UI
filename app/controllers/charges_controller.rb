@@ -164,9 +164,7 @@ class ChargesController < ApplicationController # rubocop:disable Metrics/ClassL
     return unless @weekly_period
 
     Dates::AssignBackButtonDate.call(session: session)
-
     service = Dates::ReviewWeeklySelection.new(vrn: vrn, zone_id: la_id, session: session)
-
     @dates = service.format_week_selection
     @second_week_available = service.second_week_available?
   end

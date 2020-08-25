@@ -150,7 +150,7 @@ def mock_weekly_details
 end
 
 # Mock implementation for Dates::ValidateSelectedWeeklyDate.add_dates_to_session
-def mock_add_dates_to_session(second_week_selected) # rubocop:disable Metrics/AbcSize
+def mock_add_dates_to_session(second_week_selected)
   if !second_week_selected
     add_to_session(first_week_start_date: "#{Time.current.year}-#{Time.current.month}-#{Time.current.day}")
   else

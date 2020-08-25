@@ -21,6 +21,8 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
 
   # resets which weeks was selected
   before_action :reset_week_selection, only: %i[select_weekly_date determinate_next_weekly_page]
+  # does not cache page
+  before_action :set_cache_headers, only: %i[select_weekly_date select_second_weekly_date]
 
   ##
   # Renders a select period page.
@@ -33,9 +35,10 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # * +la_id+ - lack of LA redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
   #
   def select_period
-    @return_path = if params['second_week'] == 'false'
+    @return_path = case params['second_week']
+                   when 'false'
                      select_weekly_date_dates_path
-                   elsif params['second_week'] == 'true'
+                   when 'true'
                      select_second_weekly_date_dates_path
                    else
                      local_authority_charges_path
@@ -217,7 +220,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
                        session_date: week_start_days.first,
                        back_button_date: back_button_week_dates.first)
 
-    SessionManipulation::SetSelectedWeek.call(session: session, second_week_selected: false)
+    SessionManipulation::SetSelectedWeek.call(session: session)
     @return_path = select_weekly_date_return_path
     handle_select_weekly_date
   end
@@ -333,7 +336,6 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
                                 charge_start_date: @charge_start_date, week_start_days: week_start_days)
 
     check_if_pay_week_starts_today(service) unless second_week_selected?
-
     @dates = service.chargeable_dates
     @d_day_notice = service.d_day_notice
     @all_paid = @dates.all? { |date| date[:disabled] }
@@ -342,7 +344,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   ##
   # Validates selected dates and if valid, saves them to session
   # If invalid, user is redirected to respective week page and presented with error
-  def handle_confirm_weekly_date # rubocop:disable Metrics/AbcSize
+  def handle_confirm_weekly_date
     service = Dates::ValidateSelectedWeeklyDate.new(params: params,
                                                     charge_start_date: @charge_start_date,
                                                     session: session)
@@ -358,13 +360,13 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # Checks if pay week starts today
   # If yes, redirects to select_weekly_period page
   def check_if_pay_week_starts_today(service)
-    if service.pay_week_starts_today? && vehicle_details('confirm_weekly_charge_today') != false
-      add_weekly_charge_today_to_session(service.today_date)
-      redirect_to select_weekly_period_dates_path(id: transaction_id)
-    end
+    return unless service.pay_week_starts_today? && vehicle_details('confirm_weekly_charge_today') != false
+
+    add_weekly_charge_today_to_session(service.today_date)
+    redirect_to select_weekly_period_dates_path(id: transaction_id)
   end
 
-  # Determinates redirect path after invalid date selected
+  # Determinate redirect path after invalid date selected
   def determinate_week_select_redirect_path
     if !second_week_selected?
       select_weekly_date_dates_path(id: transaction_id)
@@ -383,9 +385,10 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # If not equals 'daily-charge' or 'weekly-charge', redirects to {select_daily_date}[rdoc-ref:select_daily_date]
   #
   def determinate_next_page
-    if params[:period] == 'daily-charge'
+    case params[:period]
+    when 'daily-charge'
       redirect_to daily_charge_dates_path(id: transaction_id)
-    elsif params[:period] == 'weekly-charge'
+    when 'weekly-charge'
       redirect_to weekly_charge_dates_path(id: transaction_id)
     else
       redirect_back_to(select_daily_date_dates_path, true, :dates)
@@ -496,16 +499,9 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
     if session_date && review_as_last_path
       @input_date = Date.parse(session_date)
       Dates::AssignBackButtonDate.call(session: session, second_week_selected: second_week_selected)
-    elsif use_back_button_date(second_week_selected: second_week_selected, back_button_date: back_button_date)
+    elsif !session_date && back_button_date
       @input_date = Date.parse(back_button_date)
     end
-  end
-
-  # Specifies if back button date should be used
-  # Returns boolean
-  def use_back_button_date(second_week_selected:, back_button_date:)
-    (!second_week_selected && back_button_date) ||
-      (second_week_selected && back_button_date && !review_as_last_path)
   end
 
   # Specifies if the page before was Review payment page

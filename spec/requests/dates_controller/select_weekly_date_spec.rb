@@ -94,7 +94,7 @@ RSpec.describe 'DatesController - GET #select_weekly_date', type: :request do
 
       it 'assigns @input_date' do
         subject
-        expect(assigns(:input_date)).to eq(Date.parse('2020-05-01'))
+        expect(assigns(:input_date)).to be_nil
       end
     end
   end
