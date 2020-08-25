@@ -155,7 +155,7 @@ RSpec.describe Dates::Weekly do
       end
 
       it 'disables whole payment window' do
-        disabled_dates = service.chargeable_dates.map { |date| date[:disabled] }.select(&:present?)
+        disabled_dates = service.chargeable_dates.pluck(:disabled).select(&:present?)
 
         expect(disabled_dates.count).to eq(13)
       end

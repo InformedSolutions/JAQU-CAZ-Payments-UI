@@ -9,7 +9,7 @@
 # All methods are on the class level, so there is no initializer method.
 #
 class PaymentsApi < BaseApi
-  base_uri ENV.fetch('PAYMENTS_API_URL', '') + '/v1'
+  base_uri "#{ENV.fetch('PAYMENTS_API_URL', 'localhost:3001')}/v1"
 
   class << self
     # Calls +/v1/payments+ endpoint with +POST+ method which triggers the payment creation
