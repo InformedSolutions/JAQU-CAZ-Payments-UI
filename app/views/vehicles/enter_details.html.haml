@@ -17,7 +17,7 @@
               - @errors.reverse_each do |field, messages|
                 %li
                   = link_to(messages.first, "##{field}-error")
-      %h1.govuk-heading-xl
+      %h1.govuk-heading-l
         = title_and_header
       = form_tag enter_details_vehicles_path, method: :post do
         %fieldset.govuk-fieldset
