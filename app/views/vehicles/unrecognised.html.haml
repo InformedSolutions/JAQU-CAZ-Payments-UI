@@ -8,7 +8,7 @@
           error_msg_div: '#unrecognised-vehicle-error',
           error_msg: I18n.t('confirmation_alert')
 
-      %h1.govuk-heading-xl Vehicle details could not be found
+      %h1.govuk-heading-l Vehicle details could not be found
       %p
         Try
         = link_to 'entering your details', enter_details_vehicles_path(id: SecureRandom.uuid, new: true), class: 'govuk-link'

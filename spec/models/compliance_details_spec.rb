@@ -82,11 +82,11 @@ describe ComplianceDetails, type: :model do
         end
       end
 
-      describe 'dynamic_compliance_url' do
-        describe 'Leeds' do
+      describe '.dynamic_compliance_url' do
+        describe 'when additional_compliance_url is present' do
           let(:leeds_urls) { YAML.load_file('additional_url.yml')['leeds'] }
 
-          it 'returns leeds fleet url' do
+          it 'returns additional_compliance_url for leeds' do
             expect(details.dynamic_compliance_url).to eq(leeds_urls['fleet'])
           end
 
@@ -94,7 +94,33 @@ describe ComplianceDetails, type: :model do
             before { vehicle_details.merge!('leeds_taxi' => true) }
 
             it 'returns leeds non fleet url' do
-              expect(details.dynamic_compliance_url).to eq(leeds_urls['non_fleet'])
+              expect(details.additional_compliance_url).to eq(leeds_urls['non_fleet'])
+            end
+          end
+        end
+
+        describe 'when additional_compliance_url is not present' do
+          let(:name) { 'Bath' }
+
+          it 'returns compliance_url' do
+            expect(details.dynamic_compliance_url).to eq(details.compliance_url)
+          end
+        end
+      end
+
+      describe 'additional_compliance_url' do
+        describe 'Leeds' do
+          let(:leeds_urls) { YAML.load_file('additional_url.yml')['leeds'] }
+
+          it 'returns leeds fleet url' do
+            expect(details.additional_compliance_url).to eq(leeds_urls['fleet'])
+          end
+
+          describe 'taxi' do
+            before { vehicle_details.merge!('leeds_taxi' => true) }
+
+            it 'returns leeds non fleet url' do
+              expect(details.additional_compliance_url).to eq(leeds_urls['non_fleet'])
             end
           end
         end
@@ -104,14 +130,14 @@ describe ComplianceDetails, type: :model do
           let(:birmingham_urls) { YAML.load_file('additional_url.yml')['birmingham'] }
 
           it 'returns birmingham fleet url' do
-            expect(details.dynamic_compliance_url).to eq(birmingham_urls['fleet'])
+            expect(details.additional_compliance_url).to eq(birmingham_urls['fleet'])
           end
 
           describe 'car' do
             let(:type) { 'car' }
 
             it 'returns birmingham non_fleet url' do
-              expect(details.dynamic_compliance_url).to eq(birmingham_urls['non_fleet'])
+              expect(details.additional_compliance_url).to eq(birmingham_urls['non_fleet'])
             end
           end
 
@@ -119,8 +145,17 @@ describe ComplianceDetails, type: :model do
             let(:type) { nil }
 
             it 'returns birmingham fleet url' do
-              expect(details.dynamic_compliance_url).to eq(birmingham_urls['fleet'])
+              expect(details.additional_compliance_url).to eq(birmingham_urls['fleet'])
             end
+          end
+        end
+
+        describe 'Bath' do
+          let(:name) { 'Bath' }
+          let(:bath_urls) { YAML.load_file('additional_url.yml')['bath'] }
+
+          it 'returns nil' do
+            expect(details.additional_compliance_url).to be_nil
           end
         end
       end

@@ -41,7 +41,7 @@
                   - @dates.each do |date|
                     = "#{date.first} - #{date.second}"
                     %br
-                - else 
+                - else
                   - parse_dates(@dates).each do |date|
                     - unless date.eql? parse_dates(@dates).last
                       = date + ','
@@ -61,7 +61,7 @@
 
         - if @second_week_available
           %p= link_to 'Add another week',
-              select_second_weekly_date_dates_path(id: @transaction_id),
+              select_second_weekly_date_dates_path(id: SecureRandom.uuid, new: true),
               class: 'govuk-button govuk-button--secondary',
               id: 'add-another-week-link',
               'data-module': 'govuk-button'

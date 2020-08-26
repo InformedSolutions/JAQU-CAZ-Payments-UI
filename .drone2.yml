@@ -37,7 +37,7 @@ steps:
       - docker build -t selenium-jaqu .
     environment:
       GIT_PRIVATE_SSH:
-        from_secret: github_private_key
+        from_secret: jaqu_lower_github_private_key 
     volumes:
       - name: docker_sock
         path: /var/run/docker.sock

@@ -67,9 +67,16 @@ class ComplianceDetails
     url(:public_transport_options)
   end
 
-  # Returns "get support" link based on conditions
+  # Returns compliance url based or additional_compliance_url or compliance_url
   def dynamic_compliance_url
+    additional_compliance_url || compliance_url
+  end
+
+  # Returns compliance url from additlan_url.yml
+  def additional_compliance_url
     zone_links = additional_urls_file[zone_name.downcase]
+    return if zone_links.blank?
+
     if (leeds_taxi && zone_name == 'Leeds') || (car? && zone_name == 'Birmingham')
       return zone_links['non_fleet']
     end
