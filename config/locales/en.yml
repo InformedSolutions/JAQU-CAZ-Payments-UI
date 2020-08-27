@@ -1,7 +1,7 @@
 en:
   labels:
     vrn: For example, CU57ABC
-    country: Where was the vehicle registered?
+    country: Where is the vehicle registered?
   vrn_form:
     vrn_missing: Enter the number plate of the vehicle
     country_missing: Choose UK or Non-UK
