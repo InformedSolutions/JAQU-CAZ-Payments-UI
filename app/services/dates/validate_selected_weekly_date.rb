@@ -10,6 +10,8 @@ module Dates
   # * +session+ - session
   #
   class ValidateSelectedWeeklyDate < Base
+    include DatesHelper
+
     ##
     # Start date of selected week in YYYY-MM-DD format
     # eg 2020-6-1
@@ -98,7 +100,7 @@ module Dates
       return if @session[:second_week_selected] == false
 
       formatted_date = Time.zone.parse(@start_date).strftime(VALUE_DATE_FORMAT)
-      @session.dig(:vehicle_details, 'dates')&.include?(formatted_date)
+      disable_week(@session[:first_week_start_date]).include?(formatted_date)
     end
   end
 end

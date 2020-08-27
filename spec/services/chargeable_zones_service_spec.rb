@@ -79,7 +79,7 @@ RSpec.describe ChargeableZonesService do
 
       before do
         mock_chargeable_zones
-        mock_unrecognised_compliance(one_charge)
+        mock_unrecognised_compliance(one_charge: one_charge)
       end
 
       it_behaves_like 'a chargeable zones service'

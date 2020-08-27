@@ -1,18 +1,17 @@
 en:
-  hello: "Hello world"
   labels:
     vrn: For example, CU57ABC
-    country: Where was the vehicle registered?
+    country: Where is the vehicle registered?
   vrn_form:
-    vrn_missing: 'Enter the number plate of the vehicle'
+    vrn_missing: Enter the number plate of the vehicle
     country_missing: Choose UK or Non-UK
-    vrn_invalid: 'Enter the number plate of the vehicle in a valid format'
-    vrn_too_long: 'The number plate of the vehicle is too long'
-    vrn_too_short: 'The number plate of the vehicle is too short'
+    vrn_invalid: Enter the number plate of the vehicle in a valid format
+    vrn_too_long: The number plate of the vehicle is too long
+    vrn_too_short: The number plate of the vehicle is too short
   la_form:
-    la_missing: 'You must choose one Clean Air Zone'
+    la_missing: You must choose one Clean Air Zone
   confirmation_form:
-    answer_missing: 'Select yes if the details are correct'
+    answer_missing: Select yes if the details are correct
     exemption: Confirm you have checked if you are eligible for an exemption
   dates:
     daily:

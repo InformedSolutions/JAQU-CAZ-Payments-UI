@@ -26,10 +26,9 @@ class NonDvlaVehiclesController < ApplicationController
   def index
     @vehicle_registration = vrn
     register_details = RegisterDetails.new(vrn)
+    return unless register_details.register_compliant? || register_details.register_exempt?
 
-    if register_details.register_compliant? || register_details.register_exempt?
-      redirect_to(exempt_vehicles_path(id: transaction_id))
-    end
+    redirect_to(exempt_vehicles_path(id: transaction_id))
   end
 
   ##
