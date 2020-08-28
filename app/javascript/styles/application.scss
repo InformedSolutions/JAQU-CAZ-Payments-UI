@@ -4,6 +4,7 @@ $govuk-assets-path: '/packs/media/';
 @import '~govuk-frontend/govuk/all';
 @import 'related_components';
 @import 'cookie_control';
+@import 'datepicker';
 
 html {
   background-color: govuk-colour($colour: 'light-grey');

@@ -6,7 +6,7 @@ Feature: Static Pages
   Scenario: User sees accessibility statement page
     Given I am on the home page
     When I press "Accessibility statement" footer link
-    Then I should see "Accessibility statement for Pay a Clean Air Zone Charge"
+    Then I should see "Accessibility statement for Drive in a Clean Air Zone"
 
   Scenario: User sees cookies page
     Given I am on the home page

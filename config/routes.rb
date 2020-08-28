@@ -9,6 +9,8 @@ Rails.application.routes.draw do
       post :enter_details, to: 'vehicles#submit_details'
       get :details
       post :confirm_details
+      get :uk_registered_details
+      post :confirm_uk_registered_details
       get :incorrect_details
       get :unrecognised
       post :confirm_unrecognised
@@ -50,6 +52,7 @@ Rails.application.routes.draw do
       post :confirm_daily_date
 
       get :select_weekly_date
+      get :select_second_weekly_date
       post :confirm_date_weekly
 
       get :select_weekly_period

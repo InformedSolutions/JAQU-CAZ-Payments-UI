@@ -39,17 +39,17 @@ module MockHelper
     allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(vehicle_details)
   end
 
-  # Mocks exempt vehicle - non UK vehicle existing on Whitelist
-  def mock_exempt_whitelisted_vehicle
-    whitelisted_vehicle = read_file('whitelisted_vehicle_response.json')
-    allow(ComplianceCheckerApi).to receive(:whitelisted_vehicle).and_return(whitelisted_vehicle)
+  # Mocks non exempt vehicle - non UK vehicle existing on Whitelist
+  def mock_unregistered_non_uk_vehicle_details
+    details = JSON.parse(File.read('spec/fixtures/files/register_details_response.json'))
+    allow(ComplianceCheckerApi).to receive(:register_details).and_return(details)
   end
 
   # Mocks exempt vehicle - non UK vehicle existing on Whitelist
-  def mock_non_exempt_whitelisted_vehicle
-    allow(ComplianceCheckerApi)
-      .to receive(:whitelisted_vehicle)
-      .and_raise(BaseApi::Error404Exception.new(404, '', {}))
+  def mock_exempted_register_details
+    details = JSON.parse(File.read('spec/fixtures/files/register_details_response.json'))
+    details['registerExempt'] = true
+    allow(ComplianceCheckerApi).to receive(:register_details).and_return(details)
   end
 
   def mock_dvla_response
@@ -83,7 +83,7 @@ module MockHelper
   end
 
   # Mock response from vehicle details endpoint in VCCS API for not found in DVLA vehicle
-  def mock_unrecognized_vehicle
+  def mock_vehicle_not_found_in_dvla
     allow(ComplianceCheckerApi)
       .to receive(:vehicle_details)
       .and_raise(BaseApi::Error404Exception.new(404, '', {}))

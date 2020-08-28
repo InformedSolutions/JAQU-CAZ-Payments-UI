@@ -9,7 +9,7 @@ module SessionManipulation
   # ==== Usage
   #    form = VrnForm.new(vrn, country)
   #    if form.valid?
-  #       SessionManipulation::AddVrn.call(session: session, form: form)
+  #       SessionManipulation::AddVrn.call(session: session, vrn: vrn, country: country)
   #    end
   #
   class AddVrn < BaseManipulator
@@ -20,12 +20,13 @@ module SessionManipulation
     #
     # ==== Attributes
     # * +session+ - the user's session
-    # * +form+ - a valid instance of VrnForm
+    # * +vrn+ - string, contains vrn from the user
+    # * +country+ - string, UK or Non-UK value
     #
-    def initialize(session:, form:)
+    def initialize(session:, vrn:, country:)
       @session = session
-      @vrn = form.vrn
-      @country = form.country
+      @vrn = vrn
+      @country = country
     end
 
     # Adds +VRN+ and +country+ to the session. Used by the class level method +.call+

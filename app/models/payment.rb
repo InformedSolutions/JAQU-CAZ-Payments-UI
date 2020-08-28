@@ -65,11 +65,21 @@ class Payment
   # Creates transactions array for a weekly flow with fixed charges
   def weekly_transactions
     transactions = charge_details['dates'].map do |day|
-      transaction(day, 7.14)
+      transaction(day, weekly_transaction_price)
     end
     # Set value for the sum to equal 50
-    transactions.last[:charge] = charge_in_pence(7.16)
+    transactions.last[:charge] += weekly_transaction_price_correction(transactions)
     transactions
+  end
+
+  # Calculates weekly transaction price based on total charge and number of days to pay
+  def weekly_transaction_price
+    (charge_details['total_charge'].to_f / charge_details['dates'].count).round(2)
+  end
+
+  # Calculates the correction value to make the sum of payments is equal to toal charge
+  def weekly_transaction_price_correction(transactions)
+    charge_in_pence(charge_details['total_charge']) - transactions.sum { |t| t[:charge] }
   end
 
   # Create single transaction object

@@ -20,11 +20,15 @@
         = succeed "." do
           = link_to 'return to the start page', root_path
       = render 'common/print_link'
-      %h2.govuk-heading-m
-        Contact us
       %p
-        0300 457 8915.
+        You can contact Clean Air Zone support if you cannot use the online service or you need help.
+      %h2.govuk-heading-m
+        Contact Clean Air Zone Support
+      %p
+        = link_to('Online contact form', 'https://contact.dvla.gov.uk/caz/')
         %br
-        Monday to Friday 08:00 to 19:00. Saturday 08:00 to 14:00.
+        Telephone: 0300 029 8888
         %br
-        Standard rates apply.
+        Monday to Friday, 10am to 4pm
+        %br
+        = link_to('Find out about call charges', 'https://www.gov.uk/call-charges')

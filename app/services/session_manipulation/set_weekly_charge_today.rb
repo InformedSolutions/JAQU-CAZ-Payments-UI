@@ -9,7 +9,7 @@ module SessionManipulation
   #
   class SetWeeklyChargeToday < BaseManipulator
     # Level used to clearing keys in the session
-    LEVEL = 11
+    LEVEL = 12
 
     # Initializer function
     #

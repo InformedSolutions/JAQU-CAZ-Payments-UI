@@ -1,0 +1,64 @@
+$fa-calendar-alt-content: "\f073";
+$highlight-start-date-color: #2196f3;
+$today-color: #f44336;
+
+body:not(.js-enabled) .litepicker-input-container {
+  display: none;
+}
+
+.far {
+  &.fa-calendar-alt {
+    font-size: 2.4rem;
+    top: 5px;
+    position: relative;
+    cursor: pointer;
+
+    &:before {
+      content: $fa-calendar-alt-content;
+      font-style: normal;
+    }
+  }
+}
+
+.litepicker {
+  .day-item {
+    font-weight: bold;
+    transition: color 0ms !important;
+
+    &.is-start-date {
+      cursor: pointer;
+
+      &:focus,
+      &:active {
+        color: govuk-colour($colour: "white") !important;
+        background-color: $highlight-start-date-color !important;
+        box-shadow: none;
+        outline: none;
+      }
+    }
+
+    &.is-locked {
+      &.is-disabled,
+      &:focus,
+      &:active {
+        color: govuk-colour($colour: "dark-grey") !important;
+        background-color: govuk-colour($colour: "light-grey") !important;
+        box-shadow: none !important;
+        outline: none !important;
+      }
+
+      &.is-today {
+        color: $today-color !important;
+      }
+    }
+
+    &.is-start-date.is-end-date {
+      border-top-right-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+    }
+  }
+
+  .is-locked {
+    font-weight: normal;
+  }
+}

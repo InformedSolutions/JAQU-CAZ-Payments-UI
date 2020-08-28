@@ -10,12 +10,17 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   before_action :check_compliance_details
   # checks if weekly Leeds discount is possible for weekly paths
   before_action :check_weekly, only: %i[select_period confirm_select_period weekly_charge
-                                        confirm_weekly_charge select_weekly_date confirm_date_weekly
-                                        select_weekly_period confirm_select_weekly_period]
+                                        confirm_weekly_charge select_weekly_date select_second_weekly_date
+                                        confirm_date_weekly select_weekly_period confirm_select_weekly_period]
   # checks if weekly discount is possible to pay for today
   before_action :check_weekly_charge_today, only: %i[select_weekly_period confirm_select_weekly_period]
   # fetching +active_charge_start_date+ and assigns it to the variable
-  before_action :assign_charge_start_date, only: :select_weekly_date
+  before_action :assign_charge_start_date, only: %i[select_weekly_date select_second_weekly_date
+                                                    confirm_date_weekly]
+
+  # resets which weeks was selected
+  before_action :reset_week_selection, only: %i[select_weekly_date determinate_next_weekly_page]
+
   ##
   # Renders a select period page.
   #
@@ -26,7 +31,15 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   # * +la_id+ - lack of LA redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
   #
-  def select_period; end
+  def select_period
+    @return_path = if params['second_week'] == 'false'
+                     select_weekly_date_dates_path
+                   elsif params['second_week'] == 'true'
+                     select_second_weekly_date_dates_path
+                   else
+                     local_authority_charges_path
+                   end
+  end
 
   ##
   # Validates if user selects at least one period.
@@ -152,6 +165,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # * +la_id+ - lack of LA redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
   #
   def weekly_charge
+    Dates::AssignBackButtonDate.call(session: session)
     @compliance_details = ComplianceDetails.new(session[:vehicle_details])
     @weekly_charge = 50.00
     @return_path = determinate_return_path
@@ -197,17 +211,34 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # * +la_name+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   # * +charge+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
-  def select_weekly_date # rubocop:disable Metrics/AbcSize
-    service = Dates::Weekly.new(vrn: vrn, zone_id: la_id, charge_start_date: @charge_start_date)
-    if service.pay_week_starts_today? && vehicle_details('confirm_weekly_charge_today') != false
-      add_weekly_charge_today_to_session(service.today_date)
-      return redirect_to select_weekly_period_dates_path
-    end
+  def select_weekly_date
+    handle_back_action(second_week_selected: false,
+                       session_date: week_start_days.first,
+                       back_button_date: back_button_week_dates.first)
 
-    @dates = service.chargeable_dates
-    @d_day_notice = service.d_day_notice
-    @all_paid = @dates.all? { |date| date[:disabled] }
     @return_path = select_weekly_date_return_path
+    handle_select_weekly_date
+  end
+
+  ##
+  # Renders the list of weekly dates to pick as a second week.
+  #
+  # ==== Path
+  #    GET /dates/select_second_weekly_date
+  #
+  # ==== Validations
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  # * +la_id+ - lack of LA redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
+  # * +la_name+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  # * +charge+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  #
+  def select_second_weekly_date
+    handle_back_action(second_week_selected: true,
+                       session_date: week_start_days.second,
+                       back_button_date: back_button_week_dates.second)
+
+    SessionManipulation::SetSelectedWeek.call(session: session, second_week_selected: true)
+    handle_select_weekly_date
   end
 
   ##
@@ -217,7 +248,9 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   #    POST /dates/confirm_date_weekly
   #
   # ==== Params
-  # * +dates+ - selected dates
+  # * +date-day+ - selected day
+  # * +date-month+ - selected month
+  # * +date-year+ - selected year
   #
   # ==== Validations
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
@@ -227,13 +260,16 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # * +charge+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
   def confirm_date_weekly
-    dates = params[:dates]
-    if dates && check_already_paid_weekly(dates)
-      SessionManipulation::CalculateTotalCharge.call(session: session, dates: dates, weekly: true)
+    service = Dates::ValidateSelectedWeeklyDate.new(params: params,
+                                                    charge_start_date: @charge_start_date,
+                                                    session: session)
+
+    if service.valid? && check_already_paid_weekly([service.start_date])
+      Dates::AssignBackButtonDate.call(session: session)
+      service.add_dates_to_session
       redirect_to review_payment_charges_path
     else
-      alert = I18n.t(dates ? 'paid' : 'empty', scope: 'dates.weekly')
-      redirect_back_to(select_weekly_date_dates_path, alert, :dates)
+      redirect_back_to(determinate_week_select_redirect_path, service.error, :dates)
     end
   end
 
@@ -246,7 +282,13 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # ==== Validations
   # * +weekly_charge_today+ - lack of value in the session redirects to {weekly_charge}[rdoc-ref:weekly_charge]
   #
-  def select_weekly_period; end
+  def select_weekly_period
+    @return_path = if week_start_days.first
+                     review_payment_charges_path
+                   else
+                     weekly_charge_dates_path
+                   end
+  end
 
   ##
   # Validates if user selects at least one charge period
@@ -256,14 +298,46 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   #
   def confirm_select_weekly_period
     if params[:confirm_weekly_charge_today]
+      Dates::AssignBackButtonDate.call(session: session)
       determinate_next_weekly_page
     else
-      flash.now[:alert] = true
+      flash.now[:alert] = I18n.t('select_weekly_period')
       render :select_weekly_period
     end
   end
 
   private
+
+  ##
+  # Validates weekly dates and assigns variables used in views
+  def handle_select_weekly_date
+    service = Dates::Weekly.new(vrn: vrn, zone_id: la_id, second_week_selected: second_week_selected?,
+                                charge_start_date: @charge_start_date, week_start_days: week_start_days)
+
+    check_if_pay_week_starts_today(service) unless second_week_selected?
+
+    @dates = service.chargeable_dates
+    @d_day_notice = service.d_day_notice
+    @all_paid = @dates.all? { |date| date[:disabled] }
+  end
+
+  # Checks if pay week starts today
+  # If yes, redirects to select_weekly_period page
+  def check_if_pay_week_starts_today(service)
+    if service.pay_week_starts_today? && vehicle_details('confirm_weekly_charge_today') != false
+      add_weekly_charge_today_to_session(service.today_date)
+      redirect_to select_weekly_period_dates_path
+    end
+  end
+
+  # Determinates redirect path after invalid date selected
+  def determinate_week_select_redirect_path
+    if !second_week_selected?
+      select_weekly_date_dates_path
+    else
+      select_second_weekly_date_dates_path
+    end
+  end
 
   ##
   # ==== Params
@@ -320,7 +394,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
     @charge_start_date = FetchSingleCazData.call(zone_id: la_id)&.active_charge_start_date
   end
 
-  # Sets +weekly_dates+ and +weekly_charge_today+ to the session
+  # Sets +dates_to_disable+ and +weekly_charge_today+ to the session
   def add_weekly_charge_today_to_session(today_date)
     SessionManipulation::SetWeeklyChargeToday.call(
       session: session,
@@ -335,6 +409,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   def determinate_next_weekly_page
     add_confirm_charge_today_to_session
     if params[:confirm_weekly_charge_today] == 'true'
+      SessionManipulation::SetSelectedWeek.call(session: session, second_week_selected: false)
       SessionManipulation::CalculateTotalCharge.call(session: session, weekly: true)
       redirect_to review_payment_charges_path
     else
@@ -352,6 +427,56 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
 
   # Determinate back path on select weekly date page
   def select_weekly_date_return_path
-    vehicle_details('weekly_charge_today') ? select_weekly_period_dates_path : weekly_charge_dates_path
+    if params[:change] == 'true'
+      review_payment_charges_path
+    else
+      vehicle_details('weekly_charge_today') ? select_weekly_period_dates_path : weekly_charge_dates_path
+    end
+  end
+
+  # Returns array of selected week dates for weekly selection
+  def week_start_days
+    [session[:first_week_start_date], session[:second_week_start_date]].compact
+  end
+
+  # Returns array of held selected week dates used for back button process
+  def back_button_week_dates
+    [session[:first_week_back_button], session[:second_week_back_button]]
+  end
+
+  # Clears session second_week_selected key
+  def reset_week_selection
+    SessionManipulation::SetSelectedWeek.call(session: session, second_week_selected: nil)
+  end
+
+  # Returns session second_week_selected key
+  def second_week_selected?
+    session[:second_week_selected]
+  end
+
+  # Handles case when first or second week Leeds taxi is redirected to due to back button click
+  # Sets correct value to date input
+  def handle_back_action(second_week_selected:, session_date:, back_button_date:)
+    return if params[:change] == 'true'
+
+    if session_date && review_as_last_path
+      @input_date = Date.parse(session_date)
+      Dates::AssignBackButtonDate.call(session: session, second_week_selected: second_week_selected)
+    elsif use_back_button_date(second_week_selected: second_week_selected, back_button_date: back_button_date)
+      @input_date = Date.parse(back_button_date)
+    end
+  end
+
+  # Specifies if back button date should be used
+  # Returns boolean
+  def use_back_button_date(second_week_selected:, back_button_date:)
+    (!second_week_selected && back_button_date) ||
+      (second_week_selected && back_button_date && !review_as_last_path)
+  end
+
+  # Specifies if the page before was Review payment page
+  # Returns boolean
+  def review_as_last_path
+    request&.referer&.include?(review_payment_charges_path)
   end
 end

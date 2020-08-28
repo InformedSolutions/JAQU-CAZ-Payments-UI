@@ -4,7 +4,7 @@
 # Base module for helpers, generated automatically during new application creation.
 #
 module ApplicationHelper
-  # Returns name of service, eg. 'Pay a Clean Air Zone charge'.
+  # Returns name of service, eg. 'Drive in a Clean Air Zone'.
   def service_name
     Rails.configuration.x.service_name
   end
@@ -33,7 +33,7 @@ module ApplicationHelper
     if weekly_period && weekly_charge_today
       select_weekly_period_dates_path
     elsif weekly_period && !weekly_charge_today
-      select_weekly_date_dates_path
+      select_weekly_date_dates_path(change: true)
     else
       select_daily_date_dates_path
     end
@@ -42,5 +42,10 @@ module ApplicationHelper
   # Returns content for title with global app name.
   def page_title(title_text)
     content_for(:title, "#{title_text} | #{service_name}")
+  end
+
+  # Return link to proper DVLA contact form from env variables
+  def link_to_dvla_contact_form
+    link_to 'DVLA', ENV.fetch('DVLA_CONTACT_URL', 'https://contact-preprod.dvla.gov.uk/'), id: 'dvla-link'
   end
 end

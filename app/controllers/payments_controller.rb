@@ -21,7 +21,7 @@ class PaymentsController < ApplicationController
   # * +payment_id+ - vehicle registration number, required in the session
   #
   def index
-    payment = PaymentStatus.new(vehicle_details('payment_id'), vehicle_details('la_name'))
+    payment = PaymentStatus.new(vehicle_details('payment_id'))
     save_payment_details(payment)
     if payment.success?
       redirect_to success_payments_path
@@ -101,7 +101,7 @@ class PaymentsController < ApplicationController
 
   # Clears details of the payment in the session
   def clear_payment_in_session
-    SessionManipulation::ClearSessionDetails.call(session: session, key: 13)
+    SessionManipulation::ClearSessionDetails.call(session: session, key: 14)
   end
 
   # Save payment details using SessionManipulation::SetPaymentDetails

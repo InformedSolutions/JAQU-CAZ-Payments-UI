@@ -9,7 +9,7 @@ module SessionManipulation
   #
   class SetChargeableZones < BaseManipulator
     # Level used to clearing keys in the session
-    LEVEL = 6
+    LEVEL = 7
 
     # Initializer function. Used by the class level method +.call+
     #

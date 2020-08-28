@@ -3,7 +3,7 @@
 ##
 # Controls the first steps of the payment process regarding user's vehicle data.
 #
-class VehiclesController < ApplicationController
+class VehiclesController < ApplicationController # rubocop:disable Metrics/ClassLength
   # 404 HTTP status from API mean vehicle in not found in DLVA database. Redirects to the proper page.
   rescue_from BaseApi::Error404Exception, with: :vehicle_not_found
 
@@ -20,6 +20,7 @@ class VehiclesController < ApplicationController
   def enter_details
     @errors = {}
     @return_url = request.referer ? determinate_back_path : root_path
+    clear_inputs_if_coming_from_successful_payment
   end
 
   ##
@@ -45,11 +46,14 @@ class VehiclesController < ApplicationController
   # Validations are done by {VrnForm}[rdoc-ref:VrnForm]
   #
   def submit_details
-    form = VrnForm.new(params[:vrn], country)
-    return rerender_enter_details(form) unless form.valid?
+    form = VrnForm.new(session, params[:vrn], country)
 
-    SessionManipulation::AddVrn.call(session: session, form: form)
-    redirect_to non_uk? ? non_dvla_vehicles_path : details_vehicles_path
+    if form.valid?
+      form.submit
+      redirect_to form.redirection_path
+    else
+      rerender_enter_details(form)
+    end
   end
 
   ##
@@ -63,12 +67,7 @@ class VehiclesController < ApplicationController
   # * +vrn+ - vehicle registration number, required in the session
   #
   def details
-    @vehicle_details = VehicleDetails.new(vrn)
-    return redirect_to(exempt_vehicles_path) if @vehicle_details.exempt?
-
-    SessionManipulation::SetLeedsTaxi.call(session: session) if @vehicle_details.leeds_taxi?
-    SessionManipulation::SetType.call(session: session, type: @vehicle_details.type)
-    SessionManipulation::SetUndetermined.call(session: session) if @vehicle_details.undetermined?
+    process_details_action
   end
 
   ##
@@ -89,11 +88,50 @@ class VehiclesController < ApplicationController
   #
   def confirm_details
     form = ConfirmationForm.new(confirmation)
-    unless form.valid?
-      return redirect_to details_vehicles_path, alert: form.errors.messages[:confirmation].first
+    if form.valid?
+      redirect_to process_detail_form(form)
+    else
+      redirect_to details_vehicles_path, alert: form.error_message
     end
+  end
 
-    redirect_to process_detail_form(form)
+  ##
+  # Renders vehicle UK registered page
+  #
+  # ==== Path
+  #
+  #    GET /vehicles/uk_registered_details
+  #
+  # ==== Params
+  # * +vrn+ - vehicle registration number, required in the session
+  #
+  def uk_registered_details
+    process_details_action
+  end
+
+  ##
+  # Verifies if user confirms the vehicle's details.
+  # If yes, redirects to {local authority}[rdoc-ref:local_authority]
+  # If no, redirects to {incorrect details}[rdoc-ref:incorrect_details]
+  #
+  # ==== Path
+  #    POST /vehicles/confirm_uk_registered_details
+  #
+  # ==== Params
+  # * +vrn+ - vehicle registration number, required in the session
+  # * +confirm-vehicle+ - user confirmation of vehicle details, 'yes' or 'no', required in the query
+  #
+  # ==== Validations
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  # * +confirm-vehicle+ - lack of it redirects to {incorrect details}[rdoc-ref:VehiclesController.incorrect_details]
+  #
+  def confirm_uk_registered_details
+    form = ConfirmationForm.new(confirmation)
+    if form.valid?
+      redirect_to process_detail_form(form)
+    else
+      redirect_to uk_registered_details_vehicles_path, alert: form.error_message
+    end
   end
 
   ##
@@ -112,6 +150,11 @@ class VehiclesController < ApplicationController
   def incorrect_details
     # Used to determine the previous step in ChargesController#local_authority
     SessionManipulation::SetIncorrect.call(session: session)
+    @return_path = if vehicle_details('possible_fraud')
+                     uk_registered_details_vehicles_path
+                   else
+                     details_vehicles_path
+                   end
   end
 
   ##
@@ -191,6 +234,8 @@ class VehiclesController < ApplicationController
     @types = VehicleTypes.call
     @return_path = if vehicle_details('incorrect')
                      incorrect_details_vehicles_path
+                   elsif vehicle_details('possible_fraud')
+                     uk_registered_details_vehicles_path
                    else
                      details_vehicles_path
                    end
@@ -235,10 +280,14 @@ class VehiclesController < ApplicationController
     params['registration-country']
   end
 
-  # Checks if selected registration country equals Non-UK.
-  # Returns boolean.
-  def non_uk?
-    country == 'Non-UK'
+  # Process action which is done on submit details and uk registered details
+  def process_details_action
+    @vehicle_details = VehicleDetails.new(vrn)
+    return redirect_to(exempt_vehicles_path) if @vehicle_details.exempt?
+
+    SessionManipulation::SetLeedsTaxi.call(session: session) if @vehicle_details.leeds_taxi?
+    SessionManipulation::SetType.call(session: session, type: @vehicle_details.type)
+    SessionManipulation::SetUndetermined.call(session: session) if @vehicle_details.undetermined?
   end
 
   # Redirects to {vehicle not found}[rdoc-ref:VehiclesController.unrecognised_vehicle]
@@ -280,5 +329,12 @@ class VehiclesController < ApplicationController
   # check if user confirmed details for undetermined vehicle
   def confirmed_undetermined?
     session['vehicle_details']['undetermined'].present?
+  end
+
+  # Clear VRN and country when paying for another vehicle from the success payment page
+  def clear_inputs_if_coming_from_successful_payment
+    return unless request.referer&.include?(success_payments_path)
+
+    SessionManipulation::ClearSessionDetails.call(session: session, key: 1)
   end
 end

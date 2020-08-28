@@ -4,10 +4,9 @@ require 'rails_helper'
 
 RSpec.describe SessionManipulation::AddVrn do
   subject(:service) do
-    described_class.call(session: session, form: form)
+    described_class.call(session: session, vrn: vrn, country: country)
   end
 
-  let(:form) { VrnForm.new(vrn, country) }
   let(:session) { {} }
   let(:vrn) { 'CU123AB' }
   let(:country) { 'UK' }
