@@ -31,13 +31,23 @@ Then("I enter an undetermined vehicle's registration and choose UK") do
 end
 
 Then("I enter an exempted non-UK vehicle's registration") do
-  mock_exempt_whitelisted_vehicle
+  mock_vehicle_not_found_in_dvla
+  mock_exempted_register_details
   fill_in_non_uk(vrn)
 end
 
 Then("I enter a not-exempted non-UK vehicle's registration") do
-  mock_non_exempt_whitelisted_vehicle
+  mock_vehicle_not_found_in_dvla
+  mock_unregistered_non_uk_vehicle_details
   fill_in_non_uk(vrn)
+end
+
+Then("I enter an UK vehicle's registration and choose Non-UK country") do
+  mock_vehicle_details
+  mock_dvla_response
+
+  fill_in('vrn', with: vrn)
+  choose('Non-UK')
 end
 
 And('I choose I confirm registration') do
@@ -63,7 +73,7 @@ Then('I choose that the details are correct') do
 end
 
 Then("I enter a unrecognised vehicle's registration and choose UK") do
-  mock_unrecognized_vehicle
+  mock_vehicle_not_found_in_dvla
 
   fill_in('vrn', with: 'CU27ABA')
   choose('UK')
@@ -95,7 +105,7 @@ end
 
 Given('I am on the vehicle details page with unrecognized vehicle to check') do
   add_vrn_and_country_to_session
-  mock_unrecognized_vehicle
+  mock_vehicle_not_found_in_dvla
 
   visit details_vehicles_path
 end

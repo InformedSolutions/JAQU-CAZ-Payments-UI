@@ -9,7 +9,7 @@ module SessionManipulation
   #
   class SetUnrecognised < BaseManipulator
     # Level used to clearing keys in the session
-    LEVEL = 3
+    LEVEL = 4
 
     # Sets +unrecognised+ to true in the session. Used by the class level method +.call+
     def call

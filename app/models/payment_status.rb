@@ -6,7 +6,7 @@
 #
 class PaymentStatus
   # Getter for payment ID
-  attr_reader :id, :caz_name
+  attr_reader :id
 
   # Initializer method for the class
   #
@@ -14,9 +14,8 @@ class PaymentStatus
   #
   # * +id+ - uuid, payment ID set by the backend API
   #
-  def initialize(id, caz_name)
+  def initialize(id)
     @id = id
-    @caz_name = caz_name
   end
 
   # Returns the payment status.
@@ -50,6 +49,6 @@ class PaymentStatus
 
   # Calls backend API endpoint
   def payment_data
-    @payment_data ||= PaymentsApi.payment_status(payment_id: id, caz_name: caz_name)
+    @payment_data ||= PaymentsApi.payment_status(payment_id: id)
   end
 end

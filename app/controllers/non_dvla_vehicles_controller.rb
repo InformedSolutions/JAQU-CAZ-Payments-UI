@@ -22,9 +22,11 @@ class NonDvlaVehiclesController < ApplicationController
   #
   def index
     @vehicle_registration = vrn
-    vehicle_exempted = WhitelistedVehicle.new(vrn).exempt?
+    register_details = RegisterDetails.new(vrn)
 
-    redirect_to(exempt_vehicles_path) if vehicle_exempted
+    if register_details.register_compliant? || register_details.register_exempt?
+      redirect_to(exempt_vehicles_path)
+    end
   end
 
   ##
@@ -101,6 +103,8 @@ class NonDvlaVehiclesController < ApplicationController
   def choose_type_return_path
     if vehicle_details('unrecognised')
       unrecognised_vehicles_path
+    elsif vehicle_details('possible_fraud')
+      uk_registered_details_vehicles_path
     else
       non_dvla_vehicles_path
     end

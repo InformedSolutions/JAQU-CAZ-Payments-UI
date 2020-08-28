@@ -38,6 +38,7 @@ class ChargeableZonesService < BaseService
     chargeable_zones_data
       .select { |zone| zone['cleanAirZoneId'].in?(chargeable_vehicles_ids) }
       .map { |zone| Caz.new(zone) }
+      .sort_by(&:name)
   end
 
   private

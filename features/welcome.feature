@@ -5,5 +5,5 @@ Feature: Welcome
 
   Scenario: View welcome page
     Given I am on the home page
-    Then I should see "Pay a Clean Air Zone charge"
-      And I should see "Pay a Clean Air Zone charge" title
+    Then I should see "Drive in a Clean Air Zone"
+      And I should see "Drive in a Clean Air Zone" title

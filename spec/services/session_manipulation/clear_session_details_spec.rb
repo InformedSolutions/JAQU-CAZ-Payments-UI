@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe SessionManipulation::ClearSessionDetails do
-  subject(:service) { described_class.call(session: session, key: 7) }
+  subject(:service) { described_class.call(session: session, key: 8) }
 
   let(:session) { { vehicle_details: details } }
   let(:details) do

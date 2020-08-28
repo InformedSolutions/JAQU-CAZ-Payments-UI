@@ -1,0 +1,79 @@
+- title_and_header = 'Your vehicle is UK registered'
+- page_title(title_and_header)
+
+= link_to 'Back', enter_details_vehicles_path, method: :get, class: 'govuk-back-link', id: 'back-link'
+
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      - if alert
+        = render 'common/error_summary',
+          error_msg_div: '#confirm-vehicle-details-error',
+          error_msg: alert
+
+      %h1.govuk-heading-xl= title_and_header
+
+      %p
+        The DVLA holds a record for this vehicle.
+        %br
+        If your vehicle is registered outside the UK, contact
+        = succeed '.' do
+          = link_to_dvla_contact_form
+        %br
+        If the details displayed are correct, confirm to continue.
+
+      %table.govuk-table
+        %thead.govuk-table__head
+          %tr.govuk-table__row
+            %th.govuk-table__header.table-without-border{colspan: 2, id: 'table-header'}
+              Vehicle details
+        %tbody.govuk-table__body
+          %tr.govuk-table__row
+            %td.govuk-table__cell{scope: 'row'} Vehicle registration
+            %td.govuk-table__header{id: 'registration-number'}= @vehicle_details.registration_number
+          %tr.govuk-table__row
+            %td.govuk-table__cell{scope: 'row'} Vehicle type approval
+            %td.govuk-table__header{id: 'type-approval'}= @vehicle_details.type_approval
+          %tr.govuk-table__row
+            %td.govuk-table__cell{scope: 'row'} CAZ vehicle type
+            %td.govuk-table__header{id: 'type'}= @vehicle_details.type
+          %tr.govuk-table__row
+            %td.govuk-table__cell{scope: 'row'} Make
+            %td.govuk-table__header{id: 'make'}= @vehicle_details.make
+          %tr.govuk-table__row
+            %td.govuk-table__cell{scope: 'row'} Model
+            %td.govuk-table__header{id: 'model'}= @vehicle_details.model
+          %tr.govuk-table__row
+            %td.govuk-table__cell{scope: 'row'} Colour
+            %td.govuk-table__header{id: 'colour'}= @vehicle_details.colour
+          %tr.govuk-table__row
+            %td.govuk-table__cell{scope: 'row'} Fuel type
+            %td.govuk-table__header{id: 'fuel-type'}= @vehicle_details.fuel_type
+          - if @vehicle_details.taxi_private_hire_vehicle.eql?('Yes')
+            %tr.govuk-table__row
+              %td.govuk-table__cell{scope: 'row'} Taxi
+              %td.govuk-table__header{id: 'taxi'}= @vehicle_details.taxi_private_hire_vehicle
+
+      = form_tag confirm_uk_registered_details_vehicles_path, method: :post do
+        .govuk-form-group{class: ('govuk-form-group--error' if alert)}
+          %fieldset.govuk-fieldset
+            %legend.govuk-visually-hidden
+              Confirm vehicle details
+
+            - if alert
+              %span#confirm-vehicle-details-error.govuk-error-message
+                %span.govuk-visually-hidden Error:
+                Select yes if the details are correct
+
+            %p
+              Are these vehicles details correct?
+            .govuk-radios.govuk-radios--inline
+              .govuk-radios__item
+                %input#confirm-vehicle-1.govuk-radios__input{name: 'confirm-vehicle', type: 'radio', checked: session.dig(:vehicle_details, 'confirm_vehicle'), value: 'yes'}
+                %label.govuk-label.govuk-radios__label{for: 'confirm-vehicle-1'}
+                  Yes
+              .govuk-radios__item
+                %input#confirm-vehicle-2.govuk-radios__input{name: 'confirm-vehicle', type: 'radio', checked: session.dig(:vehicle_details, 'confirm_vehicle') == false, value: 'no'}
+                %label.govuk-label.govuk-radios__label{for: 'confirm-vehicle-2'}
+                  No
+        = submit_tag 'Confirm', class: 'govuk-button', 'data-module': 'govuk-button'

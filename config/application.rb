@@ -16,9 +16,9 @@ module CitizensChargePayment
     config.eager_load_paths << Rails.root.join('lib')
 
     default_url = 'https://www.example.com'
-    config.x.feedback_url = ENV.fetch('FEEDBACK_URL', default_url)
+    config.x.feedback_url = ENV.fetch('FEEDBACK_URL', 'https://defragroup.eu.qualtrics.com/jfe/form/SV_3ymAC1qqYAEVJgF')
 
-    config.x.service_name = 'Pay a Clean Air Zone charge'
+    config.x.service_name = 'Drive in a Clean Air Zone'
 
     config.x.check_air_standard_url = ENV.fetch('COMPLIANCE_CHECKER_UI_URL', default_url)
     fleets_ui_url = ENV.fetch('FLEETS_UI_URL', default_url)
