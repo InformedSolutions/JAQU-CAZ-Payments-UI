@@ -77,10 +77,11 @@ class ChargesController < ApplicationController
     @la_name = la_name
     @weekly_period = vehicle_details('weekly')
     @weekly_charge_today = vehicle_details('weekly_charge_today')
-    @dates = vehicle_details('dates')
+    @dates = vehicle_details('dates').sort
     @total_charge = vehicle_details('total_charge')
     @return_path = review_payment_return_path
     @chargeable_zones = vehicle_details('chargeable_zones')
+    check_second_week_availability
   end
 
   private
@@ -99,21 +100,27 @@ class ChargesController < ApplicationController
   end
 
   # Define the back button path on local authority page.
-  def local_authority_return_path
+  def local_authority_return_path # rubocop:disable Metrics/MethodLength
     if vehicle_details('undetermined')
       not_determined_vehicles_path
+    elsif vehicle_details('unrecognised') # when vehicle is non-dvla UK vehicle
+      choose_type_non_dvla_vehicles_path
     elsif vehicle_details('incorrect')
       incorrect_details_vehicles_path
+    elsif vehicle_details('possible_fraud')
+      uk_registered_details_vehicles_path
     elsif vehicle_details('country') == 'UK'
       details_vehicles_path
     else
-      choose_type_non_dvla_vehicles_path
+      choose_type_non_dvla_vehicles_path # when vehicle is non-UK vehicle
     end
   end
 
   # Define the back button path on review payment page.
   def review_payment_return_path
-    if vehicle_details('weekly')
+    if return_to_second_week_selection
+      select_second_weekly_date_dates_path
+    elsif vehicle_details('weekly')
       select_weekly_date_dates_path
     elsif vehicle_details('weekly') && vehicle_details('confirm_weekly_charge_today')
       select_weekly_period_dates_path
@@ -144,5 +151,23 @@ class ChargesController < ApplicationController
   def unable_to_determine_compliance
     SessionManipulation::SetUndetermined.call(session: session)
     redirect_to not_determined_vehicles_path
+  end
+
+  # Checks if second week is available to be selected
+  # If yes, sets the @second_week_available variable and overwrites the dates to display in a correct format
+  def check_second_week_availability
+    return unless @weekly_period
+
+    Dates::AssignBackButtonDate.call(session: session)
+
+    service = Dates::ReviewWeeklySelection.new(vrn: vrn, zone_id: la_id, session: session)
+
+    @dates = service.format_week_selection
+    @second_week_available = service.second_week_available?
+  end
+
+  # Specifies if back button should lead to second week selection page
+  def return_to_second_week_selection
+    vehicle_details('weekly') && session[:second_week_start_date] || params['cancel_second_week'] == 'true'
   end
 end

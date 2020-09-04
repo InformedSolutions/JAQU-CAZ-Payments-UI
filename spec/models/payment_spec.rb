@@ -91,8 +91,9 @@ RSpec.describe Payment, type: :model do
       end
     end
 
-    context 'when weekly flow is selected' do
+    context 'when weekly flow is selected for 1 week' do
       let(:weekly) { true }
+      let(:total_charge) { 50 }
       let(:dates) do
         (1..7).map { |i| (Date.current + i.days).to_s }
       end
@@ -102,16 +103,55 @@ RSpec.describe Payment, type: :model do
       end
 
       context 'API call' do
-        let(:dates) { [Date.current.to_s] }
         let(:expected_transactions) do
-          [
+          transactions = dates.map do |date|
             {
               vrn: vrn,
-              travelDate: dates.first,
+              travelDate: date,
               tariffCode: tariff,
-              charge: 716
+              charge: 714
             }
-          ]
+          end
+          transactions.last[:charge] = 716
+          transactions
+        end
+
+        it 'calls PaymentsApi.create_payment with proper params' do
+          expect(PaymentsApi)
+            .to receive(:create_payment)
+            .with(
+              zone_id: zone_id,
+              return_url: url,
+              transactions: expected_transactions
+            )
+          payment.payment_id
+        end
+      end
+    end
+
+    context 'when weekly flow is selected for 2 weeks' do
+      let(:weekly) { true }
+      let(:total_charge) { 100 }
+      let(:dates) do
+        (1..14).map { |i| (Date.current + i.days).to_s }
+      end
+
+      it 'returns total charge of 50' do
+        expect(payment.send(:weekly_transactions).sum { |t| t[:charge] }).to eq(10_000)
+      end
+
+      context 'API call' do
+        let(:expected_transactions) do
+          transactions = dates.map do |date|
+            {
+              vrn: vrn,
+              travelDate: date,
+              tariffCode: tariff,
+              charge: 714
+            }
+          end
+          transactions.last[:charge] = 718
+          transactions
         end
 
         it 'calls PaymentsApi.create_payment with proper params' do

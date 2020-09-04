@@ -34,6 +34,14 @@ Feature: Charges
     Then I press "Back" link
       And I should be on the vehicle details page
 
+  Scenario: User wants to return to type selection when his vehicle is UK and not recognised
+    Given I am on the choose type page for UK vehicle
+    Then I choose Car type
+      And I press the Confirm
+      And I should be on the local authorities page
+    Then I press "Back" link
+      And I should be on the choose type page
+
   Scenario: User selects LA to pay for
     Given My vehicle is not compliant
       And I am on the select local authority page
@@ -130,12 +138,8 @@ Feature: Charges
   Scenario: User selects dates to pay for and d-day is within date range you can pay
     Given I am on the dates page when d-day was yesterday
     Then I should be on the pick daily dates page
-      And I should see "Why can't I see my date?"
+      And I should see 'The Clean Air Zone charge came into operation on'
 
   Scenario: User selects dates to pay for and d-day is within date range you can pay
     Given I am on the dates page when d-day will be tomorrow
-    Then I should see "Why can't I see my date?"
-
-  Scenario: User selects dates to pay for and d-day already passed and is outside of date range
-    Given I am on the dates page when d-day was 7 days ago
-    Then I should not see "Why can't I see my date?"
+    And I should not see 'The Clean Air Zone charge came into operation on'

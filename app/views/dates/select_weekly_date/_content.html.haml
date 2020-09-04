@@ -1,0 +1,63 @@
+#dates_data{data: @dates.to_json}
+#d-day_data{data: @charge_start_date}
+
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      - if alert
+        = render 'common/error_summary',
+          error_msg_div: '#select-weekly-date-error',
+          error_msg: alert
+
+      %h1.govuk-heading-l
+        = title_and_header
+      %p A weekly charge allows you to drive in Leeds for 7 consecutive days.
+      %p A daily charge period runs from midnight to midnight.
+
+      - if @all_paid
+        .govuk-inset-text
+          If the weekly charge you want to pay for is not available, 
+          it is because you have paid for a date in those 7 consecutive days.
+
+      - if @d_day_notice
+        .govuk-inset-text
+          The Clean Air Zone charge came into operation on #{parse_single_date(@charge_start_date)}.
+
+      = form_tag confirm_date_weekly_dates_path, method: :post do
+        .govuk-form-group{class: ('govuk-form-group--error' if alert)}
+          %fieldset.govuk-fieldset
+            %h2.govuk-heading-m
+              Start date
+            %span.govuk-hint
+              For example, 12 11 2020
+            - if alert
+              %span#select-weekly-date-error.govuk-error-message
+                %span.govuk-visually-hidden Error:
+                = alert
+            = render 'dates/select_weekly_date/input_normal', input_date: @input_date
+
+        %p#week-last-day-notice
+
+        %details.govuk-details{'data-module': 'govuk-details'}
+          %summary.govuk-details__summary
+            %span.govuk-details__summary-text
+              Why can’t I select certain dates?
+          .govuk-details__text
+            %p If you can't select the date you want to pay for, it may be because:
+            %ul
+              %li
+                You have paid a charge for that date
+              %li
+                You have paid for part of those consecutive 7 days
+              %li
+                It is outside the 13 days you can pay a charge for
+            %p If the date you want to pay for is more than 7 days ago you may be sent a Penalty Charge Notice (PCN)
+
+        = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button' if !@all_paid
+
+      = javascript_pack_tag 'datePicker'
+
+      %p= link_to 'Pay for 1 day instead', select_period_dates_path(second_week: second_week), id: 'pay_instead'
+
+      - if second_week
+        %p= link_to 'Cancel adding a second week', review_payment_charges_path(cancel_second_week: true), id: 'cancel_second_week'

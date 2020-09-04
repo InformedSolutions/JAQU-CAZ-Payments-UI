@@ -28,7 +28,8 @@ RSpec.describe 'DatesController - GET #daily_charge', type: :request do
         'la_id' => zone_id,
         'daily_charge' => kind_of(Numeric),
         'la_name' => kind_of(String),
-        'weekly_possible' => false
+        'weekly_possible' => false,
+        'weekly_charge_today' => false
       ).and_return(details)
   end
 
@@ -48,7 +49,8 @@ RSpec.describe 'DatesController - GET #daily_charge', type: :request do
           'la_id' => zone_id,
           'daily_charge' => kind_of(Numeric),
           'la_name' => kind_of(String),
-          'weekly_possible' => false
+          'weekly_possible' => false,
+          'weekly_charge_today' => false
         )
       subject
     end

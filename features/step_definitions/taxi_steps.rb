@@ -43,8 +43,10 @@ Given('I have already paid for tomorrow') do
 end
 
 Given('I am on the weekly dates page') do
-  mock_single_caz_request_for_charge_start_date(2.days.ago)
+  mock_single_caz_request_for_charge_start_date(Date.current - 7.days)
+  mock_paid_dates(dates: [today_formatted])
   add_weekly_possible_details
+  mock_validate_selected_weekly_date
   visit select_weekly_date_dates_path
 end
 
@@ -89,6 +91,27 @@ Then('I choose a time-frame that was already paid') do
   allow(Dates::CheckPaidDaily).to receive(:call).and_return(false)
 end
 
+And('I fill in an available week start date') do
+  add_to_session(first_week_start_date: '2020-05-01')
+  visit select_weekly_date_dates_path
+  weekly_fill_in_date
+end
+
+And('I fill in an available second week start date') do
+  add_to_session(second_week_start_date: '2020-05-08')
+  visit select_second_weekly_date_dates_path
+  weekly_fill_in_date
+end
+
+And('I fill in an invalid second week start date') do
+  mock_already_selected_weekly_date
+  weekly_fill_in_date
+end
+
+Then('I want to change selected dates') do
+  find('#change-dates').click
+end
+
 # Mocks taxi response from vehicle details endpoint in VCCS API
 def mock_vehicle_details_taxi
   vehicle_details = read_file('vehicle_details_taxi_response.json')
@@ -99,4 +122,28 @@ end
 def mock_vehicle_compliance_leeds
   compliance_data = read_file('vehicle_compliance_leeds_response.json')
   allow(ComplianceCheckerApi).to receive(:vehicle_compliance).and_return(compliance_data)
+end
+
+def mock_validate_selected_weekly_date
+  details = instance_double(Dates::ValidateSelectedWeeklyDate,
+                            start_date: '2019-11-1',
+                            valid?: true,
+                            add_dates_to_session: true)
+  allow(Dates::ValidateSelectedWeeklyDate).to receive(:new).and_return(details)
+  allow(Dates::CheckPaidWeekly).to receive(:call).and_return(true)
+  add_weekly_vehicle_details_to_session
+end
+
+def mock_already_selected_weekly_date
+  details = instance_double(Dates::ValidateSelectedWeeklyDate,
+                            start_date: '2019-11-1',
+                            error: I18n.t('already_selected', scope: 'dates.weekly'),
+                            valid?: false)
+  allow(Dates::ValidateSelectedWeeklyDate).to receive(:new).and_return(details)
+end
+
+def weekly_fill_in_date
+  fill_in('date_day', with: '1')
+  fill_in('date_month', with: '5')
+  fill_in('date_year', with: '2020')
 end

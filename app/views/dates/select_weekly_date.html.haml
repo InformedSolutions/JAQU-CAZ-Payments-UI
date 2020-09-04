@@ -1,50 +1,17 @@
-- title_and_header = 'Choose your dates'
+-# IE11 polyfill for datepicker
+:javascript
+  window.MSInputMethodContext && 
+    document.documentMode && 
+    document.write(
+      '<script src="https://cdn.jsdelivr.net/npm/ie11-custom-properties@latest/ie11CustomProperties.js"><\x2fscript>'
+    );
+
+- title_and_header = 'When do you want your weekly charge to start?'
 - page_title(title_and_header)
 
 = link_to 'Back', @return_path, class: 'govuk-back-link', id: 'back-link'
 
-%main.govuk-main-wrapper#main-content{role: 'main'}
-  .govuk-grid-row
-    .govuk-grid-column-two-thirds
-      - if alert
-        = render 'common/error_summary',
-          error_msg_div: '#select-weekly-date-error',
-          error_msg: alert
-
-      %h1.govuk-heading-l
-        = title_and_header
-      %p A weekly charge allows you to drive in Leeds for 7 consecutive days.
-      - if @all_paid
-        .govuk-inset-text
-          If the weekly charge you want to pay for is not available,
-          it is because you have paid for a date in those 7 consecutive days.
-
-      = render 'dates/weekly_details' if @d_day_notice
-
-      = form_tag confirm_date_weekly_dates_path, method: :post do
-        .govuk-form-group{class: ('govuk-form-group--error' if alert)}
-          %fieldset.govuk-fieldset
-            %legend.govuk-visually-hidden
-              Select weekly date
-
-            - if alert
-              %span#select-weekly-date-error.govuk-error-message
-                %span.govuk-visually-hidden Error:
-                = alert
-            .govuk-radios
-              - @dates.each_with_index do |date, index|
-                .govuk-radios__item
-                  %input.govuk-radios__input{'aria-describedby': 'date-hint',
-                                             name: 'dates[]',
-                                             type: 'radio',
-                                             value: date[:value],
-                                             id: "date-#{index}",
-                                             checked: checked_weekly?(date[:value]),
-                                             disabled: date[:disabled]}
-                  %label.govuk-label.govuk-radios__label{for: "date-#{index}"}
-                    = display_date(date)
-                  %span#date-hint.govuk-hint.govuk-radios__hint
-                    = date[:hint]
-        = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button' if !@all_paid
-
-      %p= link_to 'Pay for 1 day instead', select_period_dates_path, id: 'pay_instead'
+= render 'dates/select_weekly_date/content',
+         title_and_header: title_and_header,
+         second_week: false,
+         input_date: @input_date

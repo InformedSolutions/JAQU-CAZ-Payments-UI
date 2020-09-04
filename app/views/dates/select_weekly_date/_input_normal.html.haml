@@ -1,0 +1,32 @@
+.govuk-date-input
+  .govuk-date-input__item
+    %label.govuk-label.govuk-date-input__label
+      Day
+    %input.govuk-input.govuk-date-input__input.govuk-input--width-2#date-day{type: 'text',
+                                                                             class: ('govuk-input--error' if alert),
+                                                                             name: 'date_day',
+                                                                             value: (@input_date.day if @input_date),
+                                                                             pattern: '^[0-9]{1,2}$',
+                                                                             inputmode: 'numeric'}
+  .govuk-date-input__item
+    %label.govuk-label.govuk-date-input__label
+      Month
+    %input.govuk-input.govuk-date-input__input.govuk-input--width-2#date-month{type: 'text',
+                                                                               class: ('govuk-input--error' if alert),
+                                                                               name: 'date_month',
+                                                                               value: (@input_date.month if @input_date),
+                                                                               pattern: '^[0-9]{1,2}$',
+                                                                               inputmode: 'numeric'}
+  .govuk-date-input__item
+    %label.govuk-label.govuk-date-input__label
+      Year
+    %input.govuk-input.govuk-date-input__input.govuk-input--width-4#date-year{type: 'text',
+                                                                              class: ('govuk-input--error' if alert),
+                                                                              name: 'date_year',
+                                                                              value: (@input_date.year if @input_date),
+                                                                              pattern: '^[0-9]{4}$',
+                                                                              inputmode: 'numeric'}
+  .govuk-date-input__item.litepicker-input-container
+    %label.sm-visually-hidden
+      Date picker for start date
+    %i#litepicker.far.fa-calendar-alt

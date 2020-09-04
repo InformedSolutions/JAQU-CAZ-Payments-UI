@@ -14,7 +14,7 @@ module SessionManipulation
   #
   class SetComplianceDetails < BaseManipulator
     # Level used to clearing keys in the session
-    LEVEL = 7
+    LEVEL = 8
 
     # Initializer function. Used by the class level method +.call+
     #
