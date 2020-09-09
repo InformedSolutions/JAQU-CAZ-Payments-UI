@@ -51,3 +51,6 @@ config/ssl/
 
 # Ignore RDoc HTML files
 /doc/app
+
+# Redis files
+*.rdb
