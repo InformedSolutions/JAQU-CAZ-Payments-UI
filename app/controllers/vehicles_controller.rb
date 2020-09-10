@@ -23,7 +23,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   #
   def enter_details
     @errors = {}
-    clear_inputs_if_coming_from_successful_payment
+    hide_inputs_if_coming_from_successful_payment
   end
 
   ##
@@ -314,10 +314,10 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
     session['vehicle_details']['undetermined'].present?
   end
 
-  # Clear VRN and country when paying for another vehicle from the success payment page
-  def clear_inputs_if_coming_from_successful_payment
+  # Hide VRN and country when paying for another vehicle from the success payment page
+  def hide_inputs_if_coming_from_successful_payment
     return unless request.referer&.include?(success_payments_path)
 
-    SessionManipulation::ClearSessionDetails.call(session: session, key: 1)
+    @hide_inputs = true
   end
 end
