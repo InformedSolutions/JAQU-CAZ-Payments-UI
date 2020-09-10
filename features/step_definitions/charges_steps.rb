@@ -174,6 +174,12 @@ Given('I am on the pick weekly dates page with no passes available to buy') do
   visit select_weekly_date_dates_path
 end
 
+And('The LA inputs should not be filled') do
+  expect(find('input#vrn').value).to be_nil
+  expect(find('input#registration-country-1')).not_to be_checked
+  expect(find('input#registration-country-2')).not_to be_checked
+end
+
 private
 
 def paid_period

@@ -36,3 +36,9 @@ Feature: Payments
       And I'm getting redirected from GOV.UK Pay
     Then I press "return to the start page" link
       And I should be on the start page
+
+  Scenario: User wants to pay for another vehicle after successful payment process
+    Given I have finished the payment successfully
+      And I'm getting redirected from GOV.UK Pay
+    Then I press "Pay for another vehicle" link
+      And The LA inputs should not be filled
