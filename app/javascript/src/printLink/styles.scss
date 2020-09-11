@@ -1,9 +1,19 @@
 @import "~govuk-frontend/govuk/helpers/all";
 
-.hide-text-decoration {
-  text-decoration: none;
+.print-page-link__hidden {
+  display: none !important;
+}
 
-  .link__hidden {
-    display: none !important;
+.print-page-link {
+  display: block;
+  color: govuk-colour($colour: 'blue');
+  cursor: pointer;
+
+  &:hover {
+    color: govuk-colour($colour: 'dark-blue');
+  }
+
+  &:visited {
+    color: govuk-colour($colour: 'purple');
   }
 }
