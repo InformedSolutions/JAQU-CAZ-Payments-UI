@@ -1,3 +1,6 @@
+- uk_checked = session.dig(:vehicle_details, 'country') == 'UK' && session.dig(:vehicle_details, 'possible_fraud') != true
+- non_uk_checked = session.dig(:vehicle_details, 'country') == 'Non-UK' || session.dig(:vehicle_details, 'possible_fraud') == true
+
 .govuk-radios.govuk-radios--inline
   %fieldset.govuk-fieldset
     %legend.govuk-legend
@@ -5,13 +8,13 @@
         %input#registration-country-1.govuk-radios__input{name: 'registration-country',
                                                           type: 'radio',
                                                           value: 'UK',
-                                                          checked: session.dig(:vehicle_details, 'country') == 'UK' && session.dig(:vehicle_details, 'possible_fraud') != true}
+                                                          checked: (uk_checked unless @hide_inputs)}
         %label.govuk-label.govuk-radios__label{for: 'registration-country-1'}
           UK
       .govuk-radios__item
         %input#registration-country-2.govuk-radios__input{name: 'registration-country',
                                                           type: 'radio',
                                                           value: 'Non-UK',
-                                                          checked: session.dig(:vehicle_details, 'country') == 'Non-UK' || session.dig(:vehicle_details, 'possible_fraud') == true}
+                                                          checked: (non_uk_checked unless @hide_inputs)}
         %label.govuk-label.govuk-radios__label{for: 'registration-country-2'}
           Non-UK
