@@ -7,4 +7,4 @@
                                    name: 'vrn',
                                    type: 'text',
                                    maxlength: 15,
-                                   value: (session.dig(:vehicle_details, 'vrn') && !@hide_session_values) || params[:vrn]}
+                                   value: (!@hide_session_values && session.dig(:vehicle_details, 'vrn')) || params[:vrn]}
