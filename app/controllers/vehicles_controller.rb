@@ -276,6 +276,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
 
   # Renders enter_details page and log errors
   def rerender_enter_details(form)
+    @hide_session_values = true
     @errors = form.errors.messages
     render enter_details_vehicles_path
   end
@@ -318,6 +319,6 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   def hide_inputs_if_coming_from_successful_payment
     return unless request.referer&.include?(success_payments_path)
 
-    @hide_inputs = true
+    @hide_session_values = true
   end
 end
