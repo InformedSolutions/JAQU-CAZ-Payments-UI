@@ -24,7 +24,6 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # does not cache page
   before_action :set_cache_headers, only: %i[select_weekly_date select_second_weekly_date]
 
-  before_action :set_cache_headers, only: %i[select_second_weekly_date]
   ##
   # Renders a select period page.
   #
