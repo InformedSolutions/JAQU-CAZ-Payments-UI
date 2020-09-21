@@ -67,7 +67,6 @@ class PaymentsController < ApplicationController
   #
   def success
     @payment_details = PaymentDetails.new(session[:vehicle_details])
-    clear_payment_in_session
   end
 
   ##
