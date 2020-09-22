@@ -176,7 +176,7 @@ class ApplicationController < ActionController::Base # rubocop:disable Metrics/C
     session[:history][transaction_id][:second_week_start_date] = session[:second_week_start_date] || nil
   end
 
-  # backs up the session
+  # restores the session
   def restore_session
     # restore main session
     session[:vehicle_details] = session[:history][url_id][:vehicle_details]
