@@ -26,7 +26,7 @@ RSpec.describe 'PaymentsController - GET #index', type: :request do
 
     context 'when payment status is SUCCESS' do
       it 'redirects to the success page' do
-        expect(response).to redirect_to(success_payments_path)
+        expect(response).to redirect_to(success_payments_path(id: session[:transaction_id]))
       end
 
       it 'sets user email in the session' do
@@ -46,7 +46,7 @@ RSpec.describe 'PaymentsController - GET #index', type: :request do
       let(:success) { false }
 
       it 'redirects to the failure page' do
-        expect(response).to redirect_to(failure_payments_path)
+        expect(response).to redirect_to(failure_payments_path(id: session[:transaction_id]))
       end
 
       it 'does set user email in the session' do
