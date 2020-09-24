@@ -20,8 +20,6 @@ var config = {
                 "click element #ccc-dismiss-button"
             ]
         },
-        '${BASE_URL}/refunds/scenarios',
-        '${BASE_URL}/refunds/details',
         '${BASE_URL}/vehicles/enter_details',
         {
             "url": '${BASE_URL}/vehicles/enter_details?caz-selection',

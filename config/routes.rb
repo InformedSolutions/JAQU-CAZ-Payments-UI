@@ -61,13 +61,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :refunds, only: [] do
-    collection do
-      get :scenarios
-      get :details
-    end
-  end
-
   resources :payments, only: %i[index create] do
     collection do
       get :success
