@@ -21,6 +21,9 @@
       = render 'dates/daily/inset' if @dates.any? { |date| date[:disabled] }  && !@all_paid
       = render 'dates/daily/all_paid' if @all_paid
 
+      %span.govuk-hint
+        Select all that apply.
+
       = form_tag confirm_daily_date_dates_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
           %fieldset.govuk-fieldset
