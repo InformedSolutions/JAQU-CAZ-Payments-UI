@@ -5,18 +5,18 @@ Feature: Static Pages
 
   Scenario: User sees accessibility statement page
     Given I am on the home page
-    When I press "Accessibility statement" footer link
-    Then I should see "Accessibility statement for Drive in a Clean Air Zone"
+    When I press 'Accessibility statement' footer link
+    Then I should see 'Accessibility statement for Drive in a Clean Air Zone'
 
   Scenario: User sees cookies page
     Given I am on the home page
-    When I press "Cookies" footer link
-    Then I should see "Cookies"
-      And I should see "A cookie is a small piece of data"
+    When I press 'Cookies' footer link
+    Then I should see 'Cookies'
+      And I should see 'A cookie is a small piece of data'
 
   Scenario: User sees privacy notice page
     Given I am on the home page
-    When I press "Privacy notice" footer link
-    Then I should see "Drive in a Clean Air Zone"
-      And I should see "Check if you’ll be charged to drive in a Clean Air Zone "
+    When I press 'Privacy' footer link
+    Then I should see 'Drive in a Clean Air Zone'
+      And I should see 'Check if you’ll be charged to drive in a Clean Air Zone '
 
