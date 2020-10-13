@@ -365,7 +365,7 @@ DEPENDENCIES
   listen
   puma
   rack_session_access
-  rails (~> 6.0.3.3)
+  rails (~> 6.0.3.4)
   rails-controller-testing
   redis
   rspec-rails
@@ -385,7 +385,7 @@ DEPENDENCIES
   webpacker
 
 RUBY VERSION
-   ruby 2.6.6p146
+   ruby 2.7.2p137
 
 BUNDLED WITH
    2.1.4
