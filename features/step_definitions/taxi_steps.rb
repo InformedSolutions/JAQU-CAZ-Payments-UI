@@ -113,6 +113,10 @@ Then('I want to change selected dates') do
   find('#change-dates').click
 end
 
+Then('I want to change selected dates') do
+  find('#change-dates').click
+end
+
 # Mocks taxi response from vehicle details endpoint in VCCS API
 def mock_vehicle_details_taxi
   vehicle_details = read_file('vehicle_details_taxi_response.json')
