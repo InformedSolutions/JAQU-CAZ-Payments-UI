@@ -33,12 +33,9 @@ class ChargeableZonesService < BaseService
     return [] if chargeable_zones_data.empty?
 
     chargeable_vehicles_ids = non_dvla ? non_dvla_data : dvla_data
-    # TODO: charge to filter_map when updated to ruby 2.7
-    # https://blog.saeloun.com/2019/05/25/ruby-2-7-enumerable-filter-map.html
-    chargeable_zones_data
-      .select { |zone| zone['cleanAirZoneId'].in?(chargeable_vehicles_ids) }
-      .map { |zone| Caz.new(zone) }
-      .sort_by(&:name)
+    chargeable_zones_data.filter_map do |zone|
+      Caz.new(zone) if zone['cleanAirZoneId'].in?(chargeable_vehicles_ids)
+    end.sort_by(&:name)
   end
 
   private
@@ -73,11 +70,10 @@ class ChargeableZonesService < BaseService
     @zone_data ||= ComplianceCheckerApi.clean_air_zones
   end
 
+  # Select chargeable zones and returns ids
   def select_chargeable(data)
-    # TODO: charge to filter_map when updated to ruby 2.7
-    # https://blog.saeloun.com/2019/05/25/ruby-2-7-enumerable-filter-map.html
-    data
-      .select { |zone| zone['charge'].to_i.positive? }
-      .map { |zone| zone['cleanAirZoneId'] }
+    data.filter_map do |zone|
+      zone['cleanAirZoneId'] if zone['charge'].to_i.positive?
+    end
   end
 end
