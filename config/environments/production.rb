@@ -83,7 +83,7 @@ Rails.application.configure do
   # config.force_ssl = true
 
   # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
+  config.cache_store = :redis_cache_store, { cluster: [ENV['REDIS_URL']] } if ENV['REDIS_URL']
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter     = :resque
@@ -107,7 +107,7 @@ Rails.application.configure do
 
   # Use custom logging formatter so that IP any other PII can be removed.
   config.log_formatter = CustomLogger.new
-  logger               = ActiveSupport::Logger.new(STDOUT)
+  logger               = ActiveSupport::Logger.new($stdout)
   logger.formatter     = config.log_formatter
   config.logger        = ActiveSupport::TaggedLogging.new(logger)
 

@@ -8,8 +8,6 @@ Feature: Charges
     Then I choose that the details are correct
       And I press the Confirm
       And I should be on the local authorities page
-    Then I press "Back" link
-      And I should be on the vehicle details page
 
   Scenario: User wants to return with wrong vehicle data for vehicle registered in the UK
     Given I am on the vehicles details page
@@ -18,29 +16,18 @@ Feature: Charges
     Then I should be on the incorrect details page
       And I press the Continue
       And I should be on the local authorities page
-    Then I press "Back" link
-      And I should be on the incorrect details page
 
   Scenario: User wants to return with vehicle registered not in the UK
     Given I am on the choose type page for non-UK vehicle
     Then I choose Car type
       And I press the Confirm
       And I should be on the local authorities page
-    Then I press "Back" link
-      And I should be on the choose type page
-
-  Scenario: User wants to return without the previous page
-    Given I am on the select local authority page
-    Then I press "Back" link
-      And I should be on the vehicle details page
 
   Scenario: User wants to return to type selection when his vehicle is UK and not recognised
     Given I am on the choose type page for UK vehicle
     Then I choose Car type
       And I press the Confirm
       And I should be on the local authorities page
-    Then I press "Back" link
-      And I should be on the choose type page
 
   Scenario: User selects LA to pay for
     Given My vehicle is not compliant

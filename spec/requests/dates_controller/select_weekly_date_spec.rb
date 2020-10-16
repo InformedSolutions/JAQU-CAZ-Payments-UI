@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe 'DatesController - GET #select_weekly_date', type: :request do
   subject { get select_weekly_date_dates_path, headers: { 'HTTP_REFERER': referer } }
 
+  let(:transaction_id) { SecureRandom.uuid }
   let(:referer) { '' }
 
   context 'with VRN, COUNTRY, LA, LA NAME and CHARGE in the session' do
@@ -93,7 +94,8 @@ RSpec.describe 'DatesController - GET #select_weekly_date', type: :request do
 
       it 'assigns @input_date' do
         subject
-        expect(assigns(:input_date)).to eq(Date.parse('2020-05-01'))
+        expect(assigns(:input_date)).to be_nil
+
       end
     end
   end
@@ -103,7 +105,10 @@ RSpec.describe 'DatesController - GET #select_weekly_date', type: :request do
   end
 
   context 'without details in the session' do
-    before { add_vrn_to_session }
+    before do
+      add_transaction_id_to_session(transaction_id)
+      add_vrn_to_session
+    end
 
     it_behaves_like 'la is missing'
   end

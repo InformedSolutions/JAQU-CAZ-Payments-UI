@@ -1,6 +1,6 @@
 - title_and_header = 'Enter the number plate of the vehicle'
 - page_title(title_and_header)
-= link_to 'Back', @return_url, class: 'govuk-back-link', id: 'back-link'
+= render 'common/js_back_link'
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
@@ -17,7 +17,7 @@
               - @errors.reverse_each do |field, messages|
                 %li
                   = link_to(messages.first, "##{field}-error")
-      %h1.govuk-heading-xl
+      %h1.govuk-heading-l
         = title_and_header
       = form_tag enter_details_vehicles_path, method: :post do
         %fieldset.govuk-fieldset

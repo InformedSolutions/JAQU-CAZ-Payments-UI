@@ -39,19 +39,7 @@ Feature: Leeds Taxi
       And I press the Continue
     Then I should be on the pick weekly charge period page
       And I should see 'When would you like your weekly charge to start?' title
-      And I press 'Back' link
-    Then I should be on the weekly charge page
-      And I press the Continue
-    Then I should see 'State if you would like your weekly charge to start today or another day'
-      And I select 'Today'
-      And I press the Continue
-    Then I should be on the review your payment page
-      And I press 'Back' link
-    Then I should be on the pick weekly charge period page
-      And I press the Continue
-    Then I should be on the review your payment page
-      And I press 'Back' link
-    Then I select 'Another'
+      And I select 'Another'
       And I press the Continue
     Then I should be on the pick weekly dates page
       And I press the Continue
@@ -104,26 +92,11 @@ Feature: Leeds Taxi
     Given I am on the weekly dates page
       And I fill in an available week start date
       And I press the Continue
-    Then I should be on the review your payment page
-      And I should see '01/05/2020 - 07/05/2020'
-      And I press 'Back' link
-    Then I fill in an available week start date
-      And I press the Continue
       And I press 'Add another week' link
     Then I should be on the pick second weekly dates page
-      And I press 'Back' link
-      And I press 'Add another week' link
-      And I press 'Pay for 1 day instead' link
-      And I press 'Back' link
-    Then I fill in an available second week start date
+      And I fill in an available second week start date
       And I press the Continue
       And I should not see 'Add another week'
-      And I press 'Cookies' link
-      And I press 'Back' link
-    Then I want to change selected dates
-      And I press 'Back' link
-      And I should see '01/05/2020 - 07/05/2020'
-      And I should see '08/05/2020 - 14/05/2020'
 
   Scenario: User wants to select two weeks but enters invalid second date
     Given I am on the weekly dates page
@@ -133,9 +106,7 @@ Feature: Leeds Taxi
       And I should see 'Add another week'
       And I press 'Add another week' link
     Then I should be on the pick second weekly dates page
-      And I press 'Back' link
-      And I press 'Add another week' link
-    Then I fill in an invalid second week start date
+      And I fill in an invalid second week start date
       And I press the Continue
     Then I should be on the pick second weekly dates page
       And I should see "Choose a start date for your second week that doesn't include dates"

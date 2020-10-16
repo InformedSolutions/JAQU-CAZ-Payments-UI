@@ -1,5 +1,5 @@
 - page_title('Your vehicle is registered outside the UK')
-= link_to 'Back', enter_details_vehicles_path + '?back=true', class: 'govuk-back-link', id: 'back-link'
+= render 'common/js_back_link'
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
     .govuk-grid-column-two-thirds
@@ -8,7 +8,7 @@
           error_msg_div: '#confirmation-error',
           error_msg: I18n.t('confirmation_alert')
 
-      %h1.govuk-heading-xl Your vehicle is registered outside the UK
+      %h1.govuk-heading-l Your vehicle is registered outside the UK
       %p
         We only hold data on UK-registered vehicles.
       %p

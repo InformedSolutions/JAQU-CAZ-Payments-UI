@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 module AddToSession
+  def add_transaction_id_to_session(transaction_id)
+    encoded_data = RackSessionAccess.encode(transaction_id: transaction_id)
+    put_encoded_data_to_session(encoded_data)
+  end
+
   def add_vrn_to_session(vrn: 'CU57ABC', country: 'UK')
     add_to_session(vrn: vrn, country: country)
   end

@@ -1,5 +1,5 @@
 - page_title('Vehicle details could not be found')
-= link_to 'Back', enter_details_vehicles_path + '?back=true', class: 'govuk-back-link', id: 'back-link'
+= render 'common/js_back_link'
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
     .govuk-grid-column-two-thirds
@@ -8,10 +8,10 @@
           error_msg_div: '#unrecognised-vehicle-error',
           error_msg: I18n.t('confirmation_alert')
 
-      %h1.govuk-heading-xl Vehicle details could not be found
+      %h1.govuk-heading-l Vehicle details could not be found
       %p
         Try
-        = link_to 'entering your details', enter_details_vehicles_path, class: 'govuk-link'
+        = link_to 'entering your details', enter_details_vehicles_path(id: SecureRandom.uuid, new: true), class: 'govuk-link'
         again making sure you have not mixed up letters and numbers (for example, the letters
         %b I
         and

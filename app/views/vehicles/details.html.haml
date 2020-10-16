@@ -1,5 +1,5 @@
 - page_title('Are these vehicle details correct?')
-= link_to 'Back', enter_details_vehicles_path, method: :get, class: 'govuk-back-link', id: 'back-link'
+= render 'common/js_back_link'
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
     .govuk-grid-column-two-thirds
@@ -8,7 +8,7 @@
           error_msg_div: '#confirm-vehicle-details-error',
           error_msg: alert
 
-      %h1.govuk-heading-xl Are these vehicle details correct?
+      %h1.govuk-heading-l Are these vehicle details correct?
       %table.govuk-table
         %thead.govuk-table__head
           %tr.govuk-table__row

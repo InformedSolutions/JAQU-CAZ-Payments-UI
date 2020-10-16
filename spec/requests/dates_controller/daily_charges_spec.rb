@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe 'DatesController - GET #daily_charge', type: :request do
   subject { get daily_charge_dates_path }
 
+  let(:transaction_id) { SecureRandom.uuid }
   let(:vrn) { 'CU57ABC' }
   let(:country) { 'UK' }
   let(:zone_id) { SecureRandom.uuid }
@@ -16,7 +17,9 @@ RSpec.describe 'DatesController - GET #daily_charge', type: :request do
                     exemption_or_discount_url: url,
                     compliance_url: url,
                     main_info_url: url,
-                    dynamic_compliance_url: url)
+                    additional_compliance_url: url,
+                    dynamic_compliance_url: url,
+                    global_exemption_guidance_url: url)
   end
 
   before do
@@ -67,6 +70,7 @@ RSpec.describe 'DatesController - GET #daily_charge', type: :request do
 
   context 'without LA in the session' do
     before do
+      add_transaction_id_to_session(transaction_id)
       add_vrn_to_session
     end
 

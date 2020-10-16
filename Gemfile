@@ -5,12 +5,13 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.6'
 
-gem 'rails', '~> 6.0.3.2'
+gem 'rails', '~> 6.0.3.3'
 
 gem 'bootsnap', require: false
 gem 'haml'
 gem 'httparty'
 gem 'puma'
+gem 'redis'
 gem 'sdoc', require: false
 gem 'sqlite3'
 gem 'turbolinks'

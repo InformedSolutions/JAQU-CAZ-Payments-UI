@@ -3,7 +3,7 @@
 ##
 # Controls selecting LAs where the user wants to pay for.
 #
-class ChargesController < ApplicationController
+class ChargesController < ApplicationController # rubocop:disable Metrics/ClassLength
   # 422 HTTP status from API means vehicle data incomplete so the compliance calculation is not possible.
   rescue_from BaseApi::Error422Exception, with: :unable_to_determine_compliance
   # checks if VRN is present in the session
@@ -12,6 +12,10 @@ class ChargesController < ApplicationController
   before_action :check_compliance_details, except: %i[local_authority submit_local_authority]
   # checks if vehicle_details is present in the session
   before_action :check_vehicle_details, only: %i[review_payment]
+  # does not cache page
+  before_action :set_cache_headers, only: %i[review_payment]
+  # handle cancelling second week
+  before_action :handle_second_week_cancel, only: %i[review_payment]
 
   ##
   # Renders the list of available local authorities.
@@ -31,7 +35,7 @@ class ChargesController < ApplicationController
       session: session,
       chargeable_zones: @zones.length
     )
-    return redirect_to compliant_vehicles_path if @zones.empty?
+    return redirect_to compliant_vehicles_path(id: transaction_id) if @zones.empty?
 
     @return_path = local_authority_return_path
   end
@@ -57,7 +61,7 @@ class ChargesController < ApplicationController
       store_compliance_details
       determinate_next_page
     else
-      redirect_to local_authority_charges_path, alert: la_alert(form)
+      redirect_to local_authority_charges_path(id: transaction_id), alert: la_alert(form)
     end
   end
 
@@ -81,6 +85,8 @@ class ChargesController < ApplicationController
     @total_charge = vehicle_details('total_charge')
     @return_path = review_payment_return_path
     @chargeable_zones = vehicle_details('chargeable_zones')
+    @transaction_id = transaction_id
+
     check_second_week_availability
   end
 
@@ -133,9 +139,9 @@ class ChargesController < ApplicationController
   # Else, returns redirect to daily charge
   def determinate_next_page
     if vehicle_details('weekly_possible')
-      redirect_to select_period_dates_path
+      redirect_to select_period_dates_path(id: transaction_id)
     else
-      redirect_to daily_charge_dates_path
+      redirect_to daily_charge_dates_path(id: transaction_id)
     end
   end
 
@@ -150,7 +156,7 @@ class ChargesController < ApplicationController
   # Redirects to 'Unable to determine compliance' page
   def unable_to_determine_compliance
     SessionManipulation::SetUndetermined.call(session: session)
-    redirect_to not_determined_vehicles_path
+    redirect_to not_determined_vehicles_path(id: transaction_id)
   end
 
   # Checks if second week is available to be selected
@@ -161,13 +167,27 @@ class ChargesController < ApplicationController
     Dates::AssignBackButtonDate.call(session: session)
 
     service = Dates::ReviewWeeklySelection.new(vrn: vrn, zone_id: la_id, session: session)
-
     @dates = service.format_week_selection
     @second_week_available = service.second_week_available?
   end
 
   # Specifies if back button should lead to second week selection page
   def return_to_second_week_selection
-    vehicle_details('weekly') && session[:second_week_start_date] || params['cancel_second_week'] == 'true'
+    vehicle_details('weekly') && session[:second_week_start_date] || cancel_second_week?
+  end
+
+  # Handles cancelling the second weekly selection
+  def handle_second_week_cancel
+    return unless cancel_second_week?
+
+    session[:second_week_selected] = false
+    SessionManipulation::CalculateTotalCharge.call(session: session,
+                                                   dates: [session[:first_week_start_date]],
+                                                   weekly: true)
+  end
+
+  # Indicates if adding a second week was just cancelled
+  def cancel_second_week?
+    params['cancel_second_week'] == 'true'
   end
 end

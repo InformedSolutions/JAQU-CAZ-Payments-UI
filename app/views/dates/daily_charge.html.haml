@@ -1,7 +1,7 @@
 - title_and_header = "Pay a daily #{@compliance_details.zone_name} Clean Air Zone charge"
 - page_title(title_and_header)
 
-= link_to 'Back', @return_path, class: 'govuk-back-link', id: 'back-link'
+= render 'common/js_back_link'
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
@@ -25,7 +25,7 @@
         %strong.govuk-warning-text__text
           %span.govuk-warning-text__assistive
             Warning
-          You have up to 7 days to pay the charge after driving in the zone, or you may pay a penalty charge notice (PCN).
+          Payment must be made a maximum of 7 days after you have driven in the zone or you may receive a penalty charge notice (PCN).
       = form_tag confirm_daily_charge_dates_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
           %fieldset.govuk-fieldset
@@ -45,7 +45,11 @@
                                                checked: session.dig(:vehicle_details, 'confirm_exempt'),
                                                id: 'confirm-exempt'}
                 %label.govuk-label.govuk-checkboxes__label{for: 'confirm-exempt'}
-                  I confirm I am not exempt from paying the
+                  I confirm I am not 
+                  = link_to("exempt",
+                                @compliance_details.global_exemption_guidance_url,
+                                id: 'exemption-guidance-link')
+                  from paying the
                   = @compliance_details.zone_name
                   Clean Air Zone charge.
                   %br
