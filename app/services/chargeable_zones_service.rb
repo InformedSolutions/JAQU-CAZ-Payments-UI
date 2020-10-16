@@ -72,8 +72,6 @@ class ChargeableZonesService < BaseService
 
   # Select chargeable zones and returns ids
   def select_chargeable(data)
-    data.filter_map do |zone|
-      zone['cleanAirZoneId'] if zone['charge'].to_i.positive?
-    end
+    data.filter_map { |zone| zone['cleanAirZoneId'] if zone['charge'].to_i.positive? }
   end
 end
