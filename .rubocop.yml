@@ -3,51 +3,7 @@ inherit_from: ./lib/rubocop/blacklist.yml
 
 AllCops:
   TargetRubyVersion: 2.6.6
-
-Style/Documentation:
-  Enabled: false
-
-Style/GuardClause:
-  Enabled: false
-
-Style/HashEachMethods:
-  Enabled: true
-
-Style/HashTransformKeys:
-  Enabled: true
-
-Style/HashTransformValues:
-  Enabled: true
-
-Lint/RaiseException:
-  Enabled: true
-
-Lint/StructNewOverride:
-  Enabled: true
-
-Layout/SpaceAroundMethodCallOperator:
-  Enabled: true
-
-Layout/EmptyLinesAroundAttributeAccessor:
-  Enabled: true
-
-Style/SlicingWithRange:
-  Enabled: true
-
-Style/ExponentialNotation:
-  Enabled: true
-
-Lint/DeprecatedOpenSSLConstant:
-  Enabled: true
-
-Lint/MixedRegexpCaptureTypes:
-  Enabled: true
-
-Style/RedundantRegexpCharacterClass:
-  Enabled: true
-
-Style/RedundantRegexpEscape:
-  Enabled: true
+  NewCops: enable
 
 Layout/LineLength:
   Max: 110
@@ -62,3 +18,9 @@ Metrics/BlockLength:
 Style/MixinUsage:
   Exclude:
     - 'features/step_definitions/*.rb'
+
+Style/Documentation:
+  Enabled: false
+
+Lint/MissingSuper:
+   Enabled: false

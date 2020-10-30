@@ -1,7 +1,7 @@
 - title_and_header = 'Your vehicle is UK registered'
 - page_title(title_and_header)
 
-= link_to 'Back', enter_details_vehicles_path, method: :get, class: 'govuk-back-link', id: 'back-link'
+= render 'common/js_back_link'
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
@@ -11,7 +11,7 @@
           error_msg_div: '#confirm-vehicle-details-error',
           error_msg: alert
 
-      %h1.govuk-heading-xl= title_and_header
+      %h1.govuk-heading-l= title_and_header
 
       %p
         The DVLA holds a record for this vehicle.

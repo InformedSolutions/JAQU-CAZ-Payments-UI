@@ -20,17 +20,25 @@ RSpec.describe Dates::ValidateSelectedWeeklyDate do
   let(:year) { Time.current.year }
   let(:month) { Time.current.month }
   let(:day) { Time.current.day }
+  let(:formatted_date) { "#{year}-#{month}-#{day}" }
 
   let(:charge_start_date) { '2020-01-01' }
 
-  let(:session) { { vehicle_details: { 'dates' => dates }, second_week_selected: second_week_selected } }
-  let(:dates) { nil }
+  let(:session) do
+    {
+      vehicle_details: { 'dates' => dates },
+      second_week_selected: second_week_selected,
+      first_week_start_date: first_week_start_date
+    }
+  end
 
+  let(:dates) { nil }
   let(:second_week_selected) { false }
+  let(:first_week_start_date) { nil }
 
   context 'when date is in correct format and is in range' do
     it 'assigns correct value to @start_date variable' do
-      expect(service.start_date).to eq("#{year}-#{month}-#{day}")
+      expect(service.start_date).to eq(formatted_date)
     end
 
     it 'returns true for .valid?' do
@@ -47,12 +55,13 @@ RSpec.describe Dates::ValidateSelectedWeeklyDate do
     end
   end
 
-  context 'when date is in correct format but was selected in previous week' do
+  context 'when date is in correct format but was already selected in previous week' do
     let(:second_week_selected) { true }
+    let(:first_week_start_date) { formatted_date }
     let(:dates) { Date.current.upto(Date.current + 6.days).map { |d| d.strftime('%Y-%m-%d') } }
 
     it 'parses the date' do
-      expect(service.start_date).to eq("#{year}-#{month}-#{day}")
+      expect(service.start_date).to eq(formatted_date)
     end
 
     it 'returns false for .valid?' do
@@ -85,7 +94,7 @@ RSpec.describe Dates::ValidateSelectedWeeklyDate do
     let(:day) { '14' }
 
     it 'parses the date' do
-      expect(service.start_date).to eq("#{year}-#{month}-#{day}")
+      expect(service.start_date).to eq(formatted_date)
     end
 
     it 'returns false for .valid?' do

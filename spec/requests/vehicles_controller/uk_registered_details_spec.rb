@@ -5,8 +5,11 @@ require 'rails_helper'
 RSpec.describe 'VehiclesController - GET #uk_registered_details', type: :request do
   subject { get uk_registered_details_vehicles_path }
 
+  let(:transaction_id) { SecureRandom.uuid }
+
   context 'with VRN in session' do
     before do
+      add_transaction_id_to_session(transaction_id)
       add_vrn_to_session
       mock_vehicle_details
     end
@@ -29,7 +32,7 @@ RSpec.describe 'VehiclesController - GET #uk_registered_details', type: :request
 
       it 'redirects to exempt path' do
         subject
-        expect(response).to redirect_to(exempt_vehicles_path)
+        expect(response).to redirect_to(exempt_vehicles_path(id: transaction_id))
       end
     end
 
@@ -65,6 +68,7 @@ RSpec.describe 'VehiclesController - GET #uk_registered_details', type: :request
 
   context 'when vehicle is not found' do
     before do
+      add_transaction_id_to_session(transaction_id)
       add_vrn_to_session
       allow(ComplianceCheckerApi).to receive(:vehicle_details).and_raise(
         BaseApi::Error404Exception.new(404, 'not found', message: 'Boom')
@@ -73,7 +77,7 @@ RSpec.describe 'VehiclesController - GET #uk_registered_details', type: :request
 
     it 'redirects to :unrecognized' do
       subject
-      expect(response).to redirect_to(unrecognised_vehicles_path)
+      expect(response).to redirect_to(unrecognised_vehicles_path(id: transaction_id))
     end
   end
 end

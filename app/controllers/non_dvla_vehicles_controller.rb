@@ -7,6 +7,9 @@ class NonDvlaVehiclesController < ApplicationController
   # checks if VRN is present in the session
   before_action :check_vrn
 
+  # does not cache page
+  before_action :set_cache_headers, only: %i[index]
+
   ##
   # Renders a page for vehicles that are not registered within the UK.
   #
@@ -23,10 +26,9 @@ class NonDvlaVehiclesController < ApplicationController
   def index
     @vehicle_registration = vrn
     register_details = RegisterDetails.new(vrn)
+    return unless register_details.register_compliant? || register_details.register_exempt?
 
-    if register_details.register_compliant? || register_details.register_exempt?
-      redirect_to(exempt_vehicles_path)
-    end
+    redirect_to(exempt_vehicles_path(id: transaction_id))
   end
 
   ##
@@ -49,9 +51,9 @@ class NonDvlaVehiclesController < ApplicationController
     form = ConfirmationForm.new(params['confirm-registration'])
     if form.confirmed?
       SessionManipulation::SetConfirmRegistration.call(session: session)
-      redirect_to choose_type_non_dvla_vehicles_path
+      redirect_to choose_type_non_dvla_vehicles_path(id: transaction_id)
     else
-      redirect_to non_dvla_vehicles_path, alert: true
+      redirect_to non_dvla_vehicles_path(id: transaction_id), alert: true
     end
   end
 
@@ -91,10 +93,10 @@ class NonDvlaVehiclesController < ApplicationController
   def submit_type
     type = params['vehicle-type']
     if type.blank?
-      redirect_to choose_type_non_dvla_vehicles_path, alert: true
+      redirect_to choose_type_non_dvla_vehicles_path(id: transaction_id), alert: true
     else
       SessionManipulation::SetType.call(session: session, type: type)
-      redirect_to local_authority_charges_path
+      redirect_to local_authority_charges_path(id: transaction_id)
     end
   end
 

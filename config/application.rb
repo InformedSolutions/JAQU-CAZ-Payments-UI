@@ -29,5 +29,7 @@ module CitizensChargePayment
     config.exceptions_app = routes
 
     config.time_zone = 'London'
+
+    config.x.max_history_size = ENV.fetch('MAX_HISTORY_SIZE', 100)
   end
 end

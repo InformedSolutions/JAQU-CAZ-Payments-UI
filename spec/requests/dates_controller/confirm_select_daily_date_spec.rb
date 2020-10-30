@@ -7,6 +7,7 @@ RSpec.describe 'DatesController - POST #confirm_daily_date', type: :request do
     post confirm_daily_date_dates_path, params: params
   end
 
+  let(:transaction_id) { SecureRandom.uuid }
   let(:params) { { 'dates' => %w[2019-10-07 2019-10-10] } }
   let(:charge) { 12.5 }
   let(:vrn) { 'CU123AB' }
@@ -14,13 +15,14 @@ RSpec.describe 'DatesController - POST #confirm_daily_date', type: :request do
 
   context 'with details in the session' do
     before do
+      add_transaction_id_to_session(transaction_id)
       add_details_to_session(details: { daily_charge: charge, vrn: vrn, la_id: la_id })
       allow(Dates::CheckPaidDaily).to receive(:call).and_return(true)
     end
 
     context 'with checked dates' do
       it 'redirects to :review_payment' do
-        expect(subject).to redirect_to(review_payment_charges_path)
+        expect(subject).to redirect_to(review_payment_charges_path(id: transaction_id))
       end
 
       it 'calls Dates::CheckPaidDaily with proper params' do
@@ -52,7 +54,7 @@ RSpec.describe 'DatesController - POST #confirm_daily_date', type: :request do
         end
 
         it 'redirects to :dates_charges' do
-          expect(subject).to redirect_to(select_daily_date_dates_path)
+          expect(subject).to redirect_to(select_daily_date_dates_path(id: transaction_id))
         end
       end
     end
@@ -61,7 +63,7 @@ RSpec.describe 'DatesController - POST #confirm_daily_date', type: :request do
       let(:params) { nil }
 
       it 'redirects to :dates_charges' do
-        expect(subject).to redirect_to(select_daily_date_dates_path)
+        expect(subject).to redirect_to(select_daily_date_dates_path(id: transaction_id))
       end
     end
   end
@@ -71,7 +73,10 @@ RSpec.describe 'DatesController - POST #confirm_daily_date', type: :request do
   end
 
   context 'without details in the session' do
-    before { add_vrn_to_session }
+    before do
+      add_transaction_id_to_session(transaction_id)
+      add_vrn_to_session
+    end
 
     it_behaves_like 'la is missing'
   end

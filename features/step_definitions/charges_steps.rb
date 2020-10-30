@@ -46,7 +46,7 @@ Then('I confirm exemption') do
 end
 
 Then('I choose I confirm that I am not exempt') do
-  check 'I confirm that I am not exempt'
+  check 'confirm-exempt'
 end
 
 Then('I am on the dates page') do
@@ -172,6 +172,12 @@ Given('I am on the pick weekly dates page with no passes available to buy') do
   add_weekly_vehicle_details_to_session
   mock_paid_dates(paid_period)
   visit select_weekly_date_dates_path
+end
+
+And('The LA inputs should not be filled') do
+  expect(find('input#vrn').value).to be_nil
+  expect(find('input#registration-country-1')).not_to be_checked
+  expect(find('input#registration-country-2')).not_to be_checked
 end
 
 private

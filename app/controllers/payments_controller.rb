@@ -24,9 +24,9 @@ class PaymentsController < ApplicationController
     payment = PaymentStatus.new(vehicle_details('payment_id'))
     save_payment_details(payment)
     if payment.success?
-      redirect_to success_payments_path
+      redirect_to success_payments_path(id: transaction_id)
     else
-      redirect_to failure_payments_path
+      redirect_to failure_payments_path(id: transaction_id)
     end
   end
 
@@ -67,7 +67,6 @@ class PaymentsController < ApplicationController
   #
   def success
     @payment_details = PaymentDetails.new(session[:vehicle_details])
-    clear_payment_in_session
   end
 
   ##

@@ -49,7 +49,7 @@ class VrnForm # rubocop:disable Metrics/ClassLength
     SessionManipulation::AddVrn.call(session: session, vrn: vrn, country: country)
 
     if uk?
-      @redirection_path = details_vehicles_path
+      @redirection_path = details_vehicles_path(id: session[:transaction_id])
     elsif non_uk?
       process_non_uk
     end
@@ -94,9 +94,9 @@ class VrnForm # rubocop:disable Metrics/ClassLength
     if match_uk_format? && dvla_registered?
       SessionManipulation::AddVrn.call(session: session, vrn: vrn, country: 'UK')
       SessionManipulation::SetPossibleFraud.call(session: session)
-      @redirection_path = uk_registered_details_vehicles_path
+      @redirection_path = uk_registered_details_vehicles_path(id: session[:transaction_id])
     else
-      @redirection_path = non_dvla_vehicles_path
+      @redirection_path = non_dvla_vehicles_path(id: session[:transaction_id])
     end
   end
 

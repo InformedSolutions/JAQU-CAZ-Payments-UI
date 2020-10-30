@@ -9,6 +9,10 @@
 - title_and_header = 'When do you want your second weekly charge to start?'
 - page_title(title_and_header)
 
-= link_to 'Back', review_payment_charges_path, class: 'govuk-back-link', id: 'back-link'
+= render 'common/js_back_link'
 
-= render 'dates/select_weekly_date/content', title_and_header: title_and_header, second_week: true, input_date: @input_date
+= render 'dates/select_weekly_date/content',
+         title_and_header: title_and_header,
+         second_week: true,
+         input_date: @input_date,
+         submit_url: confirm_second_date_weekly_dates_path

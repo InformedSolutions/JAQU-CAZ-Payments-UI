@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe 'ChargesController - GET #review_payment', type: :request do
   subject { get review_payment_charges_path }
 
+  let(:transaction_id) { SecureRandom.uuid }
   let(:vrn) { 'CU57ABC' }
   let(:country) { 'UK' }
   let(:zone_id) { SecureRandom.uuid }
@@ -78,7 +79,10 @@ RSpec.describe 'ChargesController - GET #review_payment', type: :request do
   end
 
   context 'without compliance details in the session' do
-    before { add_vrn_to_session }
+    before do
+      add_transaction_id_to_session(transaction_id)
+      add_vrn_to_session
+    end
 
     it_behaves_like 'la is missing'
   end

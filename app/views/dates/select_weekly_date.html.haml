@@ -9,9 +9,10 @@
 - title_and_header = 'When do you want your weekly charge to start?'
 - page_title(title_and_header)
 
-= link_to 'Back', @return_path, class: 'govuk-back-link', id: 'back-link'
+= render 'common/js_back_link'
 
 = render 'dates/select_weekly_date/content',
          title_and_header: title_and_header,
          second_week: false,
-         input_date: @input_date
+         input_date: @input_date,
+         submit_url: confirm_date_weekly_dates_path

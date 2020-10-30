@@ -29,16 +29,13 @@ RSpec.describe 'PaymentsController - GET #success', type: :request do
       .to receive(:new)
       .and_return(instance_double(ComplianceDetails,
                                   public_transport_options_url: url,
+                                  additional_compliance_url: url,
                                   dynamic_compliance_url: url))
     subject
   end
 
   it 'returns http success' do
     expect(response).to have_http_status(:success)
-  end
-
-  it 'clears payment details in session' do
-    expect(session[:vehicle_details]['payment_id']).to be_nil
   end
 
   it 'does not clear other details in session' do

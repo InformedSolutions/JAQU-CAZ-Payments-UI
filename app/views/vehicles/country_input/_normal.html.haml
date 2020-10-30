@@ -1,20 +1,4 @@
 .govuk-form-group
-  .govuk-radios
-    %fieldset.govuk-fieldset
-      %legend.govuk-legend
-        %h2.govuk-heading-m{for: 'country-of-registration'}
-          Country of registration
-    .govuk-radios__item
-      %input#registration-country-1.govuk-radios__input{name: 'registration-country',
-                                                        type: 'radio',
-                                                        value: 'UK',
-                                                        checked: session.dig(:vehicle_details, 'country') == 'UK' && session.dig(:vehicle_details, 'possible_fraud') != true}
-      %label.govuk-label.govuk-radios__label{for: 'registration-country-1'}
-        UK
-    .govuk-radios__item
-      %input#registration-country-2.govuk-radios__input{name: 'registration-country',
-                                                        type: 'radio',
-                                                        value: 'Non-UK',
-                                                        checked: session.dig(:vehicle_details, 'country') == 'Non-UK' || session.dig(:vehicle_details, 'possible_fraud') == true}
-      %label.govuk-label.govuk-radios__label{for: 'registration-country-2'}
-        Non-UK
+  %h2.govuk-heading-m{for: 'country-of-registration'}
+    Where is the vehicle registered?
+  = render 'vehicles/country_input/common'

@@ -5,7 +5,7 @@
 #
 # Also, contains some basic endpoints used for build purposes.
 #
-class ApplicationController < ActionController::Base
+class ApplicationController < ActionController::Base # rubocop:disable Metrics/ClassLength
   # Escapes all API related error with rendering 503 page
   rescue_from Errno::ECONNREFUSED,
               SocketError,
@@ -21,6 +21,8 @@ class ApplicationController < ActionController::Base
                                if: lambda {
                                      Rails.env.production? && ENV['HTTP_BASIC_PASSWORD'].present?
                                    }
+  before_action :check_for_new_id, except: %i[health build_id]
+  around_action :handle_history, except: %i[health build_id]
 
   ##
   # Health endpoint
@@ -96,7 +98,7 @@ class ApplicationController < ActionController::Base
     Rails.logger.warn(
       'Compliance details are missing in the session. Redirecting to :local_authority'
     )
-    redirect_to local_authority_charges_path
+    redirect_to local_authority_charges_path(id: transaction_id)
   end
 
   # Gets LA from vehicle_details hash in the session. Returns string, eg '39e54ed8-3ed2-441d-be3f-38fc9b70c8d3'
@@ -120,8 +122,77 @@ class ApplicationController < ActionController::Base
     redirect_to path, alert: alert
   end
 
-  # Assign back button url
-  def assign_back_button_url
-    @back_button_url = request.referer || root_path
+  # Get query parameter from request
+  def get_query_parameter(parameter)
+    request.query_parameters[parameter] if request.query_parameters.include?(parameter)
+  end
+
+  def transaction_id
+    session[:transaction_id]
+  end
+
+  def url_id
+    get_query_parameter('id')
+  end
+
+  def check_for_new_id
+    session[:transaction_id] ||= SecureRandom.uuid
+    session[:transaction_id] = url_id if get_query_parameter('new') == 'true'
+  end
+
+  # Handle history of the flow through the process - used by back links
+  def handle_history
+    session[:history] ||= {}
+    failsafe
+
+    if request.method == 'GET'
+      if url_id && !transaction_id.eql?(url_id)
+        restore_session
+      else
+        backup_session
+      end
+    end
+
+    yield
+  end
+
+  # failsafe mechanism to control session size
+  def failsafe
+    return unless session[:history].size > Rails.configuration.x.max_history_size
+
+    Rails.logger.error 'Session history size exceeded'
+    render template: 'errors/internal_server_error', status: :internal_server_error
+  end
+
+  # backs up the session
+  def backup_session
+    vehicle_details_record = Marshal.load(Marshal.dump(session[:vehicle_details]))
+    session[:history][transaction_id] = { vehicle_details: vehicle_details_record }
+    backup_leeds_taxi
+  end
+
+  def backup_leeds_taxi
+    session[:history][transaction_id][:first_week_start_date] = session[:first_week_start_date] || nil
+    session[:history][transaction_id][:second_week_start_date] = session[:second_week_start_date] || nil
+  end
+
+  # restores the session
+  def restore_session
+    # restore main session
+    session[:vehicle_details] = session[:history][url_id][:vehicle_details]
+    restore_leeds_taxi
+  end
+
+  # restores leeds taxi data if exists
+  def restore_leeds_taxi
+    session[:first_week_start_date] = session[:history][url_id][:first_week_start_date] || nil
+    session[:second_week_start_date] = session[:history][url_id][:second_week_start_date] || nil
+  end
+
+  # set headers for pages that should be refreshed every time
+  def set_cache_headers
+    response.headers['Cache-Control'] = 'no-cache, no-store'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = 'Mon, 01 Jan 1990 00:00:00 GMT'
   end
 end
