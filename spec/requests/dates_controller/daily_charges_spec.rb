@@ -18,8 +18,7 @@ describe 'DatesController - GET #daily_charge', type: :request do
                     compliance_url: url,
                     main_info_url: url,
                     additional_compliance_url: url,
-                    dynamic_compliance_url: url,
-                    global_exemption_guidance_url: url)
+                    dynamic_compliance_url: url)
   end
 
   before do
