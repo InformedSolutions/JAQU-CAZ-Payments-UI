@@ -2,7 +2,6 @@
 
 ##
 # This is an abstract class used as a base for all API exceptions.
-
 class ApiException < StandardError
   ##
   # HTTP error status as integer
