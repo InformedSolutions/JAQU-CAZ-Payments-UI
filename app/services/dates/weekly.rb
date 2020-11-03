@@ -46,6 +46,7 @@ module Dates
       end
     end
 
+    # formatted today date
     def today_date
       today.strftime(VALUE_DATE_FORMAT)
     end
