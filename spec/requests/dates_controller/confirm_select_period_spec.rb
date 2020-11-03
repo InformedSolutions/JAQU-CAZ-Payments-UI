@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'DatesController - POST #confirm_select_period', type: :request do
+describe 'DatesController - POST #confirm_select_period', type: :request do
   subject do
     post confirm_select_period_dates_path, params: { 'period' => period }
   end

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe VehicleTypes do
+describe VehicleTypes do
   subject(:service_call) { described_class.call }
 
   it 'returns 7 types' do

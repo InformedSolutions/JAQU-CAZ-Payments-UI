@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'PaymentsController - POST #create', type: :request do
+describe 'PaymentsController - POST #create', type: :request do
   subject { post payments_path }
 
   let(:vrn) { 'CU57ABC' }

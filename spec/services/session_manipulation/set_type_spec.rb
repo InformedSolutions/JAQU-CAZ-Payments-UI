@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe SessionManipulation::SetType do
-  subject(:service) { described_class.call(session: session, type: type) }
+describe SessionManipulation::SetType do
+  subject { described_class.call(session: session, type: type) }
 
   let(:session) { { vehicle_details: details } }
   let(:details) { { 'vrn' => vrn, 'country' => country, 'unrecognised' => true } }
@@ -12,7 +12,7 @@ RSpec.describe SessionManipulation::SetType do
   let(:type) { 'Car' }
 
   it 'sets type' do
-    service
+    subject
     expect(session[:vehicle_details]['type']).to eq(type)
   end
 
@@ -27,7 +27,7 @@ RSpec.describe SessionManipulation::SetType do
     end
 
     it 'clears keys from next steps' do
-      service
+      subject
       expect(session[:vehicle_details].keys)
         .to contain_exactly('vrn', 'country', 'unrecognised', 'type')
     end

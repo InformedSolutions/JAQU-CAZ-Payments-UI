@@ -23,6 +23,7 @@ group :development, :test do
   gem 'haml-rails'
   gem 'rspec-rails'
   gem 'ruby_jard'
+  gem 'yard'
 end
 
 group :development do

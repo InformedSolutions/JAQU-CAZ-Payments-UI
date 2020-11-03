@@ -8,6 +8,7 @@ require 'rails/all'
 Bundler.require(*Rails.groups)
 
 module CitizensChargePayment
+  # The class is responsible for building the middleware stack
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0

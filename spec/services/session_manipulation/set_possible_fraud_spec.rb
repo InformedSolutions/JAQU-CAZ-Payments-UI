@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe SessionManipulation::SetPossibleFraud do
+describe SessionManipulation::SetPossibleFraud do
   subject { described_class.call(session: session) }
 
   let(:session) { { vehicle_details: details } }

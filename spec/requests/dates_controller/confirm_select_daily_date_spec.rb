@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'DatesController - POST #confirm_daily_date', type: :request do
+describe 'DatesController - POST #confirm_daily_date', type: :request do
   subject do
     post confirm_daily_date_dates_path, params: params
   end

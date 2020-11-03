@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'PaymentsController - GET #success', type: :request do
+describe 'PaymentsController - GET #success', type: :request do
   subject { get failure_payments_path }
 
   let(:payment_id) { 'XYZ123ABC' }

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'ChargesController - GET #review_payment', type: :request do
+describe 'ChargesController - GET #review_payment', type: :request do
   subject { get review_payment_charges_path }
 
   let(:transaction_id) { SecureRandom.uuid }

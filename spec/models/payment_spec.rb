@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Payment, type: :model do
+describe Payment, type: :model do
   subject(:payment) do
     Payment.new({
                   'vrn' => vrn,

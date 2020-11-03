@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'DatesController - GET #weekly_charge', type: :request do
+describe 'DatesController - GET #weekly_charge', type: :request do
   subject { get weekly_charge_dates_path }
 
   let(:transaction_id) { SecureRandom.uuid }
@@ -17,8 +17,7 @@ RSpec.describe 'DatesController - GET #weekly_charge', type: :request do
                     exemption_or_discount_url: url,
                     compliance_url: url,
                     additional_compliance_url: url,
-                    dynamic_compliance_url: url,
-                    global_exemption_guidance_url: url)
+                    dynamic_compliance_url: url)
   end
 
   before do

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ConfirmationForm, type: :model do
+describe ConfirmationForm, type: :model do
   subject(:form) { described_class.new(confirmation) }
 
   let(:confirmation) { 'yes' }

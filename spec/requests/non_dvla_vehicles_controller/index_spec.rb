@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'NonDvlaVehiclesController - GET #index', type: :request do
+describe 'NonDvlaVehiclesController - GET #index', type: :request do
   subject { get non_dvla_vehicles_path }
 
   let(:transaction_id) { SecureRandom.uuid }

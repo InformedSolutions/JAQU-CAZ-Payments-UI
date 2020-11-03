@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Dates::Daily do
+describe Dates::Daily do
   subject(:service) do
     described_class.new(vrn: vrn, zone_id: zone_id, charge_start_date: active_charge_start_date)
   end
