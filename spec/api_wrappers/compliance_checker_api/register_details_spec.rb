@@ -9,10 +9,9 @@ describe 'ComplianceCheckerApi.register_details' do
 
   context 'when call returns 200' do
     before do
-      register_details = file_fixture('register_details_response.json').read
       stub_request(:get, /register-details/).to_return(
         status: 200,
-        body: register_details
+        body: file_fixture('register_details_response.json').read
       )
     end
 

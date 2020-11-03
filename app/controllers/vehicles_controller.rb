@@ -281,23 +281,6 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
     render enter_details_vehicles_path
   end
 
-  # Returns path depends on last request
-  def determinate_back_path
-    last_request = request.referer
-    back = request.query_parameters.include?('back')
-    if !back && back_button_paths.any? { |path| last_request.include?(path) }
-      last_request
-    else
-      root_path
-    end
-  end
-
-  # back button paths on enter details page
-  def back_button_paths
-    [non_dvla_vehicles_path, incorrect_details_vehicles_path, unrecognised_vehicles_path,
-     compliant_vehicles_path, exempt_vehicles_path]
-  end
-
   # persists whether or not vehicle details are correct into session and returns correct onward path
   def process_detail_form(form)
     SessionManipulation::SetConfirmVehicle.call(session: session, confirm_vehicle: form.confirmed?)

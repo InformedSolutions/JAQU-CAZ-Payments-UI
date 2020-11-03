@@ -7,10 +7,9 @@ describe 'ComplianceCheckerApi.clean_air_zones' do
 
   context 'when the response status is 200' do
     before do
-      caz_details = file_fixture('caz_list_response.json').read
       stub_request(:get, /clean-air-zones/).to_return(
         status: 200,
-        body: caz_details
+        body: file_fixture('caz_list_response.json').read
       )
     end
 

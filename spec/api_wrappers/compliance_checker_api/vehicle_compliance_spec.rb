@@ -11,10 +11,9 @@ describe 'ComplianceCheckerApi.vehicle_details' do
 
   context 'when call returns 200' do
     before do
-      vehicle_details = file_fixture('vehicle_compliance_birmingham_response.json').read
       stub_request(:get, url).to_return(
         status: 200,
-        body: vehicle_details
+        body: file_fixture('vehicle_compliance_birmingham_response.json').read
       )
     end
 
@@ -37,7 +36,7 @@ describe 'ComplianceCheckerApi.vehicle_details' do
 
   context 'when call returns 500' do
     before do
-      stub_request(:get, /compliance/).to_return(
+      stub_request(:get, url).to_return(
         status: 500,
         body: { 'message' => 'Something went wrong' }.to_json
       )
@@ -50,7 +49,7 @@ describe 'ComplianceCheckerApi.vehicle_details' do
 
   context 'when call returns 400' do
     before do
-      stub_request(:get, /compliance/).to_return(
+      stub_request(:get, url).to_return(
         status: 400,
         body: { 'message' => 'Correlation ID is missing' }.to_json
       )
@@ -63,7 +62,7 @@ describe 'ComplianceCheckerApi.vehicle_details' do
 
   context 'when call returns 404' do
     before do
-      stub_request(:get, /compliance/).to_return(
+      stub_request(:get, url).to_return(
         status: 404,
         body: { 'message' => "Vehicle with registration number #{vrn} was not found" }.to_json
       )
@@ -76,7 +75,7 @@ describe 'ComplianceCheckerApi.vehicle_details' do
 
   context 'when call returns 422' do
     before do
-      stub_request(:get, /compliance/).to_return(
+      stub_request(:get, url).to_return(
         status: 422,
         body: { 'message' => "#{vrn} is an invalid registration number" }.to_json
       )

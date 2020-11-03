@@ -4,9 +4,7 @@ require 'rails_helper'
 
 describe 'PaymentsApi.paid_payments_dates' do
   subject do
-    PaymentsApi.paid_payments_dates(
-      vrn: vrn, zone_id: id, start_date: start_date, end_date: end_date
-    )
+    PaymentsApi.paid_payments_dates(vrn: vrn, zone_id: id, start_date: start_date, end_date: end_date)
   end
 
   let(:vrn) { 'CU123AA' }

@@ -3,13 +3,7 @@
 require 'rails_helper'
 
 describe 'PaymentsApi.create_payment' do
-  subject do
-    PaymentsApi.create_payment(
-      zone_id: zone_id,
-      return_url: return_url,
-      transactions: transactions
-    )
-  end
+  subject { PaymentsApi.create_payment(zone_id: zone_id, return_url: return_url, transactions: transactions) }
 
   let(:vrn) { 'CU57ABC' }
   let(:charge) { 80 }

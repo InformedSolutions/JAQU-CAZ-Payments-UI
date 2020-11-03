@@ -3,35 +3,53 @@
 require 'rails_helper'
 
 describe PaymentStatus, type: :model do
-  subject(:payment_status) { described_class.new(id) }
+  subject { described_class.new(id) }
 
   let(:id) { SecureRandom.uuid }
   let(:status) { 'success' }
   let(:email) { 'test@example.com' }
+  let(:payment_reference) { SecureRandom.uuid }
+  let(:external_id) { SecureRandom.uuid }
 
   before do
     allow(PaymentsApi).to receive(:payment_status)
       .with(payment_id: id).and_return(
-        'paymentId' => id, 'status' => status, 'userEmail' => email
+        'paymentId' => id,
+        'status' => status,
+        'userEmail' => email,
+        'referenceNumber' => payment_reference,
+        'externalPaymentId' => external_id
       )
   end
 
   describe '.id' do
     it 'returns id' do
-      expect(payment_status.id).to eq(id)
+      expect(subject.id).to eq(id)
     end
   end
 
   describe '.status' do
     it 'returns the uppercase status' do
-      expect(payment_status.status).to eq(status.upcase)
+      expect(subject.status).to eq(status.upcase)
+    end
+  end
+
+  describe '.payment_reference' do
+    it 'returns a proper value' do
+      expect(subject.payment_reference).to eq(payment_reference)
+    end
+  end
+
+  describe '.external_id' do
+    it 'returns a proper value' do
+      expect(subject.external_id).to eq(external_id)
     end
   end
 
   describe '.success?' do
     context 'when status is success' do
       it 'returns true' do
-        expect(payment_status.success?).to be_truthy
+        expect(subject.success?).to be_truthy
       end
     end
 
@@ -39,14 +57,14 @@ describe PaymentStatus, type: :model do
       let(:status) { 'failure' }
 
       it 'returns false' do
-        expect(payment_status.success?).to be_falsey
+        expect(subject.success?).to be_falsey
       end
     end
   end
 
   describe '.user_email' do
     it 'returns the email' do
-      expect(payment_status.user_email).to eq(email)
+      expect(subject.user_email).to eq(email)
     end
   end
 end

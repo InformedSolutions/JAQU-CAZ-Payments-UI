@@ -9,10 +9,9 @@ describe 'ComplianceCheckerApi.vehicle_details' do
 
   context 'when the response status is 200' do
     before do
-      vehicle_details = file_fixture('vehicle_details_response.json').read
       stub_request(:get, /details/).to_return(
         status: 200,
-        body: vehicle_details
+        body: file_fixture('vehicle_details_response.json').read
       )
     end
 
