@@ -31,6 +31,17 @@ describe 'NonDvlaVehiclesController - GET #choose_type', type: :request do
         expect(assigns(:return_path)).to eq(unrecognised_vehicles_path)
       end
     end
+
+    context 'when vehicle is possible_fraud' do
+      before do
+        add_to_session(vrn: 'CU57ABC', country: 'UK', possible_fraud: true)
+        subject
+      end
+
+      it 'assigns VehicleController#uk_registered_details as return path' do
+        expect(assigns(:return_path)).to eq(uk_registered_details_vehicles_path)
+      end
+    end
   end
 
   context 'without VRN in the session' do
