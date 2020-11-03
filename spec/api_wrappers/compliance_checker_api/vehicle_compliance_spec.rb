@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe 'ComplianceCheckerApi.vehicle_details' do
-  subject(:call) { ComplianceCheckerApi.vehicle_compliance(vrn, zones) }
+describe 'ComplianceCheckerApi.vehicle_details' do
+  subject { ComplianceCheckerApi.vehicle_compliance(vrn, zones) }
 
   let(:vrn) { 'CAS310' }
   let(:zones) { %w[birmingham leeds] }
@@ -19,17 +19,17 @@ RSpec.describe 'ComplianceCheckerApi.vehicle_details' do
     end
 
     it 'returns registration number' do
-      expect(call['registrationNumber']).to eq(vrn)
+      expect(subject['registrationNumber']).to eq(vrn)
     end
 
     it 'returns compliance data for zones' do
-      expect(call['complianceOutcomes'][0].keys).to contain_exactly(
+      expect(subject['complianceOutcomes'][0].keys).to contain_exactly(
         'cleanAirZoneId', 'charge', 'name', 'informationUrls', 'tariffCode'
       )
     end
 
     it 'calls API with right params' do
-      expect(call)
+      expect(subject)
         .to have_requested(:get, url)
         .with(query: { zones: zones.join(',') })
     end
@@ -44,7 +44,7 @@ RSpec.describe 'ComplianceCheckerApi.vehicle_details' do
     end
 
     it 'raises Error500Exception' do
-      expect { call }.to raise_exception(BaseApi::Error500Exception)
+      expect { subject }.to raise_exception(BaseApi::Error500Exception)
     end
   end
 
@@ -57,7 +57,7 @@ RSpec.describe 'ComplianceCheckerApi.vehicle_details' do
     end
 
     it 'raises Error500Exception' do
-      expect { call }.to raise_exception(BaseApi::Error400Exception)
+      expect { subject }.to raise_exception(BaseApi::Error400Exception)
     end
   end
 
@@ -70,7 +70,7 @@ RSpec.describe 'ComplianceCheckerApi.vehicle_details' do
     end
 
     it 'raises Error500Exception' do
-      expect { call }.to raise_exception(BaseApi::Error404Exception)
+      expect { subject }.to raise_exception(BaseApi::Error404Exception)
     end
   end
 
@@ -83,7 +83,7 @@ RSpec.describe 'ComplianceCheckerApi.vehicle_details' do
     end
 
     it 'raises Error500Exception' do
-      expect { call }.to raise_exception(BaseApi::Error422Exception)
+      expect { subject }.to raise_exception(BaseApi::Error422Exception)
     end
   end
 end

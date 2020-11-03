@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'DatesController - GET #daily_charge', type: :request do
+describe 'DatesController - GET #daily_charge', type: :request do
   subject { get daily_charge_dates_path }
 
   let(:transaction_id) { SecureRandom.uuid }

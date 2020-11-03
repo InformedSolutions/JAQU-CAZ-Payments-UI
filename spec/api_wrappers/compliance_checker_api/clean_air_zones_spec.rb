@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe 'ComplianceCheckerApi.clean_air_zones' do
-  subject(:call) { ComplianceCheckerApi.clean_air_zones }
+describe 'ComplianceCheckerApi.clean_air_zones' do
+  subject { ComplianceCheckerApi.clean_air_zones }
 
   context 'when the response status is 200' do
     before do
@@ -15,11 +15,11 @@ RSpec.describe 'ComplianceCheckerApi.clean_air_zones' do
     end
 
     it 'returns an array' do
-      expect(call).to be_a(Array)
+      expect(subject).to be_a(Array)
     end
 
     it 'returns an array of CAZ objects' do
-      expect(call.first.keys).to contain_exactly(
+      expect(subject.first.keys).to contain_exactly(
         'cleanAirZoneId',
         'name',
         'boundaryUrl',
@@ -37,7 +37,7 @@ RSpec.describe 'ComplianceCheckerApi.clean_air_zones' do
     end
 
     it 'raises Error500Exception' do
-      expect { call }.to raise_exception(BaseApi::Error500Exception)
+      expect { subject }.to raise_exception(BaseApi::Error500Exception)
     end
   end
 end

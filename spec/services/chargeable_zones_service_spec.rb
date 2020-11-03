@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ChargeableZonesService do
+describe ChargeableZonesService do
   subject(:service_call) { described_class.call(vehicle_details: vehicle_details) }
 
   let(:vehicle_details) do

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Dates::Weekly do
+describe Dates::Weekly do
   subject(:service) do
     described_class.new(
       vrn: vrn,

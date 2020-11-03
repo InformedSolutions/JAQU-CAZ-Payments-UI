@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe SessionManipulation::SetComplianceDetails do
-  subject(:service) { described_class.call(session: session, la_id: la_id) }
+describe SessionManipulation::SetComplianceDetails do
+  subject { described_class.call(session: session, la_id: la_id) }
 
   let(:session) { { vehicle_details: details } }
   let(:details) { { 'vrn' => 'CU123AB', 'country' => 'UK' } }
@@ -24,11 +24,11 @@ RSpec.describe SessionManipulation::SetComplianceDetails do
     expect(ComplianceDetails)
       .to receive(:new)
       .with(details.merge('la_id' => la_id))
-    service
+    subject
   end
 
   describe 'adding fields' do
-    before { service }
+    before { subject }
 
     it 'sets la_id' do
       expect(session[:vehicle_details]['la_id']).to eq(la_id)

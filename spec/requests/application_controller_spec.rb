@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ApplicationController, type: :request do
+describe ApplicationController, type: :request do
   describe 'GET #build_id' do
     subject { get build_id_path }
 

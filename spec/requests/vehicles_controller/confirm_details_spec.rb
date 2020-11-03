@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'VehicleCheckersController - POST #confirm_details', type: :request do
+describe 'VehicleCheckersController - POST #confirm_details', type: :request do
   subject do
     post confirm_details_vehicles_path, params: { 'confirm-vehicle' => confirmation }
   end

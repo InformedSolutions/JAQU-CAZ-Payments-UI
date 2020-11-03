@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'ComplianceCheckerApi.register_details' do
+describe 'ComplianceCheckerApi.register_details' do
   subject { ComplianceCheckerApi.register_details(vrn) }
 
   let(:vrn) { 'CAS310' }

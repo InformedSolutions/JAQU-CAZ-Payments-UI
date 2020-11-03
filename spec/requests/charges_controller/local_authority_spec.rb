@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'ChargesController - GET #local_authority', type: :request do
+describe 'ChargesController - GET #local_authority', type: :request do
   subject { get local_authority_charges_path }
 
   let(:transaction_id) { SecureRandom.uuid }

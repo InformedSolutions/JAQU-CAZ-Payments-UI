@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'VehiclesController - GET #enter_details', type: :request do
+describe 'VehiclesController - GET #enter_details', type: :request do
   subject { get enter_details_vehicles_path }
 
   it 'returns a success response' do

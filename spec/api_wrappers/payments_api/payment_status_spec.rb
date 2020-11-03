@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe 'PaymentsApi.payment_status' do
-  subject(:call) { PaymentsApi.payment_status(payment_id: id) }
+describe 'PaymentsApi.payment_status' do
+  subject { PaymentsApi.payment_status(payment_id: id) }
 
   let(:id) { SecureRandom.uuid }
   let(:status) { 'success' }
@@ -18,7 +18,7 @@ RSpec.describe 'PaymentsApi.payment_status' do
     end
 
     it 'returns proper fields' do
-      expect(call.keys).to contain_exactly('paymentId', 'status', 'userEmail')
+      expect(subject.keys).to contain_exactly('paymentId', 'status', 'userEmail')
     end
   end
 
@@ -31,7 +31,7 @@ RSpec.describe 'PaymentsApi.payment_status' do
     end
 
     it 'raises Error500Exception' do
-      expect { call }.to raise_exception(BaseApi::Error500Exception)
+      expect { subject }.to raise_exception(BaseApi::Error500Exception)
     end
   end
 end

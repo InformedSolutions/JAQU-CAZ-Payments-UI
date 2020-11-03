@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe SessionManipulation::SetChargePeriod do
-  subject(:service) { described_class.call(session: session, charge_period: 'daily-period') }
+describe SessionManipulation::SetChargePeriod do
+  subject { described_class.call(session: session, charge_period: 'daily-period') }
 
   let(:session) { { vehicle_details: details } }
   let(:details) { { 'vrn' => vrn, 'country' => country } }
@@ -11,7 +11,7 @@ RSpec.describe SessionManipulation::SetChargePeriod do
   let(:country) { 'UK' }
 
   it 'sets charge period' do
-    service
+    subject
     expect(session[:vehicle_details]['charge_period']).to eq('daily-period')
   end
 
@@ -27,7 +27,7 @@ RSpec.describe SessionManipulation::SetChargePeriod do
     end
 
     it 'clears keys from next steps' do
-      service
+      subject
       expect(session[:vehicle_details].keys)
         .to contain_exactly('vrn', 'country', 'type', 'charge_period')
     end
