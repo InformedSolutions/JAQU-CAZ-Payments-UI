@@ -40,6 +40,7 @@ group :test do
   gem 'bundler-audit'
   gem 'capybara'
   gem 'cucumber-rails', require: false
+  gem 'fakeredis'
   gem 'rack_session_access'
   gem 'rails-controller-testing'
   gem 'rubocop-rails'

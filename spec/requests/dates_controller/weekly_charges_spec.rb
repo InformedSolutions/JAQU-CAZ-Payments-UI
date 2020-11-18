@@ -30,7 +30,8 @@ describe 'DatesController - GET #weekly_charge', type: :request do
         'daily_charge' => kind_of(Numeric),
         'la_name' => kind_of(String),
         'weekly_possible' => true,
-        'weekly_charge_today' => false
+        'weekly_charge_today' => false,
+        'weekly_dates' => []
       ).and_return(details)
   end
 
@@ -52,7 +53,8 @@ describe 'DatesController - GET #weekly_charge', type: :request do
           'daily_charge' => kind_of(Numeric),
           'la_name' => kind_of(String),
           'weekly_possible' => true,
-          'weekly_charge_today' => false
+          'weekly_charge_today' => false,
+          'weekly_dates' => []
         )
       subject
     end
