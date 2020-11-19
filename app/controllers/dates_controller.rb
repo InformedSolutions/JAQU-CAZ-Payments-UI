@@ -368,10 +368,10 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
 
   # Determinate redirect path after invalid date selected
   def determinate_week_select_redirect_path
-    if !second_week_selected?
-      select_weekly_date_dates_path(id: transaction_id)
-    else
+    if second_week_selected?
       select_second_weekly_date_dates_path(id: transaction_id)
+    else
+      select_weekly_date_dates_path(id: transaction_id)
     end
   end
 
