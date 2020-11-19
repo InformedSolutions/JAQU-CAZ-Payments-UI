@@ -27,10 +27,10 @@ module Dates
       @chargeable_dates ||= begin
         payment_window_dates = (calculated_start_date..(today + 6.days)).map { |date| parse(date) }
 
-        if !@second_week_selected
-          payment_window_dates
-        else
+        if @second_week_selected
           disable_already_chosen_dates(payment_window_dates)
+        else
+          payment_window_dates
         end
       end
     end

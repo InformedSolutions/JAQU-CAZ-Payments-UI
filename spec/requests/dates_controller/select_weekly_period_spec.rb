@@ -35,6 +35,17 @@ describe 'DatesController - GET #select_weekly_period', type: :request do
       end
     end
 
+    context 'when `weekly_charge_today` in session is nil' do
+      before do
+        add_transaction_id_to_session(transaction_id)
+        add_details_to_session(weekly_possible: true, weekly_charge_today: nil)
+      end
+
+      it 'redirects to daily charge page' do
+        expect(subject).to redirect_to(daily_charge_dates_path(id: transaction_id))
+      end
+    end
+
     context 'when Leeds weekly discount is NOT possible' do
       it_behaves_like 'not allowed Leeds discount'
     end

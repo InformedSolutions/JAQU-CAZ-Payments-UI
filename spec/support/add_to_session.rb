@@ -14,11 +14,12 @@ module AddToSession
     add_to_session(vrn: vrn, country: country)
   end
 
-  def add_details_to_session(details: {}, weekly_possible: false, weekly_charge_today: false)
+  def add_details_to_session(details: {}, weekly_possible: false, weekly_charge_today: false, dates: [])
     add_to_session(
       **compliance_details(details),
       weekly_possible: weekly_possible,
-      weekly_charge_today: weekly_charge_today
+      weekly_charge_today: weekly_charge_today,
+      weekly_dates: dates
     )
   end
 
