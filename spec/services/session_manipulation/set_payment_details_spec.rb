@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe SessionManipulation::SetPaymentDetails do
-  subject(:service) do
+describe SessionManipulation::SetPaymentDetails do
+  subject do
     described_class.call(
       session: session,
       email: email,
@@ -18,17 +18,17 @@ RSpec.describe SessionManipulation::SetPaymentDetails do
   let(:external_id) { 'external payment id' }
 
   it 'sets email' do
-    service
+    subject
     expect(session[:vehicle_details]['user_email']).to eq(email)
   end
 
   it 'sets payment reference' do
-    service
+    subject
     expect(session[:vehicle_details]['payment_reference']).to eq(payment_reference)
   end
 
   it 'sets email' do
-    service
+    subject
     expect(session[:vehicle_details]['external_id']).to eq(external_id)
   end
 end

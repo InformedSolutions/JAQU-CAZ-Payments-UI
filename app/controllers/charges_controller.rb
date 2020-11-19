@@ -108,8 +108,6 @@ class ChargesController < ApplicationController # rubocop:disable Metrics/ClassL
   def local_authority_return_path # rubocop:disable Metrics/MethodLength
     if vehicle_details('undetermined')
       not_determined_vehicles_path
-    elsif vehicle_details('unrecognised') # when vehicle is non-dvla UK vehicle
-      choose_type_non_dvla_vehicles_path
     elsif vehicle_details('incorrect')
       incorrect_details_vehicles_path
     elsif vehicle_details('possible_fraud')

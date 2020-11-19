@@ -20,4 +20,16 @@ describe ApplicationHelper do
       expect(helper.parse_dates(array)).to be_a(Array)
     end
   end
+
+  describe '.determinate_payment_for_path' do
+    let(:new_id) { SecureRandom.uuid }
+
+    it 'returns a proper value' do
+      expect(helper.determinate_payment_for_path(
+               true,
+               true,
+               new_id
+             )).to eq("/dates/select_weekly_period?id=#{new_id}&new=true")
+    end
+  end
 end

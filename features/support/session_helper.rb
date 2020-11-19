@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Methods used to manipulate the session data in rspec tests
 module SessionHelper
   def add_to_session(data = {})
     page.set_rack_session(data)

@@ -2,11 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe 'PaymentsApi.paid_payments_dates' do
-  subject(:call) do
-    PaymentsApi.paid_payments_dates(
-      vrn: vrn, zone_id: id, start_date: start_date, end_date: end_date
-    )
+describe 'PaymentsApi.paid_payments_dates' do
+  subject do
+    PaymentsApi.paid_payments_dates(vrn: vrn, zone_id: id, start_date: start_date, end_date: end_date)
   end
 
   let(:vrn) { 'CU123AA' }
@@ -24,11 +22,11 @@ RSpec.describe 'PaymentsApi.paid_payments_dates' do
     end
 
     it 'returns an array of dates' do
-      expect(call).to all(be_a_date_string)
+      expect(subject).to all(be_a_date_string)
     end
 
     it 'calls API with right params' do
-      expect(call)
+      expect(subject)
         .to have_requested(:post, url)
         .with(body: {
                 startDate: start_date,

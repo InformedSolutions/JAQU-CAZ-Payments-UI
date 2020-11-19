@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'VehiclesController - GET #unrecognised', type: :request do
+describe 'VehiclesController - GET #unrecognised', type: :request do
   subject { get unrecognised_vehicles_path }
 
   let(:vrn) { 'CU57ABC' }

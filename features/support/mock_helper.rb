@@ -71,15 +71,11 @@ module MockHelper
     response = read_file('caz_list_response.json')
     non_dvla_response = response['cleanAirZones'].map { |caz_data| Caz.new(caz_data) }
 
-    allow(ChargeableZonesService)
-      .to receive(:call)
-      .and_return(non_dvla_response)
+    allow(ChargeableZonesService).to receive(:call).and_return(non_dvla_response)
   end
 
   def mock_compliant_vehicle
-    allow(ChargeableZonesService)
-      .to receive(:call)
-      .and_return([])
+    allow(ChargeableZonesService).to receive(:call).and_return([])
   end
 
   # Mock response from vehicle details endpoint in VCCS API for not found in DVLA vehicle

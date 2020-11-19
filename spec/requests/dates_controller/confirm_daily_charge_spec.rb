@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'DatesController - POST #confirm_daily_charge', type: :request do
+describe 'DatesController - POST #confirm_daily_charge', type: :request do
   subject do
     post confirm_daily_charge_dates_path, params: { 'confirm-exempt' => confirmation }
   end

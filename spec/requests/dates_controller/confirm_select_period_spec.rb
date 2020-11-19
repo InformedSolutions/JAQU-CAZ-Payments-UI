@@ -2,10 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe 'DatesController - POST #confirm_select_period', type: :request do
-  subject do
-    post confirm_select_period_dates_path, params: { 'period' => period }
-  end
+describe 'DatesController - POST #confirm_select_period', type: :request do
+  subject { post confirm_select_period_dates_path, params: { 'period' => period } }
 
   let(:transaction_id) { SecureRandom.uuid }
   let(:period) { 'daily-charge' }
@@ -31,9 +29,17 @@ RSpec.describe 'DatesController - POST #confirm_select_period', type: :request d
           expect(response).to redirect_to(weekly_charge_dates_path(id: transaction_id))
         end
       end
+
+      context 'without selected radio' do
+        let(:period) { '' }
+
+        it 'redirects to :select_daily_date' do
+          expect(response).to redirect_to(select_daily_date_dates_path)
+        end
+      end
     end
 
-    context 'without selected radio' do
+    context 'without selected radio is nil' do
       let(:period) { nil }
 
       it 'redirects to :select_period' do

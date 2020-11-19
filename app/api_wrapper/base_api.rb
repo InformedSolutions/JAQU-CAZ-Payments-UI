@@ -4,7 +4,6 @@
 # This is an abstract class used as a base for all API wrapper classes.
 #
 # It includes {HTTParty gem}[https://github.com/jnunemaker/httparty]
-
 class BaseApi
   include HTTParty
 

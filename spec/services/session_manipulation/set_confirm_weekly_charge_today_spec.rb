@@ -2,17 +2,18 @@
 
 require 'rails_helper'
 
-describe SessionManipulation::SetChargePeriod do
-  subject { described_class.call(session: session, charge_period: 'daily-period') }
+describe SessionManipulation::SetConfirmWeeklyChargeToday do
+  subject { described_class.call(session: session, confirm_weekly_charge_today: confirmation) }
 
   let(:session) { { vehicle_details: details } }
+  let(:confirmation) { true }
   let(:details) { { 'vrn' => vrn, 'country' => country } }
   let(:vrn) { 'CU123AB' }
   let(:country) { 'UK' }
 
-  it 'sets charge period' do
+  it 'sets confirm_weekly_charge_today' do
     subject
-    expect(session[:vehicle_details]['charge_period']).to eq('daily-period')
+    expect(session[:vehicle_details]['confirm_weekly_charge_today']).to be_truthy
   end
 
   context 'when session is already filled with more data' do
@@ -20,16 +21,15 @@ describe SessionManipulation::SetChargePeriod do
       {
         'vrn' => vrn,
         'country' => country,
-        'payment_id' => SecureRandom.uuid,
         'type' => 'Car',
-        'confirm_exempt' => true
+        'charge_period' => 'daily-period',
+        'payment_id' => SecureRandom.uuid
       }
     end
 
     it 'clears keys from next steps' do
       subject
-      expect(session[:vehicle_details].keys)
-        .to contain_exactly('vrn', 'country', 'type', 'charge_period')
+      expect(session[:vehicle_details].keys.exclude?('payment_id')).to be_truthy
     end
   end
 end

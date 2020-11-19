@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe SessionManipulation::SetConfirmExempt do
-  subject(:service) { described_class.call(session: session) }
+describe SessionManipulation::SetConfirmExempt do
+  subject { described_class.call(session: session) }
 
   let(:session) { { vehicle_details: details } }
   let(:details) { { 'vrn' => vrn, 'country' => country } }
@@ -11,7 +11,7 @@ RSpec.describe SessionManipulation::SetConfirmExempt do
   let(:country) { 'UK' }
 
   it 'sets confirm exempt' do
-    service
+    subject
     expect(session[:vehicle_details]['confirm_exempt']).to be_truthy
   end
 
@@ -27,7 +27,7 @@ RSpec.describe SessionManipulation::SetConfirmExempt do
     end
 
     it 'clears keys from next steps' do
-      service
+      subject
       expect(session[:vehicle_details].keys)
         .to contain_exactly('vrn', 'country', 'type', 'charge_period', 'confirm_exempt')
     end

@@ -2,15 +2,15 @@
 
 require 'rails_helper'
 
-RSpec.describe SessionManipulation::SetIncorrect do
-  subject(:service) { described_class.call(session: session) }
+describe SessionManipulation::SetIncorrect do
+  subject { described_class.call(session: session) }
 
   let(:session) { { vehicle_details: details } }
   let(:details) { { 'vrn' => vrn, 'country' => country } }
   let(:vrn) { 'CU123AB' }
   let(:country) { 'UK' }
 
-  before { service }
+  before { subject }
 
   it 'sets incorrect' do
     expect(session[:vehicle_details]['incorrect']).to be_truthy

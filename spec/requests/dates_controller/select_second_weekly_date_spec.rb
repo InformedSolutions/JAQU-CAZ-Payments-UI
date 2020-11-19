@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'DatesController - GET #select_second_weekly_date', type: :request do
+describe 'DatesController - GET #select_second_weekly_date', type: :request do
   subject { get select_second_weekly_date_dates_path }
 
   let(:transaction_id) { SecureRandom.uuid }

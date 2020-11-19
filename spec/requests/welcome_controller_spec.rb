@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe WelcomeController, type: :request do
+describe WelcomeController, type: :request do
   describe 'GET #index' do
     subject { get root_path }
 
