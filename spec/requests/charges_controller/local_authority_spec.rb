@@ -17,9 +17,7 @@ describe 'ChargesController - GET #local_authority', type: :request do
         response = read_file('vehicle_compliance_birmingham_response.json')
         dvla_response = response['complianceOutcomes'].map { |caz_data| Caz.new(caz_data) }
 
-        allow(ChargeableZonesService)
-          .to receive(:call)
-          .and_return(dvla_response)
+        allow(ChargeableZonesService).to receive(:call).and_return(dvla_response)
       end
 
       context 'when the vehicle has correct data' do
@@ -57,6 +55,28 @@ describe 'ChargesController - GET #local_authority', type: :request do
           expect(assigns(:return_path)).to eq(incorrect_details_vehicles_path)
         end
       end
+
+      context 'when the vehicle is undetermined' do
+        before do
+          add_to_session(vrn: vrn, country: 'UK', undetermined: true)
+          subject
+        end
+
+        it 'assigns VehicleController#not_determined as return path' do
+          expect(assigns(:return_path)).to eq(not_determined_vehicles_path)
+        end
+      end
+
+      context 'when the vehicle is possible_fraud' do
+        before do
+          add_to_session(vrn: vrn, country: 'UK', possible_fraud: true)
+          subject
+        end
+
+        it 'assigns VehicleController#uk_registered as return path' do
+          expect(assigns(:return_path)).to eq(uk_registered_details_vehicles_path)
+        end
+      end
     end
 
     context 'without any chargeable CAZ' do
@@ -67,6 +87,19 @@ describe 'ChargesController - GET #local_authority', type: :request do
 
       it 'returns a compliant page' do
         expect(response).to redirect_to(compliant_vehicles_path(id: transaction_id))
+      end
+    end
+
+    context 'when api raise `Error422Exception` exception' do
+      before do
+        allow(ChargeableZonesService).to receive(:call).and_raise(
+          BaseApi::Error422Exception.new(422, '', '')
+        )
+        subject
+      end
+
+      it 'redirects to not_determined page' do
+        expect(response).to redirect_to(not_determined_vehicles_path(id: transaction_id))
       end
     end
   end
