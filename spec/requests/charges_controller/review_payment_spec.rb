@@ -55,21 +55,46 @@ describe 'ChargesController - GET #review_payment', type: :request do
         caz_double = instance_double(Caz, active_charge_start_date: '2020-03-01')
         allow(FetchSingleCazData).to receive(:call).and_return(caz_double)
         allow(PaymentsApi).to receive(:paid_payments_dates).and_return([])
-        add_full_payment_details(weekly: true)
         mock_chargeable_zones
-        subject
+        add_full_payment_details(weekly: true)
       end
 
-      it 'assigns DatesController#select_weekly_date as return path' do
-        expect(assigns(:return_path)).to eq(select_weekly_date_dates_path)
+      context 'when last visited page was select weekly date page' do
+        before { subject }
+
+        it 'assigns DatesController#select_weekly_date as return path' do
+          expect(assigns(:return_path)).to eq(select_weekly_date_dates_path)
+        end
+
+        it 'assigns weekly_period to true' do
+          expect(assigns(:weekly_period)).to be_truthy
+        end
+
+        it 'assigns second_week_available' do
+          expect(assigns(:second_week_available)).to be_truthy
+        end
       end
 
-      it 'assigns weekly_period to true' do
-        expect(assigns(:weekly_period)).to be_truthy
+      context 'when last visited page was select weekly period page' do
+        before do
+          add_full_payment_details(weekly: true, confirm_weekly_charge_today: true)
+          subject
+        end
+
+        it 'assigns return_path variable' do
+          expect(assigns(:return_path)).to eq(select_weekly_period_dates_path)
+        end
       end
 
-      it 'assigns second_week_available' do
-        expect(assigns(:second_week_available)).to be_truthy
+      context 'when last visited page was select second weekly date page' do
+        before do
+          add_weekly_selection_dates(second_week_start_date: '2020-05-01')
+          subject
+        end
+
+        it 'assigns return_path variable' do
+          expect(assigns(:return_path)).to eq(select_second_weekly_date_dates_path)
+        end
       end
     end
   end

@@ -123,10 +123,10 @@ class ChargesController < ApplicationController # rubocop:disable Metrics/ClassL
   def review_payment_return_path
     if return_to_second_week_selection
       select_second_weekly_date_dates_path
-    elsif vehicle_details('weekly')
-      select_weekly_date_dates_path
     elsif vehicle_details('weekly') && vehicle_details('confirm_weekly_charge_today')
       select_weekly_period_dates_path
+    elsif vehicle_details('weekly')
+      select_weekly_date_dates_path
     else
       select_daily_date_dates_path
     end

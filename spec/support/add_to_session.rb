@@ -23,7 +23,7 @@ module AddToSession
     )
   end
 
-  def add_full_payment_details(details: {}, weekly: false)
+  def add_full_payment_details(details: {}, weekly: false, confirm_weekly_charge_today: false)
     add_to_session(
       **compliance_details(details),
       weekly_possible: weekly,
@@ -31,7 +31,8 @@ module AddToSession
       weekly: weekly,
       total_charge: payment_total_charge(details, weekly),
       chargeable_zones: 2,
-      second_week_selected: true
+      second_week_selected: true,
+      confirm_weekly_charge_today: confirm_weekly_charge_today
     )
   end
 
