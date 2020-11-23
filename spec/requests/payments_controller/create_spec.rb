@@ -13,7 +13,7 @@ describe 'PaymentsController - POST #create', type: :request do
   let(:redirect_url) { 'https://www.payments.service.gov.uk' }
 
   before do
-    add_to_session(
+    add_vehicle_details_to_session(
       vrn: vrn,
       country: 'UK',
       la_id: zone_id,

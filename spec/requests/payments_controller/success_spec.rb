@@ -14,7 +14,7 @@ describe 'PaymentsController - GET #success', type: :request do
   let(:url) { 'www.wp.pl' }
 
   before do
-    add_to_session(
+    add_vehicle_details_to_session(
       vrn: vrn,
       payment_id: payment_id,
       user_email: user_email,

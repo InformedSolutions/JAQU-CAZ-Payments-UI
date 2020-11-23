@@ -23,7 +23,7 @@ describe 'DatesController - GET #select_weekly_date', type: :request do
 
     context 'with selected dates on the first week page' do
       before do
-        add_weekly_selection_dates(first_week_start_date: '2020-05-01', first_week_back_button: '2020-05-01')
+        add_to_session(first_week_start_date: '2020-05-01', first_week_back_button: '2020-05-01')
         subject
       end
 
@@ -103,7 +103,7 @@ describe 'DatesController - GET #select_weekly_date', type: :request do
 
     context 'without selected dates on the first week page' do
       before do
-        add_weekly_selection_dates(first_week_back_button: '2020-05-01')
+        add_to_session(first_week_back_button: '2020-05-01')
         subject
       end
 

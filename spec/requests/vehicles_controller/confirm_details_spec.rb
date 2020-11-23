@@ -41,7 +41,7 @@ describe 'VehicleCheckersController - POST #confirm_details', type: :request do
   context 'when vehicle is undetermined' do
     before do
       add_transaction_id_to_session(transaction_id)
-      add_to_session(vrn: 'CU57ABC', country: 'UK', undetermined: true)
+      add_vehicle_details_to_session(vrn: 'CU57ABC', country: 'UK', undetermined: true)
       subject
     end
 

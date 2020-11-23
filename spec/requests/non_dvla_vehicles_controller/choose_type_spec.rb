@@ -23,7 +23,7 @@ describe 'NonDvlaVehiclesController - GET #choose_type', type: :request do
 
     context 'when vehicle is unrecognized' do
       before do
-        add_to_session(vrn: 'CU57ABC', country: 'UK', unrecognised: true)
+        add_vehicle_details_to_session(vrn: 'CU57ABC', country: 'UK', unrecognised: true)
         subject
       end
 
@@ -34,7 +34,7 @@ describe 'NonDvlaVehiclesController - GET #choose_type', type: :request do
 
     context 'when vehicle is possible_fraud' do
       before do
-        add_to_session(vrn: 'CU57ABC', country: 'UK', possible_fraud: true)
+        add_vehicle_details_to_session(vrn: 'CU57ABC', country: 'UK', possible_fraud: true)
         subject
       end
 
