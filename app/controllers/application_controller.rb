@@ -127,14 +127,17 @@ class ApplicationController < ActionController::Base # rubocop:disable Metrics/C
     request.query_parameters[parameter] if request.query_parameters.include?(parameter)
   end
 
+  # Transaction id of session history
   def transaction_id
     session[:transaction_id]
   end
 
+  # Id parameter from request
   def url_id
     get_query_parameter('id')
   end
 
+  # Assigns +url_id+ to +transaction_id+ if a +new+ parameter from request is true
   def check_for_new_id
     session[:transaction_id] ||= SecureRandom.uuid
     session[:transaction_id] = url_id if get_query_parameter('new') == 'true'
@@ -172,21 +175,20 @@ class ApplicationController < ActionController::Base # rubocop:disable Metrics/C
   end
 
   def backup_leeds_taxi
-    session[:history][transaction_id][:first_week_start_date] = session[:first_week_start_date] || nil
-    session[:history][transaction_id][:second_week_start_date] = session[:second_week_start_date] || nil
+    session[:history][transaction_id][:first_week_start_date] = session[:first_week_start_date]
+    session[:history][transaction_id][:second_week_start_date] = session[:second_week_start_date]
   end
 
-  # restores the session
+  # restores the main session and leeds taxi data if exists
   def restore_session
-    # restore main session
-    session[:vehicle_details] = session[:history][url_id][:vehicle_details]
+    session[:vehicle_details] = session.dig(:history, url_id, :vehicle_details)
     restore_leeds_taxi
   end
 
   # restores leeds taxi data if exists
   def restore_leeds_taxi
-    session[:first_week_start_date] = session[:history][url_id][:first_week_start_date] || nil
-    session[:second_week_start_date] = session[:history][url_id][:second_week_start_date] || nil
+    session[:first_week_start_date] = session.dig(:history, url_id, :first_week_start_date)
+    session[:second_week_start_date] = session.dig(:history, url_id, :second_week_start_date)
   end
 
   # set headers for pages that should be refreshed every time

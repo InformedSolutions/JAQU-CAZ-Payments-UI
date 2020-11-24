@@ -51,7 +51,7 @@ describe 'ChargesController - POST #submit_local_authority', type: :request do
 
       context 'when vehicle is a taxi in Leeds' do
         before do
-          add_to_session(vrn: 'CU57ABC', country: 'UK', leeds_taxi: true)
+          add_vehicle_details_to_session(vrn: 'CU57ABC', country: 'UK', leeds_taxi: true)
         end
 
         it 'returns redirect to DatesController#select_period' do

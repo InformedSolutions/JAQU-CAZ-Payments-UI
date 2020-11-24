@@ -13,7 +13,7 @@ describe 'PaymentsController - GET #index', type: :request do
 
   context 'with payment id' do
     before do
-      add_to_session(payment_id: payment_id)
+      add_vehicle_details_to_session(payment_id: payment_id)
       allow(PaymentStatus).to receive(:new).and_return(
         instance_double('PaymentStatus',
                         success?: success,

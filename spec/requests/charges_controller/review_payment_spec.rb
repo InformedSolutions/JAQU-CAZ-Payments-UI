@@ -3,8 +3,9 @@
 require 'rails_helper'
 
 describe 'ChargesController - GET #review_payment', type: :request do
-  subject { get review_payment_charges_path }
+  subject { get review_payment_charges_path, params: params }
 
+  let(:params) { nil }
   let(:transaction_id) { SecureRandom.uuid }
   let(:vrn) { 'CU57ABC' }
   let(:country) { 'UK' }
@@ -88,12 +89,28 @@ describe 'ChargesController - GET #review_payment', type: :request do
 
       context 'when last visited page was select second weekly date page' do
         before do
-          add_weekly_selection_dates(second_week_start_date: '2020-05-01')
+          add_to_session(second_week_start_date: '2020-05-01')
           subject
         end
 
         it 'assigns return_path variable' do
           expect(assigns(:return_path)).to eq(select_second_weekly_date_dates_path)
+        end
+      end
+
+      context 'when cancel_second_week params is true' do
+        let(:params) { { cancel_second_week: 'true' } }
+
+        before { add_to_session({ first_week_start_date: '2020-05-01' }) }
+
+        it 'sets second_week_selected in the session' do
+          subject
+          expect(session[:second_week_selected]).to be_falsey
+        end
+
+        it 'calls SessionManipulation::CalculateTotalCharge' do
+          expect(SessionManipulation::CalculateTotalCharge).to receive(:call)
+          subject
         end
       end
     end

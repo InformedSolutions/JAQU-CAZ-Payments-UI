@@ -13,16 +13,15 @@ class BaseApi
     'X-Correlation-ID' => -> { SecureRandom.uuid }
   )
 
-  ##
   # Class representing 500 HTTP response code (Internal Server Error) returned by API
   class Error500Exception < ApiException; end
-  ##
+
   # Class representing 422 HTTP response code (Unprocessable Entity) returned by API
   class Error422Exception < ApiException; end
-  ##
+
   # Class representing 404 HTTP response code (Not Found) returned by API
   class Error404Exception < ApiException; end
-  ##
+
   # Class representing 400 HTTP response code (Bad Request) returned by API
   class Error400Exception < ApiException; end
 
