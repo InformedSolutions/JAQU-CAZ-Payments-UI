@@ -12,7 +12,7 @@ class BaseService
   # Accepts all arguments and passes them to the service initializer
   #
   def self.call(**args)
-    new(args).call
+    new(**args).call
   end
 
   ##
