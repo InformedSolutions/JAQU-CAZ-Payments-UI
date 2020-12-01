@@ -175,7 +175,7 @@ Given('I am on the pick weekly dates page with no passes available to buy') do
 end
 
 And('The LA inputs should not be filled') do
-  expect(find('input#vrn').value).to be_nil
+  expect(find('input#vrn').value.blank?).to eq(true)
   expect(find('input#registration-country-1')).not_to be_checked
   expect(find('input#registration-country-2')).not_to be_checked
 end

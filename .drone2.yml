@@ -194,7 +194,7 @@ steps:
         - push
 
   - name: sonar scan
-    image: aosapps/drone-sonar-plugin
+    image: aosapps/drone-sonar-plugin:1.0
     environment:
       SONAR_HOST:
         from_secret: jaqu_lower_sonar_host
