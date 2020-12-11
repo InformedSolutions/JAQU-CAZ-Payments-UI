@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'VehiclesController - GET #exempt', type: :request do
+describe 'VehiclesController - GET #exempt', type: :request do
   subject { get exempt_vehicles_path }
 
   context 'with VRN in session' do

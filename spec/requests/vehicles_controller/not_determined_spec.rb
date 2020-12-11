@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'VehiclesController - GET #not_determined', type: :request do
+describe 'VehiclesController - GET #not_determined', type: :request do
   subject { get not_determined_vehicles_path }
 
   before do

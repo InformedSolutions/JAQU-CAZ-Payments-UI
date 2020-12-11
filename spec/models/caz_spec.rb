@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Caz, type: :model do
+describe Caz, type: :model do
   subject(:caz) { described_class.new(data) }
 
   let(:data) do

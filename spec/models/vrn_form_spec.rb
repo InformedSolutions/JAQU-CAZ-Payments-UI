@@ -9,6 +9,47 @@ describe VrnForm, type: :model do
   let(:vrn) { 'CU57ABC' }
   let(:country) { 'UK' }
 
+  describe '.submit' do
+    subject { form.submit }
+
+    context 'when country is UK' do
+      it 'returns a proper value' do
+        expect(subject).to eq '/vehicles/details'
+      end
+    end
+
+    context 'when country is non-UK' do
+      let(:country) { 'Non-UK' }
+
+      before { mock_vehicle_details }
+
+      context 'and vrn is UK format' do
+        it 'returns a proper value' do
+          expect(subject).to eq '/vehicles/uk_registered_details'
+        end
+
+        context 'but not registered in DVLA' do
+          before do
+            allow(ComplianceCheckerApi).to receive(:vehicle_details)
+              .and_raise(BaseApi::Error404Exception.new(404, '', {}))
+          end
+
+          it 'returns a proper value' do
+            expect(subject).to eq '/non_dvla_vehicles'
+          end
+        end
+      end
+
+      context 'and vrn is not UK format' do
+        let(:vrn) { 'LU83363' }
+
+        it 'returns a proper value' do
+          expect(subject).to eq '/non_dvla_vehicles'
+        end
+      end
+    end
+  end
+
   context 'with proper VRN' do
     it { is_expected.to be_valid }
 

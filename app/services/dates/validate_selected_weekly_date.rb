@@ -35,12 +35,13 @@ module Dates
     # Sets correct error message
     # Returns string
     def error
+      weekly_scope = 'dates.weekly'
       if !@start_date
-        I18n.t('empty', scope: 'dates.weekly')
+        I18n.t('empty', scope: weekly_scope)
       elsif already_selected?
-        I18n.t('already_selected', scope: 'dates.weekly')
+        I18n.t('already_selected', scope: weekly_scope)
       else
-        I18n.t('not_available', scope: 'dates.weekly')
+        I18n.t('not_available', scope: weekly_scope)
       end
     end
 

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'PaymentsController - GET #index', type: :request do
+describe 'PaymentsController - GET #index', type: :request do
   subject { get payments_path }
 
   let(:payment_id) { 'XYZ123ABC' }

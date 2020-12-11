@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe SessionManipulation::AddVrn do
-  subject(:service) do
+describe SessionManipulation::AddVrn do
+  subject do
     described_class.call(session: session, vrn: vrn, country: country)
   end
 
@@ -12,12 +12,12 @@ RSpec.describe SessionManipulation::AddVrn do
   let(:country) { 'UK' }
 
   it 'sets VRN' do
-    service
+    subject
     expect(session[:vehicle_details]['vrn']).to eq(vrn)
   end
 
   it 'sets country' do
-    service
+    subject
     expect(session[:vehicle_details]['country']).to eq(country)
   end
 
@@ -25,7 +25,7 @@ RSpec.describe SessionManipulation::AddVrn do
     let(:session) { { vehicle_details: { 'payment_id' => SecureRandom.uuid } } }
 
     it 'clears other keys' do
-      service
+      subject
       expect(session[:vehicle_details].keys).to contain_exactly('vrn', 'country')
     end
   end

@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe Dates::CheckPaidWeekly do
-  subject(:service) { described_class.call(vrn: vrn, zone_id: zone_id, date: date) }
+describe Dates::CheckPaidWeekly do
+  subject { described_class.call(vrn: vrn, zone_id: zone_id, date: date) }
 
   let(:paid_dates) do
     (1..3).map { |i| (Date.current + i.day).strftime('%Y-%m-%d') }
@@ -27,20 +27,20 @@ RSpec.describe Dates::CheckPaidWeekly do
         start_date: date,
         end_date: (Date.current + 6.days).strftime('%Y-%m-%d')
       )
-    service
+    subject
   end
 
   context 'when no payments were made' do
     let(:paid_dates) { [] }
 
     it 'returns true' do
-      expect(service).to be_truthy
+      expect(subject).to be_truthy
     end
   end
 
   context 'when some payments were made' do
     it 'returns false' do
-      expect(service).to be_falsey
+      expect(subject).to be_falsey
     end
   end
 end

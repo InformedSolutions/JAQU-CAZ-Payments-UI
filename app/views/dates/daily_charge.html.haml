@@ -45,17 +45,11 @@
                                                checked: session.dig(:vehicle_details, 'confirm_exempt'),
                                                id: 'confirm-exempt'}
                 %label.govuk-label.govuk-checkboxes__label{for: 'confirm-exempt'}
-                  I confirm I am not 
-                  = link_to("exempt",
-                                @compliance_details.global_exemption_guidance_url,
-                                id: 'exemption-guidance-link')
-                  from paying the
-                  = @compliance_details.zone_name
-                  Clean Air Zone charge.
+                  I confirm I do not have an exemption from the #{@compliance_details.zone_name} Clean Air Zone charge.
                   %br
                   = precede '(' do
                     = succeed ').' do
-                      = link_to("Find out who is exempt from paying the charge in #{@compliance_details.zone_name}",
+                      = link_to("Find out who can apply for an exemption in #{@compliance_details.zone_name}",
                                 @compliance_details.exemption_or_discount_url,
                                 id: 'exemption-link')
         = submit_tag 'Continue', class: 'govuk-button', 'data-module': 'govuk-button'

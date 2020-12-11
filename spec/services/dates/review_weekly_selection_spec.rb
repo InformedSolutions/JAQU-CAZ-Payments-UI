@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe Dates::ReviewWeeklySelection do
-  subject(:service) do
+describe Dates::ReviewWeeklySelection do
+  subject do
     described_class.new(
       vrn: 'CU123AB',
       zone_id: SecureRandom.uuid,
@@ -21,12 +21,12 @@ RSpec.describe Dates::ReviewWeeklySelection do
 
   describe 'when second week date is in session' do
     it '.second_week_available? returns false' do
-      expect(service.second_week_available?).to eq(false)
+      expect(subject.second_week_available?).to eq(false)
     end
 
     it '.format_week_selection formats the dates correctly' do
       formatted_dates = [['01/05/2020', '07/05/2020'], ['08/05/2020', '14/05/2020']]
-      expect(service.format_week_selection).to eq(formatted_dates)
+      expect(subject.format_week_selection).to eq(formatted_dates)
     end
   end
 
@@ -34,12 +34,12 @@ RSpec.describe Dates::ReviewWeeklySelection do
     let(:session) { { first_week_start_date: '2020-05-01' } }
 
     it '.second_week_available? returns true' do
-      expect(service.second_week_available?).to eq(true)
+      expect(subject.second_week_available?).to eq(true)
     end
 
     it '.format_week_selection formats the dates correctly' do
       formatted_dates = [['01/05/2020', '07/05/2020']]
-      expect(service.format_week_selection).to eq(formatted_dates)
+      expect(subject.format_week_selection).to eq(formatted_dates)
     end
   end
 end

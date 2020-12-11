@@ -19,8 +19,5 @@ Style/MixinUsage:
   Exclude:
     - 'features/step_definitions/*.rb'
 
-Style/Documentation:
-  Enabled: false
-
 Lint/MissingSuper:
    Enabled: false

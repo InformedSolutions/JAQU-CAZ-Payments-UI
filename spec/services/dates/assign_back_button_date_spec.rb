@@ -2,10 +2,10 @@
 
 require 'rails_helper'
 
-RSpec.describe Dates::AssignBackButtonDate do
+describe Dates::AssignBackButtonDate do
   include DatesHelper
 
-  subject(:service) { described_class.call(session: session, second_week_selected: second_week_selected) }
+  subject { described_class.call(session: session, second_week_selected: second_week_selected) }
 
   let(:session) do
     {
@@ -27,7 +27,7 @@ RSpec.describe Dates::AssignBackButtonDate do
   let(:second_week_selected) { false }
 
   context 'when back button takes the user to first week' do
-    before { service }
+    before { subject }
 
     it 'sets correct back button date' do
       expect(session[:first_week_back_button]).to eq('2020-05-01')
@@ -46,7 +46,7 @@ RSpec.describe Dates::AssignBackButtonDate do
     let(:second_week_selected) { true }
     let(:second_week_start_date) { '2020-05-08' }
 
-    before { service }
+    before { subject }
 
     it 'sets correct back button date' do
       expect(session[:second_week_back_button]).to eq('2020-05-08')
@@ -66,7 +66,7 @@ RSpec.describe Dates::AssignBackButtonDate do
     let(:first_week_back_button) { '2020-05-01' }
     let(:second_week_back_button) { '2020-05-08' }
 
-    before { service }
+    before { subject }
 
     it 'clears both dates' do
       expect(session[:first_week_back_button]).to eq(nil)
