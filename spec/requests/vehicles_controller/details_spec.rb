@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'VehiclesController - GET #details', type: :request do
+describe 'VehiclesController - GET #details', type: :request do
   subject { get details_vehicles_path }
 
   let(:transaction_id) { SecureRandom.uuid }

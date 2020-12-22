@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe SessionManipulation::ClearSessionDetails do
-  subject(:service) { described_class.call(session: session, key: 8) }
+describe SessionManipulation::ClearSessionDetails do
+  subject { described_class.call(session: session, key: 8) }
 
   let(:session) { { vehicle_details: details } }
   let(:details) do
@@ -34,7 +34,7 @@ RSpec.describe SessionManipulation::ClearSessionDetails do
   end
 
   it 'clears details from steps above vehicle details' do
-    service
+    subject
     expect(session[:vehicle_details].keys).to contain_exactly(
       'vrn',
       'country',

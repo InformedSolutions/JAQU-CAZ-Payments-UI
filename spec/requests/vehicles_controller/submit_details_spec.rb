@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'VehiclesController - POST #submit_details', type: :request do
+describe 'VehiclesController - POST #submit_details', type: :request do
   subject do
     post enter_details_vehicles_path, params: { vrn: vrn, 'registration-country': country }
   end

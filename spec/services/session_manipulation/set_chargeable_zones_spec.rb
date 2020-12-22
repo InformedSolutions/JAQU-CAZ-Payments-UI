@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe SessionManipulation::SetChargeableZones do
-  subject(:service) do
+describe SessionManipulation::SetChargeableZones do
+  subject do
     described_class.call(session: session, chargeable_zones: zones_count)
   end
 
@@ -17,7 +17,7 @@ RSpec.describe SessionManipulation::SetChargeableZones do
   let(:zones_count) { 2 }
 
   it 'sets chargeable_zones' do
-    service
+    subject
     expect(session[:vehicle_details]['chargeable_zones']).to eq(zones_count)
   end
 
@@ -33,7 +33,7 @@ RSpec.describe SessionManipulation::SetChargeableZones do
     end
 
     it 'clears keys from next steps' do
-      service
+      subject
       expect(session[:vehicle_details].keys)
         .to contain_exactly('vrn', 'country', 'unrecognised', 'type', 'chargeable_zones')
     end

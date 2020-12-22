@@ -155,11 +155,11 @@ end
 
 # Mock implementation for Dates::ValidateSelectedWeeklyDate.add_dates_to_session
 def mock_add_dates_to_session(second_week_selected)
-  if !second_week_selected
-    add_to_session(first_week_start_date: "#{Time.current.year}-#{Time.current.month}-#{Time.current.day}")
-  else
+  if second_week_selected
     future_date = Time.current + 9.days
     add_to_session(second_week_start_date: "#{future_date.year}-#{future_date.month}-#{future_date.day}")
+  else
+    add_to_session(first_week_start_date: "#{Time.current.year}-#{Time.current.month}-#{Time.current.day}")
   end
 end
 

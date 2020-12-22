@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'VehiclesController - GET #compliant', type: :request do
+describe 'VehiclesController - GET #compliant', type: :request do
   subject { get compliant_vehicles_path }
 
   before { add_vrn_to_session }

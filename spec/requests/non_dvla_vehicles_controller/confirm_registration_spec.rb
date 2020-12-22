@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'NonDvlaVehiclesController - POST #confirm_registration', type: :request do
+describe 'NonDvlaVehiclesController - POST #confirm_registration', type: :request do
   subject do
     post confirm_registration_non_dvla_vehicles_path, params: { 'confirm-registration': confirm }
   end

@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe SessionManipulation::SetConfirmRegistration do
-  subject(:service) { described_class.call(session: session) }
+describe SessionManipulation::SetConfirmRegistration do
+  subject { described_class.call(session: session) }
 
   let(:session) { { vehicle_details: details } }
   let(:details) { { 'vrn' => vrn, 'country' => country } }
@@ -11,7 +11,7 @@ RSpec.describe SessionManipulation::SetConfirmRegistration do
   let(:country) { 'UK' }
 
   it 'sets confirm registration' do
-    service
+    subject
     expect(session[:vehicle_details]['confirm_registration']).to be_truthy
   end
 
@@ -27,7 +27,7 @@ RSpec.describe SessionManipulation::SetConfirmRegistration do
     end
 
     it 'clears keys from next steps' do
-      service
+      subject
       expect(session[:vehicle_details].keys)
         .to contain_exactly('vrn', 'country', 'confirm_registration')
     end

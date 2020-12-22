@@ -2,14 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe 'PaymentsApi.create_payment' do
-  subject(:call) do
-    PaymentsApi.create_payment(
-      zone_id: zone_id,
-      return_url: return_url,
-      transactions: transactions
-    )
-  end
+describe 'PaymentsApi.create_payment' do
+  subject { PaymentsApi.create_payment(zone_id: zone_id, return_url: return_url, transactions: transactions) }
 
   let(:vrn) { 'CU57ABC' }
   let(:charge) { 80 }
@@ -43,11 +37,11 @@ RSpec.describe 'PaymentsApi.create_payment' do
     end
 
     it 'returns proper fields' do
-      expect(call.keys).to contain_exactly('paymentId', 'nextUrl')
+      expect(subject.keys).to contain_exactly('paymentId', 'nextUrl')
     end
 
     it 'calls API with right params' do
-      expect(call)
+      expect(subject)
         .to have_requested(:post, /payments/)
         .with(body: {
                 'transactions' => transactions,
@@ -67,7 +61,24 @@ RSpec.describe 'PaymentsApi.create_payment' do
     end
 
     it 'raises Error500Exception' do
-      expect { call }.to raise_exception(BaseApi::Error500Exception)
+      expect { subject }.to raise_exception(BaseApi::Error500Exception)
+    end
+  end
+
+  context 'when body is an invalid JSON format' do
+    before { stub_request(:post, /payments/).to_return(status: 200, body: body) }
+
+    let(:body) { 'invalid JSON format' }
+
+    it 'raises Error500Exception' do
+      expect { subject }.to raise_exception(
+        an_instance_of(BaseApi::Error500Exception)
+          .and(having_attributes(
+                 status: 500,
+                 status_message: 'Response body parsing failed',
+                 body: body
+               ))
+      )
     end
   end
 end

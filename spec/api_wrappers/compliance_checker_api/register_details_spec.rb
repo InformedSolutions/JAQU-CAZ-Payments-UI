@@ -2,17 +2,16 @@
 
 require 'rails_helper'
 
-RSpec.describe 'ComplianceCheckerApi.register_details' do
+describe 'ComplianceCheckerApi.register_details' do
   subject { ComplianceCheckerApi.register_details(vrn) }
 
   let(:vrn) { 'CAS310' }
 
   context 'when call returns 200' do
     before do
-      register_details = file_fixture('register_details_response.json').read
       stub_request(:get, /register-details/).to_return(
         status: 200,
-        body: register_details
+        body: file_fixture('register_details_response.json').read
       )
     end
 

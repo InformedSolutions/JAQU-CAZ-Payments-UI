@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'ChargesController - POST #submit_local_authority', type: :request do
+describe 'ChargesController - POST #submit_local_authority', type: :request do
   subject do
     post submit_local_authority_charges_path, params: { 'local-authority': zone_id }
   end

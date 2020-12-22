@@ -2,7 +2,6 @@
 
 ##
 # This is an abstract class used as a base for all service classes.
-
 class BaseService
   ##
   # Creates an instance of a service and calls its +call+ method passing all the arguments.

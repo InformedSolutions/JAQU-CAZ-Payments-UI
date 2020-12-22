@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe RegisterDetails, type: :model do
+describe RegisterDetails, type: :model do
   subject { described_class.new(vrn) }
 
   let(:vrn) { 'CAS310' }

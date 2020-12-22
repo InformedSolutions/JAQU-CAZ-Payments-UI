@@ -16,11 +16,8 @@
               Vehicle details
         %tbody.govuk-table__body
           %tr.govuk-table__row
-            %td.govuk-table__cell{scope: 'row'} Vehicle registration
+            %td.govuk-table__cell{scope: 'row'} Number plate
             %td.govuk-table__header{id: 'registration-number'}= @vehicle_details.registration_number
-          %tr.govuk-table__row
-            %td.govuk-table__cell{scope: 'row'} Vehicle type approval
-            %td.govuk-table__header{id: 'type-approval'}= @vehicle_details.type_approval
           %tr.govuk-table__row
             %td.govuk-table__cell{scope: 'row'} CAZ vehicle type
             %td.govuk-table__header{id: 'type'}= @vehicle_details.type

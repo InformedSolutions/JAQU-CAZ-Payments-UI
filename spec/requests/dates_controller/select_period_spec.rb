@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'DatesController - GET #select_period', type: :request do
+describe 'DatesController - GET #select_period', type: :request do
   subject { get select_period_dates_path }
 
   let(:transaction_id) { SecureRandom.uuid }
