@@ -204,7 +204,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   end
 
   ##
-  # Renders a static page for users which VRN is recognised as compliant (no charge in all LAs)
+  # Renders a static page for users which VRN is recognised as not determined
   #
   # ==== Path
   #
@@ -218,6 +218,28 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   #
   def not_determined
     @types = VehicleTypes.call
+  end
+
+  ##
+  # Renders a static page for users which VRN is recognised as compliant (no charge in all LAs)
+  #
+  # ==== Path
+  #
+  #    GET /vehicles/compliant
+  #
+  def compliant
+    # Renders a static page
+  end
+
+  ##
+  # Renders a static page for users which VRN is recognised as exempt
+  #
+  # ==== Path
+  #
+  #    GET /vehicles/exempt
+  #
+  def exempt
+    render :compliant
   end
 
   ##
