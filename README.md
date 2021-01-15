@@ -1,5 +1,7 @@
 # JAQU CAZ - Citizens Charge Payment
 
+[![Build Status](http://drone-1587293244.eu-west-2.elb.amazonaws.com/api/badges/InformedSolutions/JAQU-CAZ-Payments-UI/status.svg?ref=refs/heads/develop)](http://drone-1587293244.eu-west-2.elb.amazonaws.com/InformedSolutions/JAQU-CAZ-Payments-UI)
+
 ### Generating documentation
 
 To generate code documentation download the project and install rails dependencies.
