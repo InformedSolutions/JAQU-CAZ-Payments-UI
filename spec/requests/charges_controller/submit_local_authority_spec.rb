@@ -12,6 +12,7 @@ describe 'ChargesController - POST #submit_local_authority', type: :request do
   let(:zone_name) { 'Leeds' }
   let(:charge) { 50 }
   let(:tariff) { 'BCC01-private_car' }
+  let(:phgv_discount_available) { true }
 
   context 'with VRN set' do
     before { add_transaction_id_to_session(transaction_id) }
@@ -20,7 +21,8 @@ describe 'ChargesController - POST #submit_local_authority', type: :request do
       details = instance_double(ComplianceDetails,
                                 zone_name: zone_name,
                                 charge: charge,
-                                tariff_code: tariff)
+                                tariff_code: tariff,
+                                phgv_discount_available?: phgv_discount_available)
       allow(ComplianceDetails).to receive(:new).and_return(details)
     end
 
@@ -61,6 +63,39 @@ describe 'ChargesController - POST #submit_local_authority', type: :request do
         it 'sets weekly_possible to true' do
           subject
           expect(session[:vehicle_details]['weekly_possible']).to be_truthy
+        end
+      end
+
+      context 'when vehicle has phgv_discount_available true in Bath' do
+        let(:zone_name) { 'Bath' }
+
+        it 'returns redirect to ChargesController#discount_available' do
+          expect(subject).to redirect_to(discount_available_charges_path(id: transaction_id))
+        end
+      end
+
+      context 'when vehicle has phgv_discount_available false in Bath' do
+        let(:phgv_discount_available) { false }
+
+        it 'returns redirect to ChargesController#discount_available' do
+          expect(subject).to redirect_to(daily_charge_dates_path(id: transaction_id))
+        end
+      end
+
+      context 'when vehicle has phgv_discount_available true but zone Birmingham' do
+        let(:zone_name) { 'Birmingham' }
+
+        it 'returns redirect to ChargesController#discount_available' do
+          expect(subject).to redirect_to(daily_charge_dates_path(id: transaction_id))
+        end
+      end
+
+      context 'when vehicle has phgv_discount_available false and zone Birmingham' do
+        let(:zone_name) { 'Birmingham' }
+        let(:phgv_discount_available) { false }
+
+        it 'returns redirect to ChargesController#discount_available' do
+          expect(subject).to redirect_to(daily_charge_dates_path(id: transaction_id))
         end
       end
     end

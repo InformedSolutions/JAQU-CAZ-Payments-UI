@@ -34,6 +34,7 @@ Rails.application.routes.draw do
       get :local_authority
       post :submit_local_authority
       get :review_payment
+      get :discount_available
     end
   end
 

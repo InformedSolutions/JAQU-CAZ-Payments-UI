@@ -66,6 +66,24 @@ class ChargesController < ApplicationController # rubocop:disable Metrics/ClassL
   end
 
   ##
+  # Renders information about available discount in Bath CAZ.
+  #
+  # ==== Path
+  #    GET /charges/discount_available
+  #
+  # ==== Params
+  # * +vrn+ - vehicle registration number, required in the session
+  # * +local-authority+ - selected local authority, required in session
+  #
+  # ==== Validations# ==== Validations
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  # * +local-authority+ - lack of LA redirects back to {picking LA}[rdoc-ref:ChargesController.local_authority]
+  #
+  def discount_available
+    @next_url = determinate_next_page_by_period
+  end
+
+  ##
   # Renders a review payment page.
   #
   # ==== Path
@@ -133,12 +151,24 @@ class ChargesController < ApplicationController # rubocop:disable Metrics/ClassL
   end
 
   # Returns redirect to selecting period if Leeds discounted charge is available.
+  # Else, redirect to disbount page if Bath phgv_discount is available
   # Else, returns redirect to daily charge
   def determinate_next_page
-    if vehicle_details('weekly_possible')
-      redirect_to select_period_dates_path(id: transaction_id)
+    @compliance_details = ComplianceDetails.new(session[:vehicle_details])
+    if la_name == 'Bath' && @compliance_details.phgv_discount_available?
+      redirect_to discount_available_charges_path(id: transaction_id)
     else
-      redirect_to daily_charge_dates_path(id: transaction_id)
+      redirect_to determinate_next_page_by_period
+    end
+  end
+
+  # Returns url to electing period if Leeds discounted charge is available.
+  # Else, returns url daily charge
+  def determinate_next_page_by_period
+    if vehicle_details('weekly_possible')
+      select_period_dates_path(id: transaction_id)
+    else
+      daily_charge_dates_path(id: transaction_id)
     end
   end
 

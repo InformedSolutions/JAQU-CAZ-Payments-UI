@@ -38,6 +38,7 @@ describe ComplianceDetails, type: :model do
       }
     ]
   end
+  let(:phgv_discount_available) { true }
   let(:name) { 'Leeds' }
   let(:url) { 'www.wp.pl' }
 
@@ -60,7 +61,8 @@ describe ComplianceDetails, type: :model do
       allow(ComplianceCheckerApi)
         .to receive(:vehicle_compliance)
         .with(vrn, [zone_id])
-        .and_return('complianceOutcomes' => outcomes)
+        .and_return('complianceOutcomes' => outcomes,
+                    'phgvDiscountAvailable' => phgv_discount_available)
     end
 
     it 'calls :vehicle_compliance with right params' do
@@ -104,6 +106,22 @@ describe ComplianceDetails, type: :model do
 
           it 'returns compliance_url' do
             expect(details.dynamic_compliance_url).to eq(details.compliance_url)
+          end
+        end
+      end
+
+      describe 'phgv_discount_available?' do
+        context 'when phgvDiscountAvailable is true in compliance endpoint' do
+          it 'returns true' do
+            expect(details.phgv_discount_available?).to be_truthy
+          end
+        end
+
+        context 'when phgvDiscountAvailable is false in compliance endpoint' do
+          let(:phgv_discount_available) { false }
+
+          it 'returns true' do
+            expect(details.phgv_discount_available?).to be_falsy
           end
         end
       end
@@ -205,5 +223,21 @@ describe ComplianceDetails, type: :model do
     end
 
     it_behaves_like 'compliance details fields'
+
+    describe 'phgv_discount_available?' do
+      context 'when phgvDiscountAvailable is true in compliance endpoint' do
+        it 'returns false' do
+          expect(details.phgv_discount_available?).to be_falsy
+        end
+      end
+
+      context 'when phgvDiscountAvailable is false in compliance endpoint' do
+        let(:phgv_discount_available) { false }
+
+        it 'returns true' do
+          expect(details.phgv_discount_available?).to be_falsy
+        end
+      end
+    end
   end
 end
