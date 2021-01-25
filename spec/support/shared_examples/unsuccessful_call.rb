@@ -3,7 +3,7 @@
 RSpec.shared_examples 'an unsuccessful API call' do
   it 'returns 503 error code' do
     subject
-    expect(response).to have_http_status(503)
+    expect(response).to have_http_status(:service_unavailable)
   end
 
   it 'renders error page' do

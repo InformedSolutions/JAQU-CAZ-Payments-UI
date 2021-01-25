@@ -14,7 +14,7 @@ RSpec.shared_examples 'a chargeable zones service' do |size = 2|
   end
 
   it 'calls ComplianceCheckerApi.clean_air_zones' do
-    expect(ComplianceCheckerApi).to receive(:clean_air_zones)
     service_call
+    expect(ComplianceCheckerApi).to have_received(:clean_air_zones)
   end
 end

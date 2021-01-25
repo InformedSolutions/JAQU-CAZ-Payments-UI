@@ -49,7 +49,7 @@ describe PaymentStatus, type: :model do
   describe '.success?' do
     context 'when status is success' do
       it 'returns true' do
-        expect(subject.success?).to be_truthy
+        expect(subject).to be_success
       end
     end
 
@@ -57,7 +57,7 @@ describe PaymentStatus, type: :model do
       let(:status) { 'failure' }
 
       it 'returns false' do
-        expect(subject.success?).to be_falsey
+        expect(subject).not_to be_success
       end
     end
   end

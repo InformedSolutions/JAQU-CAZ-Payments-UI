@@ -29,7 +29,7 @@ describe SessionManipulation::SetConfirmWeeklyChargeToday do
 
     it 'clears keys from next steps' do
       subject
-      expect(session[:vehicle_details].keys.exclude?('payment_id')).to be_truthy
+      expect(session[:vehicle_details].keys).to be_exclude('payment_id')
     end
   end
 end

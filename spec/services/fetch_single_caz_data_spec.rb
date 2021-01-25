@@ -15,8 +15,8 @@ describe FetchSingleCazData do
     end
 
     it 'calls ComplianceCheckerApi.clean_air_zones' do
-      expect(ComplianceCheckerApi).to receive(:clean_air_zones)
       subject
+      expect(ComplianceCheckerApi).to have_received(:clean_air_zones)
     end
   end
 end

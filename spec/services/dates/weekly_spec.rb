@@ -62,15 +62,14 @@ describe Dates::Weekly do
       end
 
       it 'calls PaymentsApi.paid_payments_dates with right params' do
-        expect(PaymentsApi)
-          .to receive(:paid_payments_dates)
+        subject
+        expect(PaymentsApi).to have_received(:paid_payments_dates)
           .with(
             vrn: vrn,
             zone_id: zone_id,
             start_date: (Date.current - 6.days).strftime(value_format),
             end_date: (Date.current + 12.days).strftime(value_format)
           )
-        subject
       end
 
       describe 'date object' do
@@ -145,9 +144,11 @@ describe Dates::Weekly do
 
   context 'when second week is being selected' do
     let(:second_week_selected) { true }
-    first_week_start = Time.zone.now.strftime(Dates::Base::VALUE_DATE_FORMAT)
-    second_week_start = 8.days.from_now.strftime(Dates::Base::VALUE_DATE_FORMAT)
-    let(:week_start_days) { [first_week_start, second_week_start] }
+    let(:week_start_days) do
+      first_week_start = Time.zone.now.strftime(Dates::Base::VALUE_DATE_FORMAT)
+      second_week_start = 8.days.from_now.strftime(Dates::Base::VALUE_DATE_FORMAT)
+      [first_week_start, second_week_start]
+    end
 
     describe '.chargeable_dates' do
       it 'returns 13 dates' do
@@ -156,15 +157,16 @@ describe Dates::Weekly do
 
       it 'disables whole payment window' do
         disabled_dates = service.chargeable_dates.pluck(:disabled).select(&:present?)
-
         expect(disabled_dates.count).to eq(13)
       end
 
-      it 'sets correct dates' do
+      it 'sets correct first value' do
         first_day = 6.days.ago.strftime(Dates::Base::VALUE_DATE_FORMAT)
-        last_day = 6.days.from_now.strftime(Dates::Base::VALUE_DATE_FORMAT)
-
         expect(service.chargeable_dates.first[:value]).to eq(first_day)
+      end
+
+      it 'sets correct last value' do
+        last_day = 6.days.from_now.strftime(Dates::Base::VALUE_DATE_FORMAT)
         expect(service.chargeable_dates.last[:value]).to eq(last_day)
       end
     end

@@ -27,7 +27,7 @@ describe SessionManipulation::SetPaymentDetails do
     expect(session[:vehicle_details]['payment_reference']).to eq(payment_reference)
   end
 
-  it 'sets email' do
+  it 'sets external_id' do
     subject
     expect(session[:vehicle_details]['external_id']).to eq(external_id)
   end

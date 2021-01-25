@@ -15,8 +15,8 @@ describe 'ChargesController - POST #submit_local_authority', type: :request do
   let(:phgv_discount_available) { true }
 
   context 'with VRN set' do
-    before { add_transaction_id_to_session(transaction_id) }
     before do
+      add_transaction_id_to_session(transaction_id)
       add_vrn_to_session
       details = instance_double(ComplianceDetails,
                                 zone_name: zone_name,
