@@ -39,11 +39,9 @@ describe PaymentDetails, type: :model do
 
   describe '.compliance_details' do
     it 'calls ComplianceDetails model' do
-      allow(ComplianceDetails)
-        .to receive(:new)
-        .and_return(instance_double(ComplianceDetails))
-      expect(ComplianceDetails).to receive(:new).with(session_details)
+      allow(ComplianceDetails).to receive(:new).and_return(instance_double(ComplianceDetails))
       details.compliance_details
+      expect(ComplianceDetails).to have_received(:new).with(session_details)
     end
 
     it 'returns ComplianceDetails instance' do

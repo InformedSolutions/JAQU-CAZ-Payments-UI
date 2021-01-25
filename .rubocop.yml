@@ -1,4 +1,7 @@
-require: rubocop-rails
+require:
+  - rubocop-rails
+  - rubocop-rspec
+
 inherit_from: ./lib/rubocop/blacklist.yml
 
 AllCops:
@@ -10,7 +13,7 @@ Layout/LineLength:
   IgnoredPatterns: ['(\A|\s)#']
 
 Metrics/BlockLength:
-  ExcludedMethods: ['describe', 'context']
+  IgnoredMethods: ['describe', 'context']
   Exclude:
     - 'config/routes.rb'
     - 'config/environments/*.rb'
@@ -21,3 +24,25 @@ Style/MixinUsage:
 
 Lint/MissingSuper:
    Enabled: false
+
+# rubocop-rspec gem excludes
+RSpec/NamedSubject:
+   Enabled: false
+
+RSpec/ContextWording:
+   Enabled: false
+
+RSpec/NestedGroups:
+  Max: 6
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+RSpec/DescribeClass:
+  Exclude:
+    - 'spec/api_wrappers/compliance_checker_api/*.rb'
+    - 'spec/api_wrappers/payments_api/*.rb'
+    - 'spec/requests/application_controller/*.rb'
+
+RSpec/ExampleLength:
+  Enabled: false

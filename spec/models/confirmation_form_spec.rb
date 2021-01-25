@@ -28,11 +28,11 @@ describe ConfirmationForm, type: :model do
   context 'when confirmation is empty' do
     let(:confirmation) { '' }
 
-    it { is_expected.not_to be_valid }
-
     before do
       form.valid?
     end
+
+    it { is_expected.not_to be_valid }
 
     it 'has a proper error message' do
       expect(form.errors.messages[:confirmation]).to include(

@@ -11,8 +11,10 @@ describe 'DatesController - POST #confirm_daily_charge', type: :request do
   let(:confirmation) { 'yes' }
 
   context 'with details in the session' do
-    before { add_transaction_id_to_session(transaction_id) }
-    before { add_details_to_session }
+    before do
+      add_transaction_id_to_session(transaction_id)
+      add_details_to_session
+    end
 
     context 'with checked checkbox' do
       it 'redirects to :dates' do

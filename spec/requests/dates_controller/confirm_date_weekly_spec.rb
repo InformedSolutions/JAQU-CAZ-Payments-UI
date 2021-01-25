@@ -49,10 +49,10 @@ describe 'DatesController - POST #confirm_date_weekly', type: :request do
     end
 
     it 'calls Dates::CheckPaidWeekly with right params' do
-      expect(Dates::CheckPaidWeekly).to receive(:call).with(
+      subject
+      expect(Dates::CheckPaidWeekly).to have_received(:call).with(
         vrn: vrn, zone_id: la_id, date: '2019-11-1'
       )
-      subject
     end
 
     context 'without checked dates' do
@@ -76,8 +76,8 @@ describe 'DatesController - POST #confirm_date_weekly', type: :request do
       end
 
       it 'does not call Dates::CheckPaidWeekly' do
-        expect(Dates::CheckPaidWeekly).not_to receive(:call)
         subject
+        expect(Dates::CheckPaidWeekly).not_to have_received(:call)
       end
     end
 

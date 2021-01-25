@@ -68,8 +68,11 @@ describe Dates::AssignBackButtonDate do
 
     before { subject }
 
-    it 'clears both dates' do
+    it 'clears `first_week_back_button` from session' do
       expect(session[:first_week_back_button]).to eq(nil)
+    end
+
+    it 'clears `second_week_back_button` from session' do
       expect(session[:second_week_back_button]).to eq(nil)
     end
   end
