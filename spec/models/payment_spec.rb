@@ -4,16 +4,16 @@ require 'rails_helper'
 
 describe Payment, type: :model do
   subject(:payment) do
-    Payment.new({
-                  'vrn' => vrn,
-                  'dates' => dates,
-                  'la_id' => zone_id,
-                  'daily_charge' => charge,
-                  'total_charge' => total_charge,
-                  'tariff_code' => tariff,
-                  'weekly' => weekly
-                },
-                url)
+    described_class.new({
+                          'vrn' => vrn,
+                          'dates' => dates,
+                          'la_id' => zone_id,
+                          'daily_charge' => charge,
+                          'total_charge' => total_charge,
+                          'tariff_code' => tariff,
+                          'weekly' => weekly
+                        },
+                        url)
   end
 
   let(:vrn) { 'CU57ABC' }
@@ -23,7 +23,6 @@ describe Payment, type: :model do
   let(:total_charge) { charge * dates.length }
   let(:tariff) { 'BCC01-private_car' }
   let(:weekly) { false }
-
   let(:payment_id) { SecureRandom.uuid }
   let(:url) { 'www.wp.pl' }
   let(:payment_reference) { '1056' }
@@ -80,14 +79,12 @@ describe Payment, type: :model do
       end
 
       it 'calls PaymentsApi.create_payment with proper params' do
-        expect(PaymentsApi)
-          .to receive(:create_payment)
-          .with(
-            zone_id: zone_id,
-            return_url: url,
-            transactions: expected_transactions
-          )
         payment.payment_id
+        expect(PaymentsApi).to have_received(:create_payment).with(
+          zone_id: zone_id,
+          return_url: url,
+          transactions: expected_transactions
+        )
       end
     end
 
@@ -117,14 +114,12 @@ describe Payment, type: :model do
         end
 
         it 'calls PaymentsApi.create_payment with proper params' do
-          expect(PaymentsApi)
-            .to receive(:create_payment)
-            .with(
-              zone_id: zone_id,
-              return_url: url,
-              transactions: expected_transactions
-            )
           payment.payment_id
+          expect(PaymentsApi).to have_received(:create_payment).with(
+            zone_id: zone_id,
+            return_url: url,
+            transactions: expected_transactions
+          )
         end
       end
     end
@@ -155,14 +150,12 @@ describe Payment, type: :model do
         end
 
         it 'calls PaymentsApi.create_payment with proper params' do
-          expect(PaymentsApi)
-            .to receive(:create_payment)
-            .with(
-              zone_id: zone_id,
-              return_url: url,
-              transactions: expected_transactions
-            )
           payment.payment_id
+          expect(PaymentsApi).to have_received(:create_payment).with(
+            zone_id: zone_id,
+            return_url: url,
+            transactions: expected_transactions
+          )
         end
       end
     end

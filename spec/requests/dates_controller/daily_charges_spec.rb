@@ -44,8 +44,8 @@ describe 'DatesController - GET #daily_charge', type: :request do
     end
 
     it 'call ComplianceDetails with right params' do
-      expect(ComplianceDetails)
-        .to receive(:new)
+      subject
+      expect(ComplianceDetails).to have_received(:new)
         .with(
           'vrn' => vrn,
           'country' => country,
@@ -56,7 +56,6 @@ describe 'DatesController - GET #daily_charge', type: :request do
           'weekly_charge_today' => false,
           'weekly_dates' => []
         )
-      subject
     end
 
     it 'returns a success response' do

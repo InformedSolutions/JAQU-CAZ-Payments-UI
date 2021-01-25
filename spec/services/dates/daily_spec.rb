@@ -54,15 +54,14 @@ describe Dates::Daily do
       end
 
       it 'calls PaymentsApi.paid_payments_dates with right params' do
-        expect(PaymentsApi)
-          .to receive(:paid_payments_dates)
+        subject
+        expect(PaymentsApi).to have_received(:paid_payments_dates)
           .with(
             vrn: vrn,
             zone_id: zone_id,
             start_date: six_days_ago.strftime('%Y-%m-%d'),
             end_date: (Date.current + 6.days).strftime('%Y-%m-%d')
           )
-        subject
       end
 
       describe 'date object' do
