@@ -26,10 +26,10 @@ describe 'DatesController - POST #confirm_daily_date', type: :request do
       end
 
       it 'calls Dates::CheckPaidDaily with proper params' do
-        expect(Dates::CheckPaidDaily)
-          .to receive(:call)
-          .with(vrn: vrn, zone_id: la_id, dates: params['dates'])
         subject
+        expect(Dates::CheckPaidDaily).to have_received(:call).with(
+          vrn: vrn, zone_id: la_id, dates: params['dates']
+        )
       end
 
       describe 'setting session' do

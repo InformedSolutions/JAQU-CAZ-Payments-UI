@@ -21,10 +21,8 @@ describe SessionManipulation::SetComplianceDetails do
   end
 
   it 'creates instance of ComplianceDetails with right params' do
-    expect(ComplianceDetails)
-      .to receive(:new)
-      .with(details.merge('la_id' => la_id))
     subject
+    expect(ComplianceDetails).to have_received(:new).with(details.merge('la_id' => la_id))
   end
 
   describe 'adding fields' do
@@ -34,7 +32,7 @@ describe SessionManipulation::SetComplianceDetails do
       expect(session[:vehicle_details]['la_id']).to eq(la_id)
     end
 
-    it 'sets la_id' do
+    it 'sets la_name' do
       expect(session[:vehicle_details]['la_name']).to eq(la_name)
     end
 
