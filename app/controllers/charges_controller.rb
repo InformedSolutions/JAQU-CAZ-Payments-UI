@@ -86,6 +86,7 @@ class ChargesController < ApplicationController # rubocop:disable Metrics/ClassL
     @return_path = review_payment_return_path
     @chargeable_zones = vehicle_details('chargeable_zones')
     @transaction_id = transaction_id
+
     check_second_week_availability
   end
 
@@ -162,6 +163,7 @@ class ChargesController < ApplicationController # rubocop:disable Metrics/ClassL
     return unless @weekly_period
 
     Dates::AssignBackButtonDate.call(session: session)
+
     service = Dates::ReviewWeeklySelection.new(vrn: vrn, zone_id: la_id, session: session)
     @dates = service.format_week_selection
     @second_week_available = service.second_week_available?
