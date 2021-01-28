@@ -22,7 +22,7 @@ describe 'VehiclesController - GET #incorrect_details', type: :request do
 
   context 'when vehicle is possible_fraud' do
     before do
-      add_to_session(vrn: 'CU57ABC', country: 'UK', possible_fraud: true)
+      add_vehicle_details_to_session(vrn: 'CU57ABC', country: 'UK', possible_fraud: true)
       subject
     end
 

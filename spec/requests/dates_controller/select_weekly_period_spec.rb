@@ -17,7 +17,7 @@ describe 'DatesController - GET #select_weekly_period', type: :request do
       end
 
       describe 'back button url when first week date is set' do
-        before { add_weekly_selection_dates({ first_week_start_date: '2020-05-01' }) }
+        before { add_to_session({ first_week_start_date: '2020-05-01' }) }
 
         it 'sets correct return path' do
           subject
@@ -26,7 +26,7 @@ describe 'DatesController - GET #select_weekly_period', type: :request do
       end
 
       describe 'back button url when first week date is not set' do
-        before { add_weekly_selection_dates({ first_week_start_date: nil }) }
+        before { add_to_session({ first_week_start_date: nil }) }
 
         it 'sets correct return path' do
           subject

@@ -73,6 +73,14 @@ steps:
         from_secret: browserstack_username
       BS_AUTHKEY:
         from_secret: browserstack_auth_key
+      BASEURL_CHARGE_SETTLEMENT_OAUTH: 'https://payments-userpool-dev.auth.eu-west-2.amazoncognito.com'
+      BASEURL_CHARGE_SETTLEMENT_API: 'https://dev-api.paycleanairzonecharge.co.uk'
+      CHARGE_SETTLEMENT_CLIENT_ID:
+        from_secret: charge_settlement_id
+      CHARGE_SETTLEMENT_CLIENT_SECRET:
+        from_secret: charge_settlement_secret
+      CHARGE_SETTLEMENT_COGNITO_ID:
+        from_secret: charge_settlement_cognito_id
       BASEURL_PAYMENTS: 'https://PaymentsDevUser1:CleanAir99@dev.paycleanairzonecharge.co.uk/'
       BROWSER_SET: 'basic_auth'
       BUILD: PAYMENTS-UI-${DRONE_BUILD_NUMBER}
@@ -165,7 +173,7 @@ steps:
     pull: never
     commands:
       - bundle audit check --update
-      - yarn run improved-yarn-audit --retry-on-network-failure
+      - yarn run improved-yarn-audit --exclude '1589' --retry-on-network-failure
       - brakeman --except Redirect,LinkToHref
     volumes:
       - name: docker_sock
@@ -411,7 +419,7 @@ steps:
     pull: never
     commands:
       - bundle audit check --update
-      - yarn run improved-yarn-audit --retry-on-network-failure
+      - yarn run improved-yarn-audit --exclude '1589' --retry-on-network-failure
       - brakeman --except Redirect,LinkToHref
     volumes:
       - name: docker_sock
@@ -1128,7 +1136,7 @@ steps:
     pull: never
     commands:
       - bundle audit check --update
-      - yarn run improved-yarn-audit --retry-on-network-failure
+      - yarn run improved-yarn-audit --exclude '1589' --retry-on-network-failure
       - brakeman --except Redirect,LinkToHref
     volumes:
       - name: docker_sock
@@ -1670,4 +1678,39 @@ name: payments_ruby_secret
 get:
   path: /build-tools/drone
   name: paymentsRubySecret
+
+---
+kind: secret
+name: charge_settlement_id
+get:
+  path: /build-tools/drone
+  name: chargeSettlementId
+
+---
+kind: secret
+name: charge_settlement_secret
+get:
+  path: /build-tools/drone
+  name: chargeSettlementSecret
+
+---
+kind: secret
+name: charge_settlement_cognito_id
+get:
+  path: /build-tools/drone
+  name: chargeSettlementCognitoId
+
+---
+kind: secret
+name: charge_settlement_id_St
+get:
+  path: /build-tools/drone
+  name: chargeSettlementIdSt
+
+---
+kind: secret
+name: charge_settlement_secret_St
+get:
+  path: /build-tools/drone
+  name: chargeSettlementSecretSt
   ################################################ End Secrets #########################################################
