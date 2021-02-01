@@ -23,7 +23,45 @@ describe 'ChargesController - POST #submit_local_authority', type: :request do
                                 charge: charge,
                                 tariff_code: tariff,
                                 phgv_discount_available?: phgv_discount_available)
+      unrecognised_details = instance_double(UnrecognisedComplianceDetails,
+                                             zone_name: zone_name,
+                                             charge: charge,
+                                             tariff_code: tariff)
       allow(ComplianceDetails).to receive(:new).and_return(details)
+      allow(UnrecognisedComplianceDetails).to receive(:new).and_return(unrecognised_details)
+    end
+
+    context 'with undetermined_taxi in session' do
+      before { add_undetermined_taxi_to_session }
+
+      it 'returns redirect to #daily_charge' do
+        expect(subject).to redirect_to(daily_charge_dates_path(id: transaction_id))
+      end
+
+      it 'sets la_id in the session' do
+        subject
+        expect(session.dig(:vehicle_details, 'la_id')).to eq(zone_id)
+      end
+
+      it 'sets la_name in the session' do
+        subject
+        expect(session.dig(:vehicle_details, 'la_name')).to eq(zone_name)
+      end
+
+      it 'sets daily_charge in the session' do
+        subject
+        expect(session.dig(:vehicle_details, 'daily_charge')).to eq(charge)
+      end
+
+      it 'sets tariff_code in the session' do
+        subject
+        expect(session.dig(:vehicle_details, 'tariff_code')).to eq(tariff)
+      end
+
+      it 'calls UnrecognisedComplianceDetails to fetch compliance data' do
+        subject
+        expect(UnrecognisedComplianceDetails).to have_received(:new).with(la_id: zone_id)
+      end
     end
 
     context 'with selected zone' do

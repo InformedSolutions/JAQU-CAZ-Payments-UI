@@ -5,7 +5,7 @@ require:
 inherit_from: ./lib/rubocop/blacklist.yml
 
 AllCops:
-  TargetRubyVersion: 2.7.2
+  TargetRubyVersion: 3.0.0
   NewCops: enable
 
 Layout/LineLength:
@@ -23,14 +23,14 @@ Style/MixinUsage:
     - 'features/step_definitions/*.rb'
 
 Lint/MissingSuper:
-   Enabled: false
+  Enabled: false
 
 # rubocop-rspec gem excludes
 RSpec/NamedSubject:
-   Enabled: false
+  Enabled: false
 
 RSpec/ContextWording:
-   Enabled: false
+  Enabled: false
 
 RSpec/NestedGroups:
   Max: 6
@@ -42,6 +42,7 @@ RSpec/DescribeClass:
   Exclude:
     - 'spec/api_wrappers/compliance_checker_api/*.rb'
     - 'spec/api_wrappers/payments_api/*.rb'
+    - 'spec/api_wrappers/vehicles_checker_api/*.rb'
     - 'spec/requests/application_controller/*.rb'
 
 RSpec/ExampleLength:

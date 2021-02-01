@@ -10,6 +10,7 @@ describe VehicleDetails, type: :model do
   let(:taxi_or_phv) { false }
   let(:type) { 'car' }
   let(:las) { %w[Leeds Birmingham] }
+  let(:fuel_type) { 'diesel' }
 
   let(:response) do
     {
@@ -19,14 +20,36 @@ describe VehicleDetails, type: :model do
       'make' => 'peugeot',
       'model' => '208',
       'colour' => 'grey',
-      'fuelType' => 'diesel',
+      'fuelType' => fuel_type,
       'taxiOrPhv' => taxi_or_phv,
       'licensingAuthoritiesNames' => las
     }
   end
 
+  let(:date_of_first_registration) { '2020-03' }
+  let(:euro_status) { 'EURO V' }
+
+  let(:external_details_response) do
+    {
+      'colour' => 'grey',
+      'dateOfFirstRegistration' => date_of_first_registration,
+      'euroStatus' => euro_status,
+      'fuelType' => 'diesel',
+      'make' => 'Hyundai',
+      'typeApproval' => 'M1',
+      'revenueWeight' => 3650,
+      'bodyType' => 'car',
+      'model' => 'i20',
+      'unladenWeight' => 3000,
+      'seatingCapacity' => 5,
+      'standingCapacity' => 6,
+      'taxClass' => 'SPECIAL VEHICLE'
+    }
+  end
+
   before do
     allow(ComplianceCheckerApi).to receive(:vehicle_details).with(vrn).and_return(response)
+    allow(VehiclesCheckerApi).to receive(:external_details).with(vrn).and_return(external_details_response)
   end
 
   describe '.registration_number' do
@@ -159,6 +182,57 @@ describe VehicleDetails, type: :model do
 
       it 'returns a nil' do
         expect(compliance.undetermined?).to eq(true)
+      end
+    end
+  end
+
+  describe '.undetermined_taxi?' do
+    context 'when vehicle is a taxi' do
+      let(:taxi_or_phv) { true }
+
+      context 'and it does not have a fuel type' do
+        let(:fuel_type) { nil }
+
+        it 'returns true' do
+          expect(compliance.undetermined_taxi?).to eq(true)
+        end
+      end
+
+      context 'and it does not have a vehicle type' do
+        let(:type) { nil }
+
+        it 'returns true' do
+          expect(compliance.undetermined_taxi?).to eq(true)
+        end
+      end
+
+      context 'and it does not have dateoffirstregistration and eurostatus' do
+        let(:date_of_first_registration) { nil }
+        let(:euro_status) { nil }
+
+        it 'returns true' do
+          expect(compliance.undetermined_taxi?).to eq(true)
+        end
+      end
+
+      context 'when VehiclesCheckerApi.external_details throws an error' do
+        before do
+          allow(VehiclesCheckerApi)
+            .to receive(:external_details)
+            .and_raise(BaseApi::Error404Exception.new(404, '', {}))
+        end
+
+        it 'returns true' do
+          expect(compliance.undetermined_taxi?).to eq(true)
+        end
+      end
+    end
+
+    context 'whet vehicle is not a taxi' do
+      let(:taxi_or_phv) { false }
+
+      it 'returns false' do
+        expect(compliance.undetermined_taxi?).to eq(false)
       end
     end
   end

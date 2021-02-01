@@ -15,7 +15,7 @@ rails rerdoc        # Rebuild RDoc HTML files
 To run the documentation open `doc/app/index.html` in browser.
 
 ### Dependencies
-* Ruby 2.7
+* Ruby 3
 * Ruby on Rails 6
 * [GOV.UK Frontend](https://github.com/alphagov/govuk-frontend)
 * Other packages listed in Gemfile and package.json files.

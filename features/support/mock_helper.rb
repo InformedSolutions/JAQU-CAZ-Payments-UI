@@ -12,25 +12,42 @@ module MockHelper
   # Mocks response from compliance endpoint in VCCS API
   def mock_vehicle_compliance
     compliance_data = read_file('vehicle_compliance_birmingham_response.json')
-    allow(ComplianceCheckerApi)
-      .to receive(:vehicle_compliance)
-      .and_return(compliance_data)
+    allow(ComplianceCheckerApi).to receive(:vehicle_compliance).and_return(compliance_data)
   end
 
   # Mocks response from vehicle details endpoint in VCCS API
   def mock_vehicle_details
     vehicle_details = read_file('vehicle_details_response.json')
-    allow(ComplianceCheckerApi)
-      .to receive(:vehicle_details)
-      .and_return(vehicle_details)
+    allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(vehicle_details)
   end
 
   # Mocks response from vehicle details endpoint in VCCS API
   def mock_undetermined_vehicle_details
     vehicle_details = read_file('undetermined_vehicle_details_response.json')
-    allow(ComplianceCheckerApi)
-      .to receive(:vehicle_details)
-      .and_return(vehicle_details)
+    allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(vehicle_details)
+  end
+
+  # Mocks response from vehicle details endpoint in VCCS API with missing fuel type
+  def mock_vehicle_with_missing_fuel_type
+    vehicle_details = read_file('vehicle_details_response.json')
+    vehicle_details['fuelType'] = nil
+    allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(vehicle_details)
+  end
+
+  # Mocks complete response from external details endpoint for a vehicle.
+  def mock_vehicle_external_details
+    external_details = read_file('vehicle_compliance_external_details.json')
+    allow(VehiclesCheckerApi).to receive(:external_details).and_return(external_details)
+  end
+
+  # Mocks response from vehicles external details endpoint to return missing registration date
+  # and euro status.
+  def mock_vehicle_with_missing_registration_date_and_euro_status
+    external_details = read_file('vehicle_compliance_external_details.json')
+    external_details['dateOfFirstRegistration'] = nil
+    external_details['euroStatus'] = nil
+
+    allow(VehiclesCheckerApi).to receive(:external_details).and_return(external_details)
   end
 
   # Mocks exempt vehicle details endpoint in VCCS API

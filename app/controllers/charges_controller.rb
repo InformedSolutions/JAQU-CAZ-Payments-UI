@@ -116,10 +116,11 @@ class ChargesController < ApplicationController # rubocop:disable Metrics/ClassL
 
   # Stores submitted LA in the session
   def store_compliance_details
-    SessionManipulation::SetComplianceDetails.call(
-      session: session,
-      la_id: params['local-authority']
-    )
+    if undetermined_taxi?
+      SessionManipulation::SetUnrecognisedCompliance.call(session: session, la_id: params['local-authority'])
+    else
+      SessionManipulation::SetComplianceDetails.call(session: session, la_id: params['local-authority'])
+    end
   end
 
   # Define the back button path on local authority page.

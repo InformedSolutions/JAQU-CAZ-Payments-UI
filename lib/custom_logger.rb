@@ -3,7 +3,7 @@
 # Modified Formatter class to remove IPs from logging
 class CustomLogger < ::Logger::Formatter
   # https://www.oreilly.com/library/view/regular-expressions-cookbook/9780596802837/ch07s16.html
-  IP_REGEX = /\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b/.freeze
+  IP_REGEX = /\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b/
   # Replace the sensitive string to '[REDACTED]'
   FILTERED_STRING = '[REDACTED]'
 
