@@ -105,13 +105,8 @@ class BaseApi
     # Matches error status with a proper exception class.
     # Returns an error class.
     def error_klass(status)
-      case status
-      when 400
-        Error400Exception
-      when 404
-        Error404Exception
-      when 422
-        Error422Exception
+      if status.in?([400, 401, 404, 422])
+        "BaseApi::Error#{status}Exception".constantize
       else
         Error500Exception
       end
