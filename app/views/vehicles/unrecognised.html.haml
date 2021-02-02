@@ -4,7 +4,6 @@
 %main.govuk-main-wrapper#main-content{role: 'main'}
   .govuk-grid-row
     .govuk-grid-column-two-thirds
-
       - if alert
         = render 'common/error_summary',
           error_msg_div: '#unrecognised-vehicle-error',
