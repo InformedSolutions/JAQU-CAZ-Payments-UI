@@ -79,7 +79,8 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # * +la_id+ - lack of LA redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
   #
   def daily_charge
-    @compliance_details = if undetermined_taxi?
+    @undetermined_taxi = undetermined_taxi?
+    @compliance_details = if @undetermined_taxi
                             UnrecognisedComplianceDetails.new(la_id: la_id)
                           else
                             ComplianceDetails.new(session[:vehicle_details])
