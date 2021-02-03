@@ -282,13 +282,14 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   end
 
   # Process action which is done on submit details and uk registered details
-  def process_details_action
+  def process_details_action # rubocop:disable Metrics/AbcSize
     @vehicle_details = VehicleDetails.new(vrn)
     return redirect_to(exempt_vehicles_path(id: transaction_id)) if @vehicle_details.exempt?
 
     SessionManipulation::SetLeedsTaxi.call(session: session) if @vehicle_details.leeds_taxi?
     SessionManipulation::SetType.call(session: session, type: @vehicle_details.type)
     SessionManipulation::SetUndetermined.call(session: session) if @vehicle_details.undetermined?
+    SessionManipulation::SetUndeterminedTaxi.call(session: session) if @vehicle_details.undetermined_taxi?
   end
 
   # Redirects to {vehicle not found}[rdoc-ref:VehiclesController.unrecognised_vehicle]
@@ -307,12 +308,9 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   def process_detail_form(form)
     SessionManipulation::SetConfirmVehicle.call(session: session, confirm_vehicle: form.confirmed?)
     return incorrect_details_vehicles_path(id: transaction_id) unless form.confirmed?
+    return not_determined_vehicles_path(id: transaction_id) if confirmed_undetermined?
 
-    if confirmed_undetermined?
-      not_determined_vehicles_path(id: transaction_id)
-    else
-      local_authority_charges_path(id: transaction_id)
-    end
+    local_authority_charges_path(id: transaction_id)
   end
 
   # check if user confirmed details for undetermined vehicle

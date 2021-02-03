@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 describe 'VehiclesController - GET #enter_details', type: :request do
-  subject { get enter_details_vehicles_path, headers: { 'HTTP_REFERER': referer } }
+  subject { get enter_details_vehicles_path, headers: { HTTP_REFERER: referer } }
 
   let(:referer) { '' }
 

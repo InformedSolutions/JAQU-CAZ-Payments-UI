@@ -51,10 +51,31 @@ class VehicleDetails
   #
   # Returns a boolean true if type is 'null' or is empty.
   # Returns a boolean false if type is not 'null'.
+  # Check if `type` or `fuelType` is 'null'
   def undetermined?
-    return true if compliance_api['type'].blank?
+    return true if type_and_fuel_empty?
 
-    (compliance_api['type']&.downcase == 'null')
+    date_or_euro_status_empty?
+  end
+
+  # Check if at least one attributes value is present
+  def undetermined_taxi?
+    return false unless taxi?
+    return true if type_and_fuel_empty?
+
+    date_or_euro_status_empty?
+  end
+
+  # Check if `type` or `fuelType` is 'null'
+  def type_and_fuel_empty?
+    return true if compliance_api.try(:[], 'type').blank? || compliance_api.try(:[], 'fuelType').blank?
+
+    (compliance_api['type']&.downcase == 'null') || (compliance_api['fuelType']&.downcase == 'null')
+  end
+
+  # Check if `dateOfFirstRegistration` or `euroStatus` is present
+  def date_or_euro_status_empty?
+    [external_details&.dig('dateOfFirstRegistration'), external_details&.dig('euroStatus')].any?(&:blank?)
   end
 
   # Returns a string, eg. 'M1'.
@@ -75,6 +96,11 @@ class VehicleDetails
   # Returns if vehicle is register in Leeds as taxi or PHV
   def leeds_taxi?
     compliance_api['licensingAuthoritiesNames']&.include?('Leeds')
+  end
+
+  # Returns if vehicle is a taxi or PHV - boolean.
+  def taxi?
+    compliance_api['taxiOrPhv']
   end
 
   private
@@ -120,5 +146,14 @@ class VehicleDetails
   #     * +boundary+
   def compliance_api
     @compliance_api ||= ComplianceCheckerApi.vehicle_details(vrn)
+  end
+
+  ##
+  # Calls +/v1/compliance-checker/vehicles/:vrn/external-details endpoint with +GET+ method
+  # and returns details about the requested vehicle.
+  def external_details
+    @external_details = VehiclesCheckerApi.external_details(vrn)
+  rescue BaseApi::Error404Exception
+    nil
   end
 end
