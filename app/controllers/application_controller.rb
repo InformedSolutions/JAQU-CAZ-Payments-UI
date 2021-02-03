@@ -119,7 +119,7 @@ class ApplicationController < ActionController::Base # rubocop:disable Metrics/C
   # Gets information from vehicle_details which states if vehicle is undetermined taxi.
   # Returns boolean.
   def undetermined_taxi?
-    vehicle_details('undetermined_taxi')
+    vehicle_details('undetermined_taxi') == true
   end
 
   # Logs and redirects to +path+

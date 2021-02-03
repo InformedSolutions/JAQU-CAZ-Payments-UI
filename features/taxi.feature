@@ -119,6 +119,7 @@ Feature: Leeds Taxi
     Then I select Birmingham
       And I press the Continue
     Then I should be on the daily charge page
+      And I should see 'If your vehicle does meet Clean Air standards, you can claim a refund when your vehicle details are updated.'
       And I confirm exemption
       And I press the Continue
     Then I should be on the pick daily dates page

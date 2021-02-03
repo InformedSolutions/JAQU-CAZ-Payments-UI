@@ -66,6 +66,11 @@ describe 'DatesController - GET #daily_charge', type: :request do
       subject
       expect(response).to have_http_status(:success)
     end
+
+    it 'sets :undetermined_taxi variable' do
+      subject
+      expect(assigns(:undetermined_taxi)).to be_truthy
+    end
   end
 
   context 'with VRN and LA in the session' do
@@ -94,6 +99,11 @@ describe 'DatesController - GET #daily_charge', type: :request do
     it 'returns a success response' do
       subject
       expect(response).to have_http_status(:success)
+    end
+
+    it 'does not set :undetermined_taxi variable' do
+      subject
+      expect(assigns(:undetermined_taxi)).to be_falsey
     end
   end
 

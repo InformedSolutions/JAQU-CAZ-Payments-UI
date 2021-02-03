@@ -38,6 +38,7 @@ Feature: Charges
     Then I select Birmingham
       And I press the Continue
     Then I should be on the daily charge page
+      And I should not see 'If your vehicle does meet Clean Air standards, you can claim a refund when your vehicle details are updated.'
       And I should see "Pay a daily Birmingham Clean Air Zone charge"
 
   Scenario: Vehicle is compliant in all CAZ
