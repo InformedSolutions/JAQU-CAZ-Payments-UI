@@ -57,7 +57,7 @@ module MockHelper
   end
 
   # Mocks non exempt vehicle - non UK vehicle existing on Whitelist
-  def mock_unregistered_non_uk_vehicle_details
+  def mock_unregistered_vehicle_details
     details = JSON.parse(File.read('spec/fixtures/files/register_details_response.json'))
     allow(ComplianceCheckerApi).to receive(:register_details).and_return(details)
   end
@@ -66,6 +66,13 @@ module MockHelper
   def mock_exempted_register_details
     details = JSON.parse(File.read('spec/fixtures/files/register_details_response.json'))
     details['registerExempt'] = true
+    allow(ComplianceCheckerApi).to receive(:register_details).and_return(details)
+  end
+
+  # Mocks a taxi vehicle
+  def mock_taxi_register_details
+    details = JSON.parse(File.read('spec/fixtures/files/register_details_response.json'))
+    details['registeredNTR'] = true
     allow(ComplianceCheckerApi).to receive(:register_details).and_return(details)
   end
 

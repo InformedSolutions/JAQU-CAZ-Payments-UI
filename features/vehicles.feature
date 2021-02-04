@@ -136,6 +136,17 @@ Feature: Vehicles
         And I press the Confirm
         And I should see 'Which Clean Air Zone do you need to pay for?'
 
+  Scenario: User wants to pay for a taxi which is not registered in the DVLA
+    Given I am on the home page
+      Then I press the Start now button
+        And I should be on the enter details page
+      Then I enter an unrecognised taxi registration number and choose UK
+        And I press the Continue
+        And I should be on the unrecognised page
+      Then I choose I confirm registration
+        And I press the Continue
+        And I should be on the local authorities page
+
   Scenario: User wants to pay for undetermined (without type) correct vehicle
     Given I am on the home page
       Then I press the Start now button

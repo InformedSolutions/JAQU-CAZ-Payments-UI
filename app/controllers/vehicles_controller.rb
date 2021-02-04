@@ -196,8 +196,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   def confirm_unrecognised
     form = ConfirmationForm.new(params['confirm-registration'])
     if form.confirmed?
-      SessionManipulation::SetUnrecognised.call(session: session)
-      redirect_to choose_type_non_dvla_vehicles_path
+      perform_unrecognised_vehicle_redirect
     else
       redirect_to unrecognised_vehicles_path, alert: true
     end
@@ -290,6 +289,18 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
     SessionManipulation::SetType.call(session: session, type: @vehicle_details.type)
     SessionManipulation::SetUndetermined.call(session: session) if @vehicle_details.undetermined?
     SessionManipulation::SetUndeterminedTaxi.call(session: session) if @vehicle_details.undetermined_taxi?
+  end
+
+  # Checks if the unrecognized vehicle is a taxi and performs a proper redirect
+  def perform_unrecognised_vehicle_redirect
+    registered_taxi = RegisterDetails.new(vrn).register_taxi?
+    if registered_taxi
+      SessionManipulation::SetUndeterminedTaxi.call(session: session)
+      redirect_to local_authority_charges_path
+    else
+      SessionManipulation::SetUnrecognised.call(session: session)
+      redirect_to choose_type_non_dvla_vehicles_path
+    end
   end
 
   # Redirects to {vehicle not found}[rdoc-ref:VehiclesController.unrecognised_vehicle]
