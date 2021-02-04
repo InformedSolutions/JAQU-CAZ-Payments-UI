@@ -217,7 +217,7 @@ steps:
         -Dproject.settings=./sonar-project.properties
 
   - name: deploy to dev
-    image: hashicorp/terraform:0.12.3
+    image: hashicorp/terraform:0.12.23
     commands:
       - apk add --update bash python python-dev py-pip build-base jq
       - pip install awscli
@@ -448,7 +448,7 @@ steps:
         - push
 
   - name: plan updates into st
-    image: hashicorp/terraform:0.12.3
+    image: hashicorp/terraform:0.12.23
     commands:
       - apk add --update bash python python-dev py-pip build-base jq
       - pip install awscli
@@ -511,7 +511,7 @@ steps:
         - failure
 
   - name: deploy to st
-    image: hashicorp/terraform:0.12.3
+    image: hashicorp/terraform:0.12.23
     commands:
       - apk add --update bash python python-dev py-pip build-base jq
       - pip install awscli
@@ -703,7 +703,7 @@ steps:
           - push
 
     - name: plan updates into sit
-      image: hashicorp/terraform:0.12.3
+      image: hashicorp/terraform:0.12.23
       commands:
         - apk add --update bash python python-dev py-pip build-base jq
         - pip install awscli
@@ -766,7 +766,7 @@ steps:
           - failure
 
     - name: deploy to sit
-      image: hashicorp/terraform:0.12.3
+      image: hashicorp/terraform:0.12.23
       commands:
         - apk add --update bash python python-dev py-pip build-base jq
         - pip install awscli
@@ -878,7 +878,7 @@ steps:
 
   steps:
     - name: plan updates into preprod
-      image: hashicorp/terraform:0.12.3
+      image: hashicorp/terraform:0.12.23
       commands:
         - apk add --update bash python python-dev py-pip build-base jq
         - pip install awscli
@@ -945,7 +945,7 @@ steps:
           - failure
 
     - name: deploy to preprod
-      image: hashicorp/terraform:0.12.3
+      image: hashicorp/terraform:0.12.23
       commands:
         - apk add --update bash python python-dev py-pip build-base jq
         - pip install awscli
@@ -1166,7 +1166,7 @@ steps:
         - push
 
   - name: plan updates into uat
-    image: hashicorp/terraform:0.12.3
+    image: hashicorp/terraform:0.12.23
     commands:
       - apk add --update bash python python-dev py-pip build-base jq
       - pip install awscli
@@ -1229,7 +1229,7 @@ steps:
         - failure
 
   - name: deploy to uat
-    image: hashicorp/terraform:0.12.3
+    image: hashicorp/terraform:0.12.23
     commands:
       - apk add --update bash python python-dev py-pip build-base jq
       - pip install awscli
@@ -1341,7 +1341,7 @@ steps:
 
   steps:
     - name: plan updates into prod
-      image: hashicorp/terraform:0.12.3
+      image: hashicorp/terraform:0.12.23
       commands:
         - apk add --update bash python python-dev py-pip build-base jq
         - pip install awscli
@@ -1408,7 +1408,7 @@ steps:
           - failure
 
     - name: deploy to prod
-      image: hashicorp/terraform:0.12.3
+      image: hashicorp/terraform:0.12.23
       commands:
         - apk add --update bash python python-dev py-pip build-base jq
         - pip install awscli
