@@ -72,7 +72,7 @@ class ComplianceDetails
     additional_compliance_url || compliance_url
   end
 
-  # Returns compliance url from additlan_url.yml
+  # Returns compliance url from additional_url.yml
   def additional_compliance_url
     zone_links = additional_urls_file[zone_name.downcase]
     return if zone_links.blank?

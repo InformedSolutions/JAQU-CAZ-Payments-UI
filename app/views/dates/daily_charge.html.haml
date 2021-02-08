@@ -18,6 +18,16 @@
         The daily charge for your vehicle is:
       %h2.govuk-heading-m
         = parse_charge(@compliance_details.charge)
+
+      - if @undetermined_taxi
+        %p
+          Data used to calculate the compliance of your vehicle is missing from your V5C registration certificate (log book).
+        %p
+          If your vehicle
+          %strong does
+          meet Clean Air standards, you can claim a refund when your vehicle details are updated.
+        %br
+
       %p
         The charge period runs from midnight to midnight.
       .govuk-warning-text

@@ -144,9 +144,9 @@ Given('I am on the dates page with paid charge for today') do
 end
 
 Given('I am on the dates page with all charges paid') do
-  mock_single_caz_request_for_charge_start_date
+  mock_single_caz_request_for_charge_start_date(10.days.ago)
   add_vehicle_details_to_session
-  mock_paid_dates(paid_period)
+  mock_paid_dates(dates: paid_period[:dates])
   visit select_daily_date_dates_path
 end
 
@@ -170,7 +170,7 @@ end
 Given('I am on the pick weekly dates page with no passes available to buy') do
   mock_single_caz_request_for_charge_start_date
   add_weekly_vehicle_details_to_session
-  mock_paid_dates(paid_period)
+  mock_paid_dates(dates: paid_period[:dates])
   visit select_weekly_date_dates_path
 end
 

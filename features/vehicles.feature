@@ -46,7 +46,7 @@ Feature: Vehicles
       And I should see 'There is a problem'
       And I should be on the non UK page
     Then I choose I confirm registration
-      And I press the Continue   
+      And I press the Continue
     Then I should see 'What is your vehicle?'
       And I press the Confirm
     Then I should see 'Tell us what type of vehicle you want to pay for'
@@ -136,11 +136,52 @@ Feature: Vehicles
         And I press the Confirm
         And I should see 'Which Clean Air Zone do you need to pay for?'
 
+  Scenario: User wants to pay for a taxi which is not registered in the DVLA
+    Given I am on the home page
+      Then I press the Start now button
+        And I should be on the enter details page
+      Then I enter an unrecognised taxi registration number and choose UK
+        And I press the Continue
+        And I should be on the unrecognised page
+      Then I choose I confirm registration
+        And I press the Continue
+        And I should be on the local authorities page
+
   Scenario: User wants to pay for undetermined (without type) correct vehicle
     Given I am on the home page
       Then I press the Start now button
         And I should be on the enter details page
       Then I enter an undetermined vehicle's registration and choose UK
+        And I press the Continue
+        And I should see 'Are these vehicle details correct?'
+      Then I choose that the details are correct
+        And I press the Confirm
+        And I should see 'Vehicle details are incomplete'
+        And I should see 'What is your vehicle?'
+        And I choose Car type
+        And I press the Confirm
+      Then I should see 'Which Clean Air Zone do you need to pay for?'
+
+  Scenario: User wants to pay for undetermined (without fuel type) correct vehicle
+    Given I am on the home page
+      Then I press the Start now button
+        And I should be on the enter details page
+      Then I enter a registration of vehicle which has no fuel type and choose UK
+        And I press the Continue
+        And I should see 'Are these vehicle details correct?'
+      Then I choose that the details are correct
+        And I press the Confirm
+        And I should see 'Vehicle details are incomplete'
+        And I should see 'What is your vehicle?'
+        And I choose Car type
+        And I press the Confirm
+      Then I should see 'Which Clean Air Zone do you need to pay for?'
+
+  Scenario: User wants to pay for undetermined (without registration date and euro status) correct vehicle
+    Given I am on the home page
+      Then I press the Start now button
+        And I should be on the enter details page
+      Then I enter a registration of a vehicle without registration date and euro status and choose UK
         And I press the Continue
         And I should see 'Are these vehicle details correct?'
       Then I choose that the details are correct

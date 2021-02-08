@@ -1,0 +1,15 @@
+{
+  "colour": "grey",
+  "dateOfFirstRegistration": "2020-03",
+  "euroStatus": "EURO V",
+  "fuelType": "Petrol",
+  "make": "Hyundai",
+  "typeApproval": "M1",
+  "revenueWeight": 3650,
+  "bodyType": "car",
+  "model": "i20",
+  "unladenWeight": 3000,
+  "seatingCapacity": 5,
+  "standingCapacity": 6,
+  "taxClass": "SPECIAL VEHICLE"
+}

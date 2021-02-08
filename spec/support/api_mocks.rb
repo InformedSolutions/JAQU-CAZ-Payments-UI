@@ -10,9 +10,23 @@ module ApiMocks
     allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(vehicle_details)
   end
 
+  # Mocks data from the VCCS API for taxi vehicle
   def mock_vehicle_details_taxi
     vehicle_details = read_file('vehicle_details_taxi_response.json')
     allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(vehicle_details)
+  end
+
+  # Mocks incomplete data from the VCCS API for taxi vehicle
+  def mock_unrecognised_taxi_vehicle_details
+    vehicle_details = read_file('vehicle_details_taxi_response.json')
+    vehicle_details['fuelType'] = nil
+    allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(vehicle_details)
+  end
+
+  # Mocks data from VCCS API for vehicle external details.
+  def mock_vehicle_external_details
+    external_details = read_file('vehicle_compliance_external_details.json')
+    allow(VehiclesCheckerApi).to receive(:external_details).and_return(external_details)
   end
 
   # Mocks response from clean-air-zones endpoint in VCCS API

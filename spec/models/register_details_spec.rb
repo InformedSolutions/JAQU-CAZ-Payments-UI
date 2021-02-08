@@ -8,7 +8,7 @@ describe RegisterDetails, type: :model do
   let(:vrn) { 'CAS310' }
 
   before do
-    response = { 'registerCompliant' => true, 'registerExempt' => true }
+    response = { 'registerCompliant' => true, 'registerExempt' => true, 'registeredNTR' => true }
     allow(ComplianceCheckerApi).to receive(:register_details).and_return(response)
   end
 
@@ -21,6 +21,12 @@ describe RegisterDetails, type: :model do
   describe '.register_exempt?' do
     it 'returns a proper register_exempt' do
       expect(subject.register_exempt?).to eq true
+    end
+  end
+
+  describe '.register_taxi?' do
+    it 'returns a proper registeredNTR' do
+      expect(subject.register_taxi?).to eq true
     end
   end
 end

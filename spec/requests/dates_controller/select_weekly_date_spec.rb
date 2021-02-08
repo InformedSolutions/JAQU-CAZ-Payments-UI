@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 describe 'DatesController - GET #select_weekly_date', type: :request do
-  subject { get select_weekly_date_dates_path, headers: { 'HTTP_REFERER': referer } }
+  subject { get select_weekly_date_dates_path, headers: { HTTP_REFERER: referer } }
 
   let(:transaction_id) { SecureRandom.uuid }
   let(:referer) { '' }

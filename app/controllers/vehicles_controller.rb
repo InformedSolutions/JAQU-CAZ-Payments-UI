@@ -196,8 +196,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   def confirm_unrecognised
     form = ConfirmationForm.new(params['confirm-registration'])
     if form.confirmed?
-      SessionManipulation::SetUnrecognised.call(session: session)
-      redirect_to choose_type_non_dvla_vehicles_path
+      perform_unrecognised_vehicle_redirect
     else
       redirect_to unrecognised_vehicles_path, alert: true
     end
@@ -282,13 +281,26 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   end
 
   # Process action which is done on submit details and uk registered details
-  def process_details_action
+  def process_details_action # rubocop:disable Metrics/AbcSize
     @vehicle_details = VehicleDetails.new(vrn)
     return redirect_to(exempt_vehicles_path(id: transaction_id)) if @vehicle_details.exempt?
 
     SessionManipulation::SetLeedsTaxi.call(session: session) if @vehicle_details.leeds_taxi?
     SessionManipulation::SetType.call(session: session, type: @vehicle_details.type)
     SessionManipulation::SetUndetermined.call(session: session) if @vehicle_details.undetermined?
+    SessionManipulation::SetUndeterminedTaxi.call(session: session) if @vehicle_details.undetermined_taxi?
+  end
+
+  # Checks if the unrecognized vehicle is a taxi and performs a proper redirect
+  def perform_unrecognised_vehicle_redirect
+    registered_taxi = RegisterDetails.new(vrn).register_taxi?
+    if registered_taxi
+      SessionManipulation::SetUndeterminedTaxi.call(session: session)
+      redirect_to local_authority_charges_path
+    else
+      SessionManipulation::SetUnrecognised.call(session: session)
+      redirect_to choose_type_non_dvla_vehicles_path
+    end
   end
 
   # Redirects to {vehicle not found}[rdoc-ref:VehiclesController.unrecognised_vehicle]
@@ -307,12 +319,9 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   def process_detail_form(form)
     SessionManipulation::SetConfirmVehicle.call(session: session, confirm_vehicle: form.confirmed?)
     return incorrect_details_vehicles_path(id: transaction_id) unless form.confirmed?
+    return not_determined_vehicles_path(id: transaction_id) if confirmed_undetermined?
 
-    if confirmed_undetermined?
-      not_determined_vehicles_path(id: transaction_id)
-    else
-      local_authority_charges_path(id: transaction_id)
-    end
+    local_authority_charges_path(id: transaction_id)
   end
 
   # check if user confirmed details for undetermined vehicle
