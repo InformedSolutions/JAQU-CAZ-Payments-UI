@@ -7,7 +7,7 @@
     "@rails/activestorage": "^6.1.1",
     "@rails/ujs": "^6.1.1",
     "@rails/webpacker": "^5.2.1",
-    "expose-loader": "^1.0.3",
+    "expose-loader": "^2.0.0",
     "govuk-frontend": "^3.10.2",
     "improved-yarn-audit": "^2.3.2",
     "jquery": "^3.5.1",
