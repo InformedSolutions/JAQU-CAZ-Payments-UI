@@ -53,12 +53,6 @@ describe PaymentDetails, type: :model do
       it 'returns UnrecognisedComplianceDetails instance' do
         expect(details.compliance_details).to be_a(UnrecognisedComplianceDetails)
       end
-
-      it 'calls ComplianceDetails model' do
-        allow(ComplianceDetails).to receive(:new).and_return(instance_double(ComplianceDetails))
-        details.compliance_details
-        expect(ComplianceDetails).to have_received(:new).with(session_details)
-      end
     end
 
     context 'when vehicle is not undetermined taxi' do
