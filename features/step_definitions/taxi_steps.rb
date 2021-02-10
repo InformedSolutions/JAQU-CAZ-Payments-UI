@@ -3,7 +3,7 @@
 Given('I am on the vehicle details page with taxi vehicle to check') do
   add_vrn_and_country_to_session
   mock_vehicle_details_taxi
-  mock_vehicle_external_details_taxi
+  mock_chargeable_zones
   mock_vehicle_compliance_leeds
   mock_non_dvla_response
   mock_single_caz_request_for_charge_start_date
@@ -13,9 +13,9 @@ end
 Given('I am on the vehicle details page with unrecognized taxi vehicle to check') do
   add_vrn_and_country_to_session
   mock_incomplete_vehicle_details_taxi
-  mock_vehicle_external_details_taxi
+  mock_chargeable_zones
+  mock_undetermined_vehicle_compliance
   mock_unrecognised_compliance
-  mock_vehicle_compliance_leeds
   mock_non_dvla_response
   mock_single_caz_request_for_charge_start_date
   visit details_vehicles_path
@@ -135,11 +135,6 @@ def mock_incomplete_vehicle_details_taxi
   vehicle_details = read_file('vehicle_details_taxi_response.json')
   vehicle_details['fuelType'] = nil
   allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(vehicle_details)
-end
-
-def mock_vehicle_external_details_taxi
-  external_details = read_file('vehicle_compliance_external_details.json')
-  allow(VehiclesCheckerApi).to receive(:external_details).and_return(external_details)
 end
 
 def mock_unrecognised_compliance
