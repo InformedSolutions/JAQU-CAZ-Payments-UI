@@ -44,38 +44,25 @@ class VehicleDetails
   # Returns a string 'Yes' if value is true.
   # Returns a string 'No' if value is false.
   def taxi_private_hire_vehicle
-    compliance_api['taxiOrPhv'] ? 'Yes' : 'No'
+    details_api['taxiOrPhv'] ? 'Yes' : 'No'
   end
 
-  # Check if type is 'null'
-  #
-  # Returns a boolean true if type is 'null' or is empty.
-  # Returns a boolean false if type is not 'null'.
-  # Check if `type` or `fuelType` is 'null'
-  def undetermined?
-    return true if type_and_fuel_empty?
-
-    date_or_euro_status_empty?
+  ##
+  # Calls +/v1/compliance-checker/vehicles/:vrn/compliance+ endpoint with +GET+ method
+  # and returns compliance details of the requested vehicle for all zones.
+  # Call raises an exception when vehicle is undetermined. Based on that,
+  # a proper boolean value is returned.
+  def undetermined
+    @undetermined ||= !ComplianceCheckerApi.vehicle_compliance(vrn, caz_ids)
+  rescue BaseApi::Error422Exception
+    true
   end
 
   # Check if at least one attributes value is present
   def undetermined_taxi?
     return false unless taxi?
-    return true if type_and_fuel_empty?
 
-    date_or_euro_status_empty?
-  end
-
-  # Check if `type` or `fuelType` is 'null'
-  def type_and_fuel_empty?
-    return true if compliance_api.try(:[], 'type').blank? || compliance_api.try(:[], 'fuelType').blank?
-
-    (compliance_api['type']&.downcase == 'null') || (compliance_api['fuelType']&.downcase == 'null')
-  end
-
-  # Check if `dateOfFirstRegistration` or `euroStatus` is present
-  def date_or_euro_status_empty?
-    [external_details&.dig('dateOfFirstRegistration'), external_details&.dig('euroStatus')].any?(&:blank?)
+    undetermined
   end
 
   # Returns a string, eg. 'M1'.
@@ -90,17 +77,17 @@ class VehicleDetails
 
   # Returns information if vehicle is exempted - boolean
   def exempt?
-    compliance_api['exempt']
+    details_api['exempt']
   end
 
   # Returns if vehicle is register in Leeds as taxi or PHV
   def leeds_taxi?
-    compliance_api['licensingAuthoritiesNames']&.include?('Leeds')
+    details_api['licensingAuthoritiesNames']&.include?('Leeds')
   end
 
   # Returns if vehicle is a taxi or PHV - boolean.
   def taxi?
-    compliance_api['taxiOrPhv']
+    details_api['taxiOrPhv']
   end
 
   private
@@ -120,40 +107,24 @@ class VehicleDetails
   # Returns a string, eg. 'Car' if +key+ value is present.
   # Returns a nil if +key+ value is not present.
   def string_field(key)
-    return nil if compliance_api[key].blank? || compliance_api[key].downcase == 'null'
+    return nil if details_api[key].blank? || details_api[key].downcase == 'null'
 
-    compliance_api[key]&.capitalize
+    details_api[key]&.capitalize
   end
 
   ##
-  # Calls +/v1/compliance-checker/vehicles/:vrn/compliance+ endpoint with +GET+ method
-  # and returns compliance details of the requested vehicle for requested zones.
+  # Calls +/v1/payments/vehicles/:vrn/details+ endpoint with +GET+ method
+  # and returns details of the requested vehicle.
   #
-  # ==== Result
-  #
-  # Returned compliance details will have following fields:
-  # * +registrationNumber+ - string, eg. 'CAS310'
-  # * +retrofitted+ - boolean
-  # * +exempt+ - boolean, determines if the vehicle is exempt from charges
-  # * +complianceOutcomes+ - array of objects
-  #   * +cleanAirZoneId+ - UUID, this represents CAZ ID in the DB
-  #   * +name+ - string, eg. 'Birmingham'
-  #   * +charge+ - number, determines how much owner of the vehicle will have to pay in this CAZ
-  #   * +informationUrls+ - object containing CAZ dedicated info links
-  #     * +mainInfo+
-  #     * +exemptionOrDiscount+
-  #     * +becomeCompliant+
-  #     * +boundary+
-  def compliance_api
-    @compliance_api ||= ComplianceCheckerApi.vehicle_details(vrn)
+  def details_api
+    @details_api ||= ComplianceCheckerApi.vehicle_details(vrn)
   end
 
   ##
-  # Calls +/v1/compliance-checker/vehicles/:vrn/external-details endpoint with +GET+ method
-  # and returns details about the requested vehicle.
-  def external_details
-    @external_details = VehiclesCheckerApi.external_details(vrn)
-  rescue BaseApi::Error404Exception
-    nil
+  # Calls +/v1/payments/clean-air-zones+ endpoint with +GET+ method
+  # and returns the list of available Clean Air Zones.
+  #
+  def caz_ids
+    @caz_ids ||= ComplianceCheckerApi.clean_air_zones.map { |e| e['cleanAirZoneId'] }
   end
 end

@@ -23,12 +23,6 @@ module ApiMocks
     allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(vehicle_details)
   end
 
-  # Mocks data from VCCS API for vehicle external details.
-  def mock_vehicle_external_details
-    external_details = read_file('vehicle_compliance_external_details.json')
-    allow(VehiclesCheckerApi).to receive(:external_details).and_return(external_details)
-  end
-
   # Mocks response from clean-air-zones endpoint in VCCS API
   def mock_chargeable_zones
     caz_list = read_file('caz_list_response.json')
@@ -63,6 +57,12 @@ module ApiMocks
     allow(ComplianceCheckerApi)
       .to receive(:vehicle_compliance)
       .and_return(compliance_data)
+  end
+
+  # Mocks a 422 exception thrown by ComplianceCheckerApi.vehicle_compliance
+  def mock_undetermined_vehicle_compliance
+    allow(ComplianceCheckerApi).to receive(:vehicle_compliance)
+      .and_raise(BaseApi::Error422Exception.new(422, '', {}))
   end
 
   # Mocks compliance data for non-DVLA vehicle.

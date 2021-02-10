@@ -12,7 +12,8 @@ describe 'VehiclesController - GET #details', type: :request do
       add_transaction_id_to_session(transaction_id)
       add_vrn_to_session
       mock_vehicle_details
-      mock_vehicle_external_details
+      mock_vehicle_compliance
+      mock_chargeable_zones
     end
 
     it 'returns http success' do
@@ -40,7 +41,7 @@ describe 'VehiclesController - GET #details', type: :request do
     context 'when vehicle is a taxi' do
       before do
         mock_vehicle_details_taxi
-        mock_vehicle_external_details
+        mock_vehicle_compliance
         subject
       end
 
@@ -56,7 +57,7 @@ describe 'VehiclesController - GET #details', type: :request do
     context 'when vehicle is undetermined_taxi' do
       before do
         mock_unrecognised_taxi_vehicle_details
-        mock_vehicle_external_details
+        mock_undetermined_vehicle_compliance
         subject
       end
 
