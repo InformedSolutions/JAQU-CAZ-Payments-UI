@@ -287,7 +287,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
 
     SessionManipulation::SetLeedsTaxi.call(session: session) if @vehicle_details.leeds_taxi?
     SessionManipulation::SetType.call(session: session, type: @vehicle_details.type)
-    SessionManipulation::SetUndetermined.call(session: session) if @vehicle_details.undetermined?
+    SessionManipulation::SetUndetermined.call(session: session) if @vehicle_details.undetermined
     SessionManipulation::SetUndeterminedTaxi.call(session: session) if @vehicle_details.undetermined_taxi?
   end
 
