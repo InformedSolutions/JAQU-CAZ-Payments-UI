@@ -27,27 +27,10 @@ module MockHelper
     allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(vehicle_details)
   end
 
-  # Mocks response from vehicle details endpoint in VCCS API with missing fuel type
-  def mock_vehicle_with_missing_fuel_type
-    vehicle_details = read_file('vehicle_details_response.json')
-    vehicle_details['fuelType'] = nil
-    allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(vehicle_details)
-  end
-
-  # Mocks complete response from external details endpoint for a vehicle.
-  def mock_vehicle_external_details
-    external_details = read_file('vehicle_compliance_external_details.json')
-    allow(VehiclesCheckerApi).to receive(:external_details).and_return(external_details)
-  end
-
-  # Mocks response from vehicles external details endpoint to return missing registration date
-  # and euro status.
-  def mock_vehicle_with_missing_registration_date_and_euro_status
-    external_details = read_file('vehicle_compliance_external_details.json')
-    external_details['dateOfFirstRegistration'] = nil
-    external_details['euroStatus'] = nil
-
-    allow(VehiclesCheckerApi).to receive(:external_details).and_return(external_details)
+  # Mocks a 422 exception thrown by ComplianceCheckerApi.vehicle_compliance
+  def mock_undetermined_vehicle_compliance
+    allow(ComplianceCheckerApi).to receive(:vehicle_compliance)
+      .and_raise(BaseApi::Error422Exception.new(422, '', {}))
   end
 
   # Mocks exempt vehicle details endpoint in VCCS API
@@ -112,6 +95,12 @@ module MockHelper
   # Mocks response from clean-air-zones with in VCCS API with non active zones
   def mock_non_chargeable_zones
     caz_list = read_file('unchargeable_caz_list_response.json')
+    allow(ComplianceCheckerApi).to receive(:clean_air_zones).and_return(caz_list['cleanAirZones'])
+  end
+
+  # Mocks response from clean-air-zones endpoint in VCCS API
+  def mock_chargeable_zones
+    caz_list = read_file('caz_list_response.json')
     allow(ComplianceCheckerApi).to receive(:clean_air_zones).and_return(caz_list['cleanAirZones'])
   end
 
