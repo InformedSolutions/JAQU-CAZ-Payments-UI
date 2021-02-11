@@ -74,7 +74,7 @@
         the payment transaction). Payment date is exchanged with the central service
         which will not be stored. An email address will be requested from the user
         to allow a payment transaction receipt to be sent by GOV.UK Notify.
-        The Local Authority that is responsible for the CAZ you use will be
+        The local authority that is responsible for the CAZ you use will be
         sent confirmation of the payment including the vehicle number plate that
         has been paid for. The email data is retained on the GOV.UK Notify platform
         for a period of 7 days and then deleted.
@@ -83,7 +83,7 @@
         These include a record of the number plate against which the payment is made.
       %p
         The central Drive in a Clean Air Zone service has no control over how the
-        Local Authority use the information exchanged in the above scenarios and
+        local authority use the information exchanged in the above scenarios and
         the data retention policies they apply.
       %h1.govuk-heading-xl
         Business account for multiple vehicles
@@ -122,7 +122,7 @@
         acting on behalf of JAQU, who will store the payment transaction).
         Payment date is exchanged with the central service which will not be stored.
         An email address will be requested from the user to allow a payment
-        transaction receipt to be sent by GOV.UK Notify. The Local Authority
+        transaction receipt to be sent by GOV.UK Notify. The local authority
         that is responsible for the CAZ you use will be sent confirmation of
         the payment including the vehicle number plate that has been paid for.
         The email data is retained on the GOV.UK Notify platform for a period
@@ -202,18 +202,59 @@
         = link_to('DfT', dtf_link, id: 'dtf-link')
 
       %p
-        If you want to know about the privacy notice specific to DVLA or the CAZ and Local Authority you are using, please use these links:
+        If you want to know about the privacy notice specific to DVLA or the CAZ and local authority you are using, please use these links:
       %p
         = link_to('DVLA',
                   'https://www.gov.uk/government/publications/dvla-privacy-policy/dvla-privacy-policy',
                   id: 'dvla-link')
       %p
-        = link_to('Birmingham',
-                  'https://www.birmingham.gov.uk/info/20076/pollution/1763/a_clean_air_zone_for_birmingham',
-                  id: 'birmingham-link')
+        = link_to('Bath and North East Somerset privacy policy',
+                  'https://beta.bathnes.gov.uk/council-privacy-policy',
+                  id: 'bath-link')
       %p
-        = link_to('Leeds',
-                  'https://www.leeds.gov.uk/business/environmental-health-for-business/air-quality',
-                  id: 'leeds-link')
+        = link_to('Birmingham privacy policy',
+                  'https://www.birmingham.gov.uk/info/20015/environment/2005/privacy_statement_-_environmental_health/2',
+                  id: 'birmingham-link')
 
-
+      %h2.govuk-heading-xl
+        Early Notice Letters (ENLs)
+      %p
+        Clean Air Zone local authorities, Defra and DfT (as JAQU) are Joint Controllers,
+        which means that they jointly use personal data to ensure that people, who are likely to be
+        affected by the introduction of Clean Air Zones, receive a letter giving sufficient
+        advance notice of the zones coming into place. These letters are called ’Early Notice Letters’.
+      %p
+        The relevant Clean Air Zone local authority, JAQU and DVLA will receive and use your personal data
+        for the purpose of sending the Early Notice Letter to you.
+      %p
+        Your personal data that will be processed are:
+        %ul.govuk-list-govuk-list--bullet
+          %li
+            %p
+              the number plate (also known as a vehicle registration mark) of your vehicle,
+              for which you are the registered keeper, that travels in a local authority Clean Air Zone
+          %li
+            %p
+              the tax class of your vehicle
+          %li
+            %p
+              and, in some cases as explained below, your name and address
+      %p
+        If your vehicle travels in a Clean Air Zone, the local authority’s automatic number plate recognition (ANPR)
+        cameras covering that Zone will record your number plate, which the local authority will pass to JAQU
+        so that JAQU can determine whether your vehicle meets current emission standards.
+        If your vehicle does not meet these emission standards, DVLA will use your name and address
+        held in their records with your vehicle number plate to send you a letter, on behalf of the local authority,
+        informing you that you will likely have to pay a charge if your vehicle travels in that area after Clean Air Zone charging starts.
+      %p
+        The legal basis for the processing (use) of your personal data is that the use of your personal data is necessary
+        for the performance of a task carried out in the public interest.
+      %p
+        The task in the public interest is to inform people of new regulations and penalties prior to their coming into effect.
+        This relates to monitoring and identifying contraventions of Part III and Schedule 12 of the Transport Act 2000 and
+        Parts 2 and 6 of The Road User Charging Schemes (Penalty Charges, Adjudication and Enforcement) (England)
+        Regulations 2013 pertaining to the Clean Air Zone Charging Order relevant to the local authority
+        whose ANPR cameras recorded your number plate.
+      %p
+        JAQU and the DVLA will not keep your personal data for the purpose of sending the Early Notice Letter
+        after that letter has been sent to you.
