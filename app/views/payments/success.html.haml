@@ -47,7 +47,9 @@
             %td.govuk-table__cell{scope: 'row'} Total charge
             %td.govuk-table__header{id: 'total-charge'}= parse_charge(@payment_details.total_charge)
       %p
-        You may be able to claim a refund in certain circumstances.
+        You may be able to claim a
+        = link_to 'refund', 'https://www.gov.uk/guidance/driving-in-a-clean-air-zone'
+        in certain circumstances.
         Contact the local authority in the area you're driving in to find out more.
       %h2.govuk-heading-m
         Alternatives to paying the charge
