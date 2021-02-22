@@ -4142,10 +4142,10 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
   integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
 
-litepicker@^1.5.7:
-  version "1.5.7"
-  resolved "https://registry.yarnpkg.com/litepicker/-/litepicker-1.5.7.tgz#ba4fe3686f67ec620855caa454921ce6d553ade5"
-  integrity sha512-4L2ZcF8iqCE4A/qGWS3PbdFplZR1g751x5SsZ87zCRZ4LQN1Fgezarnvqi0eHk/kDWK7Qx0HZ9Y4bNznJMF1xA==
+litepicker@^2.0.7:
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/litepicker/-/litepicker-2.0.7.tgz#460369fcd5ca301a53674e8e21ca63e47e822690"
+  integrity sha512-B2mEgCDxoHGD19QYYtUK6UiTp67rEh0bOee6lLJ7hd3wF+QFC43M3+OBgdLwFHZaSiezYbmOjQtvH9Tx8rEQGg==
 
 load-json-file@^1.0.0:
   version "1.1.0"
