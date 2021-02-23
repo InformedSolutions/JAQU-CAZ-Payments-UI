@@ -6,7 +6,7 @@ RSpec.shared_examples 'an invalid weekly selection date' do
   end
 
   it 'returns nil for .valid?' do
-    expect(subject.valid?).to be_falsey
+    expect(subject.valid?).to be_nil
   end
 
   it 'returns correct error message' do

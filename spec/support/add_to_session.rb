@@ -14,6 +14,10 @@ module AddToSession
     add_vehicle_details_to_session(vrn: vrn, country: country)
   end
 
+  def add_undetermined_taxi_to_session(vrn: 'CU57ABC', country: 'UK')
+    add_vehicle_details_to_session(vrn: vrn, country: country, undetermined_taxi: true)
+  end
+
   def add_details_to_session(details: {}, weekly_possible: false, weekly_charge_today: false, dates: [])
     add_vehicle_details_to_session(
       **compliance_details(details),
@@ -76,7 +80,8 @@ module AddToSession
       country: details[:country] || 'UK',
       la_id: details[:la_id] || SecureRandom.uuid,
       la_name: details[:la_name] || 'Leeds',
-      daily_charge: details[:daily_charge] || 15
+      daily_charge: details[:daily_charge] || 15,
+      undetermined_taxi: details[:undetermined_taxi] || false
     }
   end
 end

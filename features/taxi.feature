@@ -110,3 +110,16 @@ Feature: Leeds Taxi
       And I press the Continue
     Then I should be on the pick second weekly dates page
       And I should see "Choose a start date for your second week that doesn't include dates"
+
+  Scenario: User wants to pay for a taxi which has incomplete DVLA data
+    Given I am on the vehicle details page with unrecognized taxi vehicle to check
+      And I am not paid for today
+    When I choose that the details are correct
+      And I press the Confirm
+    Then I select Birmingham
+      And I press the Continue
+    Then I should be on the daily charge page
+      And I should see 'If your vehicle does meet Clean Air standards, you can claim a refund when your vehicle details are updated.'
+      And I confirm exemption
+      And I press the Continue
+    Then I should be on the pick daily dates page

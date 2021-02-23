@@ -11,6 +11,9 @@ describe 'DatesController - POST #confirm_select_weekly_period', type: :request 
 
   context 'with details in the session' do
     before do
+      allow(Dates::AssignBackButtonDate).to receive(:call).and_return(true)
+      allow(SessionManipulation::SetSelectedWeek).to receive(:call).and_return(true)
+      allow(SessionManipulation::CalculateTotalCharge).to receive(:call).and_return(true)
       add_transaction_id_to_session(transaction_id)
       add_details_to_session(
         weekly_possible: true,
@@ -25,26 +28,18 @@ describe 'DatesController - POST #confirm_select_weekly_period', type: :request 
       end
 
       it 'calls Dates::AssignBackButtonDate' do
-        expect(Dates::AssignBackButtonDate).to receive(:call)
         subject
+        expect(Dates::AssignBackButtonDate).to have_received(:call)
       end
 
       it 'calls SessionManipulation::SetSelectedWeek' do
-        expect(SessionManipulation::SetSelectedWeek).to receive(:call)
         subject
+        expect(SessionManipulation::SetSelectedWeek).to have_received(:call)
       end
 
       it 'calls SessionManipulation::CalculateTotalCharge' do
-        expect(SessionManipulation::CalculateTotalCharge).to receive(:call)
         subject
-      end
-
-      describe 'setting session' do
-        before { subject }
-
-        it 'sets total_charge' do
-          expect(session[:vehicle_details]['total_charge']).to eq(50)
-        end
+        expect(SessionManipulation::CalculateTotalCharge).to have_received(:call)
       end
     end
 
@@ -56,8 +51,8 @@ describe 'DatesController - POST #confirm_select_weekly_period', type: :request 
       end
 
       it 'calls Dates::AssignBackButtonDate' do
-        expect(Dates::AssignBackButtonDate).to receive(:call)
         subject
+        expect(Dates::AssignBackButtonDate).to have_received(:call)
       end
     end
 

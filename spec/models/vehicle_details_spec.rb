@@ -10,6 +10,7 @@ describe VehicleDetails, type: :model do
   let(:taxi_or_phv) { false }
   let(:type) { 'car' }
   let(:las) { %w[Leeds Birmingham] }
+  let(:fuel_type) { 'diesel' }
 
   let(:response) do
     {
@@ -19,7 +20,7 @@ describe VehicleDetails, type: :model do
       'make' => 'peugeot',
       'model' => '208',
       'colour' => 'grey',
-      'fuelType' => 'diesel',
+      'fuelType' => fuel_type,
       'taxiOrPhv' => taxi_or_phv,
       'licensingAuthoritiesNames' => las
     }
@@ -27,6 +28,18 @@ describe VehicleDetails, type: :model do
 
   before do
     allow(ComplianceCheckerApi).to receive(:vehicle_details).with(vrn).and_return(response)
+    allow(ComplianceCheckerApi).to receive(:vehicle_compliance).and_return({ 'registrationNumber' => vrn })
+    allow(ComplianceCheckerApi).to receive(:clean_air_zones)
+      .and_return(
+        [
+          {
+            'cleanAirZoneId' => '5cd7441d-766f-48ff-b8ad-1809586fea37'
+          },
+          {
+            'cleanAirZoneId' => '131af03c-f7f4-4aef-81ee-aae4f56dbeb5'
+          }
+        ]
+      )
   end
 
   describe '.registration_number' do
@@ -131,34 +144,44 @@ describe VehicleDetails, type: :model do
     end
   end
 
-  describe '.undetermined?' do
+  describe '.undetermined' do
     it 'returns a proper type approval' do
-      expect(subject.undetermined?).to eq(false)
+      expect(subject.undetermined).to eq(false)
     end
 
-    context 'when key is not present' do
+    context 'when vehicle_compliance throws 422 exception' do
       before do
-        allow(ComplianceCheckerApi).to receive(:vehicle_details).with(vrn).and_return({})
+        allow(ComplianceCheckerApi).to receive(:vehicle_compliance)
+          .and_raise(BaseApi::Error422Exception.new(422, '', {}))
       end
 
-      it 'returns a nil' do
-        expect(compliance.undetermined?).to eq(true)
+      it 'returns true' do
+        expect(subject.undetermined).to eq(true)
+      end
+    end
+  end
+
+  describe '.undetermined_taxi?' do
+    context 'when vehicle is a taxi' do
+      let(:taxi_or_phv) { true }
+
+      context 'when vehicle_compliance throws 422 exception' do
+        before do
+          allow(ComplianceCheckerApi).to receive(:vehicle_compliance)
+            .and_raise(BaseApi::Error422Exception.new(422, '', {}))
+        end
+
+        it 'returns true' do
+          expect(subject.undetermined).to eq(true)
+        end
       end
     end
 
-    context 'when value is empty' do
-      let(:type) { ' ' }
+    context 'whet vehicle is not a taxi' do
+      let(:taxi_or_phv) { false }
 
-      it 'returns a nil' do
-        expect(compliance.undetermined?).to eq(true)
-      end
-    end
-
-    context "when value is equal to 'null'" do
-      let(:type) { 'null' }
-
-      it 'returns a nil' do
-        expect(compliance.undetermined?).to eq(true)
+      it 'returns false' do
+        expect(compliance.undetermined_taxi?).to eq(false)
       end
     end
   end

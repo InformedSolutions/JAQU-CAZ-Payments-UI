@@ -1,0 +1,30 @@
+- title_and_header = 'Discount available'
+- page_title(title_and_header)
+
+= render 'common/js_back_link'
+
+%main.govuk-main-wrapper#main-content{role: 'main'}
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds
+      %h1.govuk-heading-xl
+        = title_and_header
+      %p
+        We have identified your vehicle as a PHGV.
+      %p
+        Bath and North East Somerset offer a discount for this type of vehicle allowing you to pay a charge of £9 instead of £100.
+      %p
+        You need to register to qualify for the discounted journey. The registration process can take up to 14 days.
+        %br
+        = link_to 'Register with MiPermit', 'https://beta.bathnes.gov.uk/get-exemption-or-discount-baths-clean-air-zone'
+
+      %p
+        Once approved you will pay all charges on MiPermit.
+      %p
+        If you have registered but are not yet approved, you must continue to pay the full charge here.
+      %p
+        Refunds may be available from for those who qualify for the discount.
+      %p
+        = link_to 'Contact Bath and North East Somerset Council','https://beta.bathnes.gov.uk/get-help-and-support-baths-clean-air-zone'
+
+      %p= link_to 'Continue to pay', @next_url, id: 'continue-to-pay',
+        class: 'govuk-button', 'data-module': 'govuk-button'
