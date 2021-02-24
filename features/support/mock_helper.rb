@@ -12,25 +12,25 @@ module MockHelper
   # Mocks response from compliance endpoint in VCCS API
   def mock_vehicle_compliance
     compliance_data = read_file('vehicle_compliance_birmingham_response.json')
-    allow(ComplianceCheckerApi)
-      .to receive(:vehicle_compliance)
-      .and_return(compliance_data)
+    allow(ComplianceCheckerApi).to receive(:vehicle_compliance).and_return(compliance_data)
   end
 
   # Mocks response from vehicle details endpoint in VCCS API
   def mock_vehicle_details
     vehicle_details = read_file('vehicle_details_response.json')
-    allow(ComplianceCheckerApi)
-      .to receive(:vehicle_details)
-      .and_return(vehicle_details)
+    allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(vehicle_details)
   end
 
   # Mocks response from vehicle details endpoint in VCCS API
   def mock_undetermined_vehicle_details
     vehicle_details = read_file('undetermined_vehicle_details_response.json')
-    allow(ComplianceCheckerApi)
-      .to receive(:vehicle_details)
-      .and_return(vehicle_details)
+    allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(vehicle_details)
+  end
+
+  # Mocks a 422 exception thrown by ComplianceCheckerApi.vehicle_compliance
+  def mock_undetermined_vehicle_compliance
+    allow(ComplianceCheckerApi).to receive(:vehicle_compliance)
+      .and_raise(BaseApi::Error422Exception.new(422, '', {}))
   end
 
   # Mocks exempt vehicle details endpoint in VCCS API
@@ -40,7 +40,7 @@ module MockHelper
   end
 
   # Mocks non exempt vehicle - non UK vehicle existing on Whitelist
-  def mock_unregistered_non_uk_vehicle_details
+  def mock_unregistered_vehicle_details
     details = JSON.parse(File.read('spec/fixtures/files/register_details_response.json'))
     allow(ComplianceCheckerApi).to receive(:register_details).and_return(details)
   end
@@ -49,6 +49,13 @@ module MockHelper
   def mock_exempted_register_details
     details = JSON.parse(File.read('spec/fixtures/files/register_details_response.json'))
     details['registerExempt'] = true
+    allow(ComplianceCheckerApi).to receive(:register_details).and_return(details)
+  end
+
+  # Mocks a taxi vehicle
+  def mock_taxi_register_details
+    details = JSON.parse(File.read('spec/fixtures/files/register_details_response.json'))
+    details['registeredNTR'] = true
     allow(ComplianceCheckerApi).to receive(:register_details).and_return(details)
   end
 
@@ -88,6 +95,12 @@ module MockHelper
   # Mocks response from clean-air-zones with in VCCS API with non active zones
   def mock_non_chargeable_zones
     caz_list = read_file('unchargeable_caz_list_response.json')
+    allow(ComplianceCheckerApi).to receive(:clean_air_zones).and_return(caz_list['cleanAirZones'])
+  end
+
+  # Mocks response from clean-air-zones endpoint in VCCS API
+  def mock_chargeable_zones
+    caz_list = read_file('caz_list_response.json')
     allow(ComplianceCheckerApi).to receive(:clean_air_zones).and_return(caz_list['cleanAirZones'])
   end
 

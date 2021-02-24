@@ -2,27 +2,27 @@
 
 require 'rails_helper'
 
-describe SessionManipulation::SetComplianceDetails do
+describe SessionManipulation::SetUnrecognisedCompliance do
   subject { described_class.call(session: session, la_id: la_id) }
 
   let(:session) { { vehicle_details: details } }
   let(:details) { { 'vrn' => 'CU123AB', 'country' => 'UK' } }
   let(:la_id) { SecureRandom.uuid }
-  let(:la_name) { 'Leeds' }
-  let(:daily_charge) { 12.5 }
+  let(:la_name) { 'Bath' }
+  let(:daily_charge) { 9.0 }
   let(:tariff) { 'BCC01-private_car' }
 
   before do
-    details = instance_double('ComplianceDetails',
+    details = instance_double('UnrecognisedComplianceDetails',
                               zone_name: la_name,
                               charge: daily_charge,
                               tariff_code: tariff)
-    allow(ComplianceDetails).to receive(:new).and_return(details)
+    allow(UnrecognisedComplianceDetails).to receive(:new).and_return(details)
   end
 
   it 'creates instance of ComplianceDetails with right params' do
     subject
-    expect(ComplianceDetails).to have_received(:new).with(details.merge('la_id' => la_id))
+    expect(UnrecognisedComplianceDetails).to have_received(:new).with(la_id: la_id)
   end
 
   describe 'adding fields' do
@@ -40,20 +40,8 @@ describe SessionManipulation::SetComplianceDetails do
       expect(session[:vehicle_details]['daily_charge']).to eq(daily_charge)
     end
 
-    it 'sets weekly_possible to false' do
-      expect(session[:vehicle_details]['weekly_possible']).to be_falsey
-    end
-
     it 'sets tariff_code' do
       expect(session[:vehicle_details]['tariff_code']).to eq(tariff)
-    end
-
-    context 'when vehicle is a taxi in Leeds' do
-      let(:session) { { vehicle_details: details.merge('leeds_taxi' => true) } }
-
-      it 'sets weekly_possible to true' do
-        expect(session[:vehicle_details]['weekly_possible']).to be_truthy
-      end
     end
 
     context 'when there are more details in session' do
@@ -63,7 +51,7 @@ describe SessionManipulation::SetComplianceDetails do
 
       it 'clears keys from next steps' do
         expect(session[:vehicle_details].keys).to contain_exactly(
-          'vrn', 'country', 'la_id', 'la_name', 'daily_charge', 'weekly_possible', 'tariff_code'
+          'vrn', 'country', 'la_id', 'la_name', 'daily_charge', 'tariff_code'
         )
       end
     end

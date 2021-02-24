@@ -101,7 +101,10 @@ describe 'ChargesController - GET #review_payment', type: :request do
       context 'when cancel_second_week params is true' do
         let(:params) { { cancel_second_week: 'true' } }
 
-        before { add_to_session({ first_week_start_date: '2020-05-01' }) }
+        before do
+          allow(SessionManipulation::CalculateTotalCharge).to receive(:call).and_return(true)
+          add_to_session({ first_week_start_date: '2020-05-01' })
+        end
 
         it 'sets second_week_selected in the session' do
           subject
@@ -109,8 +112,8 @@ describe 'ChargesController - GET #review_payment', type: :request do
         end
 
         it 'calls SessionManipulation::CalculateTotalCharge' do
-          expect(SessionManipulation::CalculateTotalCharge).to receive(:call)
           subject
+          expect(SessionManipulation::CalculateTotalCharge).to have_received(:call)
         end
       end
     end
