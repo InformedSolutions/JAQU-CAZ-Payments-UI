@@ -36,7 +36,8 @@ describe 'PaymentsController - POST #create', type: :request do
     end
 
     it 'calls Payment model with right params' do
-      expect(Payment).to receive(:new).with(
+      subject
+      expect(Payment).to have_received(:new).with(
         {
           'vrn' => vrn,
           'la_id' => zone_id,
@@ -46,7 +47,6 @@ describe 'PaymentsController - POST #create', type: :request do
           'la_name' => anything
         }, payments_url
       )
-      subject
     end
 
     it 'sets payment_id in the session' do
@@ -57,6 +57,7 @@ describe 'PaymentsController - POST #create', type: :request do
     context 'when called twice' do
       let(:repeated_request) { post payments_path }
       let(:second_payment_id) { 'LOREM01234IPSUM' }
+
       before do
         subject
         allow(Payment).to receive(:new).and_return(
@@ -65,7 +66,8 @@ describe 'PaymentsController - POST #create', type: :request do
       end
 
       it 'calls the Payment model a second time' do
-        expect(Payment).to receive(:new).with(
+        repeated_request
+        expect(Payment).to have_received(:new).with(
           {
             'vrn' => vrn,
             'la_id' => zone_id,
@@ -74,8 +76,7 @@ describe 'PaymentsController - POST #create', type: :request do
             'country' => anything,
             'la_name' => anything
           }, payments_url
-        )
-        repeated_request
+        ).twice
       end
 
       it 'sets payment_id in the session' do

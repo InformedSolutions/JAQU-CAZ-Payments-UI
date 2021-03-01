@@ -69,11 +69,25 @@ class PaymentDetails
 
   # Returns an associated ComplianceDetails instance
   def compliance_details
-    @compliance_details = ComplianceDetails.new(session_details)
+    @compliance_details ||= if undetermined_taxi?
+                              UnrecognisedComplianceDetails.new(la_id: la_id)
+                            else
+                              ComplianceDetails.new(session_details)
+                            end
   end
 
   private
 
   # Reader function
   attr_reader :session_details
+
+  # Returns info if payment is associated with undetermined taxi
+  def undetermined_taxi?
+    session_details['undetermined_taxi']
+  end
+
+  # Returns clean air zone id
+  def la_id
+    session_details['la_id']
+  end
 end

@@ -38,6 +38,7 @@ describe ComplianceDetails, type: :model do
       }
     ]
   end
+  let(:phgv_discount_available) { true }
   let(:name) { 'Leeds' }
   let(:url) { 'www.wp.pl' }
 
@@ -60,12 +61,13 @@ describe ComplianceDetails, type: :model do
       allow(ComplianceCheckerApi)
         .to receive(:vehicle_compliance)
         .with(vrn, [zone_id])
-        .and_return('complianceOutcomes' => outcomes)
+        .and_return('complianceOutcomes' => outcomes,
+                    'phgvDiscountAvailable' => phgv_discount_available)
     end
 
     it 'calls :vehicle_compliance with right params' do
-      expect(ComplianceCheckerApi).to receive(:vehicle_compliance).with(vrn, [zone_id])
       details.zone_name
+      expect(ComplianceCheckerApi).to have_received(:vehicle_compliance).with(vrn, [zone_id])
     end
 
     it_behaves_like 'compliance details fields'
@@ -104,6 +106,22 @@ describe ComplianceDetails, type: :model do
 
           it 'returns compliance_url' do
             expect(details.dynamic_compliance_url).to eq(details.compliance_url)
+          end
+        end
+      end
+
+      describe 'phgv_discount_available?' do
+        context 'when phgvDiscountAvailable is true in compliance endpoint' do
+          it 'returns true' do
+            expect(details).to be_phgv_discount_available
+          end
+        end
+
+        context 'when phgvDiscountAvailable is false in compliance endpoint' do
+          let(:phgv_discount_available) { false }
+
+          it 'returns true' do
+            expect(details).not_to be_phgv_discount_available
           end
         end
       end
@@ -172,15 +190,13 @@ describe ComplianceDetails, type: :model do
       end
 
       it 'calls :unrecognised_compliance with right params' do
-        expect(ComplianceCheckerApi)
-          .to receive(:unrecognised_compliance)
-          .with(type, [zone_id])
         details.zone_name
+        expect(ComplianceCheckerApi).to have_received(:unrecognised_compliance).with(type, [zone_id])
       end
 
       it 'does not call :vehicle_compliance' do
-        expect(ComplianceCheckerApi).not_to receive(:vehicle_compliance)
         details.zone_name
+        expect(ComplianceCheckerApi).not_to have_received(:vehicle_compliance)
       end
 
       it_behaves_like 'compliance details fields'
@@ -198,12 +214,26 @@ describe ComplianceDetails, type: :model do
     end
 
     it 'calls :unrecognised_compliance with right params' do
-      expect(ComplianceCheckerApi)
-        .to receive(:unrecognised_compliance)
-        .with(type, [zone_id])
       details.zone_name
+      expect(ComplianceCheckerApi).to have_received(:unrecognised_compliance).with(type, [zone_id])
     end
 
     it_behaves_like 'compliance details fields'
+
+    describe 'phgv_discount_available?' do
+      context 'when phgvDiscountAvailable is true in compliance endpoint' do
+        it 'returns false' do
+          expect(details).not_to be_phgv_discount_available
+        end
+      end
+
+      context 'when phgvDiscountAvailable is false in compliance endpoint' do
+        let(:phgv_discount_available) { false }
+
+        it 'returns true' do
+          expect(details).not_to be_phgv_discount_available
+        end
+      end
+    end
   end
 end

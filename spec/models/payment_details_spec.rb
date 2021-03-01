@@ -15,7 +15,8 @@ describe PaymentDetails, type: :model do
       'la_name' => zone_name,
       'dates' => dates,
       'total_charge' => charge,
-      'chargeable_zones' => 2
+      'chargeable_zones' => 2,
+      'undetermined_taxi' => undetermined_taxi
     }
   end
 
@@ -27,6 +28,7 @@ describe PaymentDetails, type: :model do
   let(:email) { 'test@example.com' }
   let(:charge) { 15 }
   let(:dates) { %w[2019-11-01 2019-11-02 2019-11-03] }
+  let(:undetermined_taxi) { false }
 
   it { expect(details.vrn).to eq(vrn) }
   it { expect(details.la_name).to eq(zone_name) }
@@ -38,16 +40,31 @@ describe PaymentDetails, type: :model do
   it { expect(details.chargeable_zones_count).to eq(2) }
 
   describe '.compliance_details' do
-    it 'calls ComplianceDetails model' do
-      allow(ComplianceDetails)
-        .to receive(:new)
-        .and_return(instance_double(ComplianceDetails))
-      expect(ComplianceDetails).to receive(:new).with(session_details)
-      details.compliance_details
+    context 'when vehicle is undetermined taxi' do
+      let(:undetermined_taxi) { true }
+
+      it 'calls UndeterminedComplianceDetails model' do
+        allow(UnrecognisedComplianceDetails).to receive(:new)
+          .and_return(instance_double(UnrecognisedComplianceDetails))
+        details.compliance_details
+        expect(UnrecognisedComplianceDetails).to have_received(:new).with(la_id: zone_id)
+      end
+
+      it 'returns UnrecognisedComplianceDetails instance' do
+        expect(details.compliance_details).to be_a(UnrecognisedComplianceDetails)
+      end
     end
 
-    it 'returns ComplianceDetails instance' do
-      expect(details.compliance_details).to be_a(ComplianceDetails)
+    context 'when vehicle is not undetermined taxi' do
+      it 'calls ComplianceDetails model' do
+        allow(ComplianceDetails).to receive(:new).and_return(instance_double(ComplianceDetails))
+        details.compliance_details
+        expect(ComplianceDetails).to have_received(:new).with(session_details)
+      end
+
+      it 'returns ComplianceDetails instance' do
+        expect(details.compliance_details).to be_a(ComplianceDetails)
+      end
     end
   end
 end

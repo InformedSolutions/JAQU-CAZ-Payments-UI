@@ -9,8 +9,10 @@ describe 'ChargesController - GET #local_authority', type: :request do
   let(:vrn) { 'CU57ABC' }
 
   context 'with VRN in the session' do
-    before { add_transaction_id_to_session(transaction_id) }
-    before { add_vrn_to_session(vrn: vrn) }
+    before do
+      add_transaction_id_to_session(transaction_id)
+      add_vrn_to_session(vrn: vrn)
+    end
 
     context 'with any chargeable CAZ' do
       before do
@@ -33,7 +35,7 @@ describe 'ChargesController - GET #local_authority', type: :request do
           end
         end
 
-        context 'when the vehicle in registered in the UK' do
+        context 'when the vehicle in registered in the Non-UK' do
           before do
             add_vrn_to_session(vrn: vrn, country: 'Non-UK')
             subject

@@ -12,6 +12,8 @@ describe 'VehiclesController - GET #uk_registered_details', type: :request do
       add_transaction_id_to_session(transaction_id)
       add_vrn_to_session
       mock_vehicle_details
+      mock_vehicle_compliance
+      mock_chargeable_zones
     end
 
     it 'returns http success' do
@@ -39,11 +41,28 @@ describe 'VehiclesController - GET #uk_registered_details', type: :request do
     context 'when vehicle is a taxi' do
       before do
         mock_vehicle_details_taxi
+        mock_vehicle_compliance
         subject
       end
 
       it 'sets taxi in the session' do
         expect(session[:vehicle_details]['leeds_taxi']).to be_truthy
+      end
+
+      it 'does not set undetermined vehicle' do
+        expect(session[:vehicle_details]['undetermined_taxi']).to be_falsey
+      end
+    end
+
+    context 'when vehicle is undetermined_taxi' do
+      before do
+        mock_unrecognised_taxi_vehicle_details
+        mock_undetermined_vehicle_compliance
+        subject
+      end
+
+      it 'sets undetermined_taxi = true in session' do
+        expect(session[:vehicle_details]['undetermined_taxi']).to be_truthy
       end
     end
   end

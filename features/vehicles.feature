@@ -25,6 +25,7 @@ Feature: Vehicles
     Then I enter a vehicle's registration and choose UK
       And I press the Continue
       And I should see 'Are these vehicle details correct?'
+      And I should see 'Are these vehicle details correct? | Drive in a Clean Air Zone' title
       And I press the Confirm
     Then I should see 'Select yes if the details are correct'
       And I choose that the details are incorrect
@@ -45,7 +46,7 @@ Feature: Vehicles
       And I should see 'There is a problem'
       And I should be on the non UK page
     Then I choose I confirm registration
-      And I press the Continue   
+      And I press the Continue
     Then I should see 'What is your vehicle?'
       And I press the Confirm
     Then I should see 'Tell us what type of vehicle you want to pay for'
@@ -61,6 +62,7 @@ Feature: Vehicles
     Then I enter an exempted non-UK vehicle's registration
       And I press the Continue
     Then I should see 'There is no charge for this vehicle'
+      And I should see 'There is no charge for this vehicle | Drive in a Clean Air Zone' title
 
   Scenario: User enters a correct UK vehicle's registration, choose Non-UK country (fraud detection) and choose that vehicle's details are correct
     Given I am on the home page
@@ -69,6 +71,7 @@ Feature: Vehicles
     Then I enter an UK vehicle's registration and choose Non-UK country
       And I press the Continue
     Then I should see 'Your vehicle is UK registered'
+      And I should see 'Your vehicle is UK registered | Drive in a Clean Air Zone' title
 
   Scenario: User enters a correct UK vehicle's registration, choose Non-UK country (fraud detection) and choose that vehicle's details are incorrect
     Given I am on the home page
@@ -77,6 +80,7 @@ Feature: Vehicles
     Then I enter an UK vehicle's registration and choose Non-UK country
       And I press the Continue
     Then I should see 'Your vehicle is UK registered'
+      And I should see 'Your vehicle is UK registered | Drive in a Clean Air Zone' title
 
   Scenario: User enters a vehicle's registration which cannot be recognised
     Given I am on the home page
@@ -132,6 +136,17 @@ Feature: Vehicles
         And I press the Confirm
         And I should see 'Which Clean Air Zone do you need to pay for?'
 
+  Scenario: User wants to pay for a taxi which is not registered in the DVLA
+    Given I am on the home page
+      Then I press the Start now button
+        And I should be on the enter details page
+      Then I enter an unrecognised taxi registration number and choose UK
+        And I press the Continue
+        And I should be on the unrecognised page
+      Then I choose I confirm registration
+        And I press the Continue
+        And I should be on the local authorities page
+
   Scenario: User wants to pay for undetermined (without type) correct vehicle
     Given I am on the home page
       Then I press the Start now button
@@ -157,6 +172,7 @@ Feature: Vehicles
     Then I choose that the details are correct
       And I press the Confirm
       And I should see 'There is no charge for this vehicle'
+      And I should see 'There is no charge for this vehicle | Drive in a Clean Air Zone' title
 
   Scenario: User wants to pay for undetermined (without type) incorrect vehicle
     Given I am on the home page

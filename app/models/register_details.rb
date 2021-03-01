@@ -23,6 +23,11 @@ class RegisterDetails
     register_details['registerExempt']
   end
 
+  # Returns a boolean
+  def register_taxi?
+    register_details['registeredNTR']
+  end
+
   private
 
   attr_reader :vrn
