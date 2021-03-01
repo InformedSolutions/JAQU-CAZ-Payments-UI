@@ -11,7 +11,7 @@
     "govuk-frontend": "^3.11.0",
     "improved-yarn-audit": "^2.3.2",
     "jquery": "^3.5.1",
-    "litepicker": "^1.5.7",
+    "litepicker": "^2.0.10",
     "rails-erb-loader": "^5.5.2",
     "turbolinks": "^5.2.0"
   },
