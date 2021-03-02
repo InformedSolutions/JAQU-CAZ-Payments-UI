@@ -11,7 +11,7 @@ describe 'ChargesController - GET #review_payment', type: :request do
   let(:country) { 'UK' }
   let(:zone_id) { SecureRandom.uuid }
   let(:charge) { 50 }
-  let(:la_name) { 'Weeklydiscountcaz' }
+  let(:la_name) { 'Taxidiscountcaz' }
   let(:details) { {} }
 
   context 'with full payment details in the session' do
@@ -51,7 +51,7 @@ describe 'ChargesController - GET #review_payment', type: :request do
       end
     end
 
-    context 'with Weeklydiscountcaz charge flow' do
+    context 'with Taxidiscountcaz charge flow' do
       before do
         caz_double = instance_double(Caz, active_charge_start_date: '2020-03-01')
         allow(FetchSingleCazData).to receive(:call).and_return(caz_double)

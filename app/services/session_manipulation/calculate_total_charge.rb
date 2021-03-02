@@ -43,7 +43,7 @@ module SessionManipulation
       add_fields(dates: dates, total_charge: total_charge, weekly: false)
     end
 
-    # It sets total_charge to equal Weeklydiscountcaz discounted price of:
+    # It sets total_charge to equal Taxidiscountcaz discounted price of:
     #   50 (if one week is selected)
     #   100 (if two are selected).
     def weekly_total_charge

@@ -43,7 +43,7 @@ module ApiMocks
       .and_return(compliance_data)
   end
 
-  # Mocks response from compliance endpoint in VCCS API with zero charge for Weeklydiscountcaz.
+  # Mocks response from compliance endpoint in VCCS API with zero charge for Taxidiscountcaz.
   def mock_private_car_compliance
     compliance_data = read_file('vehicle_compliance_one_charge_response.json')
     allow(ComplianceCheckerApi)
@@ -66,7 +66,7 @@ module ApiMocks
   end
 
   # Mocks compliance data for non-DVLA vehicle.
-  # If +one_charge+ is set to true, it returns zero as charge for Weeklydiscountcaz.
+  # If +one_charge+ is set to true, it returns zero as charge for Taxidiscountcaz.
   def mock_unrecognised_compliance(one_charge: false)
     compliance_data = read_file(
       one_charge ? 'unrecognised_one_charge_response.json' : 'unrecognised_vehicle_response.json'

@@ -130,7 +130,7 @@ describe 'DatesController - POST #confirm_date_weekly', type: :request do
     it_behaves_like 'la is missing'
   end
 
-  context 'when Weeklydiscountcaz discount is NOT possible' do
-    it_behaves_like 'not allowed Weeklydiscountcaz discount'
+  context 'when Taxidiscountcaz discount is NOT possible' do
+    it_behaves_like 'not allowed Taxidiscountcaz discount'
   end
 end

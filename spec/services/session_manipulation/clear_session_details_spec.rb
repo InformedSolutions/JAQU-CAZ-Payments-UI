@@ -19,7 +19,7 @@ describe SessionManipulation::ClearSessionDetails do
       'chargeable_zones' => 2,
       'la_id' => SecureRandom.uuid,
       'daily_charge' => 12.5,
-      'la_name' => 'Weeklydiscountcaz',
+      'la_name' => 'Taxidiscountcaz',
       'weekly_possible' => true,
       'tariff_code' => 'test',
       'charge_period' => 'daily-charge',

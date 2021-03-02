@@ -38,7 +38,7 @@ module SessionManipulation
         daily_charge: compliance_details.charge,
         tariff_code: compliance_details.tariff_code,
         weekly_possible:
-          session[SESSION_KEY]['weekly_taxi'] && compliance_details.zone_name == 'Weeklydiscountcaz'
+          session[SESSION_KEY]['weekly_taxi'] && compliance_details.zone_name == 'Taxidiscountcaz'
       )
     end
 

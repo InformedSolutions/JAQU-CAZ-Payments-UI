@@ -12,7 +12,7 @@ describe UnrecognisedComplianceDetails, type: :model do
         [
           {
             'cleanAirZoneId' => '7d0c4240-1618-446b-bde2-2f3458c8a521',
-            'name' => 'Weeklydiscountcaz',
+            'name' => 'Taxidiscountcaz',
             'charge' => 9.0,
             'tariffCode' => 'BAT01-TAXI_OR_PHV',
             'informationUrls' => {
@@ -36,7 +36,7 @@ describe UnrecognisedComplianceDetails, type: :model do
 
   describe '.zone_name' do
     it 'returns proper value' do
-      expect(details.zone_name).to eq('Weeklydiscountcaz')
+      expect(details.zone_name).to eq('Taxidiscountcaz')
     end
   end
 

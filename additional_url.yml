@@ -3,6 +3,6 @@ global:
 birmingham:
   fleet: 'https://www.brumbreathes.co.uk/homepage/7/financial-incentives'
   non_fleet: 'https://www.brumbreathes.co.uk/homepage/7/financial-incentives'
-weeklydiscountcaz:
+taxidiscountcaz:
   fleet: 'https://test.com'
   non_fleet: 'https://test.com'

@@ -1,5 +1,5 @@
-Feature: Weeklydiscountcaz Taxi
-  In order to pay the charge with a Weeklydiscountcaz weekly discount
+Feature: Taxidiscountcaz Taxi
+  In order to pay the charge with a Taxidiscountcaz weekly discount
   As a user
   I want to be able to select weekly payment flow
 
@@ -8,7 +8,7 @@ Feature: Weeklydiscountcaz Taxi
       And I have already paid for today
     Then I choose that the details are correct
       And I press the Confirm
-    Then I select Weeklydiscountcaz
+    Then I select Taxidiscountcaz
       And I press the Continue
       And I should be on the select period page
       And I should see 'How many days do you want to pay for?'
@@ -16,7 +16,7 @@ Feature: Weeklydiscountcaz Taxi
       And I should see 'Choose to pay for 1 day or 7 days'
     Then I select Pay for 7 days
       And I press the Continue
-      And I should see 'Pay a weekly Weeklydiscountcaz Clean Air Zone charge'
+      And I should see 'Pay a weekly Taxidiscountcaz Clean Air Zone charge'
     Then I press the Continue
       And I should see 'Confirm you have checked if you are eligible for an exemption'
     When I choose I confirm that I am not exempt
@@ -31,7 +31,7 @@ Feature: Weeklydiscountcaz Taxi
       And I am not paid for today
     When I choose that the details are correct
       And I press the Confirm
-    Then I select Weeklydiscountcaz
+    Then I select Taxidiscountcaz
       And I press the Continue
     Then I select Pay for 7 days
       And I press the Continue
@@ -50,7 +50,7 @@ Feature: Weeklydiscountcaz Taxi
       And I have already paid for tomorrow
     When I choose that the details are correct
       And I press the Confirm
-    Then I select Weeklydiscountcaz
+    Then I select Taxidiscountcaz
       And I press the Continue
     Then I select Pay for 7 days
       And I press the Continue
@@ -62,12 +62,12 @@ Feature: Weeklydiscountcaz Taxi
     Given I am on the vehicle details page with taxi vehicle to check
     Then I choose that the details are correct
       And I press the Confirm
-    Then I select Weeklydiscountcaz
+    Then I select Taxidiscountcaz
       And I press the Continue
     Then I press the Continue
     Then I select Pay for 1 day
       And I press the Continue
-      And I should see 'Pay a daily Weeklydiscountcaz Clean Air Zone charge'
+      And I should see 'Pay a daily Taxidiscountcaz Clean Air Zone charge'
 
   Scenario: User selects dates to pay for and d-day is within date range you can pay
     Given I am on the weekly dates page when d-day was yesterday and today day is paid

@@ -18,7 +18,7 @@ describe 'PaymentsController - GET #success', type: :request do
       vrn: vrn,
       payment_id: payment_id,
       user_email: user_email,
-      la_name: 'Weeklydiscountcaz',
+      la_name: 'Taxidiscountcaz',
       dates: dates,
       total_charge: charge,
       chargeable_zones: 2,
