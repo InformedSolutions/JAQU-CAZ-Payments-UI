@@ -82,7 +82,7 @@ class VehicleDetails
 
   # Returns if vehicle is register in Leeds as taxi or PHV
   def leeds_taxi?
-    details_api['licensingAuthoritiesNames']&.include?('TaxiDiscountCAZ')
+    details_api['licensingAuthoritiesNames']&.include?('Taxidiscountcaz')
   end
 
   # Returns if vehicle is a taxi or PHV - boolean.

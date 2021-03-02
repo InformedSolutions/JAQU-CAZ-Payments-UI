@@ -39,8 +39,8 @@ describe ComplianceDetails, type: :model do
     ]
   end
   let(:phgv_discount_available) { true }
-  let(:name) { 'Leeds' }
-  let(:url) { 'www.wp.pl' }
+  let(:name) { 'Taxidiscountcaz' }
+  let(:url) { 'https://www.brumbreathes.co.uk/homepage/7/financial-incentives' }
 
   let(:unrecognised_response) do
     {
@@ -86,17 +86,17 @@ describe ComplianceDetails, type: :model do
 
       describe '.dynamic_compliance_url' do
         describe 'when additional_compliance_url is present' do
-          let(:leeds_urls) { YAML.load_file('additional_url.yml')['leeds'] }
+          let(:birmingham_urls) { YAML.load_file('additional_url.yml')['birmingham'] }
 
-          it 'returns additional_compliance_url for leeds' do
-            expect(details.dynamic_compliance_url).to eq(leeds_urls['fleet'])
+          it 'returns additional_compliance_url for birmingham' do
+            expect(details.dynamic_compliance_url).to eq(birmingham_urls['fleet'])
           end
 
           describe 'taxi' do
             before { vehicle_details.merge!('leeds_taxi' => true) }
 
-            it 'returns leeds non fleet url' do
-              expect(details.additional_compliance_url).to eq(leeds_urls['non_fleet'])
+            it 'returns birmingham non fleet url' do
+              expect(details.additional_compliance_url).to eq(birmingham_urls['non_fleet'])
             end
           end
         end
@@ -127,18 +127,18 @@ describe ComplianceDetails, type: :model do
       end
 
       describe 'additional_compliance_url' do
-        describe 'Leeds' do
-          let(:leeds_urls) { YAML.load_file('additional_url.yml')['leeds'] }
+        describe 'Birmingham' do
+          let(:birmingham_urls) { YAML.load_file('additional_url.yml')['birmingham'] }
 
-          it 'returns leeds fleet url' do
-            expect(details.additional_compliance_url).to eq(leeds_urls['fleet'])
+          it 'returns birmingham fleet url' do
+            expect(details.additional_compliance_url).to eq(birmingham_urls['fleet'])
           end
 
           describe 'taxi' do
             before { vehicle_details.merge!('leeds_taxi' => true) }
 
-            it 'returns leeds non fleet url' do
-              expect(details.additional_compliance_url).to eq(leeds_urls['non_fleet'])
+            it 'returns birmingham non fleet url' do
+              expect(details.additional_compliance_url).to eq(birmingham_urls['non_fleet'])
             end
           end
         end

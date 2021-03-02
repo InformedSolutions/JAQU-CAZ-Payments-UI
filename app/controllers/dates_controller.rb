@@ -402,7 +402,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
 
   # Define the back button path on daily and weekly charge page.
   def determinate_return_path
-    la_name == 'TaxiDiscountCAZ' && weekly_possible ? select_period_dates_path : local_authority_charges_path
+    la_name == 'Taxidiscountcaz' && weekly_possible ? select_period_dates_path : local_authority_charges_path
   end
 
   # Checks if weekly discount is possible

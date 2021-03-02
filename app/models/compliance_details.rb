@@ -77,7 +77,7 @@ class ComplianceDetails
     zone_links = additional_urls_file[zone_name.downcase]
     return if zone_links.blank?
 
-    if (leeds_taxi && zone_name == 'TaxiDiscountCAZ') || (car? && zone_name == 'Birmingham')
+    if (leeds_taxi && zone_name == 'Taxidiscountcaz') || (car? && zone_name == 'Birmingham')
       return zone_links['non_fleet']
     end
 

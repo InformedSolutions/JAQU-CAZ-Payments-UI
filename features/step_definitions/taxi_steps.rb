@@ -21,8 +21,8 @@ Given('I am on the vehicle details page with unrecognized taxi vehicle to check'
   visit details_vehicles_path
 end
 
-Then('I select TaxiDiscountCAZ') do
-  choose('TaxiDiscountCAZ')
+Then('I select Taxidiscountcaz') do
+  choose('Taxidiscountcaz')
 end
 
 Then('I select Pay for 7 days') do
