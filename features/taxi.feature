@@ -1,5 +1,5 @@
-Feature: Leeds Taxi
-  In order to pay the charge with a Leeds weekly discount
+Feature: TaxiDiscountCAZ Taxi
+  In order to pay the charge with a TaxiDiscountCAZ weekly discount
   As a user
   I want to be able to select weekly payment flow
 
@@ -8,7 +8,7 @@ Feature: Leeds Taxi
       And I have already paid for today
     Then I choose that the details are correct
       And I press the Confirm
-    Then I select Leeds
+    Then I select TaxiDiscountCAZ
       And I press the Continue
       And I should be on the select period page
       And I should see 'How many days do you want to pay for?'
@@ -16,7 +16,7 @@ Feature: Leeds Taxi
       And I should see 'Choose to pay for 1 day or 7 days'
     Then I select Pay for 7 days
       And I press the Continue
-      And I should see 'Pay a weekly Leeds Clean Air Zone charge'
+      And I should see 'Pay a weekly TaxiDiscountCAZ Clean Air Zone charge'
     Then I press the Continue
       And I should see 'Confirm you have checked if you are eligible for an exemption'
     When I choose I confirm that I am not exempt

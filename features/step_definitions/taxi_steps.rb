@@ -4,7 +4,7 @@ Given('I am on the vehicle details page with taxi vehicle to check') do
   add_vrn_and_country_to_session
   mock_vehicle_details_taxi
   mock_chargeable_zones
-  mock_vehicle_compliance_leeds
+  mock_vehicle_compliance_discount_taxi
   mock_non_dvla_response
   mock_single_caz_request_for_charge_start_date
   visit details_vehicles_path
@@ -21,8 +21,8 @@ Given('I am on the vehicle details page with unrecognized taxi vehicle to check'
   visit details_vehicles_path
 end
 
-Then('I select Leeds') do
-  choose('Leeds')
+Then('I select TaxiDiscountCAZ') do
+  choose('TaxiDiscountCAZ')
 end
 
 Then('I select Pay for 7 days') do
@@ -143,8 +143,8 @@ def mock_unrecognised_compliance
 end
 
 # Mocks response from compliance endpoint in VCCS API
-def mock_vehicle_compliance_leeds
-  compliance_data = read_file('vehicle_compliance_leeds_response.json')
+def mock_vehicle_compliance_discount_taxi
+  compliance_data = read_file('vehicle_compliance_discount_taxi_response.json')
   allow(ComplianceCheckerApi).to receive(:vehicle_compliance).and_return(compliance_data)
 end
 
