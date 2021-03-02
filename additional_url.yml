@@ -1,8 +1,5 @@
 global:
   exemption_guidance: https://www.gov.uk/guidance/driving-in-a-clean-air-zone#exemptions
-leeds:
-  fleet: 'https://www.leeds.gov.uk/business/environmental-health-for-business/air-quality/support-for-buses-coaches-and-hgvs-clean-air-charging-zone'
-  non_fleet: 'https://www.leeds.gov.uk/business/environmental-health-for-business/air-quality/support-for-taxis-and-private-hire-clean-air-charging-zone'
 birmingham:
   fleet: 'https://www.brumbreathes.co.uk/homepage/7/financial-incentives'
   non_fleet: 'https://www.brumbreathes.co.uk/homepage/7/financial-incentives'
