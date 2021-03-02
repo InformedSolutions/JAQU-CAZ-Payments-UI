@@ -39,7 +39,7 @@ describe ComplianceDetails, type: :model do
     ]
   end
   let(:phgv_discount_available) { true }
-  let(:name) { 'Taxidiscountcaz' }
+  let(:name) { 'Weeklydiscountcaz' }
   let(:url) { 'https://www.brumbreathes.co.uk/homepage/7/financial-incentives' }
 
   let(:unrecognised_response) do
@@ -86,16 +86,16 @@ describe ComplianceDetails, type: :model do
 
       describe '.dynamic_compliance_url' do
         describe 'when additional_compliance_url is present' do
-          let(:taxidiscountcaz_urls) { YAML.load_file('additional_url.yml')['taxidiscountcaz'] }
+          let(:taxidiscountcaz_urls) { YAML.load_file('additional_url.yml')['weeklydiscountcaz'] }
 
-          it 'returns additional_compliance_url for taxidiscountcaz' do
+          it 'returns additional_compliance_url for weeklydiscountcaz' do
             expect(details.dynamic_compliance_url).to eq(taxidiscountcaz_urls['fleet'])
           end
 
           describe 'taxi' do
             before { vehicle_details.merge!('weekly_taxi' => true) }
 
-            it 'returns taxidiscountcaz non fleet url' do
+            it 'returns weeklydiscountcaz non fleet url' do
               expect(details.additional_compliance_url).to eq(taxidiscountcaz_urls['non_fleet'])
             end
           end
@@ -127,17 +127,17 @@ describe ComplianceDetails, type: :model do
       end
 
       describe 'additional_compliance_url' do
-        describe 'Taxidiscountcaz' do
-          let(:taxidiscountcaz_urls) { YAML.load_file('additional_url.yml')['taxidiscountcaz'] }
+        describe 'Weeklydiscountcaz' do
+          let(:taxidiscountcaz_urls) { YAML.load_file('additional_url.yml')['weeklydiscountcaz'] }
 
-          it 'returns taxidiscountcaz fleet url' do
+          it 'returns weeklydiscountcaz fleet url' do
             expect(details.additional_compliance_url).to eq(taxidiscountcaz_urls['fleet'])
           end
 
           describe 'taxi' do
             before { vehicle_details.merge!('weekly_taxi' => true) }
 
-            it 'returns taxidiscountcaz non fleet url' do
+            it 'returns weeklydiscountcaz non fleet url' do
               expect(details.additional_compliance_url).to eq(taxidiscountcaz_urls['non_fleet'])
             end
           end

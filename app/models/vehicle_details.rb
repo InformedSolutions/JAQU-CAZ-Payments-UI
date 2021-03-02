@@ -82,7 +82,7 @@ class VehicleDetails
 
   # Returns if vehicle is register in placeholder discount enabled CAZ as taxi or PHV
   def weekly_taxi?
-    details_api['licensingAuthoritiesNames']&.include?('Taxidiscountcaz')
+    details_api['licensingAuthoritiesNames']&.include?('Weeklydiscountcaz')
   end
 
   # Returns if vehicle is a taxi or PHV - boolean.

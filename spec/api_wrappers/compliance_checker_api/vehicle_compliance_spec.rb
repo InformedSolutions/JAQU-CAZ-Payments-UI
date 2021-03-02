@@ -6,7 +6,7 @@ describe 'ComplianceCheckerApi.vehicle_details' do
   subject { ComplianceCheckerApi.vehicle_compliance(vrn, zones) }
 
   let(:vrn) { 'CAS310' }
-  let(:zones) { %w[birmingham Taxidiscountcaz] }
+  let(:zones) { %w[birmingham Weeklydiscountcaz] }
   let(:url) { %r{#{vrn}/compliance\?zones=} }
 
   context 'when call returns 200' do

@@ -36,7 +36,7 @@ describe VehicleDetails, type: :model do
             'cleanAirZoneId' => '5cd7441d-766f-48ff-b8ad-1809586fea37'
           },
           {
-            'cleanAirZoneId' => '131af03c-f7f4-4aef-81ee-aae4f56dbeb5'
+            'cleanAirZoneId' => '7d0c4240-1618-446b-bde2-2f3458c8a521'
           }
         ]
       )

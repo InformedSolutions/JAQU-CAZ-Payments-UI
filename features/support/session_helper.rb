@@ -59,7 +59,7 @@ module SessionHelper
   end
 
   def compliance_details
-    { vrn: vrn, country: 'UK', la_id: random_la_uuid, la_name: 'Taxidiscountcaz', daily_charge: 9 }
+    { vrn: vrn, country: 'UK', la_id: random_la_uuid, la_name: 'Weeklydiscountcaz', daily_charge: 9 }
   end
 
   def weekly_charge_details(weekly_charge_today, weekly_dates)
