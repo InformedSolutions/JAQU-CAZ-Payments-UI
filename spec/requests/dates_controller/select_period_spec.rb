@@ -8,7 +8,7 @@ describe 'DatesController - GET #select_period', type: :request do
   let(:transaction_id) { SecureRandom.uuid }
 
   context 'with VRN and LA in the session' do
-    context 'when Leeds weekly discount is possible' do
+    context 'when Weeklydiscountcaz discount is possible' do
       before { add_details_to_session(weekly_possible: true) }
 
       it 'returns a success response' do
@@ -44,8 +44,8 @@ describe 'DatesController - GET #select_period', type: :request do
       end
     end
 
-    context 'when Leeds weekly discount is NOT possible' do
-      it_behaves_like 'not allowed Leeds discount'
+    context 'when Weeklydiscountcaz discount is NOT possible' do
+      it_behaves_like 'not allowed Weeklydiscountcaz discount'
     end
   end
 

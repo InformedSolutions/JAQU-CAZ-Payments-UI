@@ -11,7 +11,7 @@ describe 'ChargesController - GET #review_payment', type: :request do
   let(:country) { 'UK' }
   let(:zone_id) { SecureRandom.uuid }
   let(:charge) { 50 }
-  let(:la_name) { 'Leeds' }
+  let(:la_name) { 'Weeklydiscountcaz' }
   let(:details) { {} }
 
   context 'with full payment details in the session' do
@@ -31,7 +31,7 @@ describe 'ChargesController - GET #review_payment', type: :request do
       end
     end
 
-    context 'with Leeds charge flow' do
+    context 'with Weeklydiscountcaz charge flow' do
       before do
         add_transaction_id_to_session(transaction_id)
         add_full_payment_details(weekly: true)

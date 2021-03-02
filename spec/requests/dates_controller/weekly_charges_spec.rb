@@ -12,7 +12,7 @@ describe 'DatesController - GET #weekly_charge', type: :request do
   let(:url) { 'www.wp.pl' }
   let(:details) do
     instance_double(ComplianceDetails,
-                    zone_name: 'Leeds',
+                    zone_name: 'Weeklydiscountcaz',
                     charge: 50,
                     exemption_or_discount_url: url,
                     compliance_url: url,
@@ -79,7 +79,7 @@ describe 'DatesController - GET #weekly_charge', type: :request do
     it_behaves_like 'la is missing'
   end
 
-  context 'when Leeds weekly discount is NOT possible' do
-    it_behaves_like 'not allowed Leeds discount'
+  context 'when Weeklydiscountcaz discount is NOT possible' do
+    it_behaves_like 'not allowed Weeklydiscountcaz discount'
   end
 end

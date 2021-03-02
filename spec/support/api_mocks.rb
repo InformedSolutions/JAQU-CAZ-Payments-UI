@@ -43,7 +43,7 @@ module ApiMocks
       .and_return(compliance_data)
   end
 
-  # Mocks response from compliance endpoint in VCCS API with zero charge for Leeds.
+  # Mocks response from compliance endpoint in VCCS API with zero charge for Weeklydiscountcaz.
   def mock_private_car_compliance
     compliance_data = read_file('vehicle_compliance_one_charge_response.json')
     allow(ComplianceCheckerApi)

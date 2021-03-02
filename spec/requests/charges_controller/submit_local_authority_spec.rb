@@ -9,7 +9,7 @@ describe 'ChargesController - POST #submit_local_authority', type: :request do
 
   let(:transaction_id) { SecureRandom.uuid }
   let(:zone_id) { SecureRandom.uuid }
-  let(:zone_name) { 'Leeds' }
+  let(:zone_name) { 'Taxidiscountcaz' }
   let(:charge) { 50 }
   let(:tariff) { 'BCC01-private_car' }
   let(:phgv_discount_available) { true }
@@ -89,9 +89,9 @@ describe 'ChargesController - POST #submit_local_authority', type: :request do
         expect(session[:vehicle_details]['weekly_possible']).to be_falsey
       end
 
-      context 'when vehicle is a taxi in Leeds' do
+      context 'when vehicle is a taxi in Taxidiscountcaz' do
         before do
-          add_vehicle_details_to_session(vrn: 'CU57ABC', country: 'UK', leeds_taxi: true)
+          add_vehicle_details_to_session(vrn: 'CU57ABC', country: 'UK', weekly_taxi: true)
         end
 
         it 'returns redirect to DatesController#select_period' do

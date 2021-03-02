@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe SessionManipulation::SetLeedsTaxi do
+describe SessionManipulation::SetWeeklyTaxi do
   subject { described_class.call(session: session) }
 
   let(:session) { { vehicle_details: details } }
@@ -12,7 +12,7 @@ describe SessionManipulation::SetLeedsTaxi do
 
   it 'sets taxi' do
     subject
-    expect(session[:vehicle_details]['leeds_taxi']).to be_truthy
+    expect(session[:vehicle_details]['weekly_taxi']).to be_truthy
   end
 
   context 'when session is already filled with more data' do
@@ -22,7 +22,7 @@ describe SessionManipulation::SetLeedsTaxi do
 
     it 'clears keys from next steps' do
       subject
-      expect(session[:vehicle_details].keys).to contain_exactly('vrn', 'country', 'leeds_taxi')
+      expect(session[:vehicle_details].keys).to contain_exactly('vrn', 'country', 'weekly_taxi')
     end
   end
 end

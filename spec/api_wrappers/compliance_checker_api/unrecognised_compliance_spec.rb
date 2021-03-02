@@ -6,7 +6,7 @@ describe 'ComplianceCheckerApi.unrecognised_compliance' do
   subject { ComplianceCheckerApi.unrecognised_compliance(type, zones) }
 
   let(:type) { 'car' }
-  let(:zones) { %w[birmingham leeds] }
+  let(:zones) { %w[birmingham Weeklydiscountcaz] }
   let(:url) { %r{/vehicles/unrecognised/#{type}/compliance\?zones=} }
 
   context 'when call returns 200' do

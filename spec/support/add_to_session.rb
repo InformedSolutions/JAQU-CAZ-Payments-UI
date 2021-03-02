@@ -79,7 +79,7 @@ module AddToSession
       vrn: details[:vrn] || 'CU57ABC',
       country: details[:country] || 'UK',
       la_id: details[:la_id] || SecureRandom.uuid,
-      la_name: details[:la_name] || 'Leeds',
+      la_name: details[:la_name] || 'Weeklydiscountcaz',
       daily_charge: details[:daily_charge] || 15,
       undetermined_taxi: details[:undetermined_taxi] || false
     }

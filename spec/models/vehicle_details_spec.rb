@@ -9,7 +9,7 @@ describe VehicleDetails, type: :model do
   let(:type_approval) { 'M1' }
   let(:taxi_or_phv) { false }
   let(:type) { 'car' }
-  let(:las) { %w[Leeds Birmingham] }
+  let(:las) { %w[Weeklydiscountcaz Birmingham] }
   let(:fuel_type) { 'diesel' }
 
   let(:response) do
@@ -186,14 +186,14 @@ describe VehicleDetails, type: :model do
     end
   end
 
-  describe '.leeds_taxi?' do
-    subject(:taxi) { compliance.leeds_taxi? }
+  describe '.weekly_taxi?' do
+    subject(:taxi) { compliance.weekly_taxi? }
 
-    context 'when Leeds is in licensingAuthoritiesNames' do
+    context 'when Weeklydiscountcaz is in licensingAuthoritiesNames' do
       it { is_expected.to be_truthy }
     end
 
-    context 'when Leeds is NOT in licensingAuthoritiesNames' do
+    context 'when Weeklydiscountcaz is NOT in licensingAuthoritiesNames' do
       let(:las) { %w[Birmingham London] }
 
       it { is_expected.to be_falsey }

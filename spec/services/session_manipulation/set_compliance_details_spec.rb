@@ -8,7 +8,7 @@ describe SessionManipulation::SetComplianceDetails do
   let(:session) { { vehicle_details: details } }
   let(:details) { { 'vrn' => 'CU123AB', 'country' => 'UK' } }
   let(:la_id) { SecureRandom.uuid }
-  let(:la_name) { 'Leeds' }
+  let(:la_name) { 'Weeklydiscountcaz' }
   let(:daily_charge) { 12.5 }
   let(:tariff) { 'BCC01-private_car' }
 
@@ -48,8 +48,8 @@ describe SessionManipulation::SetComplianceDetails do
       expect(session[:vehicle_details]['tariff_code']).to eq(tariff)
     end
 
-    context 'when vehicle is a taxi in Leeds' do
-      let(:session) { { vehicle_details: details.merge('leeds_taxi' => true) } }
+    context 'when vehicle is a taxi in Weeklydiscountcaz' do
+      let(:session) { { vehicle_details: details.merge('weekly_taxi' => true) } }
 
       it 'sets weekly_possible to true' do
         expect(session[:vehicle_details]['weekly_possible']).to be_truthy

@@ -19,7 +19,7 @@ describe SessionManipulation::CalculateTotalCharge do
       'vrn' => 'CU123AB',
       'country' => 'UK',
       'la_id' => SecureRandom.uuid,
-      'la_name' => 'Leeds',
+      'la_name' => 'Weeklydiscountcaz',
       'daily_charge' => 20
     }
   end
@@ -45,7 +45,7 @@ describe SessionManipulation::CalculateTotalCharge do
     end
   end
 
-  context 'when discounted Leeds path is selected' do
+  context 'when Weeklydiscountcaz path is selected' do
     let(:weekly) { true }
     let(:dates) { ['2019-11-01'] }
     let(:expected_dates) { (1..7).map { |day| "2019-11-0#{day}" } }
