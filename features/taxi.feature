@@ -31,7 +31,7 @@ Feature: TaxiDiscountCAZ Taxi
       And I am not paid for today
     When I choose that the details are correct
       And I press the Confirm
-    Then I select Leeds
+    Then I select TaxiDiscountCAZ
       And I press the Continue
     Then I select Pay for 7 days
       And I press the Continue
@@ -50,7 +50,7 @@ Feature: TaxiDiscountCAZ Taxi
       And I have already paid for tomorrow
     When I choose that the details are correct
       And I press the Confirm
-    Then I select Leeds
+    Then I select TaxiDiscountCAZ
       And I press the Continue
     Then I select Pay for 7 days
       And I press the Continue
@@ -62,12 +62,12 @@ Feature: TaxiDiscountCAZ Taxi
     Given I am on the vehicle details page with taxi vehicle to check
     Then I choose that the details are correct
       And I press the Confirm
-    Then I select Leeds
+    Then I select TaxiDiscountCAZ
       And I press the Continue
     Then I press the Continue
     Then I select Pay for 1 day
       And I press the Continue
-      And I should see 'Pay a daily Leeds Clean Air Zone charge'
+      And I should see 'Pay a daily TaxiDiscountCAZ Clean Air Zone charge'
 
   Scenario: User selects dates to pay for and d-day is within date range you can pay
     Given I am on the weekly dates page when d-day was yesterday and today day is paid
