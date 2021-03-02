@@ -2,7 +2,7 @@
 
 module Dates
   ##
-  # Class is used to hold dates of Leeds Taxi weekly selections to use them after back button click
+  # Class is used to hold dates of Discounted Taxi weekly selections to use them after back button click
   #
   # ==== Usage
   #

@@ -185,13 +185,13 @@ class ApplicationController < ActionController::Base # rubocop:disable Metrics/C
     session[:history][transaction_id][:second_week_start_date] = session[:second_week_start_date]
   end
 
-  # restores the main session and leeds taxi data if exists
+  # restores the main session and weekly discount taxi data if exists
   def restore_session
     session[:vehicle_details] = session.dig(:history, url_id, :vehicle_details)
     restore_weekly_taxi
   end
 
-  # restores leeds taxi data if exists
+  # restores weekly discount taxi data if exists
   def restore_weekly_taxi
     session[:first_week_start_date] = session.dig(:history, url_id, :first_week_start_date)
     session[:second_week_start_date] = session.dig(:history, url_id, :second_week_start_date)

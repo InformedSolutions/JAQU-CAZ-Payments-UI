@@ -18,7 +18,7 @@ module SessionManipulation
     # ==== Attributes
     # * +session+ - the user's session
     # * +dates+ - array of strings, selected dates in the proper format, eg. ['2019-11-01', '2019-11-03']
-    # * +weekly+ - boolean, determines if Leeds weekly discount is used
+    # * +weekly+ - boolean, determines if weekly taxi discount discount is used
     #
     def initialize(session:, dates: session[SESSION_KEY]['weekly_dates'], weekly: false)
       @session = session
@@ -43,7 +43,7 @@ module SessionManipulation
       add_fields(dates: dates, total_charge: total_charge, weekly: false)
     end
 
-    # It sets total_charge to equal Leeds discounted price of:
+    # It sets total_charge to equal Weeklydiscountcaz discounted price of:
     #   50 (if one week is selected)
     #   100 (if two are selected).
     def weekly_total_charge
@@ -52,7 +52,7 @@ module SessionManipulation
       add_week_dates
     end
 
-    # It populates a given start date to return a whole week of Leeds discounted path
+    # It populates a given start date to return a whole week of weekly taxi discounted path
     def weekly_dates(start_date)
       selected_date = Date.strptime(start_date, Dates::Base::VALUE_DATE_FORMAT)
       selected_date

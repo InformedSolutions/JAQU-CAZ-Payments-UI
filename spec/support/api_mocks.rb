@@ -66,7 +66,7 @@ module ApiMocks
   end
 
   # Mocks compliance data for non-DVLA vehicle.
-  # If +one_charge+ is set to true, it returns zero as charge for Leeds.
+  # If +one_charge+ is set to true, it returns zero as charge for Weeklydiscountcaz.
   def mock_unrecognised_compliance(one_charge: false)
     compliance_data = read_file(
       one_charge ? 'unrecognised_one_charge_response.json' : 'unrecognised_vehicle_response.json'

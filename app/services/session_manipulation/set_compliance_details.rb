@@ -4,7 +4,7 @@ module SessionManipulation
   ##
   # Service used to set compliance details of the vehicle for the selected CAZ.
   # It sets CAZ Id and name, daily charge for the vehicle
-  # and marks if Leeds weekly discount in possible for this payment.
+  # and marks if weekly taxi discount in possible for this payment.
   #
   # Service calls backend APi compliance endpoint by using ComplianceDetails model.
   #

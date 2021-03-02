@@ -2,7 +2,7 @@
 
 module SessionManipulation
   ##
-  # Service used to mark vehicle as a taxi of PHV registered in Leeds.
+  # Service used to mark vehicle as a taxi of PHV registered in Weeklydiscountcaz.
   #
   # ==== Usage
   #    SessionManipulation::SetWeeklyTaxi.call(session: session)
