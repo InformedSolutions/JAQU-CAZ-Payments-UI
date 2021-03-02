@@ -66,7 +66,7 @@ class ApplicationController < ActionController::Base # rubocop:disable Metrics/C
     vehicle_details('vrn')
   end
 
-  # Gets LA name from vehicle_details hash in the session. Returns string, eg 'Leeds'
+  # Gets LA name from vehicle_details hash in the session. Returns string, eg 'Bath'
   def la_name
     vehicle_details('la_name')
   end

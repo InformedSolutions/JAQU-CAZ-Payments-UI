@@ -34,7 +34,7 @@ class UnrecognisedComplianceDetails
 
   # Displays root path to the CAZ campaign site
   #
-  # Returns an URL, eg. "https://www.leeds.gov.uk/business/environmental-health-for-business/air-quality"
+  # Returns an URL, eg. "https://beta.bathnes.gov.uk/bath-clean-air-zone"
   def main_info_url
     url('mainInfo')
   end
