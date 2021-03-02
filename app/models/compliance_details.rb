@@ -21,7 +21,7 @@ class ComplianceDetails
     @zone_id = vehicle_details['la_id']
     @non_dvla = vehicle_details['country'] != 'UK' || vehicle_details['unrecognised'] ||
                 vehicle_details['undetermined']
-    @leeds_taxi = vehicle_details['leeds_taxi'] || false
+    @weekly_taxi = vehicle_details['weekly_taxi'] || false
   end
 
   # Returns a string, eg. 'Birmingham'.
@@ -77,7 +77,7 @@ class ComplianceDetails
     zone_links = additional_urls_file[zone_name.downcase]
     return if zone_links.blank?
 
-    if (leeds_taxi && zone_name == 'Leeds') || (car? && zone_name == 'Birmingham')
+    if (weekly_taxi && zone_name == 'Taxidiscountcaz') || (car? && zone_name == 'Birmingham')
       return zone_links['non_fleet']
     end
 
@@ -94,7 +94,7 @@ class ComplianceDetails
   private
 
   # Attributes used to perform the backend call
-  attr_reader :vrn, :zone_id, :non_dvla, :type, :leeds_taxi
+  attr_reader :vrn, :zone_id, :non_dvla, :type, :weekly_taxi
 
   # Helper method used to take given url from URLs hash
   #

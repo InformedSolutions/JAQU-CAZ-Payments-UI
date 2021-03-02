@@ -285,7 +285,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
     @vehicle_details = VehicleDetails.new(vrn)
     return redirect_to(exempt_vehicles_path(id: transaction_id)) if @vehicle_details.exempt?
 
-    SessionManipulation::SetLeedsTaxi.call(session: session) if @vehicle_details.leeds_taxi?
+    SessionManipulation::SetWeeklyTaxi.call(session: session) if @vehicle_details.weekly_taxi?
     SessionManipulation::SetType.call(session: session, type: @vehicle_details.type)
     SessionManipulation::SetUndetermined.call(session: session) if @vehicle_details.undetermined
     SessionManipulation::SetUndeterminedTaxi.call(session: session) if @vehicle_details.undetermined_taxi?

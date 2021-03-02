@@ -151,7 +151,7 @@ class ChargesController < ApplicationController # rubocop:disable Metrics/ClassL
     end
   end
 
-  # Returns redirect to selecting period if Leeds discounted charge is available.
+  # Returns redirect to selecting period if weekly taxi discounted charge is available.
   # Else, redirect to disbount page if Bath phgv_discount is available
   # Else, returns redirect to daily charge
   def determinate_next_page
@@ -165,7 +165,7 @@ class ChargesController < ApplicationController # rubocop:disable Metrics/ClassL
     end
   end
 
-  # Returns url to electing period if Leeds discounted charge is available.
+  # Returns url to electing period if weekly taxi discounted charge is available.
   # Else, returns url daily charge
   def determinate_next_page_by_period
     if vehicle_details('weekly_possible')

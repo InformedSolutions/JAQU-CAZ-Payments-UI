@@ -15,7 +15,7 @@ module SessionManipulation
     SUBKEYS = {
       1 => %w[vrn country confirm_vehicle],
       2 => %w[possible_fraud],
-      3 => %w[unrecognised leeds_taxi confirm_registration undetermined undetermined_taxi],
+      3 => %w[unrecognised weekly_taxi confirm_registration undetermined undetermined_taxi],
       4 => %w[confirm_vehicle incorrect],
       5 => %w[type],
       6 => %w[la_id],

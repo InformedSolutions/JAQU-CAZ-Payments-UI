@@ -13,7 +13,7 @@ class LocalAuthorityForm
   #
   # ==== Attributes
   #
-  # * +authority+ - string, eg. 'Leeds'
+  # * +authority+ - string, eg. 'Bath'
   #
   def initialize(authority)
     @authority = authority

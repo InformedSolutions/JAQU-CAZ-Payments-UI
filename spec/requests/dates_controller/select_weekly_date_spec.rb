@@ -126,7 +126,7 @@ describe 'DatesController - GET #select_weekly_date', type: :request do
     it_behaves_like 'la is missing'
   end
 
-  context 'when Leeds weekly discount is NOT possible' do
-    it_behaves_like 'not allowed Leeds discount'
+  context 'when Taxidiscountcaz discount is NOT possible' do
+    it_behaves_like 'not allowed Taxidiscountcaz discount'
   end
 end

@@ -66,7 +66,7 @@ class ApplicationController < ActionController::Base # rubocop:disable Metrics/C
     vehicle_details('vrn')
   end
 
-  # Gets LA name from vehicle_details hash in the session. Returns string, eg 'Leeds'
+  # Gets LA name from vehicle_details hash in the session. Returns string, eg 'Bath'
   def la_name
     vehicle_details('la_name')
   end
@@ -177,22 +177,22 @@ class ApplicationController < ActionController::Base # rubocop:disable Metrics/C
   def backup_session
     vehicle_details_record = Marshal.load(Marshal.dump(session[:vehicle_details]))
     session[:history][transaction_id] = { vehicle_details: vehicle_details_record }
-    backup_leeds_taxi
+    backup_weekly_taxi
   end
 
-  def backup_leeds_taxi
+  def backup_weekly_taxi
     session[:history][transaction_id][:first_week_start_date] = session[:first_week_start_date]
     session[:history][transaction_id][:second_week_start_date] = session[:second_week_start_date]
   end
 
-  # restores the main session and leeds taxi data if exists
+  # restores the main session and weekly discount taxi data if exists
   def restore_session
     session[:vehicle_details] = session.dig(:history, url_id, :vehicle_details)
-    restore_leeds_taxi
+    restore_weekly_taxi
   end
 
-  # restores leeds taxi data if exists
-  def restore_leeds_taxi
+  # restores weekly discount taxi data if exists
+  def restore_weekly_taxi
     session[:first_week_start_date] = session.dig(:history, url_id, :first_week_start_date)
     session[:second_week_start_date] = session.dig(:history, url_id, :second_week_start_date)
   end

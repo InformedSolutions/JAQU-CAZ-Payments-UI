@@ -8,7 +8,7 @@ describe 'DatesController - POST #confirm_select_period', type: :request do
   let(:transaction_id) { SecureRandom.uuid }
   let(:period) { 'daily-charge' }
 
-  context 'when Leeds weekly discount is possible' do
+  context 'when Taxidiscountcaz discount is possible' do
     before do
       add_transaction_id_to_session(transaction_id)
       add_details_to_session(weekly_possible: true)
@@ -61,7 +61,7 @@ describe 'DatesController - POST #confirm_select_period', type: :request do
     it_behaves_like 'la is missing'
   end
 
-  context 'when Leeds weekly discount is NOT possible' do
-    it_behaves_like 'not allowed Leeds discount'
+  context 'when Taxidiscountcaz discount is NOT possible' do
+    it_behaves_like 'not allowed Taxidiscountcaz discount'
   end
 end

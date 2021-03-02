@@ -8,7 +8,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   before_action :check_vrn
   # checks if LA is present in the session
   before_action :check_compliance_details
-  # checks if weekly Leeds discount is possible for weekly paths
+  # checks if weekly taxi discount is possible for weekly paths
   before_action :check_weekly, only: %i[select_period confirm_select_period weekly_charge
                                         confirm_weekly_charge select_weekly_date select_second_weekly_date
                                         confirm_date_weekly confirm_second_date_weekly
@@ -402,7 +402,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
 
   # Define the back button path on daily and weekly charge page.
   def determinate_return_path
-    la_name == 'Leeds' && weekly_possible ? select_period_dates_path : local_authority_charges_path
+    la_name == 'Taxidiscountcaz' && weekly_possible ? select_period_dates_path : local_authority_charges_path
   end
 
   # Checks if weekly discount is possible
@@ -496,7 +496,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
     session[:second_week_selected]
   end
 
-  # Handles case when first or second week Leeds taxi is redirected to due to back button click
+  # Handles case when first or second week weekly discount taxi is redirected to due to back button click
   # Sets correct value to date input
   def handle_back_action(second_week_selected:, session_date:, back_button_date:)
     return if params[:change] == 'true'
