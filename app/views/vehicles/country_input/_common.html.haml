@@ -7,19 +7,17 @@
 - non_uk_checked_params = params['registration-country'] == 'Non-UK'
 
 .govuk-radios.govuk-radios--inline
-  %fieldset.govuk-fieldset
-    %legend.govuk-legend
-      .govuk-radios__item
-        %input#registration-country-1.govuk-radios__input{name: 'registration-country',
-                                                          type: 'radio',
-                                                          value: 'UK',
-                                                          checked: uk_checked_session || uk_checked_params}
-        %label.govuk-label.govuk-radios__label{for: 'registration-country-1'}
-          UK
-      .govuk-radios__item
-        %input#registration-country-2.govuk-radios__input{name: 'registration-country',
-                                                          type: 'radio',
-                                                          value: 'Non-UK',
-                                                          checked: non_uk_checked_session || non_uk_checked_params}
-        %label.govuk-label.govuk-radios__label{for: 'registration-country-2'}
-          Non-UK
+  .govuk-radios__item
+    %input#registration-country-1.govuk-radios__input{name: 'registration-country',
+                                                      type: 'radio',
+                                                      value: 'UK',
+                                                      checked: uk_checked_session || uk_checked_params}
+    %label.govuk-label.govuk-radios__label{for: 'registration-country-1'}
+      UK
+  .govuk-radios__item
+    %input#registration-country-2.govuk-radios__input{name: 'registration-country',
+                                                      type: 'radio',
+                                                      value: 'Non-UK',
+                                                      checked: non_uk_checked_session || non_uk_checked_params}
+    %label.govuk-label.govuk-radios__label{for: 'registration-country-2'}
+      Non-UK
