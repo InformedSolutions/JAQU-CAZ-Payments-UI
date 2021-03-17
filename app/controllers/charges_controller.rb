@@ -12,8 +12,6 @@ class ChargesController < ApplicationController # rubocop:disable Metrics/ClassL
   before_action :check_compliance_details, except: %i[local_authority submit_local_authority]
   # checks if vehicle_details is present in the session
   before_action :check_vehicle_details, only: %i[review_payment]
-  # does not cache page
-  before_action :set_cache_headers, only: %i[review_payment]
   # handle cancelling second week
   before_action :handle_second_week_cancel, only: %i[review_payment]
 
