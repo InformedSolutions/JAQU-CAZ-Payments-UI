@@ -11,9 +11,6 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   before_action :check_vrn, except: %i[enter_details submit_details not_determined]
   skip_around_action :handle_history, only: %i[enter_details submit_details]
 
-  # does not cache page
-  before_action :set_cache_headers, only: %i[not_determined unrecognised]
-
   ##
   # Renders the first step of checking the vehicle compliance.
   # If it was called using GET method, it clears @errors variable.
