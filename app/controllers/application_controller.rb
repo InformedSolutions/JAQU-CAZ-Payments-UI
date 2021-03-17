@@ -196,11 +196,4 @@ class ApplicationController < ActionController::Base # rubocop:disable Metrics/C
     session[:first_week_start_date] = session.dig(:history, url_id, :first_week_start_date)
     session[:second_week_start_date] = session.dig(:history, url_id, :second_week_start_date)
   end
-
-  # set headers for pages that should be refreshed every time
-  def set_cache_headers
-    response.headers['Cache-Control'] = 'no-cache, no-store'
-    response.headers['Pragma'] = 'no-cache'
-    response.headers['Expires'] = 'Mon, 01 Jan 1990 00:00:00 GMT'
-  end
 end
