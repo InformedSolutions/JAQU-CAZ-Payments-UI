@@ -33,7 +33,9 @@ describe ComplianceDetails, type: :model do
           'exemptionOrDiscount' => url,
           'becomeCompliant' => url,
           'mainInfo' => url,
-          'publicTransportOptions' => url
+          'publicTransportOptions' => url,
+          'paymentsCompliance' => url,
+          'fleetsCompliance' => url
         }
       }
     ]
@@ -84,32 +86,6 @@ describe ComplianceDetails, type: :model do
         end
       end
 
-      describe '.dynamic_compliance_url' do
-        describe 'when additional_compliance_url is present' do
-          let(:taxidiscountcaz_urls) { YAML.load_file('additional_url.yml')['taxidiscountcaz'] }
-
-          it 'returns additional_compliance_url for taxidiscountcaz' do
-            expect(details.dynamic_compliance_url).to eq(taxidiscountcaz_urls['fleet'])
-          end
-
-          describe 'taxi' do
-            before { vehicle_details.merge!('weekly_taxi' => true) }
-
-            it 'returns taxidiscountcaz non fleet url' do
-              expect(details.additional_compliance_url).to eq(taxidiscountcaz_urls['non_fleet'])
-            end
-          end
-        end
-
-        describe 'when additional_compliance_url is not present' do
-          let(:name) { 'Bath' }
-
-          it 'returns compliance_url' do
-            expect(details.dynamic_compliance_url).to eq(details.compliance_url)
-          end
-        end
-      end
-
       describe 'phgv_discount_available?' do
         context 'when phgvDiscountAvailable is true in compliance endpoint' do
           it 'returns true' do
@@ -122,58 +98,6 @@ describe ComplianceDetails, type: :model do
 
           it 'returns true' do
             expect(details).not_to be_phgv_discount_available
-          end
-        end
-      end
-
-      describe 'additional_compliance_url' do
-        describe 'Taxidiscountcaz' do
-          let(:taxidiscountcaz_urls) { YAML.load_file('additional_url.yml')['taxidiscountcaz'] }
-
-          it 'returns taxidiscountcaz fleet url' do
-            expect(details.additional_compliance_url).to eq(taxidiscountcaz_urls['fleet'])
-          end
-
-          describe 'taxi' do
-            before { vehicle_details.merge!('weekly_taxi' => true) }
-
-            it 'returns taxidiscountcaz non fleet url' do
-              expect(details.additional_compliance_url).to eq(taxidiscountcaz_urls['non_fleet'])
-            end
-          end
-        end
-
-        describe 'Birmingham' do
-          let(:name) { 'Birmingham' }
-          let(:birmingham_urls) { YAML.load_file('additional_url.yml')['birmingham'] }
-
-          it 'returns birmingham fleet url' do
-            expect(details.additional_compliance_url).to eq(birmingham_urls['fleet'])
-          end
-
-          describe 'car' do
-            let(:type) { 'car' }
-
-            it 'returns birmingham non_fleet url' do
-              expect(details.additional_compliance_url).to eq(birmingham_urls['non_fleet'])
-            end
-          end
-
-          describe 'undefined' do
-            let(:type) { nil }
-
-            it 'returns birmingham fleet url' do
-              expect(details.additional_compliance_url).to eq(birmingham_urls['fleet'])
-            end
-          end
-        end
-
-        describe 'Bath' do
-          let(:name) { 'Bath' }
-          let(:bath_urls) { YAML.load_file('additional_url.yml')['bath'] }
-
-          it 'returns nil' do
-            expect(details.additional_compliance_url).to be_nil
           end
         end
       end

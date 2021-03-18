@@ -21,7 +21,9 @@ describe UnrecognisedComplianceDetails, type: :model do
               'becomeCompliant' => 'www.sample-compliant-link.com',
               'boundary' => 'www.sample-boundary-link.com',
               'additionalInfo' => 'www.sample-info-link.com',
-              'publicTransportOptions' => 'www.sample-public-link.com'
+              'publicTransportOptions' => 'www.sample-public-link.com',
+              'paymentsCompliance' => 'www.payments-compliance.com',
+              'fleetsCompliance' => 'www.fleets-compliance.com'
             },
             'operatorName' => nil
           }
@@ -66,19 +68,13 @@ describe UnrecognisedComplianceDetails, type: :model do
 
   describe '.compliance_url' do
     it 'returns proper value' do
-      expect(details.compliance_url).to eq('www.sample-compliant-link.com')
+      expect(details.compliance_url).to eq('www.payments-compliance.com')
     end
   end
 
   describe '.public_transport_options_url' do
     it 'returns proper value' do
       expect(details.public_transport_options_url).to eq('www.sample-public-link.com')
-    end
-  end
-
-  describe '.dynamic_compliance_url' do
-    it 'returns proper value' do
-      expect(details.dynamic_compliance_url).to eq('www.sample-compliant-link.com')
     end
   end
 end

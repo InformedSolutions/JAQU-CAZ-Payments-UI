@@ -50,17 +50,12 @@ class UnrecognisedComplianceDetails
   #
   # Returns an URL, eg. 'www.example.com'.
   def compliance_url
-    url('becomeCompliant')
+    url('paymentsCompliance')
   end
 
   # Returns a string, eg. 'www.example.com'.
   def public_transport_options_url
     url('publicTransportOptions')
-  end
-
-  # Returns compliance url based or additional_compliance_url or compliance_url
-  def dynamic_compliance_url
-    compliance_url
   end
 
   private

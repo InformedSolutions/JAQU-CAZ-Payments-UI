@@ -52,7 +52,7 @@ class ComplianceDetails
   #
   # Returns an URL, eg. 'www.example.com'.
   def compliance_url
-    url(:become_compliant)
+    url(:payments_compliance)
   end
 
   # Displays root path to the CAZ campaign site
@@ -65,23 +65,6 @@ class ComplianceDetails
   # Returns a string, eg. 'www.example.com'.
   def public_transport_options_url
     url(:public_transport_options)
-  end
-
-  # Returns compliance url based or additional_compliance_url or compliance_url
-  def dynamic_compliance_url
-    additional_compliance_url || compliance_url
-  end
-
-  # Returns compliance url from additional_url.yml
-  def additional_compliance_url
-    zone_links = additional_urls_file[zone_name.downcase]
-    return if zone_links.blank?
-
-    if (weekly_taxi && zone_name == 'Taxidiscountcaz') || (car? && zone_name == 'Birmingham')
-      return zone_links['non_fleet']
-    end
-
-    zone_links['fleet']
   end
 
   # Returns information if pghvDiscount is Available for DVLA vehicle.
@@ -128,15 +111,5 @@ class ComplianceDetails
   # Get compliance data for non-DVLA registered vehicle
   def non_dvla_compliance_data
     ComplianceCheckerApi.unrecognised_compliance(type, [zone_id])['charges']
-  end
-
-  # Reads additional_url.yml
-  def additional_urls_file
-    YAML.load_file('additional_url.yml')
-  end
-
-  # Checks if the vehicle is a car. Returns boolean
-  def car?
-    type&.downcase&.include?('car')
   end
 end

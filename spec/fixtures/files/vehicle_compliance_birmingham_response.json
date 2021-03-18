@@ -12,6 +12,8 @@
         "mainInfo": "http://test.com",
         "exemptionOrDiscount": "http://test.com",
         "becomeCompliant": "http://test.com",
+        "paymentsCompliance": "http://payments-compliance.com",
+        "fleetsCompliance": "http://fleets-compliance.com",
         "boundary": "http://test.com"
       }
     }
