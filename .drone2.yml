@@ -115,15 +115,6 @@ volumes:
 
 steps:
 
-  # Clean agent images and containers to prevent disk space overuse
-  - name: clean agent
-    image: docker:19.03.11-git
-    commands:
-    - docker system prune -f
-    volumes:
-      - name: docker_sock
-        path: /var/run/docker.sock
-
   # Build docker image
   - name: build
     image: docker:19.03.11-git
@@ -191,12 +182,16 @@ steps:
       registry: 311075478274.dkr.ecr.eu-west-2.amazonaws.com
       dockerfile: Dockerfile.build
       region: eu-west-2
+      use_cache: true
       tags:
         - latest
         - ${DRONE_BUILD_NUMBER}
       build_args:
         - secret_key_base=${DRONE_COMMIT}
         - aws_region=eu-west-2
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
     when:
       event:
         - push
