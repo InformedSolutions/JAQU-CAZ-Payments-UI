@@ -36,9 +36,29 @@ class Caz
     caz_data[:boundary_url]
   end
 
+  # Returns a string with URL, eg. 'http://example.com'
+  def privacy_policy_url
+    caz_data[:privacy_policy_url]
+  end
+
   # Returns a string with a date, eg. '2020-05-01'
   def active_charge_start_date
     caz_data[:active_charge_start_date]
+  end
+
+  # Returns a string, eg. 'Summer 2021'
+  def active_charge_start_date_text
+    caz_data[:active_charge_start_date_text]
+  end
+
+  # Returns an integer, eg. 2
+  def display_order
+    caz_data[:display_order]
+  end
+
+  # Returns a string with a date, eg. '2020-05-01'
+  def display_from
+    caz_data[:display_from]
   end
 
   private

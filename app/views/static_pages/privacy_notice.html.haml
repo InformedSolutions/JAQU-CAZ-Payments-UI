@@ -152,12 +152,10 @@
       %p
         - dvla_link = 'https://www.gov.uk/government/publications/dvla-privacy-policy/dvla-privacy-policy'
         = link_to('DVLA', dvla_link, id: 'dvla-link')
-      %p
-        - bath_policy_link = 'https://beta.bathnes.gov.uk/council-privacy-policy'
-        = link_to('Bath and North East Somerset privacy policy', bath_policy_link, id: 'bath-policy-link')
-      %p
-        - birmingham_policy_link = 'https://www.birmingham.gov.uk/info/20015/environment/2005/privacy_statement_-_environmental_health/2'
-        = link_to('Birmingham privacy policy', birmingham_policy_link, id: 'birmingham-policy-link')
+
+      - @caz_link_display_data.each do |caz_link|
+        %p
+          = link_to("#{caz_link.name} privacy policy", caz_link.privacy_policy_url, id: "#{caz_link.name.downcase}-policy-link")
 
       %h2.govuk-heading-l
         Early Notice Letters (ENLs)
