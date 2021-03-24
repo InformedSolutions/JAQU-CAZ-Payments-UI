@@ -114,6 +114,11 @@ class ComplianceCheckerApi < BaseApi
     # * +name+ - string, eg. "Birmingham"
     # * +cleanAirZoneId+ - UUID, this represents CAZ ID in the DB
     # * +boundaryUrl+ - URL, this represents a link to eg. a map with CAZ boundaries
+    # * +privacyPolicyUrl+ - URL, represents privacy policy URL
+    # * +activeChargeStartDate+ - date, presents when charging starts
+    # * +activeChargeStartDateText+ - string, presents information about CAZ charging activation date
+    # * +displayFrom+ - date, presents date since which the CAZ is visible in the system
+    # * +displayOrder+ - integer, presents in what order cazes should be displayed
     #
     # ==== Serialization
     #
