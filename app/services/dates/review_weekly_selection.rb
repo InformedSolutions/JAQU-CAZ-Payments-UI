@@ -61,7 +61,7 @@ module Dates
 
     # Fetches charge_start_date for selected CAZ
     def charge_start_date
-      FetchSingleCazData.call(zone_id: @zone_id)&.active_charge_start_date
+      CazDataProvider.single(zone_id: @zone_id)&.active_charge_start_date
     end
   end
 end

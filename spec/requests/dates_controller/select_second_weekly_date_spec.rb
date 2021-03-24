@@ -16,7 +16,7 @@ describe 'DatesController - GET #select_second_weekly_date', type: :request do
         'Caz',
         active_charge_start_date: 7.days.ago.strftime(Dates::Weekly::VALUE_DATE_FORMAT)
       )
-      allow(FetchSingleCazData).to receive(:call).and_return(stubbed_caz)
+      allow(CazDataProvider).to receive(:single).and_return(stubbed_caz)
       subject
     end
 
@@ -29,8 +29,8 @@ describe 'DatesController - GET #select_second_weekly_date', type: :request do
         expect(response).to have_http_status(:ok)
       end
 
-      it 'calls FetchSingleCazData service' do
-        expect(FetchSingleCazData).to have_received(:call)
+      it 'calls CazDataProvider service' do
+        expect(CazDataProvider).to have_received(:single)
       end
 
       it 'assigns the @d_day_notice variable' do
@@ -47,8 +47,8 @@ describe 'DatesController - GET #select_second_weekly_date', type: :request do
         expect(response).to have_http_status(:success)
       end
 
-      it 'calls FetchSingleCazData service' do
-        expect(FetchSingleCazData).to have_received(:call)
+      it 'calls CazDataProvider service' do
+        expect(CazDataProvider).to have_received(:single)
       end
 
       it 'assigns the @d_day_notice variable' do
