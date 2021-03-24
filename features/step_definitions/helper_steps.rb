@@ -30,6 +30,14 @@ Then('I press {string} footer link') do |string|
   end
 end
 
+Then('I press Privacy footer link') do
+  mock_chargeable_zones
+
+  within('footer.govuk-footer') do
+    click_link('Privacy')
+  end
+end
+
 Given('I am on the enter details page') do
   visit enter_details_vehicles_path
 end

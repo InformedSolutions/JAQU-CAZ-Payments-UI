@@ -22,7 +22,11 @@ describe 'ComplianceCheckerApi.clean_air_zones' do
         'cleanAirZoneId',
         'name',
         'boundaryUrl',
-        'activeChargeStartDate'
+        'privacyPolicyUrl',
+        'activeChargeStartDate',
+        'activeChargeStartDateText',
+        'displayFrom',
+        'displayOrder'
       )
     end
   end

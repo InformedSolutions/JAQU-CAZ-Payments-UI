@@ -15,7 +15,7 @@ describe Dates::ReviewWeeklySelection do
 
   before do
     caz_double = instance_double(Caz, active_charge_start_date: '2020-03-01')
-    allow(FetchSingleCazData).to receive(:call).and_return(caz_double)
+    allow(CazDataProvider).to receive(:single).and_return(caz_double)
     allow(PaymentsApi).to receive(:paid_payments_dates).and_return([])
   end
 
