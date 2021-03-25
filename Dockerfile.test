@@ -12,7 +12,7 @@ RUN apk add --no-cache --update build-base \
   curl-dev \
   sqlite-dev \
   git \
-  && PACKAGES="ca-certificates procps curl pcre libstdc++ libexecinfo" \
+  && PACKAGES="ca-certificates procps curl pcre libstdc++ libexecinfo shared-mime-info" \
   && BUILD_PACKAGES="pcre-dev libexecinfo-dev" \
   && apk add --update $PACKAGES $BUILD_PACKAGES \
   && rm -rf /var/cache/apk/*
