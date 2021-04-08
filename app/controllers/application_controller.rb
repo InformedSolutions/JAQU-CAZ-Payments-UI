@@ -180,6 +180,7 @@ class ApplicationController < ActionController::Base # rubocop:disable Metrics/C
     backup_weekly_taxi
   end
 
+  # copy weekly taxi data to history session
   def backup_weekly_taxi
     session[:history][transaction_id][:first_week_start_date] = session[:first_week_start_date]
     session[:history][transaction_id][:second_week_start_date] = session[:second_week_start_date]
