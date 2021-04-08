@@ -54,7 +54,7 @@ class ChargesController < ApplicationController # rubocop:disable Metrics/ClassL
   # * +local-authority+ - lack of LA redirects back to {picking LA}[rdoc-ref:ChargesController.local_authority]
   #
   def submit_local_authority
-    form = LocalAuthorityForm.new(params['local-authority'])
+    form = LocalAuthorityForm.new(local_authority_params)
     if form.valid?
       store_compliance_details
       determinate_next_page
@@ -115,9 +115,9 @@ class ChargesController < ApplicationController # rubocop:disable Metrics/ClassL
   # Stores submitted LA in the session
   def store_compliance_details
     if undetermined_taxi?
-      SessionManipulation::SetUnrecognisedCompliance.call(session: session, la_id: params['local-authority'])
+      SessionManipulation::SetUnrecognisedCompliance.call(session: session, la_id: local_authority_params)
     else
-      SessionManipulation::SetComplianceDetails.call(session: session, la_id: params['local-authority'])
+      SessionManipulation::SetComplianceDetails.call(session: session, la_id: local_authority_params)
     end
   end
 
@@ -216,5 +216,10 @@ class ChargesController < ApplicationController # rubocop:disable Metrics/ClassL
   # Indicates if adding a second week was just cancelled
   def cancel_second_week?
     params['cancel_second_week'] == 'true'
+  end
+
+  # Local authority from the query params
+  def local_authority_params
+    params['local-authority']
   end
 end
