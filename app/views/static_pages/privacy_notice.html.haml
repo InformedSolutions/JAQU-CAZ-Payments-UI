@@ -158,6 +158,40 @@
           = link_to("#{caz_link.name} privacy policy", caz_link.privacy_policy_url, id: "#{caz_link.name.downcase}-policy-link")
 
       %h2.govuk-heading-l
+        Customer Contact Centre
+      %p
+        You can raise any queries about the information provided by the service by using the
+        - link = 'https://contact.dvla.gov.uk/caz/'
+        = link_to('web form', link, id: 'dvla-contact-link')
+      %p
+        Along with your query, you will need to give your name and email address, which will be used to respond to you.
+        The information you provide will be sent by GOV.UK Notify to JAQU (or their agents acting on their behalf) for the sole purpose of replying to you.
+        Your personal information will be deleted after a year.
+      %p
+        Alternatively, if you phone the Customer Contact Centre, to resolve any queries you may have, JAQU and the local authority may share your:
+        %ul.govuk-list-govuk-list--bullet
+          %li
+            %p
+              Name/surname (current and previous)
+          %li
+            %p
+              Address (current and previous)
+          %li
+            %p
+              Phone
+          %li
+            %p
+              Email address
+          %li
+            %p
+              Number plate (Vehicle registration mark - VRM)
+      %p
+        All information related to general enquiries are kept for 90 days. After 90 days, only name and email address are kept for future reference and the rest of the information will be deleted.
+        Name and email are kept for 7 years for analysis purposes to enable us to check whether the users have previously submitted an enquiry.
+      %p
+        All information related to complaints are kept for 7 years.
+
+      %h2.govuk-heading-l
         Early Notice Letters (ENLs)
       %p
         Clean Air Zone local authorities, Defra and DfT (as JAQU) are Joint Controllers, which means that they jointly use personal data to ensure that people, who are likely to be affected by the introduction of CAZs, receive a letter giving sufficient advance notice of the zones coming into place.
