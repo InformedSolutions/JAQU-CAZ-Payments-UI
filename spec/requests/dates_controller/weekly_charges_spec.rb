@@ -45,17 +45,9 @@ describe 'DatesController - GET #weekly_charge', type: :request do
     it 'call ComplianceDetails with right params' do
       subject
       expect(ComplianceDetails).to have_received(:new)
-        .with(
-          'vrn' => vrn,
-          'country' => country,
-          'la_id' => zone_id,
-          'daily_charge' => kind_of(Numeric),
-          'la_name' => kind_of(String),
-          'undetermined_taxi' => false,
-          'weekly_possible' => true,
-          'weekly_charge_today' => false,
-          'weekly_dates' => []
-        )
+        .with('vrn' => vrn, 'country' => country, 'la_id' => zone_id, 'daily_charge' => kind_of(Numeric),
+              'la_name' => kind_of(String), 'undetermined_taxi' => false, 'weekly_possible' => true,
+              'weekly_charge_today' => false, 'weekly_dates' => [])
     end
 
     it 'returns a success response' do

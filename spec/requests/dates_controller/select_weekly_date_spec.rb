@@ -27,7 +27,7 @@ describe 'DatesController - GET #select_weekly_date', type: :request do
         subject
       end
 
-      context 'a week starting from today can be paid' do
+      context 'when a week starting from today can be paid' do
         it 'returns a found response' do
           subject
           expect(response).to have_http_status(:found)
@@ -46,7 +46,7 @@ describe 'DatesController - GET #select_weekly_date', type: :request do
         end
       end
 
-      context "a week starting from today can't be paid" do
+      context "with a week starting from today can't be paid" do
         let(:paid_dates) { [Date.current.strftime(Dates::Weekly::VALUE_DATE_FORMAT)] }
 
         it 'returns a success response' do
@@ -63,7 +63,7 @@ describe 'DatesController - GET #select_weekly_date', type: :request do
         end
       end
 
-      context 'user chooses date after clicking Change link on Review Payment page if today cannot be paid' do
+      context 'with user chooses date after clicking `Change` link if today cannot be paid' do
         subject { get select_weekly_date_dates_path(change: true) }
 
         it 'returns a found response' do
@@ -84,7 +84,7 @@ describe 'DatesController - GET #select_weekly_date', type: :request do
         end
       end
 
-      context 'user chooses date after clicking Back button on Review Payment page' do
+      context 'when user chooses date after clicking Back button on Review Payment page' do
         let(:referer) { 'http://www.example.com/charges/review_payment' }
 
         it 'assigns @input_date' do
@@ -93,7 +93,7 @@ describe 'DatesController - GET #select_weekly_date', type: :request do
         end
       end
 
-      context 'user chooses date after coming back to the page not from Review Payment' do
+      context 'when user chooses date after coming back to the page not from Review Payment' do
         it 'assigns @input_date' do
           subject
           expect(assigns(:input_date)).to be_nil

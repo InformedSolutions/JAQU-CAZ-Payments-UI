@@ -41,14 +41,10 @@ describe 'PaymentsApi.create_payment' do
     end
 
     it 'calls API with right params' do
-      expect(subject)
-        .to have_requested(:post, /payments/)
-        .with(body: {
-                'transactions' => transactions,
-                'cleanAirZoneId' => zone_id,
-                'returnUrl' => return_url,
-                'telephonePayment' => false
-              })
+      expect(subject).to have_requested(:post, /payments/).with(
+        body: { 'transactions' => transactions, 'cleanAirZoneId' => zone_id, 'returnUrl' => return_url,
+                'telephonePayment' => false }
+      )
     end
   end
 
@@ -73,11 +69,7 @@ describe 'PaymentsApi.create_payment' do
     it 'raises Error500Exception' do
       expect { subject }.to raise_exception(
         an_instance_of(BaseApi::Error500Exception)
-          .and(having_attributes(
-                 status: 500,
-                 status_message: 'Response body parsing failed',
-                 body: body
-               ))
+          .and(having_attributes(status: 500, status_message: 'Response body parsing failed', body: body))
       )
     end
   end

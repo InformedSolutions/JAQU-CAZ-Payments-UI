@@ -5,13 +5,13 @@
 # and is used to display data in +app/views/vehicles/details.html.haml+.
 class VehicleDetails
   ##
-  # Creates an instance of a class, make +vrn+ uppercase and remove all spaces.
+  # Initializer method
   #
   # ==== Attributes
   #
   # * +vrn+ - string, eg. 'CU57ABC'
   def initialize(vrn)
-    @vrn = vrn.upcase.gsub(/\s+/, '')
+    @vrn = vrn
   end
 
   # Returns a string, eg. 'CU57ABC'.

@@ -81,9 +81,7 @@ describe Payment, type: :model do
       it 'calls PaymentsApi.create_payment with proper params' do
         payment.payment_id
         expect(PaymentsApi).to have_received(:create_payment).with(
-          zone_id: zone_id,
-          return_url: url,
-          transactions: expected_transactions
+          zone_id: zone_id, return_url: url, transactions: expected_transactions
         )
       end
     end
@@ -99,7 +97,7 @@ describe Payment, type: :model do
         expect(payment.send(:weekly_transactions).sum { |t| t[:charge] }).to eq(5000)
       end
 
-      context 'API call' do
+      context 'when API call' do
         let(:expected_transactions) do
           transactions = dates.map do |date|
             {
@@ -116,9 +114,7 @@ describe Payment, type: :model do
         it 'calls PaymentsApi.create_payment with proper params' do
           payment.payment_id
           expect(PaymentsApi).to have_received(:create_payment).with(
-            zone_id: zone_id,
-            return_url: url,
-            transactions: expected_transactions
+            zone_id: zone_id, return_url: url, transactions: expected_transactions
           )
         end
       end
@@ -135,7 +131,7 @@ describe Payment, type: :model do
         expect(payment.send(:weekly_transactions).sum { |t| t[:charge] }).to eq(10_000)
       end
 
-      context 'API call' do
+      context 'when API call' do
         let(:expected_transactions) do
           transactions = dates.map do |date|
             {
@@ -152,9 +148,7 @@ describe Payment, type: :model do
         it 'calls PaymentsApi.create_payment with proper params' do
           payment.payment_id
           expect(PaymentsApi).to have_received(:create_payment).with(
-            zone_id: zone_id,
-            return_url: url,
-            transactions: expected_transactions
+            zone_id: zone_id, return_url: url, transactions: expected_transactions
           )
         end
       end
