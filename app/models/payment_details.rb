@@ -32,7 +32,7 @@ class PaymentDetails
     session_details['vrn']
   end
 
-  # Returns selected local authority name, eg. 'Leeds'
+  # Returns selected local authority name, eg. 'Bath'
   def la_name
     session_details['la_name']
   end

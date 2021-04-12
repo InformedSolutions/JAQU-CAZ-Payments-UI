@@ -5,14 +5,14 @@ require 'rails_helper'
 describe UnrecognisedComplianceDetails, type: :model do
   subject(:details) { described_class.new(la_id: la_id) }
 
-  let(:la_id) { '7d0c4240-1618-446b-bde2-2f3458c8a520' }
+  let(:la_id) { '7d0c4240-1618-446b-bde2-2f3458c8a521' }
   let(:api_response) do
     {
       'charges' =>
         [
           {
-            'cleanAirZoneId' => '131af03c-f7f4-4aef-81ee-aae4f56dbeb5',
-            'name' => 'Bath',
+            'cleanAirZoneId' => '7d0c4240-1618-446b-bde2-2f3458c8a521',
+            'name' => 'Taxidiscountcaz',
             'charge' => 9.0,
             'tariffCode' => 'BAT01-TAXI_OR_PHV',
             'informationUrls' => {
@@ -36,7 +36,7 @@ describe UnrecognisedComplianceDetails, type: :model do
 
   describe '.zone_name' do
     it 'returns proper value' do
-      expect(details.zone_name).to eq('Bath')
+      expect(details.zone_name).to eq('Taxidiscountcaz')
     end
   end
 

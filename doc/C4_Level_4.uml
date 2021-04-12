@@ -59,7 +59,7 @@
     <node x="2036.0000000000002" y="615.0">VehicleDetails</node>
     <node x="4442.0" y="889.0">SessionManipulation::AddVrn</node>
     <node x="0.0" y="1235.0">SessionManipulation</node>
-    <node x="4270.0" y="889.0">SessionManipulation::SetLeedsTaxi</node>
+    <node x="4270.0" y="889.0">SessionManipulation::SetWeeklyTaxi</node>
     <node x="267.0" y="1235.0">ApplicationHelper</node>
     <node x="4802.0" y="722.0">ChargeableZonesService</node>
     <node x="4857.0" y="615.0">BaseService</node>
@@ -176,7 +176,7 @@
       <point x="2493.125" y="525.0" />
       <point x="43.125" y="28.5" />
     </edge>
-    <edge source="SessionManipulation::SetLeedsTaxi" target="SessionManipulation::BaseManipulator">
+    <edge source="SessionManipulation::SetWeeklyTaxi" target="SessionManipulation::BaseManipulator">
       <point x="0.0" y="-28.5" />
       <point x="4346.0" y="849.0" />
       <point x="4662.5625" y="849.0" />

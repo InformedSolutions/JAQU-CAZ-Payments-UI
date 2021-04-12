@@ -18,7 +18,7 @@ describe SessionManipulation::SetIncorrect do
 
   context 'when session is already filled with more data' do
     let(:details) do
-      { 'vrn' => vrn, 'country' => country, 'la_name' => 'Leeds' }
+      { 'vrn' => vrn, 'country' => country, 'la_name' => 'Taxidiscountcaz' }
     end
 
     it 'clears keys from next steps' do
