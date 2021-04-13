@@ -54,6 +54,7 @@ Rails.application.routes.draw do
 
       get :select_weekly_date
       post :confirm_date_weekly
+
       get :select_second_weekly_date
       post :confirm_second_date_weekly
 
@@ -69,16 +70,20 @@ Rails.application.routes.draw do
     end
   end
 
-  get :accessibility_statement, to: 'static_pages#accessibility_statement'
-  get :cookies, to: 'static_pages#cookies'
-  get :privacy_notice, to: 'static_pages#privacy_notice'
+  scope controller: 'static_pages' do
+    get :accessibility_statement
+    get :cookies
+    get :privacy_notice
+  end
 
-  get :build_id, to: 'application#build_id'
-  get :health, to: 'application#health'
+  scope controller: 'application' do
+    get :build_id
+    get :health
+  end
 
   get :service_unavailable, to: 'application#server_unavailable'
+
   match '/404', to: 'errors#not_found', via: :all
-  # There is no 422 error page in design systems
   match '/422', to: 'errors#internal_server_error', via: :all
   match '/500', to: 'errors#internal_server_error', via: :all
   match '/503', to: 'errors#service_unavailable', via: :all

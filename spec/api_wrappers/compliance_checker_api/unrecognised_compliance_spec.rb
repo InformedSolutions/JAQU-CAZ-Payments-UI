@@ -22,12 +22,8 @@ describe 'ComplianceCheckerApi.unrecognised_compliance' do
     end
 
     it 'returns proper fields' do
-      expect(subject['charges'].first.keys).to contain_exactly(
-        'cleanAirZoneId',
-        'name',
-        'charge',
-        'tariffCode'
-      )
+      expect(subject['charges'].first.keys).to contain_exactly('cleanAirZoneId', 'name', 'charge',
+                                                               'tariffCode')
     end
 
     it 'calls API with right params' do

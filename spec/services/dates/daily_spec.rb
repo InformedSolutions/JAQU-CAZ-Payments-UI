@@ -19,7 +19,7 @@ describe Dates::Daily do
     subject { service.chargeable_dates }
 
     context 'when #active_charge_start_date is considered' do
-      context 'and #active_charge_start_date is nil' do
+      context 'with #active_charge_start_date is nil' do
         let(:active_charge_start_date) { nil }
 
         it 'returns a whole range - thirteen days' do
@@ -27,7 +27,7 @@ describe Dates::Daily do
         end
       end
 
-      context 'and #active_charge_start_date is today' do
+      context 'with #active_charge_start_date is today' do
         let(:active_charge_start_date) { Date.current.to_s }
 
         it 'returns 7 days' do
@@ -39,7 +39,7 @@ describe Dates::Daily do
         end
       end
 
-      context 'and #active_charge_start_date is more than a week in the future' do
+      context 'with #active_charge_start_date is more than a week in the future' do
         let(:active_charge_start_date) { 10.days.from_now.to_s }
 
         it 'returns an empty collection' do
@@ -56,12 +56,8 @@ describe Dates::Daily do
       it 'calls PaymentsApi.paid_payments_dates with right params' do
         subject
         expect(PaymentsApi).to have_received(:paid_payments_dates)
-          .with(
-            vrn: vrn,
-            zone_id: zone_id,
-            start_date: six_days_ago.strftime('%Y-%m-%d'),
-            end_date: (Date.current + 6.days).strftime('%Y-%m-%d')
-          )
+          .with(vrn: vrn, zone_id: zone_id, start_date: six_days_ago.strftime('%Y-%m-%d'),
+                end_date: (Date.current + 6.days).strftime('%Y-%m-%d'))
       end
 
       describe 'date object' do
@@ -102,7 +98,7 @@ describe Dates::Daily do
         end
       end
 
-      context 'and #active_charge_start_date is today' do
+      context 'with #active_charge_start_date is today' do
         let(:active_charge_start_date) { Date.current.to_s }
 
         it 'returns true' do
@@ -110,7 +106,7 @@ describe Dates::Daily do
         end
       end
 
-      context 'and #active_charge_start_date is more than a week in the future' do
+      context 'with #active_charge_start_date is more than a week in the future' do
         let(:active_charge_start_date) { 6.days.from_now.to_s }
 
         it 'returns false' do

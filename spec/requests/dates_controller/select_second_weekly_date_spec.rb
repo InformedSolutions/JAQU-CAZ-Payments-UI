@@ -22,7 +22,7 @@ describe 'DatesController - GET #select_second_weekly_date', type: :request do
 
     let(:paid_dates) { [] }
 
-    context 'a week starting from today can be paid' do
+    context 'when a week starting from today can be paid' do
       before { subject }
 
       it 'returns an ok response' do
@@ -38,7 +38,7 @@ describe 'DatesController - GET #select_second_weekly_date', type: :request do
       end
     end
 
-    context "a week starting from today can't be paid" do
+    context "when a week starting from today can't be paid" do
       let(:paid_dates) { [Date.current.strftime(Dates::Weekly::VALUE_DATE_FORMAT)] }
 
       before { subject }

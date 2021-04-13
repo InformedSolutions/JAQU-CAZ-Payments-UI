@@ -20,23 +20,23 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   #
   def enter_details
     @errors = {}
-    hide_inputs_if_coming_from_successful_payment
+    hide_inputs
   end
 
   ##
   # Validates submitted VRN. If successful, adds submitted VRN to the session and
-  # redirects to {details}[rdoc-ref:VehiclesController.details].
+  # redirects to {details}[rdoc-ref:details].
   #
-  # Any invalid params values triggers rendering {enter details}[rdoc-ref:VehiclesController.enter_details]
+  # Any invalid params values triggers rendering {enter details}[rdoc-ref:enter_details]
   # with @errors displayed.
   #
-  # Selecting NON-UK vehicle redirects to a {non-uk page}[rdoc-ref:VehiclesController.non_uk]
+  # Selecting NON-UK vehicle redirects to a {non-uk page}[rdoc-ref:non_uk]
   #
   # ==== Path
   #
   #    POST /vehicles/submit_details
   #
-  # GET method redirects to {enter details}[rdoc-ref:VehiclesController.enter_details]
+  # GET method redirects to {enter details}[rdoc-ref:enter_details]
   #
   # ==== Params
   # * +vrn+ - vehicle registration number, string, required in the query
@@ -47,7 +47,6 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   #
   def submit_details
     form = VrnForm.new(session, params[:vrn], country)
-
     if form.valid?
       form.submit
       redirect_to form.redirection_path
@@ -72,8 +71,8 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
 
   ##
   # Verifies if user confirms the vehicle's details.
-  # If yes, renders to {incorrect details}[rdoc-ref:VehiclesController.local_authority]
-  # If no, redirects to {incorrect details}[rdoc-ref:VehiclesController.incorrect_details]
+  # If yes, renders to {incorrect details}[rdoc-ref:local_authority]
+  # If no, redirects to {incorrect details}[rdoc-ref:incorrect_details]
   #
   # ==== Path
   #    POST /vehicles/confirm_details
@@ -83,8 +82,8 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   # * +confirm-vehicle+ - user confirmation of vehicle details, 'yes' or 'no', required in the query
   #
   # ==== Validations
-  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
-  # * +confirm-vehicle+ - lack of it redirects to {incorrect details}[rdoc-ref:VehiclesController.incorrect_details]
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:enter_details]
+  # * +confirm-vehicle+ - lack of it redirects to {incorrect details}[rdoc-ref:incorrect_details]
   #
   def confirm_details
     form = ConfirmationForm.new(confirmation)
@@ -122,8 +121,8 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   # * +confirm-vehicle+ - user confirmation of vehicle details, 'yes' or 'no', required in the query
   #
   # ==== Validations
-  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
-  # * +confirm-vehicle+ - lack of it redirects to {incorrect details}[rdoc-ref:VehiclesController.incorrect_details]
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:enter_details]
+  # * +confirm-vehicle+ - lack of it redirects to {incorrect details}[rdoc-ref:incorrect_details]
   #
   def confirm_uk_registered_details
     form = ConfirmationForm.new(confirmation)
@@ -145,7 +144,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   # * +vrn+ - vehicle registration number, required in the session
   #
   # ==== Validations
-  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:enter_details]
   #
   def incorrect_details
     # Used to determine the previous step in ChargesController#local_authority
@@ -168,7 +167,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   # * +vrn+ - vehicle registration number, required in the session
   #
   # ==== Validations
-  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:enter_details]
   #
   def unrecognised
     @vrn = vrn
@@ -177,7 +176,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   ##
   # Verifies if user confirms that the registration number is correct.
   # If yes, renders to {choose type}[rdoc-ref:NonDvlaVehiclesController.choose_type]
-  # If no, redirects to {non_dvla_vehicles}[rdoc-ref:VehiclesController.unrecognised]
+  # If no, redirects to {non_dvla_vehicles}[rdoc-ref:unrecognised]
   #
   # ==== Path
   #    POST /vehicles/confirm_unrecognised
@@ -187,13 +186,13 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   # * +confirm-registration+ - user confirmation that the registration number is correct.
   #
   # ==== Validations
-  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
-  # * +confirm-registration+ - lack of it redirects to {non_dvla_vehicles}[rdoc-ref:VehiclesController.unrecognised]
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:enter_details]
+  # * +confirm-registration+ - lack of it redirects to {non_dvla_vehicles}[rdoc-ref:unrecognised]
   #
   def confirm_unrecognised
     form = ConfirmationForm.new(params['confirm-registration'])
     if form.confirmed?
-      perform_unrecognised_vehicle_redirect
+      determinate_next_page
     else
       redirect_to unrecognised_vehicles_path, alert: true
     end
@@ -210,7 +209,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   # * +vrn+ - vehicle registration number, required in the session
   #
   # ==== Validations
-  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:enter_details]
   #
   def not_determined
     @types = VehicleTypes.call
@@ -241,7 +240,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   ##
   # Verifies if user choose a type of vehicle.
   # If yes, renders {local authorities}[rdoc-ref:LocalAuthoritiesController.index]
-  # If no, redirects to {choose_type}[rdoc-ref:VehiclesController.not_determined]
+  # If no, redirects to {choose_type}[rdoc-ref:not_determined]
   #
   # ==== Path
   #
@@ -252,8 +251,8 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   # * +vehicle-type+ - user's type of vehicle
   #
   # ==== Validations
-  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
-  # * +vehicle-type+ - lack of it redirects to {choose_type}[rdoc-ref:VehiclesController.not_determined]
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:enter_details]
+  # * +vehicle-type+ - lack of it redirects to {choose_type}[rdoc-ref:not_determined]
   #
   def submit_type
     type = params['vehicle-type']
@@ -279,7 +278,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
 
   # Process action which is done on submit details and uk registered details
   def process_details_action # rubocop:disable Metrics/AbcSize
-    @vehicle_details = VehicleDetails.new(vrn)
+    @vehicle_details = VehicleDetails.new(vrn_without_leading_zeros)
     return redirect_to(exempt_vehicles_path(id: transaction_id)) if @vehicle_details.exempt?
 
     SessionManipulation::SetWeeklyTaxi.call(session: session) if @vehicle_details.weekly_taxi?
@@ -289,8 +288,8 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   end
 
   # Checks if the unrecognized vehicle is a taxi and performs a proper redirect
-  def perform_unrecognised_vehicle_redirect
-    registered_taxi = RegisterDetails.new(vrn).register_taxi?
+  def determinate_next_page
+    registered_taxi = RegisterDetails.new(vrn_without_leading_zeros).register_taxi?
     if registered_taxi
       SessionManipulation::SetUndeterminedTaxi.call(session: session)
       redirect_to local_authority_charges_path
@@ -300,7 +299,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
     end
   end
 
-  # Redirects to {vehicle not found}[rdoc-ref:VehiclesController.unrecognised_vehicle]
+  # Redirects to {vehicle not found}[rdoc-ref:unrecognised_vehicle]
   def vehicle_not_found
     redirect_to unrecognised_vehicles_path(id: transaction_id)
   end
@@ -327,9 +326,14 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   end
 
   # Hide VRN and country when paying for another vehicle from the success payment page
-  def hide_inputs_if_coming_from_successful_payment
+  def hide_inputs
     return unless request.referer&.include?(success_payments_path)
 
     @hide_session_values = true
+  end
+
+  # Returns VRN with leading zeros stripped
+  def vrn_without_leading_zeros
+    @vrn_without_leading_zeros ||= vrn.gsub(/^0+/, '')
   end
 end

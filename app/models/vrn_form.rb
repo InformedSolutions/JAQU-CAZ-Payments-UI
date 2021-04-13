@@ -3,7 +3,7 @@
 ##
 # This class is used to validate user data filled in +app/views/vehicles/enter_details.html.haml+.
 #
-class VrnForm # rubocop:disable Metrics/ClassLength
+class VrnForm
   include ActiveModel::Validations
   include Rails.application.routes.url_helpers
 
@@ -14,7 +14,6 @@ class VrnForm # rubocop:disable Metrics/ClassLength
   validates :country, inclusion: {
     in: %w[UK Non-UK], message: I18n.t('vrn_form.country_missing')
   }
-
   # Check if VRN is present
   validates :vrn, presence: { message: I18n.t('vrn_form.vrn_missing') }
   # Checks if VRN has valid length when vehicle is registered in the UK
@@ -22,10 +21,8 @@ class VrnForm # rubocop:disable Metrics/ClassLength
     minimum: 2, too_short: I18n.t('vrn_form.vrn_too_short'),
     maximum: 7, too_long: I18n.t('vrn_form.vrn_too_long')
   }, if: -> { uk? }
-
   # Checks if VRN is in valid format when vehicle is registered in the UK
   validate :vrn_uk_format, if: -> { uk? }
-
   # Checks if VRN contains only alphanumerics when vehicle is not registered in the UK
   validate :vrn_non_uk_format, if: -> { non_uk? }
 
@@ -40,15 +37,14 @@ class VrnForm # rubocop:disable Metrics/ClassLength
   #
   def initialize(session, vrn, country)
     @session = session
-    @vrn = vrn&.delete(' ')&.upcase
+    @vrn = vrn&.gsub(/\t+|\s+/, '')&.upcase
     @country = country
   end
 
   # Persists vehicle details into session and returns correct onward path
   def submit
-    SessionManipulation::AddVrn.call(session: session, vrn: vrn, country: country)
-
     if uk?
+      SessionManipulation::AddVrn.call(session: session, vrn: vrn, country: country)
       @redirection_path = details_vehicles_path(id: session[:transaction_id])
     elsif non_uk?
       process_non_uk
@@ -72,18 +68,18 @@ class VrnForm # rubocop:disable Metrics/ClassLength
   # Check if VRN match uk format
   def match_uk_format?
     FORMAT_REGEXPS.any? do |reg|
-      reg.match(vrn).present?
-    end && no_leading_zeros?
+      reg.match(vrn_without_leading_zeros).present?
+    end
   end
 
-  # Checks if VRN starts with '0'
-  def no_leading_zeros?
-    !vrn.starts_with?('0')
+  # Returns VRN with leading zeros stripped
+  def vrn_without_leading_zeros
+    @vrn_without_leading_zeros ||= vrn.gsub(/^0+/, '')
   end
 
   # Check if VRN is DVLA registered
   def dvla_registered?
-    ComplianceCheckerApi.vehicle_details(vrn)
+    ComplianceCheckerApi.vehicle_details(vrn_without_leading_zeros)
     true
   rescue BaseApi::Error404Exception
     false
@@ -92,10 +88,11 @@ class VrnForm # rubocop:disable Metrics/ClassLength
   # Process non UK selected VRN
   def process_non_uk
     if match_uk_format? && dvla_registered?
-      SessionManipulation::AddVrn.call(session: session, vrn: vrn, country: 'UK')
-      SessionManipulation::SetPossibleFraud.call(session: session)
+      SessionManipulation::AddVrn.call(session: session, vrn: vrn_without_leading_zeros,
+                                       country: 'UK') && set_possible_fraud
       @redirection_path = uk_registered_details_vehicles_path(id: session[:transaction_id])
     else
+      SessionManipulation::AddVrn.call(session: session, vrn: vrn_without_leading_zeros, country: country)
       @redirection_path = non_dvla_vehicles_path(id: session[:transaction_id])
     end
   end
@@ -121,40 +118,22 @@ class VrnForm # rubocop:disable Metrics/ClassLength
 
   # Regexps formats to validate +vrn+.
   FORMAT_REGEXPS = [
-    /^[A-Z]{3}[0-9]{3}$/, # AAA999
-    /^[A-Z][0-9]{3}[A-Z]{3}$/, # A999AAA
-    /^[A-Z]{3}[0-9]{3}[A-Z]$/, # AAA999A
-    /^[A-Z]{3}[0-9]{4}$/, # AAA9999
-    /^[A-Z]{2}[0-9]{2}[A-Z]{3}$/, # AA99AAA
-    /^[0-9]{4}[A-Z]{3}$/, # 9999AAA
-    /^[A-Z][0-9]$/, # A9
-    /^[0-9][A-Z]$/, # 9A
-    /^[A-Z]{2}[0-9]$/, # AA9
-    /^[A-Z][0-9]{2}$/, # A99
-    /^[0-9][A-Z]{2}$/, # 9AA
-    /^[0-9]{2}[A-Z]$/, # 99A
-    /^[A-Z]{3}[0-9]$/, # AAA9
-    /^[A-Z][0-9]{3}$/, # A999
-    /^[A-Z]{2}[0-9]{2}$/, # AA99
-    /^[0-9][A-Z]{3}$/, # 9AAA
-    /^[0-9]{2}[A-Z]{2}$/, # 99AA
-    /^[0-9]{3}[A-Z]$/, # 999A
-    /^[A-Z][0-9][A-Z]{3}$/, # A9AAA
-    /^[A-Z]{3}[0-9][A-Z]$/, # AAA9A
-    /^[A-Z]{3}[0-9]{2}$/, # AAA99
-    /^[A-Z]{2}[0-9]{3}$/, # AA999
-    /^[0-9]{2}[A-Z]{3}$/, # 99AAA
-    /^[0-9]{3}[A-Z]{2}$/, # 999AA
-    /^[0-9]{4}[A-Z]$/, # 9999A
-    /^[A-Z][0-9]{4}$/, # A9999
-    /^[A-Z][0-9]{2}[A-Z]{3}$/, # A99AAA
-    /^[A-Z]{3}[0-9]{2}[A-Z]$/, # AAA99A
-    /^[0-9]{3}[A-Z]{3}$/, # 999AAA
-    /^[A-Z]{2}[0-9]{4}$/, # AA9999
-    /^[0-9]{4}[A-Z]{2}$/, # 9999AA
+    /^[A-Za-z]{1,2}[0-9]{1,4}$/,
+    /^[A-Za-z]{3}[0-9]{1,3}$/,
+    /^[1-9][0-9]{0,2}[A-Za-z]{3}$/,
+    /^[1-9][0-9]{0,3}[A-Za-z]{1,2}$/,
+    /^[A-Za-z]{3}[0-9]{1,3}[A-Za-z]$/,
+    /^[A-Za-z][0-9]{1,3}[A-Za-z]{3}$/,
+    /^[A-Za-z]{2}[0-9]{2}[A-Za-z]{3}$/,
+    /^[A-Za-z]{3}[0-9]{4}$/,
 
     # The following regex is technically not valid, but is considered as valid
     # due to the requirement which forces users not to include leading zeros.
     /^[A-Z]{2,3}$/ # AA, AAA
   ].freeze
+
+  # Service used to mark vehicle as possible fraud.
+  def set_possible_fraud
+    SessionManipulation::SetPossibleFraud.call(session: session)
+  end
 end

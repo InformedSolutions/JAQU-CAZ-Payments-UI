@@ -4,12 +4,12 @@
 require 'webmock/rspec'
 # Checks code coverage
 require 'simplecov'
-# YARD is a Ruby Documentation tool.
+# YARD is a Ruby Documentation tool
 require 'yard'
 
 # Run scanner to check which files was not documented
 warn('Code documentation coverage:')
-YARD::CLI::Stats.new.run('--list-undoc', '--compact', '--private', '--no-save', '-q')
+YARD::CLI::Stats.new.run('--list-undoc', '--private', '--compact', '--no-save', '-q')
 
 SimpleCov.start 'rails' do
   # minimum coverage percentage expected
