@@ -12,8 +12,6 @@ class ChargesController < ApplicationController # rubocop:disable Metrics/ClassL
   before_action :check_compliance_details, except: %i[local_authority submit_local_authority]
   # checks if vehicle_details is present in the session
   before_action :check_vehicle_details, only: %i[review_payment]
-  # does not cache page
-  before_action :set_cache_headers, only: %i[review_payment]
   # handle cancelling second week
   before_action :handle_second_week_cancel, only: %i[review_payment]
 
@@ -152,7 +150,7 @@ class ChargesController < ApplicationController # rubocop:disable Metrics/ClassL
     end
   end
 
-  # Returns redirect to selecting period if Leeds discounted charge is available.
+  # Returns redirect to selecting period if weekly taxi discounted charge is available.
   # Else, redirect to disbount page if Bath phgv_discount is available
   # Else, returns redirect to daily charge
   def determinate_next_page
@@ -166,7 +164,7 @@ class ChargesController < ApplicationController # rubocop:disable Metrics/ClassL
     end
   end
 
-  # Returns url to electing period if Leeds discounted charge is available.
+  # Returns url to electing period if weekly taxi discounted charge is available.
   # Else, returns url daily charge
   def determinate_next_page_by_period
     if vehicle_details('weekly_possible')

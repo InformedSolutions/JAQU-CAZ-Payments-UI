@@ -80,9 +80,9 @@ class VehicleDetails
     details_api['exempt']
   end
 
-  # Returns if vehicle is register in Leeds as taxi or PHV
-  def leeds_taxi?
-    details_api['licensingAuthoritiesNames']&.include?('Leeds')
+  # Returns if vehicle is register in placeholder discount enabled CAZ as taxi or PHV
+  def weekly_taxi?
+    details_api['licensingAuthoritiesNames']&.include?('Taxidiscountcaz')
   end
 
   # Returns if vehicle is a taxi or PHV - boolean.

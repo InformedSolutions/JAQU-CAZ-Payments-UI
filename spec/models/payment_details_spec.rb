@@ -22,7 +22,7 @@ describe PaymentDetails, type: :model do
 
   let(:vrn) { 'CU57ABC' }
   let(:zone_id) { SecureRandom.uuid }
-  let(:zone_name) { 'Leeds' }
+  let(:zone_name) { 'Birmingham' }
   let(:ref) { SecureRandom.uuid }
   let(:id) { SecureRandom.uuid }
   let(:email) { 'test@example.com' }

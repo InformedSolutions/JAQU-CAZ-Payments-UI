@@ -9,7 +9,7 @@ describe VehicleDetails, type: :model do
   let(:type_approval) { 'M1' }
   let(:taxi_or_phv) { false }
   let(:type) { 'car' }
-  let(:las) { %w[Leeds Birmingham] }
+  let(:las) { %w[Taxidiscountcaz Birmingham] }
   let(:fuel_type) { 'diesel' }
 
   let(:response) do
@@ -36,7 +36,7 @@ describe VehicleDetails, type: :model do
             'cleanAirZoneId' => '5cd7441d-766f-48ff-b8ad-1809586fea37'
           },
           {
-            'cleanAirZoneId' => '131af03c-f7f4-4aef-81ee-aae4f56dbeb5'
+            'cleanAirZoneId' => '7d0c4240-1618-446b-bde2-2f3458c8a521'
           }
         ]
       )
@@ -186,14 +186,14 @@ describe VehicleDetails, type: :model do
     end
   end
 
-  describe '.leeds_taxi?' do
-    subject(:taxi) { compliance.leeds_taxi? }
+  describe '.weekly_taxi?' do
+    subject(:taxi) { compliance.weekly_taxi? }
 
-    context 'when Leeds is in licensingAuthoritiesNames' do
+    context 'when Taxidiscountcaz is in licensingAuthoritiesNames' do
       it { is_expected.to be_truthy }
     end
 
-    context 'when Leeds is NOT in licensingAuthoritiesNames' do
+    context 'when Taxidiscountcaz is NOT in licensingAuthoritiesNames' do
       let(:las) { %w[Birmingham London] }
 
       it { is_expected.to be_falsey }

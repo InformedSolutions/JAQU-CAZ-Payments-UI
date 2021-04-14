@@ -17,7 +17,7 @@ describe 'PaymentsController - POST #create', type: :request do
       vrn: vrn,
       country: 'UK',
       la_id: zone_id,
-      la_name: 'Leeds',
+      la_name: 'Taxidiscountcaz',
       dates: dates,
       total_charge: charge
     )

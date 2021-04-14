@@ -46,7 +46,7 @@ describe 'VehiclesController - GET #details', type: :request do
       end
 
       it 'sets taxi in the session' do
-        expect(session[:vehicle_details]['leeds_taxi']).to be_truthy
+        expect(session[:vehicle_details]['weekly_taxi']).to be_truthy
       end
 
       it 'does not set undetermined vehicle' do
