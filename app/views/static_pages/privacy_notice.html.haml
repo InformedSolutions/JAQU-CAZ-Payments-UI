@@ -155,7 +155,7 @@
 
       - @caz_link_display_data.each do |caz_link|
         %p
-          = link_to("#{caz_link.name} privacy policy", caz_link.privacy_policy_url, id: "#{caz_link.name.downcase}-policy-link")
+          = link_to("#{caz_link.operator_name} privacy policy", caz_link.privacy_policy_url, id: "#{caz_link.name.downcase}-policy-link")
 
       %h2.govuk-heading-l
         Customer Contact Centre
