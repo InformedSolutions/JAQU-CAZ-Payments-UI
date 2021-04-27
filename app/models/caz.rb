@@ -61,6 +61,11 @@ class Caz
     caz_data[:display_from]
   end
 
+  # Returns an operator name eg. Bath and North East Somerset Council
+  def operator_name
+    caz_data[:operator_name]
+  end
+
   private
 
   attr_reader :caz_data
