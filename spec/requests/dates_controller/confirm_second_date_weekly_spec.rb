@@ -33,7 +33,7 @@ describe 'DatesController - POST #confirm_second_date_weekly', type: :request do
       'Caz',
       active_charge_start_date: 7.days.ago.strftime(Dates::Weekly::VALUE_DATE_FORMAT)
     )
-    allow(FetchSingleCazData).to receive(:call).and_return(stubbed_caz)
+    allow(CazDataProvider).to receive(:single).and_return(stubbed_caz)
   end
 
   context 'with details in the session' do

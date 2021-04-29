@@ -15,9 +15,7 @@ describe 'DatesController - GET #weekly_charge', type: :request do
                     zone_name: 'Taxidiscountcaz',
                     charge: 50,
                     exemption_or_discount_url: url,
-                    compliance_url: url,
-                    additional_compliance_url: url,
-                    dynamic_compliance_url: url)
+                    compliance_url: url)
   end
 
   before do

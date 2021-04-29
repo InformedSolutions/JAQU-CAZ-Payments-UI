@@ -29,8 +29,7 @@ describe 'PaymentsController - GET #success', type: :request do
       .to receive(:new)
       .and_return(instance_double(ComplianceDetails,
                                   public_transport_options_url: url,
-                                  additional_compliance_url: url,
-                                  dynamic_compliance_url: url))
+                                  compliance_url: url))
     subject
   end
 

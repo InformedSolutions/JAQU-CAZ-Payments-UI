@@ -121,7 +121,7 @@ module MockHelper
   end
 
   def mock_single_caz_request_for_charge_start_date(date = Date.current)
-    allow(FetchSingleCazData).to receive(:call).and_return(
+    allow(CazDataProvider).to receive(:single).and_return(
       OpenStruct.new(active_charge_start_date: date.to_s)
     )
   end

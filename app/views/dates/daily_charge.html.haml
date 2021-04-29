@@ -66,5 +66,5 @@
       %p
         = succeed '.' do
           = link_to("Contact the local authority for support to upgrade or replace your vehicle in #{@compliance_details.zone_name}",
-                    @compliance_details.dynamic_compliance_url,
+                    @compliance_details.compliance_url,
                     id: 'compliance-link')

@@ -152,12 +152,44 @@
       %p
         - dvla_link = 'https://www.gov.uk/government/publications/dvla-privacy-policy/dvla-privacy-policy'
         = link_to('DVLA', dvla_link, id: 'dvla-link')
+
+      - @caz_link_display_data.each do |caz_link|
+        %p
+          = link_to("#{caz_link.operator_name} privacy policy", caz_link.privacy_policy_url, id: "#{caz_link.name.downcase}-policy-link")
+
+      %h2.govuk-heading-l
+        Customer Contact Centre
       %p
-        - bath_policy_link = 'https://beta.bathnes.gov.uk/council-privacy-policy'
-        = link_to('Bath and North East Somerset privacy policy', bath_policy_link, id: 'bath-policy-link')
+        You can raise any queries about the information provided by the service by using the
+        - link = 'https://contact.dvla.gov.uk/caz/'
+        = link_to('web form', link, id: 'dvla-contact-link')
       %p
-        - birmingham_policy_link = 'https://www.birmingham.gov.uk/info/20015/environment/2005/privacy_statement_-_environmental_health/2'
-        = link_to('Birmingham privacy policy', birmingham_policy_link, id: 'birmingham-policy-link')
+        Along with your query, you will need to give your name and email address, which will be used to respond to you.
+        The information you provide will be sent by GOV.UK Notify to JAQU (or their agents acting on their behalf) for the sole purpose of replying to you.
+        Your personal information will be deleted after a year.
+      %p
+        Alternatively, if you phone the Customer Contact Centre, to resolve any queries you may have, JAQU and the local authority may share your:
+        %ul.govuk-list-govuk-list--bullet
+          %li
+            %p
+              Name/surname (current and previous)
+          %li
+            %p
+              Address (current and previous)
+          %li
+            %p
+              Phone
+          %li
+            %p
+              Email address
+          %li
+            %p
+              Number plate (Vehicle registration mark - VRM)
+      %p
+        All information related to general enquiries are kept for 90 days. After 90 days, only name and email address are kept for future reference and the rest of the information will be deleted.
+        Name and email are kept for 7 years for analysis purposes to enable us to check whether the users have previously submitted an enquiry.
+      %p
+        All information related to complaints are kept for 7 years.
 
       %h2.govuk-heading-l
         Early Notice Letters (ENLs)

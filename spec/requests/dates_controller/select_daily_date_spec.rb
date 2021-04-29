@@ -12,7 +12,7 @@ describe 'DatesController - GET #select_daily_date', type: :request do
       add_details_to_session
       allow(PaymentsApi).to receive(:paid_payments_dates).and_return([])
       stubbed_caz = instance_double('Caz', active_charge_start_date: '2020-05-01')
-      allow(FetchSingleCazData).to receive(:call).and_return(stubbed_caz)
+      allow(CazDataProvider).to receive(:single).and_return(stubbed_caz)
       subject
     end
 
@@ -20,8 +20,8 @@ describe 'DatesController - GET #select_daily_date', type: :request do
       expect(response).to have_http_status(:success)
     end
 
-    it 'calls FetchSingleCazData service' do
-      expect(FetchSingleCazData).to have_received(:call)
+    it 'calls CazDataProvider service' do
+      expect(CazDataProvider).to have_received(:single)
     end
 
     it 'assigns the @d_day_notice' do

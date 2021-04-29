@@ -58,7 +58,7 @@
           Contact the local authority for support to upgrade or replace your vehicle in
           = succeed '.' do
             = link_to(@payment_details.la_name,
-                      @payment_details.compliance_details.dynamic_compliance_url,
+                      @payment_details.compliance_details.compliance_url,
                       id: 'become-compliant-url')
         %li
           = link_to("Explore cycling and public transport options in #{@payment_details.la_name}.",
