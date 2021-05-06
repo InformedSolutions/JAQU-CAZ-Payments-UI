@@ -76,7 +76,7 @@ class ChargeableZonesService < BaseService
 
   # Calling API and returns the list of the available local authorities.
   def zone_data
-    @zone_data ||= ComplianceCheckerApi.clean_air_zones
+    @zone_data = ComplianceCheckerApi.clean_air_zones
   end
 
   # Select chargeable zones and returns ids

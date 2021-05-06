@@ -103,13 +103,17 @@ describe ChargeableZonesService do
       before do
         mock_vehicle_compliance
         mock_unrecognised_compliance
+        service_call
       end
 
       it_behaves_like 'a chargeable zones service'
 
       it 'calls ComplianceCheckerApi.unrecognised_compliance with the right params' do
-        service_call
         expect(ComplianceCheckerApi).to have_received(:unrecognised_compliance).with(type, mocked_zone_ids)
+      end
+
+      it 'calls ComplianceCheckerApi.clean_air_zones' do
+        expect(ComplianceCheckerApi).to have_received(:clean_air_zones).exactly(3).times
       end
     end
   end

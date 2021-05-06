@@ -125,6 +125,6 @@ class VehicleDetails
   # and returns the list of available Clean Air Zones.
   #
   def caz_ids
-    @caz_ids ||= ComplianceCheckerApi.clean_air_zones.map { |e| e['cleanAirZoneId'] }
+    @caz_ids = ComplianceCheckerApi.clean_air_zones.map { |e| e['cleanAirZoneId'] }
   end
 end

@@ -25,7 +25,7 @@ class CazDataProvider
 
     # Fetches clean air zones data
     def clean_air_zones
-      @clean_air_zones ||= ComplianceCheckerApi.clean_air_zones
+      @clean_air_zones = ComplianceCheckerApi.clean_air_zones
     end
 
     # Finds the expected clean air zone data based on provided zone id

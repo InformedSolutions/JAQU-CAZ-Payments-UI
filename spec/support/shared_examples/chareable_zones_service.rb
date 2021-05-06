@@ -12,9 +12,4 @@ RSpec.shared_examples 'a chargeable zones service' do |size = 2|
   it 'sets name in Caz objects' do
     expect(service_call.map(&:name)).to all(be_a(String))
   end
-
-  it 'calls ComplianceCheckerApi.clean_air_zones' do
-    service_call
-    expect(ComplianceCheckerApi).to have_received(:clean_air_zones)
-  end
 end
