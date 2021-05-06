@@ -10,9 +10,7 @@
       %p
         If your vehicle details are incorrect, you can
         = succeed '.' do
-          = link_to('update them with the DVLA',
-                    'https://www.gov.uk/change-vehicle-details-registration-certificate/how-to-tell-dvla',
-                    id: 'dvla-link')
+          = link_to_dvla_contact_form('contact us')
       %p
         You still need to pay a charge if you have driven, or are planning to drive, in the zone.
       %p
