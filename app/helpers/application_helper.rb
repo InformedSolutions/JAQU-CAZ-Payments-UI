@@ -45,7 +45,7 @@ module ApplicationHelper
   end
 
   # Return link to proper DVLA contact form from env variables
-  def link_to_dvla_contact_form
-    link_to 'DVLA', ENV.fetch('DVLA_CONTACT_URL', 'https://contact-preprod.dvla.gov.uk/'), id: 'dvla-link'
+  def link_to_dvla_contact_form(label = 'DVLA')
+    link_to label, ENV.fetch('DVLA_CONTACT_URL', 'https://contact-preprod.dvla.gov.uk/'), id: 'dvla-link'
   end
 end
