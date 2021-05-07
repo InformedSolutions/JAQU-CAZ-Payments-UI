@@ -38,3 +38,6 @@ RSpec/DescribeClass:
 
 RSpec/ExampleLength:
   Max: 5
+
+Rails/EnvironmentVariableAccess:
+  Enabled: false
