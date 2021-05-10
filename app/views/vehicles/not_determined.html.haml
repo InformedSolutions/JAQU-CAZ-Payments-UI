@@ -17,11 +17,11 @@
               %h1.govuk-fieldset__heading
                 = title_and_header
             %p
-              Data used to calculate the compliance of your vehicle is missing from your V5C registration certificate (log book).
+              = 'Data used to calculate the compliance of your vehicle is missing from your V5C registration certificate (log book). '
+              = link_to_dvla_contact_form('Contact us')
+              to find out more.
             %p
-              If your vehicle
-              %strong does
-              meet Clean Air standards, you can claim a refund when your vehicle details are updated.
+              We need some details before you can proceed to payment.
             %h2.govuk-heading-m
               What is your vehicle?
             - if alert
