@@ -6,12 +6,13 @@
 # Also, contains some basic endpoints used for build purposes.
 #
 class ApplicationController < ActionController::Base # rubocop:disable Metrics/ClassLength
-  # Escapes all API related error with rendering 503 page
+  # Escapes all API and security related error with rendering 503 page
   rescue_from Errno::ECONNREFUSED,
               SocketError,
               BaseApi::Error500Exception,
               BaseApi::Error422Exception,
               BaseApi::Error400Exception,
+              InvalidHostException,
               with: :redirect_to_server_unavailable
 
   # enable basic HTTP authentication on production environment if HTTP_BASIC_PASSWORD variable present
@@ -22,6 +23,12 @@ class ApplicationController < ActionController::Base # rubocop:disable Metrics/C
                                      Rails.env.production? && ENV['HTTP_BASIC_PASSWORD'].present?
                                    }
   before_action :check_for_new_id, except: %i[health build_id]
+
+  # check if host headers are valid
+  before_action :validate_host_headers!,
+                except: %i[health build_id],
+                if: -> { Rails.env.production? && Rails.configuration.x.host.present? }
+
   around_action :handle_history, except: %i[health build_id]
 
   ##
@@ -164,6 +171,13 @@ class ApplicationController < ActionController::Base # rubocop:disable Metrics/C
 
     yield
   end
+
+  # Checks if hosts were not manipulated
+  # :nocov:
+  def validate_host_headers!
+    Security::HostHeaderValidator.call(request: request, allowed_host: Rails.configuration.x.host)
+  end
+  # :nocov:
 
   # failsafe mechanism to control session size
   def failsafe
