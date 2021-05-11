@@ -47,6 +47,16 @@ Then("I enter an undetermined vehicle's registration and choose UK") do
   choose('UK')
 end
 
+Then('I enter an undetermined with type vehicle registration and choose UK') do
+  mock_chargeable_zones
+  mock_undetermined_vehicle_compliance
+  mock_unrecognised_compliance
+  mock_undetermined_vehicle_details_with_type
+
+  fill_in('vrn', with: vrn)
+  choose('UK')
+end
+
 Then("I enter an exempted non-UK vehicle's registration") do
   mock_vehicle_not_found_in_dvla
   mock_exempted_register_details
