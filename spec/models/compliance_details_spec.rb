@@ -120,7 +120,9 @@ describe ComplianceDetails, type: :model do
 
       it 'calls :unrecognised_compliance with right params' do
         details.zone_name
-        expect(ComplianceCheckerApi).to have_received(:unrecognised_compliance).with(mapped_dvla_vehicle_type, [zone_id])
+        expect(ComplianceCheckerApi).to(
+          have_received(:unrecognised_compliance).with(mapped_dvla_vehicle_type, [zone_id])
+        )
       end
 
       it 'does not call :vehicle_compliance' do
@@ -143,7 +145,9 @@ describe ComplianceDetails, type: :model do
 
       it 'calls :unrecognised_compliance with right params' do
         details.zone_name
-        expect(ComplianceCheckerApi).to have_received(:unrecognised_compliance).with(type, [zone_id])
+        expect(ComplianceCheckerApi).to(
+          have_received(:unrecognised_compliance).with(type, [zone_id])
+        )
       end
 
       it 'does not call :vehicle_compliance' do

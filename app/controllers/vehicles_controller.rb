@@ -325,12 +325,12 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
 
   # check if user confirmed details for undetermined vehicle
   def confirmed_undetermined?
-    session['vehicle_details']['undetermined'].present?
+    vehicle_details('undetermined').present?
   end
 
   # check if vehicle has type in DVLA
   def dvla_vehicle_type?
-    session['vehicle_details']['dvla_vehicle_type'].present?
+    vehicle_details('dvla_vehicle_type').present?
   end
 
   # Hide VRN and country when paying for another vehicle from the success payment page
