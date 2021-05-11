@@ -27,6 +27,12 @@ module MockHelper
     allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(vehicle_details)
   end
 
+  # Mocks response from vehicle details endpoint in VCCS API
+  def mock_undetermined_vehicle_details_with_type
+    vehicle_details = read_file('undetermined_vehicle_with_type_details_response.json')
+    allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(vehicle_details)
+  end
+
   # Mocks a 422 exception thrown by ComplianceCheckerApi.vehicle_compliance
   def mock_undetermined_vehicle_compliance
     allow(ComplianceCheckerApi).to receive(:vehicle_compliance)

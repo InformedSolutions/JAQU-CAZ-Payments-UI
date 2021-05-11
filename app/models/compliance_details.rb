@@ -17,7 +17,7 @@ class ComplianceDetails
   #
   def initialize(vehicle_details)
     @vrn = vehicle_details['vrn']
-    @type = (vehicle_details['type'] || '').downcase
+    @type = load_type(vehicle_details).downcase
     @zone_id = vehicle_details['la_id']
     @non_dvla = vehicle_details['country'] != 'UK' || vehicle_details['unrecognised'] ||
                 vehicle_details['undetermined']
@@ -111,5 +111,18 @@ class ComplianceDetails
   # Get compliance data for non-DVLA registered vehicle
   def non_dvla_compliance_data
     ComplianceCheckerApi.unrecognised_compliance(type, [zone_id])['charges']
+  end
+
+  # Loads vehicle type from the session
+  def load_type(vehicle_details)
+    return vehicle_details['type'] || '' unless vehicle_details['dvla_vehicle_type']
+
+    map_dvla_vehicle_type(vehicle_details['dvla_vehicle_type'])
+  end
+
+  # Map DVLA vehicle type to vehicle type supported by VCCS endpoints value
+  def map_dvla_vehicle_type(name)
+    VehicleTypes.call.select { |vehicle_type| vehicle_type[:name] == name }
+                .first.try(:[], :value).to_s
   end
 end
