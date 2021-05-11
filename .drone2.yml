@@ -402,7 +402,7 @@ steps:
     pull: never
     commands:
       - bundle audit check --update
-      - yarn run improved-yarn-audit --retry-on-network-failure
+      - yarn run improved-yarn-audit --exclude 1693 --retry-on-network-failure
       - brakeman --except Redirect,LinkToHref
     volumes:
       - name: docker_sock
@@ -1119,7 +1119,7 @@ steps:
     pull: never
     commands:
       - bundle audit check --update
-      - yarn run improved-yarn-audit --retry-on-network-failure
+      - yarn run improved-yarn-audit --exclude 1693 --retry-on-network-failure
       - brakeman --except Redirect,LinkToHref
     volumes:
       - name: docker_sock
