@@ -11,6 +11,7 @@ describe ComplianceDetails, type: :model do
       'country' => country,
       'la_id' => zone_id,
       'unrecognised' => unrecognised,
+      'dvla_vehicle_type' => dvla_vehicle_type,
       'type' => type
     }
   end
@@ -22,6 +23,7 @@ describe ComplianceDetails, type: :model do
   let(:type) { 'bus' }
   let(:tariff) { 'BCC01-BUS' }
   let(:charge) { 15 }
+  let(:dvla_vehicle_type) { nil }
 
   let(:outcomes) do
     [
@@ -103,7 +105,35 @@ describe ComplianceDetails, type: :model do
       end
     end
 
-    context 'when vehicle is unrecognised' do
+    context 'when vehicle is unrecognised but has type in DVLA' do
+      let(:unrecognised) { true }
+      let(:dvla_vehicle_type) { 'Heavy goods vehicle' }
+      let(:type) { nil }
+      let(:mapped_dvla_vehicle_type) { 'hgv' }
+
+      before do
+        allow(ComplianceCheckerApi)
+          .to receive(:unrecognised_compliance)
+          .with(mapped_dvla_vehicle_type, [zone_id])
+          .and_return(unrecognised_response)
+      end
+
+      it 'calls :unrecognised_compliance with right params' do
+        details.zone_name
+        expect(ComplianceCheckerApi).to(
+          have_received(:unrecognised_compliance).with(mapped_dvla_vehicle_type, [zone_id])
+        )
+      end
+
+      it 'does not call :vehicle_compliance' do
+        details.zone_name
+        expect(ComplianceCheckerApi).not_to have_received(:vehicle_compliance)
+      end
+
+      it_behaves_like 'compliance details fields'
+    end
+
+    context 'when vehicle is unrecognised but has chosen type during the process' do
       let(:unrecognised) { true }
 
       before do
@@ -115,7 +145,9 @@ describe ComplianceDetails, type: :model do
 
       it 'calls :unrecognised_compliance with right params' do
         details.zone_name
-        expect(ComplianceCheckerApi).to have_received(:unrecognised_compliance).with(type, [zone_id])
+        expect(ComplianceCheckerApi).to(
+          have_received(:unrecognised_compliance).with(type, [zone_id])
+        )
       end
 
       it 'does not call :vehicle_compliance' do

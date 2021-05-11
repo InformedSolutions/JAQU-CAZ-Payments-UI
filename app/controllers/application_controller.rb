@@ -129,6 +129,12 @@ class ApplicationController < ActionController::Base # rubocop:disable Metrics/C
     vehicle_details('undetermined_taxi') == true
   end
 
+  # Gets information from vehicle_details which states if vehicle is undetermined vehicle
+  # with vehicle type from the dvla. Returns boolean.
+  def undetermined_with_type?
+    vehicle_details('undetermined') == true && vehicle_details('dvla_vehicle_type').present?
+  end
+
   # Logs and redirects to +path+
   def redirect_back_to(path, alert, template)
     Rails.logger.warn("The form is invalid. Redirecting back to :#{template}")

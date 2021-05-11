@@ -78,6 +78,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   #
   def daily_charge
     @undetermined_taxi = undetermined_taxi?
+    @undetermined_with_type = undetermined_with_type?
     @compliance_details = if @undetermined_taxi
                             UnrecognisedComplianceDetails.new(la_id: la_id)
                           else

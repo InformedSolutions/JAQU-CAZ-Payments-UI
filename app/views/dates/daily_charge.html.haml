@@ -19,7 +19,7 @@
       %h2.govuk-heading-m
         = parse_charge(@compliance_details.charge)
 
-      - if @undetermined_taxi
+      - if @undetermined_taxi || @undetermined_with_type
         %p
           Data used to calculate the compliance of your vehicle is missing from your V5C registration certificate (log book).
         %p

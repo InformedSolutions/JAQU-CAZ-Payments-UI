@@ -18,7 +18,7 @@ class ChargeableZonesService < BaseService
   def initialize(vehicle_details:)
     @vrn = vehicle_details['vrn']
     @undetermined_taxi = vehicle_details['undetermined_taxi']
-    @type = @undetermined_taxi ? 'TAXI_OR_PHV' : vehicle_details['type']
+    @type = load_type(vehicle_details)
     @non_dvla = vehicle_details['country'] != 'UK' || vehicle_details['unrecognised'] ||
                 vehicle_details['undetermined']
   end
@@ -82,5 +82,22 @@ class ChargeableZonesService < BaseService
   # Select chargeable zones and returns ids
   def select_chargeable(data)
     data.filter_map { |zone| zone['cleanAirZoneId'] if zone['charge'].to_i.positive? }
+  end
+
+  # Loads vehicle type from the session
+  def load_type(vehicle_details)
+    return 'TAXI_OR_PHV' if vehicle_details['undetermined_taxi']
+
+    if vehicle_details['undetermined'] && vehicle_details['dvla_vehicle_type']
+      map_dvla_vehicle_type(vehicle_details['dvla_vehicle_type'])
+    else
+      vehicle_details['type']
+    end
+  end
+
+  # Map DVLA vehicle type to vehicle type supported by VCCS endpoints value
+  def map_dvla_vehicle_type(name)
+    VehicleTypes.call.select { |vehicle_type| vehicle_type[:name] == name }
+                .first.try(:[], :value).to_s
   end
 end
