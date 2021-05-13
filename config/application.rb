@@ -31,5 +31,6 @@ module CitizensChargePayment
     config.time_zone = 'London'
 
     config.x.max_history_size = ENV.fetch('MAX_HISTORY_SIZE', 100)
+    config.x.host = ENV['HOST']
   end
 end

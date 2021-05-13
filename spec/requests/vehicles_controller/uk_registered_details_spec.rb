@@ -21,9 +21,9 @@ describe 'VehiclesController - GET #uk_registered_details', type: :request do
       expect(response).to be_successful
     end
 
-    it 'sets type in the session' do
+    it 'sets dvla_vehicle_type in the session' do
       subject
-      expect(session[:vehicle_details]['type']).not_to be_nil
+      expect(session[:vehicle_details]['dvla_vehicle_type']).not_to be_nil
     end
 
     context 'when vehicle is exempted' do
