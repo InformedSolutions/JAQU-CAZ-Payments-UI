@@ -46,7 +46,7 @@ describe ChargeableZonesService do
     before { mock_chargeable_zones }
 
     context 'when country is UK' do
-      context 'and charge price is more then zero for many CAZes' do
+      context 'with charge price is more then zero for many CAZes' do
         before { mock_vehicle_compliance }
 
         it_behaves_like 'a chargeable zones service'
@@ -57,13 +57,13 @@ describe ChargeableZonesService do
         end
       end
 
-      context 'and charge price is more then zero for one CAZ' do
+      context 'with charge price is more then zero for one CAZ' do
         before { mock_private_car_compliance }
 
         it_behaves_like 'a chargeable zones service', 1
       end
 
-      context 'and charge price equals to zero in all CAZes' do
+      context 'with charge price equals to zero in all CAZes' do
         before { mock_vehicle_with_zero_charge }
 
         it 'returns zero caz zones' do

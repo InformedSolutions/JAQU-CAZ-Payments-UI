@@ -26,14 +26,8 @@ describe 'PaymentsApi.paid_payments_dates' do
     end
 
     it 'calls API with right params' do
-      expect(subject)
-        .to have_requested(:post, url)
-        .with(body: {
-                startDate: start_date,
-                endDate: end_date,
-                vrns: [vrn],
-                cleanAirZoneId: id
-              })
+      expect(subject).to have_requested(:post, url).with(body: { startDate: start_date, endDate: end_date,
+                                                                 vrns: [vrn], cleanAirZoneId: id })
     end
   end
 end

@@ -80,17 +80,9 @@ describe 'DatesController - GET #daily_charge', type: :request do
     it 'call ComplianceDetails with right params' do
       subject
       expect(ComplianceDetails).to have_received(:new)
-        .with(
-          'vrn' => vrn,
-          'country' => country,
-          'la_id' => zone_id,
-          'daily_charge' => 15,
-          'la_name' => 'Taxidiscountcaz',
-          'undetermined_taxi' => false,
-          'weekly_possible' => false,
-          'weekly_charge_today' => false,
-          'weekly_dates' => []
-        )
+        .with('vrn' => vrn, 'country' => country, 'la_id' => zone_id, 'daily_charge' => 15,
+              'la_name' => 'Taxidiscountcaz', 'undetermined_taxi' => false, 'weekly_possible' => false,
+              'weekly_charge_today' => false, 'weekly_dates' => [])
     end
 
     it 'returns a success response' do

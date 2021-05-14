@@ -13,7 +13,6 @@ class WelcomeController < ApplicationController
   #
   # ==== Path
   #    GET /
-  #    GET /welcome/index
   #
   def index
     SessionManipulation::ClearSessionDetails.call(session: session, key: 1) if vrn

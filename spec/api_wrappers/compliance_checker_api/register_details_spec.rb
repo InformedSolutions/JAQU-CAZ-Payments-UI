@@ -16,14 +16,8 @@ describe 'ComplianceCheckerApi.register_details' do
     end
 
     it 'returns proper fields' do
-      expect(subject.keys).to contain_exactly(
-        'registerCompliant',
-        'registerExempt',
-        'registeredMOD',
-        'registeredGPW',
-        'registeredNTR',
-        'registeredRetrofit'
-      )
+      expect(subject.keys).to contain_exactly('registerCompliant', 'registerExempt', 'registeredMOD',
+                                              'registeredGPW', 'registeredNTR', 'registeredRetrofit')
     end
   end
 
