@@ -28,12 +28,8 @@ describe Dates::CheckPaidDaily do
   it 'calls PaymentsApi.paid_payments_dates with right params' do
     subject
     expect(PaymentsApi).to have_received(:paid_payments_dates)
-      .with(
-        vrn: vrn,
-        zone_id: zone_id,
-        start_date: (Date.current - 6.days).strftime('%Y-%m-%d'),
-        end_date: (Date.current + 6.days).strftime('%Y-%m-%d')
-      )
+      .with(vrn: vrn, zone_id: zone_id, start_date: (Date.current - 6.days).strftime('%Y-%m-%d'),
+            end_date: (Date.current + 6.days).strftime('%Y-%m-%d'))
   end
 
   context 'when dates in paid dates' do

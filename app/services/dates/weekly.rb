@@ -70,6 +70,7 @@ module Dates
       (week_array & paid_dates).any?
     end
 
+    # Prepare the hint text
     def weekly_date_hint(date)
       week_end_date = (date + 6.days).strftime(DISPLAY_DATE_FORMAT)
       "Your weekly charge is valid until 11.59pm on #{week_end_date}"

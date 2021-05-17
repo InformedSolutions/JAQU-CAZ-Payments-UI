@@ -12,7 +12,7 @@ describe 'VehiclesController - GET #enter_details', type: :request do
     expect(response).to have_http_status(:success)
   end
 
-  context 'user clicking Pay for another vehicle from the Success payment page' do
+  context 'when user clicking Pay for another vehicle from the Success payment page' do
     let(:referer) { 'http://www.example.com/payments/success' }
 
     it 'assigns @hide_session_values' do

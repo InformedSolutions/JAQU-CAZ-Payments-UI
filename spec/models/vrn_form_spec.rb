@@ -23,12 +23,12 @@ describe VrnForm, type: :model do
 
       before { mock_vehicle_details }
 
-      context 'and vrn is UK format' do
+      context 'with vrn is UK format' do
         it 'returns a proper value' do
           expect(subject).to eq '/vehicles/uk_registered_details'
         end
 
-        context 'but not registered in DVLA' do
+        context 'with not registered in DVLA' do
           before do
             allow(ComplianceCheckerApi).to receive(:vehicle_details)
               .and_raise(BaseApi::Error404Exception.new(404, '', {}))
@@ -40,7 +40,7 @@ describe VrnForm, type: :model do
         end
       end
 
-      context 'and vrn is not UK format' do
+      context 'with vrn is not UK format' do
         let(:vrn) { 'LU83363' }
 
         it 'returns a proper value' do
@@ -70,7 +70,7 @@ describe VrnForm, type: :model do
     end
   end
 
-  context 'country validation' do
+  context 'with country validation' do
     before { form.valid? }
 
     context 'when country is nil' do
@@ -86,7 +86,7 @@ describe VrnForm, type: :model do
     end
   end
 
-  context 'VRN validation' do
+  context 'with VRN validation' do
     before { form.valid? }
 
     context 'when VRN is empty' do
@@ -122,9 +122,7 @@ describe VrnForm, type: :model do
     context 'when VRN starts with 0' do
       let(:vrn) { '00SGL6' }
 
-      it { is_expected.not_to be_valid }
-
-      it_behaves_like 'an invalid vrn input', I18n.t('vrn_form.vrn_invalid')
+      it { is_expected.to be_valid }
     end
 
     context 'when country in Non-UK' do
@@ -270,7 +268,7 @@ describe VrnForm, type: :model do
     end
 
     context 'when VRN is in format 9999AAA' do
-      let(:vrn) { '7429HER' }
+      let(:vrn) { '7429HE' }
 
       it { is_expected.to be_valid }
     end
@@ -391,6 +389,12 @@ describe VrnForm, type: :model do
 
     context 'when VRN is in format A9999' do
       let(:vrn) { 'B8659' }
+
+      it { is_expected.to be_valid }
+    end
+
+    context 'when VRN starts with 0 and is with 0 stripped' do
+      let(:vrn) { '009999A' }
 
       it { is_expected.to be_valid }
     end

@@ -177,7 +177,7 @@ describe VehicleDetails, type: :model do
       end
     end
 
-    context 'whet vehicle is not a taxi' do
+    context 'when vehicle is not a taxi' do
       let(:taxi_or_phv) { false }
 
       it 'returns false' do

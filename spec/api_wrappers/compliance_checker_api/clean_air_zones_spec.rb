@@ -19,14 +19,8 @@ describe 'ComplianceCheckerApi.clean_air_zones' do
 
     it 'returns an array of CAZ objects' do
       expect(subject.first.keys).to contain_exactly(
-        'cleanAirZoneId',
-        'name',
-        'boundaryUrl',
-        'privacyPolicyUrl',
-        'activeChargeStartDate',
-        'activeChargeStartDateText',
-        'displayFrom',
-        'displayOrder'
+        'cleanAirZoneId', 'name', 'boundaryUrl', 'privacyPolicyUrl', 'activeChargeStartDate',
+        'activeChargeStartDateText', 'displayFrom', 'displayOrder'
       )
     end
   end

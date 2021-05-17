@@ -6,7 +6,6 @@
 # For further information see the following documentation
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
 
-# :nocov:
 if Rails.env.production?
   defaults = %i[self https]
   defaults.push(ENV['CLOUDFRONT_ENDPOINT']) if ENV['CLOUDFRONT_ENDPOINT']
@@ -23,7 +22,6 @@ if Rails.env.production?
     policy.frame_ancestors(:none)
   end
 end
-# :nocov:
 
 # If you are using UJS then enable automatic nonce generation
 # Rails.application.config.content_security_policy_nonce_generator =

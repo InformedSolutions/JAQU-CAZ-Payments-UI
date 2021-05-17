@@ -38,14 +38,8 @@ describe 'PaymentsController - POST #create', type: :request do
     it 'calls Payment model with right params' do
       subject
       expect(Payment).to have_received(:new).with(
-        {
-          'vrn' => vrn,
-          'la_id' => zone_id,
-          'total_charge' => charge,
-          'dates' => dates,
-          'country' => anything,
-          'la_name' => anything
-        }, payments_url
+        { 'vrn' => vrn, 'la_id' => zone_id, 'total_charge' => charge, 'dates' => dates, 'country' => anything,
+          'la_name' => anything }, payments_url
       )
     end
 
@@ -68,14 +62,8 @@ describe 'PaymentsController - POST #create', type: :request do
       it 'calls the Payment model a second time' do
         repeated_request
         expect(Payment).to have_received(:new).with(
-          {
-            'vrn' => vrn,
-            'la_id' => zone_id,
-            'total_charge' => charge,
-            'dates' => dates,
-            'country' => anything,
-            'la_name' => anything
-          }, payments_url
+          { 'vrn' => vrn, 'la_id' => zone_id, 'total_charge' => charge, 'dates' => dates,
+            'country' => anything, 'la_name' => anything }, payments_url
         ).twice
       end
 
