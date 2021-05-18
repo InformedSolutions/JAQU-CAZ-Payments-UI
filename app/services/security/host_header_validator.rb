@@ -12,10 +12,10 @@ module Security
     #
     # ==== Attributes
     # * +request+ - request details
-    # * +allowed_host+ - allowed host from the configuration
+    # * +allowed_hosts+ - allowed hosts from the configuration
     #
-    def initialize(request:, allowed_host:)
-      @allowed_host = sanitize_host(allowed_host)
+    def initialize(request:, allowed_hosts:)
+      @allowed_hosts = sanitize_hosts(allowed_hosts)
       @origin_host = request.get_header('HTTP_HOST').to_s.sub(/:\d+\z/, '')
       @x_forwarded_host = load_header_value(request.x_forwarded_host)
       @x_forwarded_server = load_header_value(request.get_header('HTTP_X_FORWARDED_SERVER'))
@@ -40,7 +40,7 @@ module Security
     def allowed?(host)
       return true if host.blank?
 
-      allowed_host.match?(host)
+      allowed_hosts.any? { |allowed_host| allowed_host.match?(host) }
     end
 
     # Checks if all provided hosts are allowed
@@ -49,7 +49,12 @@ module Security
         allowed?(@x_host)
     end
 
-    # Sanitize host string from the configuration
+    # Sanitize list of hosts from the configuration
+    def sanitize_hosts(hosts)
+      hosts.split(',').map { |host| sanitize_host(host) }
+    end
+
+    # Sanitize single host string
     def sanitize_host(host)
       if host.start_with?('.')
         /\A(.+\.)?#{Regexp.escape(host[1..])}\z/i
@@ -59,6 +64,6 @@ module Security
     end
 
     # Attributes reader
-    attr_reader :allowed_host, :x_forwarded_host, :x_forwarded_server, :x_host
+    attr_reader :allowed_hosts, :x_forwarded_host, :x_forwarded_server, :x_host
   end
 end
