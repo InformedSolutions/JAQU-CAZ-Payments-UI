@@ -13,11 +13,7 @@ describe 'VehiclesController - GET #enter_details', type: :request do
   end
 
   context 'when vrn already selected in the seesion' do
-    before do
-      add_details_to_session(
-        details: { vrn: 'ANY123' }
-      )
-    end
+    before { add_details_to_session(details: { vrn: 'ANY123' }) }
 
     it 'clears vrn from the session' do
       subject
