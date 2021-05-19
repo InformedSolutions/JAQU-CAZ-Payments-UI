@@ -135,6 +135,10 @@ Then('I should see {string} as vrn value') do |string|
   expect(page).to have_field('vrn', with: string)
 end
 
+Then('I should empty vrn field') do
+  expect(find('input#vrn').value.blank?).to eq(true)
+end
+
 Given('I am on the vehicle details page with unrecognized vehicle to check') do
   add_vrn_and_country_to_session
   mock_vehicle_not_found_in_dvla
@@ -150,6 +154,10 @@ Then("I enter a vehicle's registration but the zones are not active") do
 
   fill_in('vrn', with: 'CAS310')
   choose('UK')
+end
+
+Then('I go to the enter details page') do
+  visit '/vehicles/enter_details'
 end
 
 private

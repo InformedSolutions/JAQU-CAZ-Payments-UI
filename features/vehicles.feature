@@ -18,6 +18,20 @@ Feature: Vehicles
       And I press the Continue
       And I should see 'Enter the number plate of the vehicle'
 
+  Scenario: User wants restart the vehicle check
+    Given I am on the home page
+    Then I should see 'Start now'
+      And I press the Start now button
+    Then I should be on the enter details page
+      And I should see 'Enter the number plate of the vehicle'
+      And I should empty vrn field
+    Then I enter a vehicle's registration and choose UK
+      And I press the Continue
+      And I should see 'Are these vehicle details correct?'
+    Then I go to the enter details page
+      And I should see 'Enter the number plate of the vehicle'
+      And I should empty vrn field
+
   Scenario: User enters a correct vehicle's registration and choose what vehicle's details are incorrect
     Given I am on the home page
     Then I press the Start now button

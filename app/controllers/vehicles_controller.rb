@@ -21,6 +21,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   def enter_details
     @errors = {}
     hide_inputs
+    SessionManipulation::ClearSessionDetails.call(session: session, key: 1) if vrn
   end
 
   ##
