@@ -36,9 +36,9 @@ A Ruby static code analyzer and formatter.
 rubocop
 ```
 
-Configures various linters to comply with GOV.UK's style guides.
+Configurable tool for writing clean and consistent SCSS.
 ```
-scss-lint app/javascript
+node_modules/.bin/stylelint 'app/javascript/**/*.(s)?scss'
 ```
 
 ### SonarQube inspection

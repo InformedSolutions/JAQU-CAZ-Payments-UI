@@ -17,7 +17,7 @@ end
 
 Given('I am on the daily charge page') do
   add_vrn_country_la_to_session
-  mock_single_caz_request_for_charge_start_date
+  mock_single_caz
   mock_vehicle_compliance
   mock_paid_dates
 
@@ -50,27 +50,32 @@ Then('I choose I confirm that I am not exempt') do
 end
 
 Then('I am on the dates page') do
-  mock_single_caz_request_for_charge_start_date
+  mock_single_caz
   add_vehicle_details_to_session
   mock_paid_dates
+
   visit select_daily_date_dates_path
 end
 
 Then('I am on the dates page when d-day was yesterday') do
-  mock_single_caz_request_for_charge_start_date(Date.current.yesterday)
+  mock_single_caz(Date.current.yesterday)
   mock_daily_dates_data
+
   visit select_daily_date_dates_path
 end
 
 Then('I am on the dates page when d-day was 7 days ago') do
-  mock_single_caz_request_for_charge_start_date(Date.current - 7.days)
+  mock_single_caz(Date.current - 7.days)
   mock_daily_dates_data
+
   visit select_daily_date_dates_path
 end
 
 Then('I am on the dates page when d-day will be tomorrow') do
-  mock_single_caz_request_for_charge_start_date(Date.current.tomorrow)
+  mock_chargeable_zones
+  mock_single_caz(Date.current.tomorrow)
   mock_daily_dates_data
+
   visit select_daily_date_dates_path
 end
 
@@ -84,6 +89,7 @@ end
 
 Then('I am on the review payment page') do
   add_vehicle_details_to_session(add_dates: true)
+  mock_chargeable_zones
   mock_dvla_response
   mock_payment_creation
 
@@ -93,7 +99,8 @@ end
 Then('I am on the review weekly payment page') do
   add_weekly_vehicle_details_to_session(weekly_charge_today: false)
   mock_payment_creation
-  mock_single_caz_request_for_charge_start_date
+  mock_chargeable_zones
+  mock_single_caz
   mock_paid_dates
 
   visit review_payment_charges_path
@@ -102,7 +109,8 @@ end
 Then('I am on the review weekly payment page when a week charge starting from today') do
   add_weekly_vehicle_details_to_session(weekly_charge_today: true, weekly_dates: [today_formatted])
   mock_payment_creation
-  mock_single_caz_request_for_charge_start_date
+  mock_chargeable_zones
+  mock_single_caz
   mock_paid_dates
 
   visit review_payment_charges_path
@@ -119,12 +127,14 @@ end
 Then('I press the Change Payment for link') do
   mock_vehicle_compliance
   mock_paid_dates(dates: [today_formatted])
-  mock_single_caz_request_for_charge_start_date
+  mock_single_caz
+
   find('#change-dates').click
 end
 
 Then('I am go the review payment page') do
   add_vehicle_details_to_session(add_dates: true)
+
   visit review_payment_charges_path
 end
 
@@ -137,16 +147,20 @@ Then('I should not see the Change Clean Air Zone link') do
 end
 
 Given('I am on the dates page with paid charge for today') do
-  mock_single_caz_request_for_charge_start_date(10.days.ago)
+  mock_chargeable_zones
+  mock_single_caz(10.days.ago)
   add_vehicle_details_to_session
   mock_paid_dates(dates: [today_formatted])
+
   visit select_daily_date_dates_path
 end
 
 Given('I am on the dates page with all charges paid') do
-  mock_single_caz_request_for_charge_start_date(10.days.ago)
+  mock_chargeable_zones
+  mock_single_caz(10.days.ago)
   add_vehicle_details_to_session
   mock_paid_dates(dates: paid_period[:dates])
+
   visit select_daily_date_dates_path
 end
 
@@ -168,9 +182,11 @@ Then('I should not see the continue button') do
 end
 
 Given('I am on the pick weekly dates page with no passes available to buy') do
-  mock_single_caz_request_for_charge_start_date
+  mock_chargeable_zones
+  mock_single_caz
   add_weekly_vehicle_details_to_session
   mock_paid_dates(dates: paid_period[:dates])
+
   visit select_weekly_date_dates_path
 end
 
