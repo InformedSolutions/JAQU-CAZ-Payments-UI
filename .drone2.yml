@@ -314,7 +314,7 @@ steps:
       BASE_URL: https://PaymentsDevUser1:CleanAir99@dev.paycleanairzonecharge.co.uk
     commands:
       - mkdir screenshots
-      - /usr/local/bin/pa11y-ci -c pa11y/.pa11yci.conf.js
+      - /usr/local/bin/pa11y-ci -c ci-cd-resources/pa11y/.pa11yci.conf.js
     when:
       event:
         - push
