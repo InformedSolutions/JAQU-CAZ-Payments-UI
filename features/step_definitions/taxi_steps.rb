@@ -6,7 +6,7 @@ Given('I am on the vehicle details page with taxi vehicle to check') do
   mock_chargeable_zones
   mock_vehicle_compliance_discount_taxi
   mock_non_dvla_response
-  mock_single_caz_request_for_charge_start_date
+  mock_single_caz
   visit details_vehicles_path
 end
 
@@ -17,7 +17,7 @@ Given('I am on the vehicle details page with unrecognized taxi vehicle to check'
   mock_undetermined_vehicle_compliance
   mock_unrecognised_compliance
   mock_non_dvla_response
-  mock_single_caz_request_for_charge_start_date
+  mock_single_caz
   visit details_vehicles_path
 end
 
@@ -55,7 +55,7 @@ Given('I have already paid for tomorrow') do
 end
 
 Given('I am on the weekly dates page') do
-  mock_single_caz_request_for_charge_start_date(Date.current - 7.days)
+  mock_single_caz(Date.current - 7.days)
   mock_paid_dates(dates: [today_formatted])
   add_weekly_possible_details
   mock_validate_selected_weekly_date
@@ -64,28 +64,28 @@ Given('I am on the weekly dates page') do
 end
 
 Given('I am on the weekly dates page when d-day was yesterday and today day is paid') do
-  mock_single_caz_request_for_charge_start_date(Date.current.yesterday)
+  mock_single_caz(Date.current.yesterday)
   mock_paid_dates(dates: [today_formatted])
   add_weekly_possible_details
   visit select_weekly_date_dates_path
 end
 
 Given('I am on the weekly dates page when d-day will be tomorrow') do
-  mock_single_caz_request_for_charge_start_date(Date.current.tomorrow)
+  mock_single_caz(Date.current.tomorrow)
   mock_paid_dates
   add_weekly_possible_details
   visit select_weekly_date_dates_path
 end
 
 Given('I am on the weekly dates page when d-day was 7 days ago and today day is paid') do
-  mock_single_caz_request_for_charge_start_date(Date.current - 7.days)
+  mock_single_caz(Date.current - 7.days)
   mock_paid_dates(dates: [today_formatted])
   add_weekly_possible_details
   visit select_weekly_date_dates_path
 end
 
 Given('I am on the weekly dates page when d-day was 7 days ago and today day is not paid') do
-  mock_single_caz_request_for_charge_start_date(Date.current - 7.days)
+  mock_single_caz(Date.current - 7.days)
   mock_paid_dates
   add_weekly_possible_details
   visit select_weekly_date_dates_path

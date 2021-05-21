@@ -9,7 +9,7 @@ describe 'ChargesController - GET #review_payment', type: :request do
   let(:transaction_id) { SecureRandom.uuid }
   let(:vrn) { 'CU57ABC' }
   let(:country) { 'UK' }
-  let(:zone_id) { SecureRandom.uuid }
+  let(:zone_id) { '7d0c4240-1618-446b-bde2-2f3458c8a520' }
   let(:charge) { 50 }
   let(:la_name) { 'Taxidiscountcaz' }
   let(:details) { {} }
