@@ -14,11 +14,7 @@ describe 'DatesController - GET #select_weekly_date', type: :request do
     before do
       add_details_to_session(weekly_possible: true)
       allow(PaymentsApi).to receive(:paid_payments_dates).and_return(paid_dates)
-      stubbed_caz = instance_double(
-        'Caz',
-        active_charge_start_date: 7.days.ago.strftime(Dates::Weekly::VALUE_DATE_FORMAT)
-      )
-      allow(CazDataProvider).to receive(:single).and_return(stubbed_caz)
+      mock_single_caz(7.days.ago.strftime(Dates::Weekly::VALUE_DATE_FORMAT))
     end
 
     context 'with selected dates on the first week page' do
@@ -31,10 +27,6 @@ describe 'DatesController - GET #select_weekly_date', type: :request do
         it 'returns a found response' do
           subject
           expect(response).to have_http_status(:found)
-        end
-
-        it 'calls CazDataProvider service' do
-          expect(CazDataProvider).to have_received(:single)
         end
 
         it 'assigns the @d_day_notice variable' do
@@ -54,10 +46,6 @@ describe 'DatesController - GET #select_weekly_date', type: :request do
           expect(response).to have_http_status(:success)
         end
 
-        it 'calls CazDataProvider service' do
-          expect(CazDataProvider).to have_received(:single)
-        end
-
         it 'assigns the @d_day_notice variable' do
           expect(assigns(:d_day_notice)).to eq(false)
         end
@@ -71,10 +59,6 @@ describe 'DatesController - GET #select_weekly_date', type: :request do
           expect(response).to have_http_status(:found)
         end
 
-        it 'calls CazDataProvider service' do
-          expect(CazDataProvider).to have_received(:single)
-        end
-
         it 'assigns the @d_day_notice variable' do
           expect(assigns(:d_day_notice)).to eq(false)
         end
@@ -85,7 +69,7 @@ describe 'DatesController - GET #select_weekly_date', type: :request do
       end
 
       context 'when user chooses date after clicking Back button on Review Payment page' do
-        let(:referer) { 'http://www.example.com/charges/review_payment' }
+        let(:referer) { 'https://www.example.com/charges/review_payment' }
 
         it 'assigns @input_date' do
           subject

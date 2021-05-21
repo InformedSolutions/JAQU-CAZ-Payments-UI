@@ -11,17 +11,12 @@ describe 'DatesController - GET #select_daily_date', type: :request do
     before do
       add_details_to_session
       allow(PaymentsApi).to receive(:paid_payments_dates).and_return([])
-      stubbed_caz = instance_double('Caz', active_charge_start_date: '2020-05-01')
-      allow(CazDataProvider).to receive(:single).and_return(stubbed_caz)
+      mock_single_caz('2020-05-01')
       subject
     end
 
     it 'returns a success response' do
       expect(response).to have_http_status(:success)
-    end
-
-    it 'calls CazDataProvider service' do
-      expect(CazDataProvider).to have_received(:single)
     end
 
     it 'assigns the @d_day_notice' do

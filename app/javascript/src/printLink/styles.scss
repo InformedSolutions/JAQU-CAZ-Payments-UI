@@ -1,8 +1,10 @@
 @import "~govuk-frontend/govuk/helpers/all";
 
+/* stylelint-disable declaration-no-important */
 .print-page-link__hidden {
   display: none !important;
 }
+/* stylelint-enable declaration-no-important */
 
 .print-page-link {
   display: block;

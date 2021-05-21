@@ -81,4 +81,10 @@ module ApiMocks
     caz_list = read_file('caz_list_response.json')['cleanAirZones']
     caz_list.map { |caz| caz['cleanAirZoneId'] }
   end
+
+  def mock_single_caz(date = Date.current)
+    details = instance_double(CazDataProvider,
+                              single: OpenStruct.new(active_charge_start_date: date.to_s))
+    allow(CazDataProvider).to receive(:new).and_return(details)
+  end
 end

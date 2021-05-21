@@ -6,7 +6,7 @@ describe Dates::ReviewWeeklySelection do
   subject do
     described_class.new(
       vrn: 'CU123AB',
-      zone_id: SecureRandom.uuid,
+      zone_id: '7d0c4240-1618-446b-bde2-2f3458c8a520',
       session: session
     )
   end
@@ -14,9 +14,8 @@ describe Dates::ReviewWeeklySelection do
   let(:session) { { first_week_start_date: '2020-05-01', second_week_start_date: '2020-05-08' } }
 
   before do
-    caz_double = instance_double(Caz, active_charge_start_date: '2020-03-01')
-    allow(CazDataProvider).to receive(:single).and_return(caz_double)
     allow(PaymentsApi).to receive(:paid_payments_dates).and_return([])
+    mock_single_caz('2020-03-01')
   end
 
   describe 'when second week date is in session' do
@@ -25,7 +24,7 @@ describe Dates::ReviewWeeklySelection do
     end
 
     it '.format_week_selection formats the dates correctly' do
-      formatted_dates = [['01/05/2020', '07/05/2020'], ['08/05/2020', '14/05/2020']]
+      formatted_dates = [%w[01/05/2020 07/05/2020], %w[08/05/2020 14/05/2020]]
       expect(subject.format_week_selection).to eq(formatted_dates)
     end
   end
@@ -38,7 +37,7 @@ describe Dates::ReviewWeeklySelection do
     end
 
     it '.format_week_selection formats the dates correctly' do
-      formatted_dates = [['01/05/2020', '07/05/2020']]
+      formatted_dates = [%w[01/05/2020 07/05/2020]]
       expect(subject.format_week_selection).to eq(formatted_dates)
     end
   end

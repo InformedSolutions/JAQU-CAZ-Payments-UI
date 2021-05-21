@@ -1,15 +1,15 @@
-$cc-black: #000;
-$cc-white: #FFFFFF;
-$focus-color: #fd0;
+$cc-black: #000000;
+$cc-white: #ffffff;
+$focus-color: #ffdd00;
 
+/* stylelint-disable selector-max-id, declaration-no-important */
 .ccc-button-solid {
   color: $cc-white !important;
   border-color: $cc-black !important;
   background: $cc-black !important;
 }
 
-// scss-lint:disable IdSelector
-#ccc .checkbox-toggle-input:focus~.checkbox-toggle-toggle {
+#ccc .checkbox-toggle-input:focus ~ .checkbox-toggle-toggle {
   -webkit-filter: none !important;
   filter: none !important;
   background-color: $focus-color !important;
@@ -21,4 +21,4 @@ $focus-color: #fd0;
   border-color: $focus-color !important;
   box-shadow: none !important;
 }
-// scss-lint:enable IdSelector
+/* stylelint-enable selector-max-id, declaration-no-important */

@@ -6,7 +6,7 @@ describe CazDataProvider do
   before { mock_chargeable_zones }
 
   describe '.single' do
-    subject { described_class.single(zone_id: zone_id) }
+    subject { described_class.new.single(zone_id: zone_id) }
 
     let(:zone_id) { '7d0c4240-1618-446b-bde2-2f3458c8a520' }
 
@@ -15,20 +15,8 @@ describe CazDataProvider do
     end
   end
 
-  describe '.all' do
-    subject { described_class.all }
-
-    it 'returns collection of Caz objects' do
-      expect(subject).to all(be_a(Caz))
-    end
-
-    it 'returns all CAZes' do
-      expect(subject.count).to eq(2)
-    end
-  end
-
   describe '.displayable' do
-    subject { described_class.displayable }
+    subject { described_class.new.displayable }
 
     it 'returns collection of Caz objects' do
       expect(subject).to all(be_a(Caz))
