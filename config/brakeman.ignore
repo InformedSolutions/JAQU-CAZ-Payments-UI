@@ -1,0 +1,88 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 4,
+      "fingerprint": "11b5ebbe952705cb9c1bb072408d46fed6e04aa9375fb337bed69ebb03cd9fb5",
+      "check_name": "LinkToHref",
+      "message": "Potentially unsafe model attribute in `link_to` href",
+      "file": "app/views/dates/weekly_charge.html.haml",
+      "line": 58,
+      "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
+      "code": "link_to(\"Contact the local authority for support to upgrade or replace your vehicle in #{ComplianceDetails.new(session[:vehicle_details]).zone_name}\", ComplianceDetails.new(session[:vehicle_details]).compliance_url, :id => \"compliance-link\")",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "DatesController",
+          "method": "weekly_charge",
+          "line": 180,
+          "file": "app/controllers/dates_controller.rb",
+          "rendered": {
+            "name": "dates/weekly_charge",
+            "file": "app/views/dates/weekly_charge.html.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "dates/weekly_charge"
+      },
+      "user_input": "ComplianceDetails.new(session[:vehicle_details]).compliance_url",
+      "confidence": "Weak",
+      "note": ""
+    },
+    {
+      "warning_type": "Redirect",
+      "warning_code": 18,
+      "fingerprint": "6c0abe7c41c2d71ad7469c8b0841d65e50ddcb92e0f10bc62be63328f685072a",
+      "check_name": "Redirect",
+      "message": "Possible unprotected redirect",
+      "file": "app/controllers/payments_controller.rb",
+      "line": 49,
+      "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
+      "code": "redirect_to(Payment.new(session[:vehicle_details], payments_url).gov_uk_pay_url)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "PaymentsController",
+        "method": "create"
+      },
+      "user_input": "Payment.new(session[:vehicle_details], payments_url).gov_uk_pay_url",
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 4,
+      "fingerprint": "ece9e532969d6bb964095e41d0655e3a1766997616f65a61bb4bf5bfe49401ee",
+      "check_name": "LinkToHref",
+      "message": "Potentially unsafe model attribute in `link_to` href",
+      "file": "app/views/dates/weekly_charge.html.haml",
+      "line": 51,
+      "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
+      "code": "link_to(\"Find out who can apply for an exemption in #{ComplianceDetails.new(session[:vehicle_details]).zone_name}\", ComplianceDetails.new(session[:vehicle_details]).exemption_or_discount_url, :id => \"exemption-link\")",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "DatesController",
+          "method": "weekly_charge",
+          "line": 180,
+          "file": "app/controllers/dates_controller.rb",
+          "rendered": {
+            "name": "dates/weekly_charge",
+            "file": "app/views/dates/weekly_charge.html.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "dates/weekly_charge"
+      },
+      "user_input": "ComplianceDetails.new(session[:vehicle_details]).exemption_or_discount_url",
+      "confidence": "Weak",
+      "note": ""
+    }
+  ],
+  "updated": "2021-05-21 11:54:31 +0200",
+  "brakeman_version": "5.0.1"
+}
