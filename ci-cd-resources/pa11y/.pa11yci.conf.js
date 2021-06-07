@@ -30,7 +30,7 @@ var config = {
                 "wait for element #confirm-vehicle-1 to be visible",
                 "click element #confirm-vehicle-1",
                 "click element input[type=submit]",
-                "wait for element #birmingham to be visible"
+                "wait for element #bath to be visible"
             ]
         },
         {
@@ -42,8 +42,8 @@ var config = {
                 "wait for element #confirm-vehicle-1 to be visible",
                 "click element #confirm-vehicle-1",
                 "click element input[type=submit]",
-                "wait for element #birmingham to be visible",
-                "click element #birmingham",
+                "wait for element #bath to be visible",
+                "click element #bath",
                 "click element input[type=submit]",
                 "wait for element #confirm-exempt to be visible",
             ]
@@ -57,8 +57,8 @@ var config = {
                 "wait for element #confirm-vehicle-1 to be visible",
                 "click element #confirm-vehicle-1",
                 "click element input[type=submit]",
-                "wait for element #birmingham to be visible",
-                "click element #birmingham",
+                "wait for element #bath to be visible",
+                "click element #bath",
                 "click element input[type=submit]",
                 "wait for element #confirm-exempt to be visible",
                 "click element #confirm-exempt",
@@ -76,8 +76,8 @@ var config = {
                 "wait for element #confirm-vehicle-1 to be visible",
                 "click element #confirm-vehicle-1",
                 "click element input[type=submit]",
-                "wait for element #birmingham to be visible",
-                "click element #birmingham",
+                "wait for element #bath to be visible",
+                "click element #bath",
                 "click element input[type=submit]",
                 "wait for element #confirm-exempt to be visible",
                 "click element #confirm-exempt",
