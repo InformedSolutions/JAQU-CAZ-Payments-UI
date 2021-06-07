@@ -315,9 +315,7 @@ steps:
     commands:
       - mkdir screenshots
       - /usr/local/bin/pa11y-ci -c ci-cd-resources/pa11y/.pa11yci.conf.js
-    when:
-      event:
-        - push
+
 
 
   ################################################# End of DEV Environment Steps #######################################################
