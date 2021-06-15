@@ -1,4 +1,4 @@
-<%= javascript_tag do -%>
+<%= javascript_tag nonce: true do -%>
   var gaID = '<%= ENV['GOOGLE_ANALYTICS_ID'] %>';
   var apiKey = '<%= ENV['COOKIE_CONTROL_API_KEY'] %>';
   var product = '<%= ENV['COOKIE_CONTROL_PRODUCT'] %>';
