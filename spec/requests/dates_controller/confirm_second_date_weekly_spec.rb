@@ -17,7 +17,7 @@ describe 'DatesController - POST #confirm_second_date_weekly', type: :request do
     }
   end
   let(:vrn) { 'CU123AB' }
-  let(:la_id) { SecureRandom.uuid }
+  let(:la_id) { '7d0c4240-1618-446b-bde2-2f3458c8a520' }
   let(:params) { { 'date_year' => '2019', 'date_month' => '11', 'date_day' => '01' } }
 
   before do
@@ -29,11 +29,7 @@ describe 'DatesController - POST #confirm_second_date_weekly', type: :request do
                               valid?: true,
                               add_dates_to_session: true)
     allow(Dates::ValidateSelectedWeeklyDate).to receive(:new).and_return(details)
-    stubbed_caz = instance_double(
-      'Caz',
-      active_charge_start_date: 7.days.ago.strftime(Dates::Weekly::VALUE_DATE_FORMAT)
-    )
-    allow(CazDataProvider).to receive(:single).and_return(stubbed_caz)
+    mock_single_caz(7.days.ago.strftime(Dates::Weekly::VALUE_DATE_FORMAT))
   end
 
   context 'with details in the session' do
@@ -110,7 +106,6 @@ describe 'DatesController - POST #confirm_second_date_weekly', type: :request do
                                   error: I18n.t('dates.weekly.not_available'),
                                   valid?: true)
         allow(Dates::ValidateSelectedWeeklyDate).to receive(:new).and_return(details)
-
         allow(Dates::CheckPaidWeekly).to receive(:call).and_return(false)
         subject
       end

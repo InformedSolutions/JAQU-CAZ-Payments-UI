@@ -12,11 +12,7 @@ describe 'DatesController - GET #select_second_weekly_date', type: :request do
       assign_second_week_selected
       add_details_to_session(weekly_possible: true)
       allow(PaymentsApi).to receive(:paid_payments_dates).and_return(paid_dates)
-      stubbed_caz = instance_double(
-        'Caz',
-        active_charge_start_date: 7.days.ago.strftime(Dates::Weekly::VALUE_DATE_FORMAT)
-      )
-      allow(CazDataProvider).to receive(:single).and_return(stubbed_caz)
+      mock_single_caz(7.days.ago.strftime(Dates::Weekly::VALUE_DATE_FORMAT))
       subject
     end
 
@@ -27,10 +23,6 @@ describe 'DatesController - GET #select_second_weekly_date', type: :request do
 
       it 'returns an ok response' do
         expect(response).to have_http_status(:ok)
-      end
-
-      it 'calls CazDataProvider service' do
-        expect(CazDataProvider).to have_received(:single)
       end
 
       it 'assigns the @d_day_notice variable' do
@@ -45,10 +37,6 @@ describe 'DatesController - GET #select_second_weekly_date', type: :request do
 
       it 'returns a success response' do
         expect(response).to have_http_status(:success)
-      end
-
-      it 'calls CazDataProvider service' do
-        expect(CazDataProvider).to have_received(:single)
       end
 
       it 'assigns the @d_day_notice variable' do

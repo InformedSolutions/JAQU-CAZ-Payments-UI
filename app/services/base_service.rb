@@ -17,7 +17,7 @@ class BaseService
   ##
   # Default initializer. May be overridden in each service
   #
-  def initialize(_options = {}); end # rubocop:disable Lint/UselessMethodDefinition
+  def initialize(_options = {}); end
 
   private
 

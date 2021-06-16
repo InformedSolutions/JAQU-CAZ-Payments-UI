@@ -1,8 +1,0 @@
-global:
-  exemption_guidance: https://www.gov.uk/guidance/driving-in-a-clean-air-zone#exemptions
-birmingham:
-  fleet: 'https://www.brumbreathes.co.uk/homepage/7/financial-incentives'
-  non_fleet: 'https://www.brumbreathes.co.uk/homepage/7/financial-incentives'
-taxidiscountcaz:
-  fleet: 'https://test.com'
-  non_fleet: 'https://test.com'

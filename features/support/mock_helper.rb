@@ -27,6 +27,12 @@ module MockHelper
     allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(vehicle_details)
   end
 
+  # Mocks response from vehicle details endpoint in VCCS API
+  def mock_undetermined_vehicle_details_with_type
+    vehicle_details = read_file('undetermined_vehicle_with_type_details_response.json')
+    allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(vehicle_details)
+  end
+
   # Mocks a 422 exception thrown by ComplianceCheckerApi.vehicle_compliance
   def mock_undetermined_vehicle_compliance
     allow(ComplianceCheckerApi).to receive(:vehicle_compliance)
@@ -63,14 +69,11 @@ module MockHelper
     response = read_file('vehicle_compliance_birmingham_response.json')
     dvla_response = response['complianceOutcomes'].map { |caz_data| Caz.new(caz_data) }
 
-    allow(ChargeableZonesService)
-      .to receive(:call)
-      .and_return(dvla_response)
+    allow(ChargeableZonesService).to receive(:call).and_return(dvla_response)
   end
 
   def mock_unsuccessful_dvla_response
-    allow(ChargeableZonesService)
-      .to receive(:call)
+    allow(ChargeableZonesService).to receive(:call)
       .and_raise(BaseApi::Error422Exception.new(422, '', {}))
   end
 
@@ -120,10 +123,10 @@ module MockHelper
     allow(PaymentsApi).to receive(:paid_payments_dates).and_return(dates)
   end
 
-  def mock_single_caz_request_for_charge_start_date(date = Date.current)
-    allow(CazDataProvider).to receive(:single).and_return(
-      OpenStruct.new(active_charge_start_date: date.to_s)
-    )
+  def mock_single_caz(date = Date.current)
+    details = instance_double(CazDataProvider,
+                              single: OpenStruct.new(active_charge_start_date: date.to_s))
+    allow(CazDataProvider).to receive(:new).and_return(details)
   end
 
   private

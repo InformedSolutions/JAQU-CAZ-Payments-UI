@@ -21,6 +21,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   def enter_details
     @errors = {}
     hide_inputs
+    SessionManipulation::ClearSessionDetails.call(session: session, key: 1) if vrn
   end
 
   ##
@@ -277,14 +278,17 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   end
 
   # Process action which is done on submit details and uk registered details
-  def process_details_action # rubocop:disable Metrics/AbcSize
+  def process_details_action
     @vehicle_details = VehicleDetails.new(vrn_without_leading_zeros)
     return redirect_to(exempt_vehicles_path(id: transaction_id)) if @vehicle_details.exempt?
 
-    SessionManipulation::SetWeeklyTaxi.call(session: session) if @vehicle_details.weekly_taxi?
-    SessionManipulation::SetType.call(session: session, type: @vehicle_details.type)
-    SessionManipulation::SetUndetermined.call(session: session) if @vehicle_details.undetermined
-    SessionManipulation::SetUndeterminedTaxi.call(session: session) if @vehicle_details.undetermined_taxi?
+    SessionManipulation::SetVehicleDetails.call(
+      session: session,
+      weekly_taxi: @vehicle_details.weekly_taxi?,
+      undetermined: @vehicle_details.undetermined,
+      undetermined_taxi: @vehicle_details.undetermined_taxi?,
+      dvla_vehicle_type: @vehicle_details.type
+    )
   end
 
   # Checks if the unrecognized vehicle is a taxi and performs a proper redirect
@@ -315,14 +319,19 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   def process_detail_form(form)
     SessionManipulation::SetConfirmVehicle.call(session: session, confirm_vehicle: form.confirmed?)
     return incorrect_details_vehicles_path(id: transaction_id) unless form.confirmed?
-    return not_determined_vehicles_path(id: transaction_id) if confirmed_undetermined?
+    return not_determined_vehicles_path(id: transaction_id) if confirmed_undetermined? && !dvla_vehicle_type?
 
     local_authority_charges_path(id: transaction_id)
   end
 
   # check if user confirmed details for undetermined vehicle
   def confirmed_undetermined?
-    session['vehicle_details']['undetermined'].present?
+    vehicle_details('undetermined').present?
+  end
+
+  # check if vehicle has type in DVLA
+  def dvla_vehicle_type?
+    vehicle_details('dvla_vehicle_type').present?
   end
 
   # Hide VRN and country when paying for another vehicle from the success payment page

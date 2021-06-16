@@ -2,6 +2,7 @@ $fa-calendar-alt-content: "\f073";
 $highlight-start-date-color: #2196f3;
 $today-color: #f44336;
 
+/* stylelint-disable declaration-no-important, max-nesting-depth */
 body:not(.js-enabled) .litepicker-input-container {
   display: none;
 }
@@ -62,3 +63,4 @@ body:not(.js-enabled) .litepicker-input-container {
     font-weight: normal;
   }
 }
+/* stylelint-enable declaration-no-important, max-nesting-depth */

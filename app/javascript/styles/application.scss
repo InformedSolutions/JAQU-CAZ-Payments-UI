@@ -1,9 +1,6 @@
-$govuk-global-styles: true;
-$govuk-assets-path: '/packs/media/';
-
-@import '~govuk-frontend/govuk/all';
-@import 'related_components';
-@import 'cookie_control';
+@import 'govuk-frontend';
+@import 'related-components';
+@import 'cookie-control';
 @import 'datepicker';
 
 html {
