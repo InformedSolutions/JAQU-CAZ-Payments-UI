@@ -26,7 +26,7 @@ RSpec/NamedSubject:
   Enabled: false
 
 RSpec/NestedGroups:
-  Max: 6
+  Max: 5
 
 RSpec/MultipleMemoizedHelpers:
   Max: 15
@@ -34,7 +34,6 @@ RSpec/MultipleMemoizedHelpers:
 RSpec/DescribeClass:
   Exclude:
     - 'spec/api_wrappers/**/*.rb'
-    - 'spec/requests/application_controller/*.rb'
 
 RSpec/ExampleLength:
   Max: 5

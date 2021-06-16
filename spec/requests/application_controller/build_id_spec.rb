@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe 'ApplicationController - GET #build_id' do
+describe 'ApplicationController - GET #build_id', type: :request do
   subject { get build_id_path }
 
   context 'when BUILD_ID is not defined' do
