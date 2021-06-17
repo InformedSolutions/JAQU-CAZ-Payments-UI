@@ -7,6 +7,9 @@
 class BaseApi
   include HTTParty
 
+  # normalize non-ascii URIs
+  uri_adapter Addressable::URI
+
   headers(
     'Content-Type' => 'application/json',
     'Accept' => 'application/json',
