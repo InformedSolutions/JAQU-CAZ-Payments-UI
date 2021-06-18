@@ -158,6 +158,18 @@ steps:
       - rubocop
       - node_modules/.bin/stylelint 'app/javascript/**/*.(s)?scss'
 
+  # Invoke security analysis through Ruby libraries
+  - name: security tests (Ruby)
+    image: test-payments-frontend
+    pull: never
+    commands:
+      - bundle audit check --update
+      - yarn run improved-yarn-audit --retry-on-network-failure
+      - brakeman
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+
   # Push built image to ECR registry
   - name: publish image to ecr
     image: plugins/ecr
@@ -402,7 +414,7 @@ steps:
     pull: never
     commands:
       - bundle audit check --update
-      - yarn run improved-yarn-audit --exclude 1693,1745 --retry-on-network-failure
+      - yarn run improved-yarn-audit --retry-on-network-failure
       - brakeman
     volumes:
       - name: docker_sock
@@ -662,6 +674,18 @@ steps:
       commands:
         - rubocop
         - node_modules/.bin/stylelint 'app/javascript/**/*.(s)?scss'
+
+    # Invoke security analysis through Ruby libraries
+    - name: security tests (Ruby)
+      image: test-payments-frontend
+      pull: never
+      commands:
+        - bundle audit check --update
+        - yarn run improved-yarn-audit --retry-on-network-failure
+        - brakeman
+      volumes:
+        - name: docker_sock
+          path: /var/run/docker.sock
 
     # Push built image to ECR registry
     - name: publish image to ecr
