@@ -78,6 +78,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   #
   def daily_charge
     @undetermined_taxi = undetermined_taxi?
+    @undetermined_with_type = undetermined_with_type?
     @compliance_details = if @undetermined_taxi
                             UnrecognisedComplianceDetails.new(la_id: la_id)
                           else
@@ -127,7 +128,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # * +charge+ - lack of VRN redirects to {enter_details}[rdoc-ref:VehiclesController.enter_details]
   #
   def select_daily_date
-    @charge_start_date = CazDataProvider.single(zone_id: la_id)&.active_charge_start_date
+    @charge_start_date = CazDataProvider.new.single(zone_id: la_id)&.active_charge_start_date
     service = Dates::Daily.new(vrn: vrn, zone_id: la_id, charge_start_date: @charge_start_date)
     @dates = service.chargeable_dates
     @d_day_notice = service.d_day_notice
@@ -431,7 +432,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
 
   # Fetching +active_charge_start_date+ and assigns it to variable
   def assign_charge_start_date
-    @charge_start_date = CazDataProvider.single(zone_id: la_id)&.active_charge_start_date
+    @charge_start_date = CazDataProvider.new.single(zone_id: la_id)&.active_charge_start_date
   end
 
   # Sets +dates_to_disable+ and +weekly_charge_today+ to the session

@@ -13,7 +13,7 @@ require("@rails/ujs").start();
 // const imagePath = (name) => images(name, true)
 
 import '../styles/application.scss';
-import '../src/GovUKAssets';
+import '../src/govukFrontendAssets';
 import { initAll } from 'govuk-frontend/govuk/all.js';
 import initPrintLink from '../src/printLink/init';
 import cookieControl from "../src/cookieControl";

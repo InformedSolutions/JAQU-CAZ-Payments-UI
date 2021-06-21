@@ -12,6 +12,15 @@ describe 'VehiclesController - GET #enter_details', type: :request do
     expect(response).to have_http_status(:success)
   end
 
+  context 'when vrn already selected in the seesion' do
+    before { add_details_to_session(details: { vrn: 'ANY123' }) }
+
+    it 'clears vrn from the session' do
+      subject
+      expect(session.dig(:vehicle_details, 'vrn')).to be_nil
+    end
+  end
+
   context 'when user clicking Pay for another vehicle from the Success payment page' do
     let(:referer) { 'http://www.example.com/payments/success' }
 

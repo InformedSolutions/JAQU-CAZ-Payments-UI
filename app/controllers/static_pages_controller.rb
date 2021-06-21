@@ -31,6 +31,6 @@ class StaticPagesController < ApplicationController
   #    GET /privacy_notice
   #
   def privacy_notice
-    @caz_link_display_data = CazDataProvider.displayable
+    @caz_link_display_data = CazDataProvider.new.displayable
   end
 end

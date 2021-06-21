@@ -1,0 +1,6 @@
+{
+  "extends": "stylelint-config-gds/scss",
+  "rules": {
+    "scss/comment-no-loud": null
+  }
+}

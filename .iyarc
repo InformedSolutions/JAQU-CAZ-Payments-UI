@@ -1,0 +1,7 @@
+# A list of advisory exclusions for `improved-yarn-audit` library.
+# Advisory exclusions to be ignored can either be provided on their own line, or as a comma separated list.
+# Can be tested by running `yarn run improved-yarn-audit` in console.
+1693
+1751
+1754
+1755

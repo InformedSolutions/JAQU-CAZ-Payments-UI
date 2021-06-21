@@ -10,6 +10,8 @@ describe ChargeableZonesService do
       'vrn' => vrn,
       'country' => country,
       'unrecognised' => unrecognised,
+      'undetermined' => undetermined,
+      'dvla_vehicle_type' => dvla_vehicle_type,
       'type' => type
     }
   end
@@ -17,7 +19,9 @@ describe ChargeableZonesService do
   let(:vrn) { 'CU57ABC' }
   let(:country) { 'UK' }
   let(:unrecognised) { false }
+  let(:undetermined) { false }
   let(:type) { nil }
+  let(:dvla_vehicle_type) { nil }
 
   context 'when zones are not chargeable' do
     before do
@@ -96,7 +100,45 @@ describe ChargeableZonesService do
       end
     end
 
-    context 'when vehicle is unrecognised' do
+    context 'when vehicle is undetermined but has type in DVLA' do
+      let(:undetermined) { true }
+      let(:dvla_vehicle_type) { 'Heavy goods vehicle' }
+      let(:type) { nil }
+      let(:mapped_dvla_vehicle_type) { 'hgv' }
+
+      before do
+        mock_vehicle_compliance
+        mock_unrecognised_compliance
+      end
+
+      it_behaves_like 'a chargeable zones service'
+
+      it 'calls ComplianceCheckerApi.unrecognised_compliance with the right params' do
+        service_call
+        expect(ComplianceCheckerApi).to(
+          have_received(:unrecognised_compliance).with(mapped_dvla_vehicle_type, mocked_zone_ids)
+        )
+      end
+    end
+
+    context 'when vehicle is undetermined but has chosen type during the process' do
+      let(:undetermined) { true }
+      let(:type) { 'private_car' }
+
+      before do
+        mock_vehicle_compliance
+        mock_unrecognised_compliance
+      end
+
+      it_behaves_like 'a chargeable zones service'
+
+      it 'calls ComplianceCheckerApi.unrecognised_compliance with the right params' do
+        service_call
+        expect(ComplianceCheckerApi).to have_received(:unrecognised_compliance).with(type, mocked_zone_ids)
+      end
+    end
+
+    context 'when vehicle is unrecognised but has chosen type during the process' do
       let(:unrecognised) { true }
       let(:type) { 'private_car' }
 

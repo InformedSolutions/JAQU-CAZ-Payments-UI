@@ -27,7 +27,6 @@ describe 'ChargesController - POST #submit_local_authority', type: :request do
                                              zone_name: zone_name,
                                              charge: charge,
                                              tariff_code: tariff)
-
       allow(ComplianceDetails).to receive(:new).and_return(details)
       allow(UnrecognisedComplianceDetails).to receive(:new).and_return(unrecognised_details)
     end

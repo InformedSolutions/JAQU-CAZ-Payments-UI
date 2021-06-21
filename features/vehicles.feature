@@ -18,6 +18,20 @@ Feature: Vehicles
       And I press the Continue
       And I should see 'Enter the number plate of the vehicle'
 
+  Scenario: User wants restart the vehicle check
+    Given I am on the home page
+    Then I should see 'Start now'
+      And I press the Start now button
+    Then I should be on the enter details page
+      And I should see 'Enter the number plate of the vehicle'
+      And I should empty vrn field
+    Then I enter a vehicle's registration and choose UK
+      And I press the Continue
+      And I should see 'Are these vehicle details correct?'
+    Then I go to the enter details page
+      And I should see 'Enter the number plate of the vehicle'
+      And I should empty vrn field
+
   Scenario: User enters a correct vehicle's registration and choose what vehicle's details are incorrect
     Given I am on the home page
     Then I press the Start now button
@@ -161,6 +175,34 @@ Feature: Vehicles
         And I choose Car type
         And I press the Confirm
       Then I should see 'Which Clean Air Zone do you need to pay for?'
+
+  Scenario: User wants to pay for undetermined taxi
+    Given I am on the home page
+      Then I press the Start now button
+        And I should be on the enter details page
+      Then I enter an undetermined taxi and choose UK
+        And I press the Continue
+        And I should see 'Are these vehicle details correct?'
+      Then I choose that the details are correct
+        And I press the Confirm
+        And I should see 'Which Clean Air Zone do you need to pay for?'
+      Then I select Birmingham
+        And I press the Continue
+        And I should see 'Data used to calculate the compliance of your vehicle is missing from your V5C registration certificate'
+
+  Scenario: User wants to pay for undetermined (with type) correct vehicle
+    Given I am on the home page
+      Then I press the Start now button
+        And I should be on the enter details page
+      Then I enter an undetermined with type vehicle registration and choose UK
+        And I press the Continue
+        And I should see 'Are these vehicle details correct?'
+      Then I choose that the details are correct
+        And I press the Confirm
+        And I should see 'Which Clean Air Zone do you need to pay for?'
+      Then I select Birmingham
+        And I press the Continue
+        And I should see 'Data used to calculate the compliance of your vehicle is missing from your V5C registration certificate'
 
   Scenario: User wants to pay for non active Clean Air Zone
     Given I am on the home page

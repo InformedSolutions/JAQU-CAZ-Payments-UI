@@ -100,82 +100,41 @@
       %h2.govuk-heading-l
         General
       %p
-        IP addresses will be captured when using this service; JAQU (and our data processor partners that work on our behalf) cannot identify individuals from the IP address.
-        We use IP addresses to investigate and address security issues that may arise and diagnose and analyse internet traffic via this service.
-        We will only retain IP addresses for 30 days.
+        IP addresses will be captured when using this service; JAQU (and our data processor partners that work on our behalf)
+        have no ability to identify individuals from the IP address. We use IP addresses to investigate and address security
+        issues that may arise and diagnose and analyse internet traffic via this service.
+        We will only retain IP addresses for a period of 30 days.
       %p
-        You can raise any queries about the information provided by the service by using the
-        = succeed '.' do
-          = link_to('web form', 'https://contact.dvla.gov.uk/caz/' )
+        The processing of personal data in the Drive in a Clean Air Zone service is necessary for the performance
+        of a task carried out in the exercise of official authority vested in both DfT and Defra, as partners in JAQU.
       %p
-        Along with your query, you will need to give your name and email address, which will be used to respond to you. The information you provide will be sent by GOV.UK Notify to JAQU (or their agents acting on their behalf) for the sole purpose of replying to you. Your personal information will be deleted after a year.
-      %p
-        The processing of personal data in the service is necessary for the performance of a task carried out in the exercise of official authority vested in both DfT and Defra, as partners in JAQU.
-      %p
-        If you have any questions about how your personal data is processed by the service, or are interested in exercising any of your rights in relation to that processing, contact:
-      %p
-        Data Protection Manager for JAQU
-        %br
-        Defra
-        %br
-        Information Rights Team
-        %br
-        Area 1E
-        %br
-        Nobel House
-        %br
-        17 Smith Square
-        %br
-        London
-        %br
-        SW1P 3JR
-
-      %p
-        Email:
-        = mail_to 'data.protection@defra.gov.uk'
-      %p
-        A list of your rights under the
-        - link = 'https://ico.org.uk/for-organisations/guide-to-the-general-data-protection-regulation-gdpr/individual-rights/'
-        = link_to('General Data Protection Regulation and the Data Protection Act 2018',
-                  link,
-                  id: 'general-data-link')
-      %p
-        Defra’s and DfT’s Personal Information Charters are available at:
-      %p
-        - defra_link = 'https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs/about/personal-information-charter'
-        = link_to('Defra', defra_link, id: 'defra-link')
-      %p
-        - dft_link = 'https://www.gov.uk/government/organisations/department-for-transport/about/personal-information-charter'
-        = link_to('DfT', dft_link, id: 'dtf-link')
-      %p
-        If you want to know about the privacy notice specific to DVLA or the CAZ and local authority you are using, use these links:
-      %p
-        - dvla_link = 'https://www.gov.uk/government/publications/dvla-privacy-policy/dvla-privacy-policy'
-        = link_to('DVLA', dvla_link, id: 'dvla-link')
-
-      - @caz_link_display_data.each do |caz_link|
-        %p
-          = link_to("#{caz_link.operator_name} privacy policy", caz_link.privacy_policy_url, id: "#{caz_link.name.downcase}-policy-link")
+        If you have any questions about how your personal data is processed by the Drive in a Clean Air Zone service,
+        or are interested in exercising any of your rights in relation to that processing, please contact:
+      %ul.govuk-list-list--bullet
+        %li
+          %p
+            Email:
+            = mail_to 'data.protection@defra.gov.uk'
 
       %h2.govuk-heading-l
         Customer Contact Centre
       %p
-        You can raise any queries about the information provided by the service by using the
-        - link = 'https://contact.dvla.gov.uk/caz/'
-        = link_to('web form', link, id: 'dvla-contact-link')
+        You can raise any queries about the information provided by the Drive in a Clean Air Zone service by using the
+        = succeed('.') do
+          = link_to('web form', 'https://contact.dvla.gov.uk/caz/', id: 'dvla-contact-link')
       %p
         Along with your query, you will need to give your name and email address, which will be used to respond to you.
         The information you provide will be sent by GOV.UK Notify to JAQU (or their agents acting on their behalf) for the sole purpose of replying to you.
         Your personal information will be deleted after a year.
       %p
-        Alternatively, if you phone the Customer Contact Centre, to resolve any queries you may have, JAQU and the local authority may share your:
+        Alternatively, if you phone the Customer Contact Centre, to enable resolution of any queries you may have, JAQU and [Council] may share your:
         %ul.govuk-list-govuk-list--bullet
           %li
             %p
-              Name/surname (current and previous)
+              Name/Surname (Current and Previous)
           %li
             %p
-              Address (current and previous)
+              Address (Current and Previous)
           %li
             %p
               Phone
@@ -184,10 +143,14 @@
               Email address
           %li
             %p
-              Number plate (Vehicle registration mark - VRM)
+              Vehicle registration mark (VRM)
+          %li
+            %p
+              If required by the local authority, a copy of the telephone recording for appeals or enforcement purposes.
       %p
-        All information related to general enquiries are kept for 90 days. After 90 days, only name and email address are kept for future reference and the rest of the information will be deleted.
-        Name and email are kept for 7 years for analysis purposes to enable us to check whether the users have previously submitted an enquiry.
+        All information related to general enquiries are retained for period of 90 days. After 90 days, only name and
+        email address are kept for future reference and the rest of the information will be deleted.
+        Name and email are retained for 7 years for analysis purposes to enable us to check whether the users have previously submitted an enquiry.
       %p
         All information related to complaints are kept for 7 years.
 
@@ -216,7 +179,33 @@
       %p
         The legal basis for the processing (use) of your personal data is that the use of your personal data is necessary for the performance of a task carried out in the public interest.
       %p
-        TThe task in the public interest is to inform people of new regulations and penalties prior to their coming into effect.
+        The task in the public interest is to inform people of new regulations and penalties prior to their coming into effect.
         This relates to monitoring and identifying contraventions of Part III and Schedule 12 of the Transport Act 2000 and Parts 2 and 6 of The Road User Charging Schemes (Penalty Charges, Adjudication and Enforcement) (England) Regulations 2013 pertaining to the Clean Air Zone Charging Order relevant to the local authority whose ANPR cameras recorded your number plate.
       %p
         JAQU and the DVLA will not keep your personal data for the purpose of sending the Early Notice Letter after that letter has been sent to you.
+
+      %h2.govuk-heading-l
+        System performance test data
+      %p
+        The local authority is also required to test the performance of their systems before going
+        live with the Clean Air Zone (CAZ) service. This requires historic anonymised VRM data
+        from the DVLA which is shared between the DVLA and local authority via JAQU.
+        This enables the system setup to be tested against expected performance under controlled volumes.
+      %p
+        This data is deleted once testing is completed.
+
+      %h2.govuk-heading-l
+        NO2 Plan Evaluation data
+      %p
+        In order to understand the extent to which the programme is meeting its stated aim of reducing
+        nitrogen dioxide concentrations to within legal limits in the shortest possible time, a clear
+        understanding of fleet composition (with reference to Euro Standards) before,
+        during and after implementation of Local Plan measures, is needed.
+      %p
+        The local authority will be sharing VRM details with JAQU before the CAZ goes live,
+        and then quarterly for the duration of the evaluation. DfT will match this data with vehicle
+        type and emissions data which will be anonymised, before being sent back to the local authority
+        and 3rd parties (Ricardo Energy and Environment and Ipsos MORI) for further evaluation and reporting.
+      %p
+        Local authorities and JAQU won’t retain the VRM data, and DfT will retain pseudonymised data
+        (where identifying details are replaced with a key) for no longer than 12 months.
