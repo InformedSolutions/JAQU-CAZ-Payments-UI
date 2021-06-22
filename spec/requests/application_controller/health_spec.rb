@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe 'ApplicationController - GET #health' do
+describe 'ApplicationController - GET #health', type: :request do
   subject { get health_path }
 
   it 'returns a 200 OK status' do
