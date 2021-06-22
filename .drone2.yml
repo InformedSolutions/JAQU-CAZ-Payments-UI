@@ -855,7 +855,7 @@ steps:
     - name: await ecs rollout
       image: alpine:3.11.6
       environment:
-        build_id_url: https://sit.paycleanairzonecharge.co.uk/build_id
+        build_id_url: https://sit-payments-web.cleanairzone.defra.gov.uk/build_id
         build_id: ${DRONE_BUILD_NUMBER}
       commands:
         - apk add curl
