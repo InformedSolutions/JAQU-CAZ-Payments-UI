@@ -106,7 +106,7 @@ class VrnForm
 
   # Checks if VRN contains only alphanumerics
   def vrn_non_uk_format
-    return if /^[{\p{L}}{0-9}]+$/.match(vrn).present?
+    return if /^[\p{L}{0-9}]+$/.match(vrn).present?
 
     add_format_error
   end
