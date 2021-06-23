@@ -76,7 +76,7 @@ end
 Then("I enter a not-exempted non-UK vehicle's registration") do
   mock_vehicle_not_found_in_dvla
   mock_unregistered_vehicle_details
-  fill_in_non_uk(vrn)
+  fill_in_non_uk('7694746צ')
 end
 
 Then("I enter an UK vehicle's registration and choose Non-UK country") do
