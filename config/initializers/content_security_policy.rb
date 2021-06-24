@@ -9,6 +9,8 @@
 if Rails.env.production?
   defaults = %i[self https]
   defaults.push(ENV['CLOUDFRONT_ENDPOINT']) if ENV['CLOUDFRONT_ENDPOINT']
+  script_src_hashes = "'sha256-f+YXp5ywL3CIOsMHauDMq/Prbj1OLxHNWjNykmvj0IE='", # gtm_script.html.erb
+                      "'sha256-Ug0ljy8BmeqfNTsYf2vPkpM3/JbbQAxRCXVPy1LCiuM='" # cookieControl-9.1.min.js
   style_src_hashes = "'sha256-X9p4TjH/YcVnBPLQowyqjpYeRftuKwrxa9Esue0lXSQ='", # cookieControl.js
                      "'sha256-2wbctP9QeeYIdN6tUTZfM2lRU20JjCKfxpcV0IqZTxU='", # cookieControl-9.1.min.js
                      "'sha256-0GYrWdLqt3hLu7QGjIxFZNP1rxLWoAENWtxQqPkNd4k='", # cookieControl-9.1.min.js
@@ -22,7 +24,7 @@ if Rails.env.production?
     policy.font_src(*defaults, :data)
     policy.img_src(*defaults)
     policy.object_src(:none)
-    policy.script_src(*defaults)
+    policy.script_src(*defaults, *script_src_hashes)
     policy.style_src(*defaults, *style_src_hashes)
     policy.connect_src(*defaults)
     policy.frame_src('https://www.googletagmanager.com')
