@@ -1552,6 +1552,14 @@ steps:
     limit: 1
 
   steps:
+
+    - name: check for hotfix pipeline
+      image: alpine:3.11.6
+      environment:
+       DRONE_SOURCE_BRANCH: ${DRONE_SOURCE_BRANCH}
+      commands:
+        - sh ci-cd-resources/hotfix-check.sh
+
     - name: plan updates into prod
       image: hashicorp/terraform:0.12.23
       commands:
@@ -1729,6 +1737,208 @@ steps:
           - push
 
     ################################################# End  of Prod Environment Steps #######################################################
+
+---
+
+#################################################### Hotfix Environment Steps ############################################################
+  kind: pipeline
+  type: docker
+  name: payments-web-prod-hotfix
+  trigger:
+    branch:
+      - master
+    event:
+      - pull_request
+      - push
+  concurrency:
+    limit: 1
+
+  steps:
+
+    - name: check for hotfix pipeline
+      image: alpine:3.11.6
+      environment:
+       DRONE_SOURCE_BRANCH: ${DRONE_SOURCE_BRANCH}
+      commands:
+        - sh ci-cd-resources/standard-release-check.sh
+
+    - name: plan updates into prod
+      image: hashicorp/terraform:0.12.23
+      commands:
+        - apk add --update bash python python-dev py-pip build-base jq
+        - pip install awscli
+        - mkdir ~/.aws
+        - echo -e "[profile target_acc]\nrole_arn = $SRC_AWS_ACCOUNT_ROLE\ncredential_source = Environment\nrole_session_name = AWSACCOUNT" > ~/.aws/config
+        - TASKDEF=`aws ecs describe-services --profile target_acc --cluster payments-cluster-uat --services payments-uat-ecs-service | jq --raw-output '.services[0].taskDefinition'`
+        - export TF_VAR_build_number=`aws ecs describe-task-definition --profile target_acc --task-definition $TASKDEF | jq --raw-output '.taskDefinition.containerDefinitions[0].image' | cut -f 2 -d ':'`
+        - mkdir ~/.ssh
+        - echo -e "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
+        - chmod 600 ~/.ssh/id_rsa
+        - touch ~/.ssh/known_hosts
+        - chmod 600 ~/.ssh/known_hosts
+        - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
+        - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
+        - cd JAQU-CAZ-IAC
+        - git checkout prod_live
+        - cd terraform-iac/projects/payments/layers/01.networking
+        - PATH=$PATH:../../../../bin/
+        - chmod +x ../../../../bin/tf
+        - tf init
+        - tf workspace select prod || tf workspace new prod
+        - tf plan
+        - cd ../02.backends
+        - tf init
+        - tf workspace select prod || tf workspace new prod
+        - tf plan
+        - cd ../04.web
+        - tf init
+        - tf workspace select prod || tf workspace new prod
+        - tf plan
+      environment:
+        TF_VAR_secret_key_base:
+           from_secret: payments_ruby_secret
+        TF_VAR_google_analytics_id: UA-150934733-5
+        TF_VAR_access_key:
+          from_secret: jaqu_prod_aws_access_key_id
+        TF_VAR_secret_key:
+          from_secret: jaqu_prod_aws_secret_access_key
+        TF_VAR_master_access_key:
+          from_secret: jaqu_master_aws_access_key_id
+        TF_VAR_master_secret_key:
+          from_secret: jaqu_master_aws_secret_access_key
+        AWS_ACCESS_KEY_ID:
+          from_secret: jaqu_prod_aws_access_key_id
+        AWS_SECRET_ACCESS_KEY:
+          from_secret: jaqu_prod_aws_secret_access_key
+        AWS_DEFAULT_REGION: eu-west-2
+        AWS_ACCOUNT_NAME: jaqu-prod
+        SRC_AWS_ACCOUNT_ROLE: arn:aws:iam::360470905865:role/jaqu-stagingServiceRole
+        GIT_PRIVATE_SSH:
+          from_secret: jaqu_lower_github_private_key
+        TF_VAR_enable_https_redirect: false
+        TF_VAR_feedback_url: https://defragroup.eu.qualtrics.com/jfe/form/SV_eLoFG7Lxyn9V6oB
+      when:
+        event:
+          - pull_request
+
+    - name: provisioning warning
+      image: docker:19.03.11-git
+      commands:
+        - echo "Pipeline failed. If a deployment is being made for the first time into an environment terraform backends will not yet exist which means this is to be expected. If not terraform related, please see logs for further details"
+      when:
+        status:
+          - failure
+
+    - name: deploy to prod
+      image: hashicorp/terraform:0.12.23
+      commands:
+        - apk add --update bash python python-dev py-pip build-base jq
+        - pip install awscli
+        - mkdir ~/.aws
+        - echo -e "[profile target_acc]\nrole_arn = $SRC_AWS_ACCOUNT_ROLE\ncredential_source = Environment\nrole_session_name = AWSACCOUNT" > ~/.aws/config
+        - TASKDEF=`aws ecs describe-services --profile target_acc --cluster payments-cluster-uat --services payments-uat-ecs-service | jq --raw-output '.services[0].taskDefinition'`
+        - export TF_VAR_build_number=`aws ecs describe-task-definition --profile target_acc --task-definition $TASKDEF | jq --raw-output '.taskDefinition.containerDefinitions[0].image' | cut -f 2 -d ':'`
+        - mkdir ~/.ssh
+        - echo -e "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
+        - chmod 600 ~/.ssh/id_rsa
+        - touch ~/.ssh/known_hosts
+        - chmod 600 ~/.ssh/known_hosts
+        - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
+        - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
+        - cd JAQU-CAZ-IAC
+        - git checkout prod_live
+        - cd terraform-iac/projects/payments/layers/01.networking
+        - PATH=$PATH:../../../../bin/
+        - chmod +x ../../../../bin/tf
+        - tf init
+        - tf workspace select prod || tf workspace new prod
+        - tf apply -auto-approve
+        - cd ../02.backends
+        - tf init
+        - tf workspace select prod || tf workspace new prod
+        - tf apply -auto-approve
+        - cd ../04.web
+        - tf init
+        - tf workspace select prod || tf workspace new prod
+        - tf apply -auto-approve
+      environment:
+        TF_VAR_secret_key_base:
+           from_secret: payments_ruby_secret
+        TF_VAR_google_analytics_id: UA-150934733-5
+        TF_VAR_access_key:
+          from_secret: jaqu_prod_aws_access_key_id
+        TF_VAR_secret_key:
+          from_secret: jaqu_prod_aws_secret_access_key
+        TF_VAR_master_access_key:
+          from_secret: jaqu_master_aws_access_key_id
+        TF_VAR_master_secret_key:
+          from_secret: jaqu_master_aws_secret_access_key
+        AWS_ACCESS_KEY_ID:
+          from_secret: jaqu_prod_aws_access_key_id
+        AWS_SECRET_ACCESS_KEY:
+          from_secret: jaqu_prod_aws_secret_access_key
+        AWS_DEFAULT_REGION: eu-west-2
+        AWS_ACCOUNT_NAME: jaqu-prod
+        SRC_AWS_ACCOUNT_ROLE: arn:aws:iam::360470905865:role/jaqu-stagingServiceRole
+        GIT_PRIVATE_SSH:
+          from_secret: jaqu_lower_github_private_key
+        TF_VAR_enable_https_redirect: false
+        TF_VAR_feedback_url: https://defragroup.eu.qualtrics.com/jfe/form/SV_eLoFG7Lxyn9V6oB
+      when:
+        event:
+          - push
+
+    - name: codedeploy ui prod
+      image: alpine:3.11.6
+      commands:
+        - apk add --update bash python python-dev py-pip build-base jq
+        - pip install awscli
+        - mkdir ~/.aws
+        - echo -e "[profile target_acc]\nrole_arn = $AWS_ACCOUNT_ROLE\ncredential_source = Environment\nrole_session_name = AWSACCOUNT" > ~/.aws/config
+        - aws deploy create-deployment --application-name $APPLICATION_NAME --deployment-config-name CodeDeployDefault.ECSAllAtOnce --deployment-group-name $DEPLOYMENT_GROUP --description "Deployment ECS" --s3-location bucket=$LAMBDA_BUCKET,bundleType=yaml,key=$PROJECT/prod/appspec.yaml --profile target_acc
+      environment:
+        AWS_ACCESS_KEY_ID:
+          from_secret: jaqu_prod_aws_access_key_id
+        AWS_SECRET_ACCESS_KEY:
+          from_secret: jaqu_prod_aws_secret_access_key
+        AWS_ACCOUNT_ROLE: arn:aws:iam::286199435714:role/jaqu-prodServiceRole
+        AWS_DEFAULT_REGION: eu-west-2
+        APPLICATION_NAME: payments-codedeploy-service-prod
+        DEPLOYMENT_GROUP: payments-codedeploy-service-prod
+        PROJECT: payments
+        LAMBDA_BUCKET: jaqu-shared-project-lambda-bucket
+      when:
+        event:
+          - push
+
+    # Build docker image
+    - name: await ecs rollout
+      image: alpine:3.11.6
+      environment:
+        build_id_url: https://pay.drive-clean-air-zone.service.gov.uk/build_id
+        SRC_AWS_ACCOUNT_ROLE: arn:aws:iam::360470905865:role/jaqu-stagingServiceRole
+        AWS_ACCESS_KEY_ID:
+          from_secret: jaqu_staging_aws_access_key_id
+        AWS_SECRET_ACCESS_KEY:
+          from_secret: jaqu_staging_aws_secret_access_key
+        AWS_DEFAULT_REGION: eu-west-2
+      commands:
+        - apk add --update bash python python-dev py-pip build-base jq
+        - pip install awscli
+        - mkdir ~/.aws
+        - echo -e "[profile target_acc]\nrole_arn = $SRC_AWS_ACCOUNT_ROLE\ncredential_source = Environment\nrole_session_name = AWSACCOUNT" > ~/.aws/config
+        - TASKDEF=`aws ecs describe-services --profile target_acc --cluster payments-cluster-uat --services payments-uat-ecs-service | jq --raw-output '.services[0].taskDefinition'`
+        - export build_id=`aws ecs describe-task-definition  --profile target_acc --task-definition $TASKDEF | jq --raw-output '.taskDefinition.containerDefinitions[0].image' | cut -f 2 -d ':'`
+        - apk add curl
+        - sh ci-cd-resources/check_build_number.sh
+      volumes:
+        - name: docker_sock
+          path: /var/run/docker.sock
+      when:
+        event:
+          - push
+
+    ################################################# End  of Hotfix Environment Steps #######################################################
 
 
   ################################################ Secrets #########################################################
