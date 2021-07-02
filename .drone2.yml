@@ -724,6 +724,8 @@ steps:
       environment:
         GIT_PRIVATE_SSH:
           from_secret: jaqu_lower_github_private_key
+      depends_on:
+        - static code analysis (Ruby + assets)
 
     - name: plan updates into sit
       image: hashicorp/terraform:0.12.23
@@ -873,6 +875,7 @@ steps:
           - push
       depends_on:
         - clone iac
+        - publish image to ecr
         
     - name: deploy to sit2
       image: hashicorp/terraform:0.12.23
