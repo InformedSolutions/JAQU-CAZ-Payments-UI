@@ -8,7 +8,6 @@ ruby '3.0.1'
 gem 'rails', '~> 6.1'
 
 gem 'activerecord-nulldb-adapter'
-gem 'addressable'
 gem 'bootsnap', require: false
 gem 'haml'
 gem 'httparty'
