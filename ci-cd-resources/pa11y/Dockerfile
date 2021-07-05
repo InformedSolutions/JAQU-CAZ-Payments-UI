@@ -6,7 +6,8 @@ RUN apt-get update && apt-get install -y wget --no-install-recommends \
     && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
     && apt-get update \
     && apt-get install -y google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst ttf-freefont \
-      --no-install-recommends \
+        libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 \
+        --no-install-recommends \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /src/*.deb
 
