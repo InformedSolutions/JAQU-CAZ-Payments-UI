@@ -71,13 +71,11 @@ class ApplicationController < ActionController::Base # rubocop:disable Metrics/C
   end
 
   # Logs the exception at info level and renders service unavailable page
-  # :nocov:
   def render_forbidden(exception)
     Rails.logger.info "#{exception.class}: #{exception}"
 
     render template: 'errors/service_unavailable', status: :forbidden
   end
-  # :nocov:
 
   # Gets VRN from vehicle_details hash in the session. Returns string, eg 'CU1234'
   def vrn
