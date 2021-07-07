@@ -24,7 +24,8 @@
         %strong.govuk-warning-text__text
           %span.govuk-warning-text__assistive
             Warning
-          Payment must be made a maximum of 7 days after you have driven in the zone or you may receive a penalty charge notice (PCN).
+          Payment can be made 6 days before, on the day of travel or by 11:59pm on the 6th day
+          after driving in the zone or you may receive a penalty charge notice (PCN).
 
       = form_tag confirm_weekly_charge_dates_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
