@@ -12,8 +12,10 @@ class ApplicationController < ActionController::Base # rubocop:disable Metrics/C
               BaseApi::Error500Exception,
               BaseApi::Error422Exception,
               BaseApi::Error400Exception,
-              InvalidHostException,
               with: :redirect_to_server_unavailable
+
+  rescue_from InvalidHostException,
+              with: :render_forbidden
 
   # enable basic HTTP authentication on production environment if HTTP_BASIC_PASSWORD variable present
   http_basic_authenticate_with name: ENV['HTTP_BASIC_USER'],
@@ -66,6 +68,13 @@ class ApplicationController < ActionController::Base # rubocop:disable Metrics/C
     Rails.logger.error "#{exception.class}: #{exception.message}"
 
     render template: 'errors/service_unavailable', status: :service_unavailable
+  end
+
+  # Logs the exception at info level and renders service unavailable page
+  def render_forbidden(exception)
+    Rails.logger.info "#{exception.class}: #{exception}"
+
+    render template: 'errors/service_unavailable', status: :forbidden
   end
 
   # Gets VRN from vehicle_details hash in the session. Returns string, eg 'CU1234'
