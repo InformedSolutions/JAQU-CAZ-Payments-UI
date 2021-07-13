@@ -7,22 +7,36 @@
   .govuk-grid-row
     .govuk-grid-column-two-thirds
       %h1.govuk-heading-l= title_and_header
+
       %p
-        If your vehicle details are incorrect, you can
-        = succeed '.' do
-          = link_to_dvla_contact_form('contact us')
+        If you vehicle details are incorrect, you must
+        = link_to('update the details',
+                  'https://www.gov.uk/change-vehicle-details-registration-certificate/how-to-tell-dvla',
+                  id: 'update-vehicle-details')
+        the DVLA holds for your vehicle.
+      .govuk-warning-text
+        %span.govuk-warning-text__icon{'aria-hidden': true } !
+        %strong.govuk-warning-text__text
+          %span.govuk-warning-text__assistive
+            Warning
+          You must update your vehicle details with DVLA, or your vehicle may be classed as chargeable and you
+          may receive a penalty charge notice (PCN) if you drive in a zone and do not pay the charge.
+
+      %h1.govuk-heading-m You still have to pay the Clean Air Zone charge
       %p
-        You still need to pay a charge if you have driven, or are planning to drive, in the zone.
+        Payment can be made a 6 days before, on the day of travel or by 11:59pm on the 6th day after driving
+        in the zone or you may receive a penalty charge notice (PCN).
       %p
         If your vehicle does meet emission standards, you can claim a
         = link_to('refund',
-                  'https://www.gov.uk/guidance/driving-in-a-clean-air-zone',
+                  'https://www.gov.uk/change-vehicle-details-registration-certificate/how-to-tell-dvla',
                   id: 'refund-link')
-        from the Local Authority after your registration details have been updated.
-
+        from the local authority after your registration details have been updated.
+      %p
+        If you want to discuss this matter further
+        = succeed '.' do
+          = link_to_dvla_contact_form('contact clean air zones')
       = link_to('Continue',
                 undetermined_vehicle? ? not_determined_vehicles_path : local_authority_charges_path,
                 class: 'govuk-button',
                 'data-module': 'govuk-button')
-      %p
-        = link_to('Check another vehicle', enter_details_vehicles_path)
