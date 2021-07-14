@@ -181,10 +181,10 @@ class ChargesController < ApplicationController # rubocop:disable Metrics/ClassL
     redirect_to_enter_details('Vehicle details')
   end
 
-  # Redirects to 'Unable to determine compliance' page
+  # Marks vehicle as undetermined in session and redirects to incomplete vehicle details page.
   def unable_to_determine_compliance
     SessionManipulation::SetUndetermined.call(session: session)
-    redirect_to not_determined_vehicles_path(id: transaction_id)
+    redirect_to incomplete_vehicles_path
   end
 
   # Checks if second week is available to be selected
