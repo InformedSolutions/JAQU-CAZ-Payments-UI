@@ -130,8 +130,8 @@ describe 'ChargesController - GET #local_authority', type: :request do
         subject
       end
 
-      it 'redirects to not_determined page' do
-        expect(response).to redirect_to(not_determined_vehicles_path(id: transaction_id))
+      it 'redirects to incomplete vehicle details page' do
+        expect(response).to redirect_to(incomplete_vehicles_path)
       end
     end
   end

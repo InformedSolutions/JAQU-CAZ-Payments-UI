@@ -1,6 +1,5 @@
-- title_and_header = 'Incorrect vehicle details'
+- title_and_header = 'Vehicle details are incomplete'
 - page_title(title_and_header)
-
 = render 'common/js_back_link'
 
 %main.govuk-main-wrapper#main-content{role: 'main'}
@@ -8,7 +7,8 @@
     .govuk-grid-column-two-thirds
       %h1.govuk-heading-l= title_and_header
       %p
-        If you vehicle details are incorrect, you must
+        Data used to calculate the compliance of your vehicle is missing from your V5C registration
+        certificate (log book). You must
         = link_to('update the details',
                   'https://www.gov.uk/change-vehicle-details-registration-certificate/how-to-tell-dvla',
                   id: 'update-vehicle-details')
@@ -18,13 +18,12 @@
         %strong.govuk-warning-text__text
           %span.govuk-warning-text__assistive
             Warning
-          You must update your vehicle details with DVLA, or your vehicle may be classed as chargeable and you
-          may receive a penalty charge notice (PCN) if you drive in a zone and do not pay the charge.
-
+          You must update your vehicles with DVLA, or your vehicle may be classed as chargeable and you may
+          receive a penalty charge notice (PCN) if you drive into a zone and do not pay the charge.
       %h1.govuk-heading-m You still have to pay the Clean Air Zone charge
       %p
-        Payment can be made a 6 days before, on the day of travel or by 11:59pm on the 6th day after driving
-        in the zone or you may receive a penalty charge notice (PCN).
+        Payment must be made a maximum of 7 days after you have driven in the zone or you may receive a
+        penalty charge notice (PCN).
       %p
         If your vehicle does meet emission standards, you can claim a
         = link_to('refund',
@@ -36,6 +35,7 @@
         = succeed '.' do
           = link_to_dvla_contact_form('contact clean air zones')
       = link_to('Continue',
-                undetermined_vehicle? ? not_determined_vehicles_path : local_authority_charges_path,
+                not_determined_vehicles_path(id: session[:transaction_id]),
                 class: 'govuk-button',
                 'data-module': 'govuk-button')
+
