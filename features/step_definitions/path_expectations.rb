@@ -20,7 +20,7 @@ Then('I should be on the incorrect details page') do
   expect_path(incorrect_details_vehicles_path)
 end
 
-Then('I should be on the vehicle details incomplete page') do
+Then('I should be on select vehicle type page') do
   expect_path(not_determined_vehicles_path)
 end
 
@@ -98,4 +98,8 @@ end
 
 Then('I should be on the accessibility statement page') do
   expect_path(accessibility_statement_path)
+end
+
+Then('I should be on the incomplete vehicle details page') do
+  expect_path(incomplete_vehicles_path)
 end

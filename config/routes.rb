@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       post :confirm_unrecognised
       get :compliant
       get :exempt
+      get :incomplete
       get :not_determined
       post :not_determined, to: 'vehicles#submit_type'
     end

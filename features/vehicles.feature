@@ -141,14 +141,18 @@ Feature: Vehicles
         And I should be on the enter details page
       Then I enter an incomplete vehicle's registration and choose UK
         And I press the Continue
-        And I should see 'Are these vehicle details correct?'
-      Then I choose that the details are correct
-        And I press the Confirm
-        And I should see 'Vehicle details are incomplete'
+      Then I should see 'Are these vehicle details correct?'
+        And I choose that the details are correct
+      When I press the Confirm
+      Then I should be on the incomplete vehicle details page
+        And I should see 'Vehicle details are incomplete' title
+      When I press the Continue
+      Then I should be on select vehicle type page
+        And I should see 'Vehicle details are incomplete' title
         And I should see 'What is your vehicle?'
         And I choose Car type
-        And I press the Confirm
-        And I should see 'Which Clean Air Zone do you need to pay for?'
+      When I press the Confirm
+      Then I should be on the local authorities page
 
   Scenario: User wants to pay for a taxi which is not registered in the DVLA
     Given I am on the home page
@@ -163,18 +167,22 @@ Feature: Vehicles
 
   Scenario: User wants to pay for undetermined (without type) correct vehicle
     Given I am on the home page
-      Then I press the Start now button
-        And I should be on the enter details page
-      Then I enter an undetermined vehicle's registration and choose UK
+      When I press the Start now button
+      Then I should be on the enter details page
+      When I enter an undetermined vehicle's registration and choose UK
         And I press the Continue
-        And I should see 'Are these vehicle details correct?'
-      Then I choose that the details are correct
-        And I press the Confirm
-        And I should see 'Vehicle details are incomplete'
+      Then I should see 'Are these vehicle details correct?'
+        And I choose that the details are correct
+      When I press the Confirm
+      Then I should be on the incomplete vehicle details page
+        And I should see 'Vehicle details are incomplete' title
+      When I press the Continue
+      Then I should be on select vehicle type page
+        And I should see 'Vehicle details are incomplete' title
         And I should see 'What is your vehicle?'
         And I choose Car type
-        And I press the Confirm
-      Then I should see 'Which Clean Air Zone do you need to pay for?'
+      When I press the Confirm
+      Then I should be on the local authorities page
 
   Scenario: User wants to pay for undetermined taxi
     Given I am on the home page
