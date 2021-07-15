@@ -26,4 +26,16 @@ describe CazDataProvider do
       expect(subject.count).to eq(1)
     end
   end
+
+  describe 'chargeable' do
+    subject { described_class.new.chargeable }
+
+    it 'returns collection of Caz objects' do
+      expect(subject).to all(be_a(Caz))
+    end
+
+    it 'filters out non-chargeable CAZes' do
+      expect(subject.count).to eq(2)
+    end
+  end
 end

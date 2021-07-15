@@ -26,11 +26,13 @@ end
 
 Given('My vehicle is compliant') do
   allow(ChargeableZonesService).to receive(:call).and_return([])
+  mock_chargeable_zones
 end
 
 Given('My vehicle is not compliant') do
   mock_vehicle_compliance
   mock_non_dvla_response
+  mock_chargeable_zones
 end
 
 When('I am only chargeable in one Clean Air Zone') do

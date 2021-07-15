@@ -1,0 +1,13 @@
+%details.govuk-details{'data-module': 'govuk-details'}
+  %summary.govuk-details__summary
+    %span.govuk-details__summary-text
+      Why can’t I see the zone I need to pay for?
+  .govuk-details__text
+    %p
+      You will only see zones that are charging your vehicle type.
+    %p
+      You must
+      = link_to('update your vehicle details',
+                'https://www.gov.uk/change-vehicle-details-registration-certificate/how-to-tell-dvla',
+                id: 'dvla-link')
+      with DVLA, or your vehicle type may be classed as chargeable and you may receive a penalty charge notice.

@@ -8,6 +8,12 @@ describe 'ChargesController - GET #local_authority', type: :request do
   let(:transaction_id) { SecureRandom.uuid }
   let(:vrn) { 'CU57ABC' }
 
+  before do
+    caz_list_response = read_file('caz_list_response.json')
+    caz_data_provider = instance_double(CazDataProvider, chargeable: caz_list_response)
+    allow(CazDataProvider).to receive(:new).and_return(caz_data_provider)
+  end
+
   context 'with VRN in the session' do
     before do
       add_transaction_id_to_session(transaction_id)
