@@ -122,7 +122,6 @@ class ComplianceDetails
 
   # Map DVLA vehicle type to vehicle type supported by VCCS endpoints value
   def map_dvla_vehicle_type(name)
-    VehicleTypes.call.select { |vehicle_type| vehicle_type[:name] == name }
-                .first.try(:[], :value).to_s
+    VehicleTypes.call.select { |vehicle_type| vehicle_type[:name] == name }.first.try(:[], :value).to_s
   end
 end

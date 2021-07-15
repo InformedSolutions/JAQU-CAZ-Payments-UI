@@ -5,9 +5,7 @@
 class ConfirmationForm
   include ActiveModel::Validations
 
-  validates :confirmation, inclusion: {
-    in: %w[yes no], message: I18n.t('confirmation_form.answer_missing')
-  }
+  validates :confirmation, inclusion: { in: %w[yes no], message: I18n.t('confirmation_form.answer_missing') }
 
   ##
   # Initializer method

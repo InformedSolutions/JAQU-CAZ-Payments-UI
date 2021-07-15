@@ -51,13 +51,13 @@ module MockHelper
     allow(ComplianceCheckerApi).to receive(:vehicle_details).and_return(vehicle_details)
   end
 
-  # Mocks non exempt vehicle - non UK vehicle existing on Whitelist
+  # Mocks non exempt vehicle - non UK vehicle existing on allow list
   def mock_unregistered_vehicle_details
     details = JSON.parse(File.read('spec/fixtures/files/register_details_response.json'))
     allow(ComplianceCheckerApi).to receive(:register_details).and_return(details)
   end
 
-  # Mocks exempt vehicle - non UK vehicle existing on Whitelist
+  # Mocks exempt vehicle - non UK vehicle existing on allow list
   def mock_exempted_register_details
     details = JSON.parse(File.read('spec/fixtures/files/register_details_response.json'))
     details['registerExempt'] = true

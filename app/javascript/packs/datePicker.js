@@ -1,12 +1,13 @@
-import Litepicker from "litepicker";
-import "jquery";
+/* eslint-disable */
+import Litepicker from 'litepicker';
+import 'jquery';
 import {
   loadAllPolyfills,
   addPrecedingZero,
   convertUTCToLocal,
   isIE11,
   addZero,
-} from "../src/compatibilityHelpers";
+} from '../src/compatibilityHelpers';
 
 /**
  * All times in local timezone unless specified otherwise
@@ -23,10 +24,10 @@ isIE11 && loadAllPolyfills();
 
 const DAY_IN_MS = 86400 * 1000;
 
-const isStartDateClass = "is-start-date";
-const isInRangeClass = "is-in-range";
-const isEndDateClass = "is-end-date";
-const isDisabledClass = "is-disabled";
+const isStartDateClass = 'is-start-date';
+const isInRangeClass = 'is-in-range';
+const isEndDateClass = 'is-end-date';
+const isDisabledClass = 'is-disabled';
 const classes = [
   isStartDateClass,
   isInRangeClass,
@@ -57,7 +58,7 @@ const classes = [
  * @type {DateData[]}
  */
 const datesData = JSON.parse(
-  document.getElementById("dates_data").getAttribute("data")
+  document.getElementById('dates_data').getAttribute('data'),
 );
 
 /**
@@ -66,7 +67,7 @@ const datesData = JSON.parse(
  * @type {Date} D-Day date
  */
 const chargeStartDate = convertUTCToLocal(
-  new Date(document.getElementById("d-day_data").getAttribute("data"))
+  new Date(document.getElementById('d-day_data').getAttribute('data')),
 );
 
 /**
@@ -109,17 +110,16 @@ const setPaymentWindow = () => {
       startDateMS: dDayDate,
       endDateMS,
     };
-  } else if (!isInOperation) {
+  } if (!isInOperation) {
     return {
       startDateMS: dDayDate,
       endDateMS: dDayDate - 1 * DAY_IN_MS,
     };
-  } else {
-    return {
-      startDateMS,
-      endDateMS,
-    };
   }
+  return {
+    startDateMS,
+    endDateMS,
+  };
 };
 
 // Define payment window
@@ -153,8 +153,7 @@ let selectedDate = new Date(0);
  *
  * @returns {boolean}
  */
-const isDateInRange = (dateInMS) =>
-  startDateMS <= dateInMS && dateInMS <= endDateMS;
+const isDateInRange = (dateInMS) => startDateMS <= dateInMS && dateInMS <= endDateMS;
 
 /**
  * Highlights the date provided as a parameter
@@ -185,8 +184,7 @@ const highlightWeek = (firstDay) => {
  * Resets all classes used for highlighting
  * days in the calendar
  */
-const resetHighlight = () =>
-  classes.forEach((className) => $(`.${className}`).removeClass(className));
+const resetHighlight = () => classes.forEach((className) => $(`.${className}`).removeClass(className));
 
 /**
  * Is called when:
@@ -215,9 +213,9 @@ const onSelectAction = (date) => {
  * @param {Date} date
  */
 const writeDateToInputs = (date) => {
-  document.getElementById("date-day").value = date.getDate();
-  document.getElementById("date-month").value = date.getMonth() + 1;
-  document.getElementById("date-year").value = date.getFullYear();
+  document.getElementById('date-day').value = date.getDate();
+  document.getElementById('date-month').value = date.getMonth() + 1;
+  document.getElementById('date-year').value = date.getFullYear();
 };
 
 /**
@@ -229,13 +227,13 @@ const writeDateToInputs = (date) => {
 const onDayHoverAction = (date, attrs) => {
   resetHighlight();
 
-  if (!date || attrs.includes("is-locked")) return;
+  if (!date || attrs.includes('is-locked')) return;
 
   highlightWeek(date);
 };
 
 const pickerInstance = new Litepicker({
-  element: document.getElementById("litepicker"),
+  element: document.getElementById('litepicker'),
   minDate: dateToString(new Date(startDateMS)),
   maxDate: dateToString(new Date(endDateMS)),
   numberOfMonths: 2,
@@ -263,8 +261,8 @@ const pickerInstance = new Litepicker({
  */
 const getValuesFromInputs = () => {
   const today = new Date();
-  const partials = ["date-day", "date-month", "date-year"].map(
-    (id) => document.getElementById(id).value
+  const partials = ['date-day', 'date-month', 'date-year'].map(
+    (id) => document.getElementById(id).value,
   );
 
   // If each input is null
@@ -306,10 +304,10 @@ const getValuesFromInputs = () => {
  * @param {Date} [date] - selected date
  */
 const handleEndDayNotice = (date) => {
-  const el = document.getElementById("week-last-day-notice");
+  const el = document.getElementById('week-last-day-notice');
 
   if (!date) {
-    el.innerText = "";
+    el.innerText = '';
     return;
   }
 
@@ -335,13 +333,13 @@ const goToPreviousMonthIfAvailable = () => {
 };
 
 const initializeListeners = () => {
-  ["date-day", "date-month", "date-year"].forEach((id) => {
+  ['date-day', 'date-month', 'date-year'].forEach((id) => {
     document
       .getElementById(id)
-      .addEventListener("click", () => pickerInstance.show());
+      .addEventListener('click', () => pickerInstance.show());
     document
       .getElementById(id)
-      .addEventListener("change", () => getValuesFromInputs());
+      .addEventListener('change', () => getValuesFromInputs());
   });
 };
 

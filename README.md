@@ -36,7 +36,12 @@ A Ruby static code analyzer and formatter.
 rubocop
 ```
 
-Configurable tool for writing clean and consistent SCSS.
+Identifying and reporting on patterns found in JavaScript code.
+```
+node_modules/.bin/eslint 'app/javascript'
+```
+
+Writing clean and consistent SCSS.
 ```
 node_modules/.bin/stylelint 'app/javascript/**/*.(s)?scss'
 ```

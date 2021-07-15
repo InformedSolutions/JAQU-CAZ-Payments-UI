@@ -1,15 +1,15 @@
-require("@rails/ujs").start();
-
 import '../styles/application.scss';
 import '../src/govukFrontendAssets';
-import { initAll } from 'govuk-frontend/govuk/all.js';
-import initPrintLink from '../src/printLink/init';
-import cookieControl from "../src/cookieControl";
-import initBackLink from '../src/backLink/init';
+import { initAll } from 'govuk-frontend/govuk/all';
+import printLink from '../src/printLink/init';
+import cookieControl from '../src/cookieControl';
+import backLink from '../src/backLink';
 import '@fortawesome/fontawesome-free/css/regular.min.css';
+
+require('@rails/ujs').start();
 
 document.body.classList.add('js-enabled');
 initAll();
-initPrintLink();
+printLink();
 cookieControl();
-initBackLink();
+backLink();

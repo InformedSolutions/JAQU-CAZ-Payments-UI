@@ -1,50 +1,49 @@
+/* eslint-disable */
 // IE11 polyfill for Object.entries()
 function loadObjectEntriesPolyfill() {
-  if (!Object.entries)
+  if (!Object.entries) {
     Object.entries = function (obj) {
-      var ownProps = Object.keys(obj),
-        i = ownProps.length,
-        resArray = new Array(i); // preallocate the Array
+      const ownProps = Object.keys(obj);
+      let i = ownProps.length;
+      const resArray = new Array(i); // preallocate the Array
       while (i--) resArray[i] = [ownProps[i], obj[ownProps[i]]];
 
       return resArray;
     };
+  }
 }
 
 // IE11 polyfill for String.includes() and Array.includes()
 function loadIncludesPolyfill() {
   if (!String.prototype.includes) {
-    Object.defineProperty(String.prototype, "includes", {
+    Object.defineProperty(String.prototype, 'includes', {
       enumerable: false,
       writable: true,
-      value: function (search, start) {
-        "use strict";
-        if (typeof start !== "number") {
+      value(search, start) {
+        if (typeof start !== 'number') {
           start = 0;
         }
 
         if (start + search.length > this.length) {
           return false;
-        } else {
-          return this.indexOf(search, start) !== -1;
         }
+        return this.indexOf(search, start) !== -1;
       },
     });
   }
 
   if (!Array.prototype.includes) {
-    Object.defineProperty(Array.prototype, "includes", {
+    Object.defineProperty(Array.prototype, 'includes', {
       enumerable: false,
       writable: true,
-      value: function (searchElement /*, fromIndex*/) {
-        "use strict";
-        var O = Object(this);
-        var len = parseInt(O.length) || 0;
+      value(searchElement /* , fromIndex */) {
+        const O = Object(this);
+        const len = parseInt(O.length) || 0;
         if (len === 0) {
           return false;
         }
-        var n = parseInt(arguments[1]) || 0;
-        var k;
+        const n = parseInt(arguments[1]) || 0;
+        let k;
         if (n >= 0) {
           k = n;
         } else {
@@ -53,13 +52,13 @@ function loadIncludesPolyfill() {
             k = 0;
           }
         }
-        var currentElement;
+        let currentElement;
         while (k < len) {
           currentElement = O[k];
           if (
-            searchElement === currentElement ||
-            (searchElement !== searchElement &&
-              currentElement !== currentElement)
+            searchElement === currentElement
+            || (searchElement !== searchElement
+              && currentElement !== currentElement)
           ) {
             // NaN !== NaN
             return true;
@@ -87,7 +86,7 @@ export function loadAllPolyfills() {
  *
  * @returns {string}
  */
-export const addPrecedingZero = (value) => ("0" + value).slice(-2);
+export const addPrecedingZero = (value) => (`0${value}`).slice(-2);
 
 /**
  *
@@ -97,14 +96,13 @@ export const addPrecedingZero = (value) => ("0" + value).slice(-2);
  */
 export const convertUTCToLocal = (date) => new Date(date.setHours(0, 0, 0, 0));
 
-const isSafari =
-  /constructor/i.test(window.HTMLElement) ||
-  (function (p) {
-    return p.toString() === "[object SafariRemoteNotification]";
-  })(
-    !window["safari"] ||
-      (typeof safari !== "undefined" && safari.pushNotification)
-  );
+const isSafari = /constructor/i.test(window.HTMLElement)
+  || (function (p) {
+    return p.toString() === '[object SafariRemoteNotification]';
+  }(
+    !window.safari
+      || (typeof safari !== 'undefined' && safari.pushNotification),
+  ));
 
 export const isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
 
