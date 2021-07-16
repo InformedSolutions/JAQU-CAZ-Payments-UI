@@ -15,6 +15,12 @@ class CazDataProvider
     clean_air_zones.map { |zone| Caz.new(zone) }.reject { |caz| Date.parse(caz.display_from).future? }
   end
 
+  # Returns collection of CAZes which has activeChargeStartDate today or in the past
+  def chargeable
+    clean_air_zones.reject { |caz| Date.parse(caz['activeChargeStartDate']).future? }
+                   .map { |caz| Caz.new(caz) }
+  end
+
   private
 
   # Finds the expected clean air zone data based on provided zone id

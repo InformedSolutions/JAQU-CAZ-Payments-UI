@@ -6,7 +6,6 @@ Given('I am on the vehicle details page with taxi vehicle to check') do
   mock_chargeable_zones
   mock_vehicle_compliance_discount_taxi
   mock_non_dvla_response
-  mock_single_caz
   visit details_vehicles_path
 end
 
@@ -17,7 +16,6 @@ Given('I am on the vehicle details page with unrecognized taxi vehicle to check'
   mock_undetermined_vehicle_compliance
   mock_unrecognised_compliance
   mock_non_dvla_response
-  mock_single_caz
   visit details_vehicles_path
 end
 

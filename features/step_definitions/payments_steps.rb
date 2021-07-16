@@ -25,6 +25,7 @@ end
 
 Then('I press pay for another CAZ') do
   mock_dvla_response
+  mock_chargeable_zones
   click_link 'Pay for another Clean Air Zone'
 end
 

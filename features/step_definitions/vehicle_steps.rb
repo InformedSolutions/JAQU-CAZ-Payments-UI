@@ -33,6 +33,7 @@ Then('I enter an unrecognised taxi registration number and choose UK') do
   mock_vehicle_not_found_in_dvla
   mock_taxi_register_details
   mock_dvla_response
+  mock_chargeable_zones
 
   fill_in('vrn', with: vrn)
   choose('UK')

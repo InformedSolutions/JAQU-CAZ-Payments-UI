@@ -29,6 +29,8 @@ class ChargesController < ApplicationController # rubocop:disable Metrics/ClassL
   #
   def local_authority
     @zones = ChargeableZonesService.call(vehicle_details: session[:vehicle_details])
+    @all_chargeable_zones_displayed = all_chargeable_zones_displayed?(@zones)
+    @undetermined = vehicle_details('undetermined')
     SessionManipulation::SetChargeableZones.call(
       session: session,
       chargeable_zones: @zones.length
@@ -181,10 +183,10 @@ class ChargesController < ApplicationController # rubocop:disable Metrics/ClassL
     redirect_to_enter_details('Vehicle details')
   end
 
-  # Redirects to 'Unable to determine compliance' page
+  # Marks vehicle as undetermined in session and redirects to incomplete vehicle details page.
   def unable_to_determine_compliance
     SessionManipulation::SetUndetermined.call(session: session)
-    redirect_to not_determined_vehicles_path(id: transaction_id)
+    redirect_to incomplete_vehicles_path
   end
 
   # Checks if second week is available to be selected
@@ -221,5 +223,10 @@ class ChargesController < ApplicationController # rubocop:disable Metrics/ClassL
   # Local authority from the query params
   def local_authority_params
     params['local-authority']
+  end
+
+  # Checks if chargeable zones for the vehicle are all current chargeable zones
+  def all_chargeable_zones_displayed?(zones)
+    zones.count == CazDataProvider.new.chargeable.count
   end
 end

@@ -45,8 +45,8 @@ describe 'VehicleCheckersController - POST #confirm_details', type: :request do
       subject
     end
 
-    it 'redirects to not determined vehicle page' do
-      expect(response).to redirect_to(not_determined_vehicles_path(id: transaction_id))
+    it 'redirects to incomplete vehicle details page' do
+      expect(response).to redirect_to(incomplete_vehicles_path)
     end
   end
 end

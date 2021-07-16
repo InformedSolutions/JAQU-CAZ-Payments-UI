@@ -148,7 +148,6 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:enter_details]
   #
   def incorrect_details
-    # Used to determine the previous step in ChargesController#local_authority
     SessionManipulation::SetIncorrect.call(session: session)
     @return_path = if vehicle_details('possible_fraud')
                      uk_registered_details_vehicles_path
@@ -200,6 +199,17 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   end
 
   ##
+  # Informs the user about updating their details before making a payment.
+  #
+  # ==== Path
+  #
+  #    GET /vehicles/incomplete
+  #
+  def incomplete
+    # renders static page
+  end
+
+  ##
   # Renders a static page for users which VRN is recognised as not determined
   #
   # ==== Path
@@ -214,6 +224,33 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   #
   def not_determined
     @types = VehicleTypes.call
+  end
+
+  ##
+  # Verifies if user choose a type of vehicle.
+  # If yes, renders {local authorities}[rdoc-ref:LocalAuthoritiesController.index]
+  # If no, redirects to {choose_type}[rdoc-ref:not_determined]
+  #
+  # ==== Path
+  #
+  #    POST /vehicles/not_determined
+  #
+  # ==== Params
+  # * +vrn+ - vehicle registration number, required in the session
+  # * +vehicle-type+ - user's type of vehicle
+  #
+  # ==== Validations
+  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:enter_details]
+  # * +vehicle-type+ - lack of it redirects to {choose_type}[rdoc-ref:not_determined]
+  #
+  def submit_type
+    type = params['vehicle-type']
+    if type.blank?
+      redirect_to not_determined_vehicles_path, alert: true
+    else
+      SessionManipulation::SetType.call(session: session, type: type)
+      redirect_to local_authority_charges_path
+    end
   end
 
   ##
@@ -236,33 +273,6 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   #
   def exempt
     render :compliant
-  end
-
-  ##
-  # Verifies if user choose a type of vehicle.
-  # If yes, renders {local authorities}[rdoc-ref:LocalAuthoritiesController.index]
-  # If no, redirects to {choose_type}[rdoc-ref:not_determined]
-  #
-  # ==== Path
-  #
-  #    POST /vehicles/submit_type
-  #
-  # ==== Params
-  # * +vrn+ - vehicle registration number, required in the session
-  # * +vehicle-type+ - user's type of vehicle
-  #
-  # ==== Validations
-  # * +vrn+ - lack of VRN redirects to {enter_details}[rdoc-ref:enter_details]
-  # * +vehicle-type+ - lack of it redirects to {choose_type}[rdoc-ref:not_determined]
-  #
-  def submit_type
-    type = params['vehicle-type']
-    if type.blank?
-      redirect_to not_determined_vehicles_path, alert: true
-    else
-      SessionManipulation::SetType.call(session: session, type: type)
-      redirect_to local_authority_charges_path
-    end
   end
 
   private
@@ -319,7 +329,7 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   def process_detail_form(form)
     SessionManipulation::SetConfirmVehicle.call(session: session, confirm_vehicle: form.confirmed?)
     return incorrect_details_vehicles_path(id: transaction_id) unless form.confirmed?
-    return not_determined_vehicles_path(id: transaction_id) if confirmed_undetermined_to_complete_data?
+    return incomplete_vehicles_path if confirmed_undetermined_to_complete_data?
 
     local_authority_charges_path(id: transaction_id)
   end
