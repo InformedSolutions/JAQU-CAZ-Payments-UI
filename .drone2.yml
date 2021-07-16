@@ -1026,9 +1026,25 @@ steps:
       - pull_request
       - push
   concurrency:
-    limit: 1
+    limit: 2
+
 
   steps:
+
+    - name: clone iac
+      image: hashicorp/terraform:0.12.23
+      commands:
+        - apk update && apk add bash
+        - mkdir ~/.ssh
+        - echo -e "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
+        - chmod 600 ~/.ssh/id_rsa
+        - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
+        - cd JAQU-CAZ-IAC
+        - git checkout staging_preprod
+     environment:
+       GIT_PRIVATE_SSH:
+         from_secret: jaqu_lower_github_private_key
+
     - name: plan updates into preprod
       image: hashicorp/terraform:0.12.23
       commands:
@@ -1038,15 +1054,7 @@ steps:
         - echo -e "[profile target_acc]\nrole_arn = $SRC_AWS_ACCOUNT_ROLE\ncredential_source = Environment\nrole_session_name = AWSACCOUNT" > ~/.aws/config
         - TASKDEF=`aws ecs describe-services --profile target_acc --cluster payments-cluster-sit --services payments-sit-ecs-service | jq --raw-output '.services[0].taskDefinition'`
         - export TF_VAR_build_number=`aws ecs describe-task-definition --profile target_acc --task-definition $TASKDEF | jq --raw-output '.taskDefinition.containerDefinitions[0].image' | cut -f 2 -d ':'`
-        - mkdir ~/.ssh
-        - echo -e "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
-        - chmod 600 ~/.ssh/id_rsa
-        - touch ~/.ssh/known_hosts
-        - chmod 600 ~/.ssh/known_hosts
-        - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
-        - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
         - cd JAQU-CAZ-IAC
-        - git checkout staging_preprod
         - cd terraform-iac/projects/payments/layers/01.networking
         - PATH=$PATH:../../../../bin/
         - chmod +x ../../../../bin/tf
@@ -1080,13 +1088,64 @@ steps:
         AWS_DEFAULT_REGION: eu-west-2
         AWS_ACCOUNT_NAME: jaqu-staging
         SRC_AWS_ACCOUNT_ROLE: arn:aws:iam::072187228077:role/jaqu-controlledServiceRole
-        GIT_PRIVATE_SSH:
-          from_secret: jaqu_lower_github_private_key
         TF_VAR_feedback_url: https://defragroup.eu.qualtrics.com/jfe/form/SV_3ymAC1qqYAEVJgF
         TF_VAR_enable_https_redirect: false
       when:
         event:
           - pull_request
+      depends_on:
+      - clone iac
+
+    - name: plan updates into preprod2
+      image: hashicorp/terraform:0.12.23
+      commands:
+        - apk add --update bash python python-dev py-pip build-base jq
+        - pip install awscli
+        - mkdir ~/.aws
+        - echo -e "[profile target_acc]\nrole_arn = $SRC_AWS_ACCOUNT_ROLE\ncredential_source = Environment\nrole_session_name = AWSACCOUNT" > ~/.aws/config
+        - TASKDEF=`aws ecs describe-services --profile target_acc --cluster payments-cluster-sit --services payments-sit-ecs-service | jq --raw-output '.services[0].taskDefinition'`
+        - export TF_VAR_build_number=`aws ecs describe-task-definition --profile target_acc --task-definition $TASKDEF | jq --raw-output '.taskDefinition.containerDefinitions[0].image' | cut -f 2 -d ':'`
+        - cd JAQU-CAZ-IAC
+        - cd terraform-iac/projects/payments/layers/01.networking
+        - PATH=$PATH:../../../../bin/
+        - chmod +x ../../../../bin/tf
+        - tf init
+        - tf workspace select preprod2 || tf workspace new preprod2
+        - tf plan
+        - cd ../02.backends
+        - tf init
+        - tf workspace select preprod2 || tf workspace new preprod2
+        - tf plan
+        - cd ../04.web
+        - tf init
+        - tf workspace select preprod2 || tf workspace new preprod2
+        - tf plan
+      environment:
+        TF_VAR_secret_key_base:
+           from_secret: payments_ruby_secret
+        TF_VAR_google_analytics_id: UA-144774549-5
+        TF_VAR_access_key:
+          from_secret: jaqu_staging_aws_access_key_id
+        TF_VAR_secret_key:
+          from_secret: jaqu_staging_aws_secret_access_key
+        TF_VAR_master_access_key:
+          from_secret: jaqu_master_aws_access_key_id
+        TF_VAR_master_secret_key:
+          from_secret: jaqu_master_aws_secret_access_key
+        AWS_ACCESS_KEY_ID:
+          from_secret: jaqu_staging_aws_access_key_id
+        AWS_SECRET_ACCESS_KEY:
+          from_secret: jaqu_staging_aws_secret_access_key
+        AWS_DEFAULT_REGION: eu-west-2
+        AWS_ACCOUNT_NAME: jaqu-staging
+        SRC_AWS_ACCOUNT_ROLE: arn:aws:iam::072187228077:role/jaqu-controlledServiceRole
+        TF_VAR_feedback_url: https://defragroup.eu.qualtrics.com/jfe/form/SV_3ymAC1qqYAEVJgF
+        TF_VAR_enable_https_redirect: false
+      when:
+        event:
+          - pull_request
+      depends_on:
+      - plan updates into preprod 
 
     - name: provisioning warning
       image: docker:19.03.11-git
@@ -1105,15 +1164,7 @@ steps:
         - echo -e "[profile target_acc]\nrole_arn = $SRC_AWS_ACCOUNT_ROLE\ncredential_source = Environment\nrole_session_name = AWSACCOUNT" > ~/.aws/config
         - TASKDEF=`aws ecs describe-services --profile target_acc --cluster payments-cluster-sit --services payments-sit-ecs-service | jq --raw-output '.services[0].taskDefinition'`
         - export TF_VAR_build_number=`aws ecs describe-task-definition --profile target_acc --task-definition $TASKDEF | jq --raw-output '.taskDefinition.containerDefinitions[0].image' | cut -f 2 -d ':'`
-        - mkdir ~/.ssh
-        - echo -e "$GIT_PRIVATE_SSH" > ~/.ssh/id_rsa
-        - chmod 600 ~/.ssh/id_rsa
-        - touch ~/.ssh/known_hosts
-        - chmod 600 ~/.ssh/known_hosts
-        - ssh-keyscan -H github.com > /etc/ssh/ssh_known_hosts 2> /dev/null
-        - git clone git@github.com:InformedSolutions/JAQU-CAZ-IAC.git
         - cd JAQU-CAZ-IAC
-        - git checkout staging_preprod
         - cd terraform-iac/projects/payments/layers/01.networking
         - PATH=$PATH:../../../../bin/
         - chmod +x ../../../../bin/tf
@@ -1147,13 +1198,64 @@ steps:
         AWS_DEFAULT_REGION: eu-west-2
         AWS_ACCOUNT_NAME: jaqu-staging
         SRC_AWS_ACCOUNT_ROLE: arn:aws:iam::072187228077:role/jaqu-controlledServiceRole
-        GIT_PRIVATE_SSH:
-          from_secret: jaqu_lower_github_private_key
         TF_VAR_enable_https_redirect: false
         TF_VAR_feedback_url: https://defragroup.eu.qualtrics.com/jfe/form/SV_3ymAC1qqYAEVJgF
       when:
         event:
           - push
+    depends_on:
+      - clone iac
+    
+    - name: deploy to preprod2
+      image: hashicorp/terraform:0.12.23
+      commands:
+        - apk add --update bash python python-dev py-pip build-base jq
+        - pip install awscli
+        - mkdir ~/.aws
+        - echo -e "[profile target_acc]\nrole_arn = $SRC_AWS_ACCOUNT_ROLE\ncredential_source = Environment\nrole_session_name = AWSACCOUNT" > ~/.aws/config
+        - TASKDEF=`aws ecs describe-services --profile target_acc --cluster payments-cluster-sit --services payments-sit-ecs-service | jq --raw-output '.services[0].taskDefinition'`
+        - export TF_VAR_build_number=`aws ecs describe-task-definition --profile target_acc --task-definition $TASKDEF | jq --raw-output '.taskDefinition.containerDefinitions[0].image' | cut -f 2 -d ':'`
+        - cd JAQU-CAZ-IAC
+        - cd terraform-iac/projects/payments/layers/01.networking
+        - PATH=$PATH:../../../../bin/
+        - chmod +x ../../../../bin/tf
+        - tf init
+        - tf workspace select preprod2 || tf workspace new preprod2
+        - tf apply -auto-approve
+        - cd ../02.backends
+        - tf init
+        - tf workspace select preprod2 || tf workspace new preprod2
+        - tf apply -auto-approve
+        - cd ../04.web
+        - tf init
+        - tf workspace select preprod2 || tf workspace new preprod2
+        - tf apply -auto-approve
+      environment:
+        TF_VAR_secret_key_base:
+           from_secret: payments_ruby_secret
+        TF_VAR_google_analytics_id: UA-144774549-5
+        TF_VAR_access_key:
+          from_secret: jaqu_staging_aws_access_key_id
+        TF_VAR_secret_key:
+          from_secret: jaqu_staging_aws_secret_access_key
+        TF_VAR_master_access_key:
+          from_secret: jaqu_master_aws_access_key_id
+        TF_VAR_master_secret_key:
+          from_secret: jaqu_master_aws_secret_access_key
+        AWS_ACCESS_KEY_ID:
+          from_secret: jaqu_staging_aws_access_key_id
+        AWS_SECRET_ACCESS_KEY:
+          from_secret: jaqu_staging_aws_secret_access_key
+        AWS_DEFAULT_REGION: eu-west-2
+        AWS_ACCOUNT_NAME: jaqu-staging
+        SRC_AWS_ACCOUNT_ROLE: arn:aws:iam::072187228077:role/jaqu-controlledServiceRole
+        TF_VAR_enable_https_redirect: false
+        TF_VAR_feedback_url: https://defragroup.eu.qualtrics.com/jfe/form/SV_3ymAC1qqYAEVJgF
+      when:
+        event:
+          - push
+      depends_on:
+          - deploy to preprod
 
     - name: codedeploy ui preprod
       image: alpine:3.11.6
@@ -1177,9 +1279,36 @@ steps:
       when:
         event:
           - push
+      depends_on:
+          - deploy to preprod
+
+    - name: codedeploy ui preprod2
+      image: alpine:3.11.6
+      commands:
+        - apk add --update bash python python-dev py-pip build-base jq
+        - pip install awscli
+        - mkdir ~/.aws
+        - echo -e "[profile target_acc]\nrole_arn = $AWS_ACCOUNT_ROLE\ncredential_source = Environment\nrole_session_name = AWSACCOUNT" > ~/.aws/config
+        - aws deploy create-deployment --application-name $APPLICATION_NAME --deployment-config-name CodeDeployDefault.ECSAllAtOnce --deployment-group-name $DEPLOYMENT_GROUP --description "Deployment ECS" --s3-location bucket=$LAMBDA_BUCKET,bundleType=yaml,key=$PROJECT/preprod/appspec.yaml --profile target_acc
+      environment:
+        AWS_ACCESS_KEY_ID:
+          from_secret: jaqu_staging_aws_access_key_id
+        AWS_SECRET_ACCESS_KEY:
+          from_secret: jaqu_staging_aws_secret_access_key
+        AWS_ACCOUNT_ROLE: arn:aws:iam::360470905865:role/jaqu-stagingServiceRole
+        AWS_DEFAULT_REGION: eu-west-2
+        APPLICATION_NAME: payments-codedeploy-service-preprod
+        DEPLOYMENT_GROUP: payments-codedeploy-service-preprod
+        PROJECT: payments
+        LAMBDA_BUCKET: jaqu-shared-project-lambda-bucket
+      when:
+        event:
+          - push
+      depends_on:
+          - deploy to preprod2
 
     # Build docker image
-    - name: await ecs rollout
+    - name: await ecs rollout (preprod)
       image: alpine:3.11.6
       environment:
         build_id_url: https://preprod-payments-web.cleanairzone.defra.gov.uk/build_id
@@ -1204,7 +1333,37 @@ steps:
       when:
         event:
           - push
+      depends_on:
+          - deploy to preprod
 
+    - name: await ecs rollout (preprod2)
+      image: alpine:3.11.6
+      environment:
+        build_id_url: https://preprod2-payments-web.cleanairzone.defra.gov.uk/build_id
+        SRC_AWS_ACCOUNT_ROLE: arn:aws:iam::072187228077:role/jaqu-controlledServiceRole
+        AWS_ACCESS_KEY_ID:
+          from_secret: jaqu_controlled_aws_access_key_id
+        AWS_SECRET_ACCESS_KEY:
+          from_secret: jaqu_controlled_aws_secret_access_key
+        AWS_DEFAULT_REGION: eu-west-2
+      commands:
+        - apk add --update bash python python-dev py-pip build-base jq
+        - pip install awscli
+        - mkdir ~/.aws
+        - echo -e "[profile target_acc]\nrole_arn = $SRC_AWS_ACCOUNT_ROLE\ncredential_source = Environment\nrole_session_name = AWSACCOUNT" > ~/.aws/config
+        - TASKDEF=`aws ecs describe-services --profile target_acc --cluster payments-cluster-sit --services payments-sit-ecs-service | jq --raw-output '.services[0].taskDefinition'`
+        - export build_id=`aws ecs describe-task-definition  --profile target_acc --task-definition $TASKDEF | jq --raw-output '.taskDefinition.containerDefinitions[0].image' | cut -f 2 -d ':'`
+        - apk add curl
+        - sh ci-cd-resources/check_build_number.sh
+      volumes:
+        - name: docker_sock
+          path: /var/run/docker.sock
+      when:
+        event:
+          - push
+        depends_on:
+          - deploy to preprod2
+          
     ################################################# End  of Preprod Environment Steps #######################################################
 
 ---
