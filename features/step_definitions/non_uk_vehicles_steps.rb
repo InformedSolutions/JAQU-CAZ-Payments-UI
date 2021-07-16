@@ -13,4 +13,5 @@ end
 Then('I choose Car type') do
   choose('Car')
   mock_non_dvla_response
+  mock_chargeable_zones
 end
