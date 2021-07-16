@@ -6,13 +6,13 @@ describe StaticPagesController, type: :request do
   describe 'GET #accessibility_statement' do
     subject { get accessibility_statement_path }
 
-    it_behaves_like 'a static page'
+    it_behaves_like 'a static page', :accessibility_statement
   end
 
   describe 'GET #cookies' do
     subject { get cookies_path }
 
-    it_behaves_like 'a static page'
+    it_behaves_like 'a static page', :cookies
   end
 
   describe 'GET #privacy_notice' do
@@ -20,7 +20,13 @@ describe StaticPagesController, type: :request do
 
     before { mock_chargeable_zones }
 
-    it_behaves_like 'a static page'
+    it_behaves_like 'a static page', :privacy_notice
+  end
+
+  describe 'GET #terms_and_conditions' do
+    subject { get terms_and_conditions_path }
+
+    it_behaves_like 'a static page', :terms_and_conditions
   end
 
   context 'when service call returns `InvalidHostException`' do

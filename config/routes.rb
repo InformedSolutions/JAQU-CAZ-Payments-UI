@@ -71,13 +71,14 @@ Rails.application.routes.draw do
     end
   end
 
-  scope controller: 'static_pages' do
+  scope controller: :static_pages do
     get :accessibility_statement
     get :cookies
     get :privacy_notice
+    get :terms_and_conditions
   end
 
-  scope controller: 'application' do
+  scope controller: :application do
     get :build_id
     get :health
   end

@@ -35,8 +35,5 @@ RSpec/DescribeClass:
   Exclude:
     - 'spec/api_wrappers/**/*.rb'
 
-RSpec/ExampleLength:
-  Max: 5
-
 Rails/EnvironmentVariableAccess:
   Enabled: false
