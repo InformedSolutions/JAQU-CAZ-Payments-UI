@@ -156,6 +156,7 @@ steps:
         path: /var/run/docker.sock
     commands:
       - rubocop
+      - node_modules/.bin/eslint 'app/javascript'
       - node_modules/.bin/stylelint 'app/javascript/**/*.(s)?scss'
 
   # Invoke security analysis through Ruby libraries
@@ -407,6 +408,7 @@ steps:
         path: /var/run/docker.sock
     commands:
       - rubocop
+      - node_modules/.bin/eslint 'app/javascript'
       - node_modules/.bin/stylelint 'app/javascript/**/*.(s)?scss'
 
   # Invoke security analysis through Ruby libraries
@@ -680,6 +682,7 @@ steps:
           path: /var/run/docker.sock
       commands:
         - rubocop
+        - node_modules/.bin/eslint 'app/javascript'
         - node_modules/.bin/stylelint 'app/javascript/**/*.(s)?scss'
       depends_on:
         - integration tests
@@ -1280,6 +1283,7 @@ steps:
         path: /var/run/docker.sock
     commands:
       - rubocop
+      - node_modules/.bin/eslint 'app/javascript'
       - node_modules/.bin/stylelint 'app/javascript/**/*.(s)?scss'
 
   # Invoke security analysis through Ruby libraries
