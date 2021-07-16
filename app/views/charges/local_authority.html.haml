@@ -16,7 +16,9 @@
                 Which Clean Air Zone do you need to pay for?
             %p
               You need to pay separately for each Clean Air Zone you drive in.
-            - if @zones.size == 1
+            - if @undetermined
+              = render 'charges/undetermined_vehicle_notice'
+            - elsif !@all_chargeable_zones_displayed
               = render 'charges/one_zone'
             - if alert
               %span#local-authority-error.govuk-error-message
