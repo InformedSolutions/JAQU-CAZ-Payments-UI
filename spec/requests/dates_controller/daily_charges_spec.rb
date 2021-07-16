@@ -64,9 +64,9 @@ describe 'DatesController - GET #daily_charge', type: :request do
       expect(response).to have_http_status(:success)
     end
 
-    it 'sets :undetermined_taxi variable' do
+    it 'renders daily_charge_for_incomplete template' do
       subject
-      expect(assigns(:undetermined_taxi)).to be_truthy
+      expect(response).to render_template('dates/daily_charge_for_incomplete')
     end
   end
 
@@ -90,9 +90,9 @@ describe 'DatesController - GET #daily_charge', type: :request do
       expect(response).to have_http_status(:success)
     end
 
-    it 'does not set :undetermined_taxi variable' do
+    it 'renders daily_charge template' do
       subject
-      expect(assigns(:undetermined_taxi)).to be_falsey
+      expect(response).to render_template('dates/daily_charge')
     end
   end
 

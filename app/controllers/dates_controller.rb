@@ -77,14 +77,14 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   # * +la_id+ - lack of LA redirects to {picking LA}[rdoc-ref:ChargesController.local_authority]
   #
   def daily_charge
-    @undetermined_taxi = undetermined_taxi?
-    @undetermined_with_type = undetermined_with_type?
-    @compliance_details = if @undetermined_taxi
+    @compliance_details = if undetermined_taxi?
                             UnrecognisedComplianceDetails.new(la_id: la_id)
                           else
                             ComplianceDetails.new(session[:vehicle_details])
                           end
-    @return_path = determinate_return_path
+    @return_path = determine_return_path
+
+    return render 'dates/daily_charge_for_incomplete' if undetermined_taxi? || undetermined_with_type?
   end
 
   ##
@@ -176,7 +176,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
     Dates::AssignBackButtonDate.call(session: session)
     @compliance_details = ComplianceDetails.new(session[:vehicle_details])
     @weekly_charge = 50.00
-    @return_path = determinate_return_path
+    @return_path = determine_return_path
   end
 
   ##
@@ -400,7 +400,7 @@ class DatesController < ApplicationController # rubocop:disable Metrics/ClassLen
   end
 
   # Define the back button path on daily and weekly charge page.
-  def determinate_return_path
+  def determine_return_path
     la_name == 'Taxidiscountcaz' && weekly_possible ? select_period_dates_path : local_authority_charges_path
   end
 

@@ -20,14 +20,29 @@
         = parse_charge(@compliance_details.charge)
 
       %p
-        The charge period runs from midnight to midnight.
+        The daily charge period runs from midnight to midnight.
+
+      %p
+        Data used to calculate the compliance of your vehicle is missing from your V5C registration certificate (log book).
+        You must
+        = link_to('update the details', '#', id: 'dvla-link')
+        the DVLA holds for your vehicle.
+
       .govuk-warning-text
         %span.govuk-warning-text__icon{'aria-hidden': true } !
         %strong.govuk-warning-text__text
           %span.govuk-warning-text__assistive
             Warning
-          Payment can be made 6 days before, on the day of travel or by 11:59pm on the 6th day
-          after driving in the zone or you may receive a penalty charge notice (PCN).
+          Payment must be made by 11.59pm on the 6th day after driving into the zone.
+          You must update your vehicle details with DVLA, or you may receive a penalty charge notice (PCN)
+          if you drive into a zone and do not pay the charge.
+
+      %p
+        If your vehicle does meet emission standards, you can claim a
+        = link_to('refund',
+                  'https://www.gov.uk/guidance/driving-in-a-clean-air-zone',
+                  id: 'refund-link')
+        from the local authority after your registration details have been updated.
 
       = form_tag confirm_daily_charge_dates_path, method: :post do
         .govuk-form-group{class: ('govuk-form-group--error' if alert)}
