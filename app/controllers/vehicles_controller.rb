@@ -329,19 +329,14 @@ class VehiclesController < ApplicationController # rubocop:disable Metrics/Class
   def process_detail_form(form)
     SessionManipulation::SetConfirmVehicle.call(session: session, confirm_vehicle: form.confirmed?)
     return incorrect_details_vehicles_path(id: transaction_id) unless form.confirmed?
-    return incomplete_vehicles_path if confirmed_undetermined_to_complete_data?
+    return incomplete_vehicles_path if confirmed_undetermined?
 
     local_authority_charges_path(id: transaction_id)
   end
 
   # check if confirmed undetermined vehicle which does not have vehicle type and is not a taxi
-  def confirmed_undetermined_to_complete_data?
-    confirmed_undetermined? && !dvla_vehicle_type? && !undetermined_taxi?
-  end
-
-  # check if user confirmed details for undetermined vehicle
   def confirmed_undetermined?
-    vehicle_details('undetermined').present?
+    vehicle_details('undetermined').present? && !dvla_vehicle_type? && !undetermined_taxi?
   end
 
   # check if vehicle has type in DVLA
